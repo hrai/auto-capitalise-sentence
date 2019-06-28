@@ -1,0 +1,25 @@
+{
+  "name": "Auto Capitalise Extension",
+  "description": "Firefox add-on to automatically capitalise the first letter of a sentence while typing.",
+  "homepage_url": "https://github.com/hrai/auto-capitalise",
+  "manifest_version": 2,
+  "version": "1.0",
+
+  "applications": {
+    "gecko": {
+      "id": "commands-demo@mozilla.org",
+      "strict_min_version": "60.0b5"
+    }
+  },
+
+  "background": {
+    "scripts": ["background.js"]
+  },
+
+  "commands": {
+    "toggle-feature": {
+      "suggested_key": { "default": "Ctrl+Shift+U" },
+      "description": "Send a 'toggle-feature' event to the extension"
+    }
+  }
+}
