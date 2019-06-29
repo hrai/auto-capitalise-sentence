@@ -8,8 +8,7 @@
   "content_scripts": [
     {
       "matches": ["*://*/*"],
-      "js": ["content.js"]
+      "js": [ "jquery-3.4.1.min.js", "content.js" ]
     }
   ]
-
 }
