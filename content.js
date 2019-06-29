@@ -5,10 +5,9 @@ $(document).ready(function(){
         var text = $(textBox).val();
 
         var regex =/\w+\s*\.+\s*\w$/;
-        // var regex =/^\w+\.+\s\w$/;
         var matches = regex.test(text);
 
-        console.log(matches);
+        // console.log(matches);
 
         if(matches) {
 
@@ -17,7 +16,7 @@ $(document).ready(function(){
 
             textBox.value = (updatedStr);
         }
-        console.log(event);
 
+        // console.log(event);
     });
 });
