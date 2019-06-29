@@ -1,13 +1,10 @@
 $(document).ready(function(){
-    //change to text area
     $("textarea").keyup(function(event){
         var textBox =event.target;
         var text = $(textBox).val();
 
         var regex =/\w+\s*\.+\s*\w$/;
         var matches = regex.test(text);
-
-        // console.log(matches);
 
         if(matches) {
 
