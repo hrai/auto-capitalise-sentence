@@ -5,21 +5,11 @@
   "manifest_version": 2,
   "version": "1.0",
 
-  "applications": {
-    "gecko": {
-      "id": "commands-demo@mozilla.org",
-      "strict_min_version": "60.0b5"
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "js": ["content.js"]
     }
-  },
+  ]
 
-  "background": {
-    "scripts": ["background.js"]
-  },
-
-  "commands": {
-    "toggle-feature": {
-      "suggested_key": { "default": "Ctrl+Shift+U" },
-      "description": "Send a 'toggle-feature' event to the extension"
-    }
-  }
 }
