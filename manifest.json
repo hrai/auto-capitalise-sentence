@@ -3,7 +3,7 @@
   "description": "Firefox add-on to automatically capitalise the first letter of a sentence while typing.",
   "homepage_url": "https://github.com/hrai/auto-capitalise",
   "manifest_version": 2,
-  "version": "1.0",
+  "version": "1.1",
 
   "content_scripts": [
     {
