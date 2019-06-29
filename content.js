@@ -4,7 +4,8 @@ $(document).ready(function(){
         var textBox =event.target;
         var text = $(textBox).val();
 
-        var regex =/^\w+\s*\.+\s*\w/;
+        var regex =/\w+\s*\.+\s*\w$/;
+        // var regex =/^\w+\.+\s\w$/;
         var matches = regex.test(text);
 
         console.log(matches);
