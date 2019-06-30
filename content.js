@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    $("textarea").keyup(function(event){
+    $("textarea").keydown(function(event){
         var textBox =event.target;
         var text = $(textBox).val();
 
@@ -8,7 +8,7 @@ $(document).ready(function(){
             return;
         }
 
-        var regex =/\w+\.+\s*\w$/;
+        var regex =/\w+\.+\s+\w$/;
         var matches = regex.test(text);
 
         if(matches) {
