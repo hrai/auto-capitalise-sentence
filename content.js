@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    $("textarea").keydown(function(event){
+    $(":text,textarea").keydown(function(event){
         var textBox =event.target;
         var text = $(textBox).val();
 
