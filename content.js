@@ -40,7 +40,7 @@ $(document).ready(function(){
                 return;
             }
 
-            var regex =/\w+\s*\.+\s+\w$/;
+            var regex =/\w+\s*(\.|\?)+\s+\w$/;
             var matches = regex.test(text);
 
             if(matches) {
