@@ -1,5 +1,4 @@
-$(window).load(function(){
-    console.log('poi');
+$(document).ready(function(){
     var sitesToExclude = [];
 
     function excludeSite(site) {
@@ -31,12 +30,11 @@ $(window).load(function(){
         }
     }
 
-    function capitaliseText(event) {
-        var textBox =event.target;
-        var text = $(textBox).val();
+    function capitaliseText(htmlControl) {
+        var text = $(htmlControl).val();
 
         if(text.length == 1) {
-            textBox.value = text.toUpperCase();
+            htmlControl.value = text.toUpperCase();
             return;
         }
 
@@ -47,19 +45,38 @@ $(window).load(function(){
             var lastChar = text.slice(-1);
             var updatedStr = text.substr(0, text.length-1) + lastChar.toUpperCase();
 
-            textBox.value = updatedStr;
+            htmlControl.value = updatedStr;
         }
 
-        // console.log(event);  
+        // console.log(event);
     }
 
     function hookupEventHandlers() {
-        $("body").on('focus', 'p', function() {
-            capitaliseText();
+        $(":text,textarea").keydown(function(event){
+            capitaliseText(event.target);
         });
 
-        $(":text,textarea,p").keydown(function(event){
-            capitaliseText(event);
+        wireupPtagHandlers();
+    }
+
+    function wireupPtagHandlers() {
+        var target = document.querySelector("p");
+
+        var observer = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+              if (mutation.type=="childList" ) {
+                  capitaliseText(mutation.target);
+                  //console.log(mutation.target.innerHTML);
+              }
+          });
         });
+
+        var config = {
+          childList: true,
+          subtree: true,
+          characterData: true
+        };
+
+        observer.observe(target, config);
     }
 });
