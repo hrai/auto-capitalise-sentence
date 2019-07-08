@@ -1,4 +1,4 @@
-$(document).load(function(){
+$(window).load(function(){
     var sitesToExclude = [];
 
     function excludeSite(site) {
