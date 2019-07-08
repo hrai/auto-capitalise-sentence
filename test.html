@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+</head>
+<body>
+    <p id='pt'>Test</p>
+    <textarea name="bing" rows="8" cols="40" id="bing"></textarea>
+</body>
+
+</html>
+<script type='text/javascript'>
+
+    $(document).ready(function() {
+        var b =$('#bing');
+
+        b.keyup(function() {
+            debugger
+            $('#pt').html(b.val());
+        });
+    });
+</script>
