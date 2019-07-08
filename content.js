@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).load(function(){
     var sitesToExclude = [];
 
     function excludeSite(site) {
@@ -30,27 +30,35 @@ $(document).ready(function(){
         }
     }
 
+    function capitaliseText(event) {
+        var textBox =event.target;
+        var text = $(textBox).val();
+
+        if(text.length == 1) {
+            textBox.value = text.toUpperCase();
+            return;
+        }
+
+        var regex =/\w+\s*(\.|\?)+\s+\w$/;
+        var matches = regex.test(text);
+
+        if(matches) {
+            var lastChar = text.slice(-1);
+            var updatedStr = text.substr(0, text.length-1) + lastChar.toUpperCase();
+
+            textBox.value = updatedStr;
+        }
+
+        // console.log(event);  
+    }
+
     function hookupEventHandlers() {
+        $("body").on('change', 'p', function(event) {
+            capitaliseText(event);
+        });
+
         $(":text,textarea,p").keydown(function(event){
-            var textBox =event.target;
-            var text = $(textBox).val();
-
-            if(text.length == 1) {
-                textBox.value = text.toUpperCase();
-                return;
-            }
-
-            var regex =/\w+\s*(\.|\?)+\s+\w$/;
-            var matches = regex.test(text);
-
-            if(matches) {
-                var lastChar = text.slice(-1);
-                var updatedStr = text.substr(0, text.length-1) + lastChar.toUpperCase();
-
-                textBox.value = updatedStr;
-            }
-
-            // console.log(event);
+            capitaliseText(event);
         });
     }
 });
