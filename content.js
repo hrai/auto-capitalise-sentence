@@ -1,4 +1,5 @@
 $(window).load(function(){
+    console.log('poi');
     var sitesToExclude = [];
 
     function excludeSite(site) {
@@ -53,8 +54,8 @@ $(window).load(function(){
     }
 
     function hookupEventHandlers() {
-        $("body").on('change', 'p', function(event) {
-            capitaliseText(event);
+        $("body").on('focus', 'p', function() {
+            capitaliseText();
         });
 
         $(":text,textarea,p").keydown(function(event){
