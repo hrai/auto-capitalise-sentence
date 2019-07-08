@@ -31,7 +31,7 @@ $(document).ready(function(){
     }
 
     function hookupEventHandlers() {
-        $(":text,textarea").keydown(function(event){
+        $(":text,textarea,p").keydown(function(event){
             var textBox =event.target;
             var text = $(textBox).val();
 
