@@ -1,5 +1,6 @@
 $(document).ready(function(){
   var sitesToExclude = [];
+  var elementsWithModifiedContents = [];
 
   function excludeSite(site) {
     sitesToExclude.push(site);
@@ -10,7 +11,9 @@ $(document).ready(function(){
 
   var totalSites =sitesToExclude.length;
   if(totalSites ==0) {
-    hookupEventHandlers();
+    hookupEventHandler($(":text,textarea"));
+    wireupPtagHandlers();
+
     return;
   }
 
@@ -18,7 +21,9 @@ $(document).ready(function(){
     try {
       sitesToExclude.forEach(function(siteToExclude) {
         if(!siteToExclude.includes(currentUrlDomain)) {
-          hookupEventHandlers();
+          hookupEventHandler($(":text,textarea"));
+          wireupPtagHandlers();
+
           throw BreakException;
         }
       });
@@ -33,9 +38,12 @@ $(document).ready(function(){
   function setText(htmlControl, tagName, updatedStr) {
     if(tagName.toUpperCase()==='INPUT' || tagName.toUpperCase()==='TEXTAREA') {
       htmlControl.val(updatedStr);
+      return;
     }
 
     htmlControl.html(updatedStr);
+
+    elementsWithModifiedContents.push(htmlControl.html());
   }
 
   function getText(htmlControl, tagName) {
@@ -47,13 +55,16 @@ $(document).ready(function(){
   }
 
   function capitaliseText(element) {
+    if(elementsWithModifiedContents.indexOf(element.html()) >= 0)
+      return;
+
     var htmlControl = $(element);
 
     var tagName = htmlControl.prop('tagName');
     var text = getText(htmlControl, tagName);
 
     if(text.length == 1) {
-      htmlControl.value = text.toUpperCase();
+      setText(htmlControl, tagName, text.toUpperCase())
       return;
     }
 
@@ -70,24 +81,39 @@ $(document).ready(function(){
     // console.log(event);
   }
 
-  function hookupEventHandlers() {
-    $(":text,textarea").keydown(function(event){
+  function hookupEventHandler(element) {
+    element.keydown(function(event){
       capitaliseText(event.target);
     });
+  }
 
-    wireupPtagHandlers();
+  function hookupHtmlChangeEventHandler(element) {
+    var observer = new MutationObserver(function(mutations, observer) {
+      $.each(mutations, function (i, mutation) {
+        var target = $(mutation.target);
+
+        capitaliseText(target);
+      });
+    });
+
+    var config = {
+      childList: true,
+      characterData: true
+    };
+
+    observer.observe(element, config);
   }
 
   function wireupPtagHandlers() {
     var target = document.querySelector("div");
 
-    var observe = new MutationObserver(function(mutations, observer) {
+    var observer = new MutationObserver(function(mutations, observer) {
       $.each(mutations, function (i, mutation) {
         var addedNodes = $(mutation.addedNodes);
         var selector = "p"
         var filteredEls = addedNodes.find(selector).addBack(selector); // finds either added alone or as tree
-        filteredEls.each(function(index, item) {
-          capitaliseText(item);
+        filteredEls.each(function(index, element) {
+          hookupHtmlChangeEventHandler(element);
         });
       });
     });
@@ -99,6 +125,6 @@ $(document).ready(function(){
       characterData: true
     };
 
-    observe.observe(target, config);
+    observer.observe(target, config);
   }
 });

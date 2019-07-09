@@ -8,8 +8,10 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 </head>
 <body>
-    <p id='pt'>Test</p>
-    <textarea name="bing" rows="8" cols="40" id="bing"></textarea>
+    <div>
+        <p id='pt'>Test</p>
+        <textarea name="bing" rows="8" cols="40" id="bing"></textarea>
+    </div>
 </body>
 
 </html>
@@ -19,7 +21,8 @@
         var b =$('#bing');
 
         b.keyup(function() {
-            $('#pt').html(b.val());
+            $('#pt').append("<p>Test</p>");
+            $('#pt').html(b.val().toLowerCase());
         });
     });
 </script>
