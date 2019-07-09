@@ -11,8 +11,7 @@ $(document).ready(function(){
 
   var totalSites =sitesToExclude.length;
   if(totalSites ==0) {
-    hookupEventHandler($(":text,textarea"));
-    wireupPtagHandlers();
+    hookupEventHandler();
 
     return;
   }
@@ -21,8 +20,7 @@ $(document).ready(function(){
     try {
       sitesToExclude.forEach(function(siteToExclude) {
         if(!siteToExclude.includes(currentUrlDomain)) {
-          hookupEventHandler($(":text,textarea"));
-          wireupPtagHandlers();
+          hookupEventHandler();
 
           throw BreakException;
         }
@@ -81,10 +79,12 @@ $(document).ready(function(){
     // console.log(event);
   }
 
-  function hookupEventHandler(element) {
-    element.keydown(function(event){
+  function hookupEventHandler() {
+    $(":text,textarea").keydown(function(event){
       capitaliseText(event.target);
     });
+
+    wireupPtagHandlers();
   }
 
   function hookupHtmlChangeEventHandler(element) {
