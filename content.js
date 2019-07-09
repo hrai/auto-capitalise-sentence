@@ -52,10 +52,7 @@ $(document).ready(function(){
     return htmlControl.html();
   }
 
-  function capitaliseText(element) {
-    if(elementsWithModifiedContents.indexOf(element.html()) >= 0)
-      return;
-
+  function capitaliseTextForInputTags(element) {
     var htmlControl = $(element);
 
     var tagName = htmlControl.prop('tagName');
@@ -79,9 +76,37 @@ $(document).ready(function(){
     // console.log(event);
   }
 
+  function capitaliseText(mutation) {
+
+    var htmlControl = $(mutation.parent());
+
+    var tagName = htmlControl.prop('tagName');
+    var text=mutation.text();
+    if(elementsWithModifiedContents.indexOf(text) >= 0)
+      return;
+
+
+    if(text.length == 1) {
+      setText(htmlControl, tagName, text.toUpperCase())
+      return;
+    }
+
+    var regex =/\w+\s*(\.|\?)+\s+\w$/;
+    var matches = regex.test(text);
+
+    if(matches) {
+      var lastChar = text.slice(-1);
+      var updatedStr = text.substr(0, text.length-1) + lastChar.toUpperCase();
+
+      setText(htmlControl, tagName, updatedStr)
+    }
+
+    // console.log(event);
+  }
+
   function hookupEventHandler() {
     $(":text,textarea").keydown(function(event){
-      capitaliseText(event.target);
+      capitaliseTextForInputTags(event.target);
     });
 
     wireupPtagHandlers();
@@ -98,6 +123,8 @@ $(document).ready(function(){
 
     var config = {
       childList: true,
+      attributes: true,
+      subtree: true,
       characterData: true
     };
 
