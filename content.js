@@ -1,82 +1,104 @@
 $(document).ready(function(){
-    var sitesToExclude = [];
+  var sitesToExclude = [];
 
-    function excludeSite(site) {
-        sitesToExclude.push(site);
+  function excludeSite(site) {
+    sitesToExclude.push(site);
+  }
+
+  //https://stackoverflow.com/questions/406192/get-current-url-with-jquery
+  var currentUrlDomain = window.location.origin;
+
+  var totalSites =sitesToExclude.length;
+  if(totalSites ==0) {
+    hookupEventHandlers();
+    return;
+  }
+
+  if(totalSites !=0) {
+    try {
+      sitesToExclude.forEach(function(siteToExclude) {
+        if(!siteToExclude.includes(currentUrlDomain)) {
+          hookupEventHandlers();
+          throw BreakException;
+        }
+      });
+    }
+    catch (e) {
+      if (e !== BreakException) {
+        throw e;
+      }
+    }
+  }
+
+  function setText(htmlControl, tagName, updatedStr) {
+    if(tagName.toUpperCase()==='INPUT' || tagName.toUpperCase()==='TEXTAREA') {
+      htmlControl.val(updatedStr);
     }
 
-    //https://stackoverflow.com/questions/406192/get-current-url-with-jquery
-    var currentUrlDomain = window.location.origin;
+    htmlControl.html(updatedStr);
+  }
 
-    var totalSites =sitesToExclude.length;
-    if(totalSites ==0) {
-        hookupEventHandlers();
-        return;
+  function getText(htmlControl, tagName) {
+    if(tagName.toUpperCase()==='INPUT' || tagName.toUpperCase()==='TEXTAREA') {
+      return htmlControl.val();
     }
 
-    if(totalSites !=0) {
-        try {
-            sitesToExclude.forEach(function(siteToExclude) {
-                if(!siteToExclude.includes(currentUrlDomain)) {
-                    hookupEventHandlers();
-                    throw BreakException;
-                }
-            });
-        }
-        catch (e) {
-            if (e !== BreakException) {
-                throw e;
-            }
-        }
+    return htmlControl.html();
+  }
+
+  function capitaliseText(element) {
+    var htmlControl = $(element);
+
+    var tagName = htmlControl.prop('tagName');
+    var text = getText(htmlControl, tagName);
+
+    if(text.length == 1) {
+      htmlControl.value = text.toUpperCase();
+      return;
     }
 
-    function capitaliseText(htmlControl) {
-        var text = $(htmlControl).val();
+    var regex =/\w+\s*(\.|\?)+\s+\w$/;
+    var matches = regex.test(text);
 
-        if(text.length == 1) {
-            htmlControl.value = text.toUpperCase();
-            return;
-        }
+    if(matches) {
+      var lastChar = text.slice(-1);
+      var updatedStr = text.substr(0, text.length-1) + lastChar.toUpperCase();
 
-        var regex =/\w+\s*(\.|\?)+\s+\w$/;
-        var matches = regex.test(text);
-
-        if(matches) {
-            var lastChar = text.slice(-1);
-            var updatedStr = text.substr(0, text.length-1) + lastChar.toUpperCase();
-
-            htmlControl.value = updatedStr;
-        }
-
-        // console.log(event);
+      setText(htmlControl, tagName, updatedStr)
     }
 
-    function hookupEventHandlers() {
-        $(":text,textarea").keydown(function(event){
-            capitaliseText(event.target);
+    // console.log(event);
+  }
+
+  function hookupEventHandlers() {
+    $(":text,textarea").keydown(function(event){
+      capitaliseText(event.target);
+    });
+
+    wireupPtagHandlers();
+  }
+
+  function wireupPtagHandlers() {
+    var target = document.querySelector("div");
+
+    var observe = new MutationObserver(function(mutations, observer) {
+      $.each(mutations, function (i, mutation) {
+        var addedNodes = $(mutation.addedNodes);
+        var selector = "p"
+        var filteredEls = addedNodes.find(selector).addBack(selector); // finds either added alone or as tree
+        filteredEls.each(function(index, item) {
+          capitaliseText(item);
         });
+      });
+    });
 
-        wireupPtagHandlers();
-    }
 
-    function wireupPtagHandlers() {
-        var target = document.querySelector("p");
+    var config = {
+      childList: true,
+      subtree: true,
+      characterData: true
+    };
 
-        var observer = new MutationObserver(function(mutations) {
-          mutations.forEach(function(mutation) {
-              if (mutation.type=="childList" ) {
-                  capitaliseText(mutation.target);
-                  //console.log(mutation.target.innerHTML);
-              }
-          });
-        });
-
-        var config = {
-          childList: true,
-          subtree: true,
-          characterData: true
-        };
-
-        observer.observe(target, config);
-    }
+    observe.observe(target, config);
+  }
 });
