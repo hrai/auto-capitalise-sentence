@@ -39,7 +39,9 @@ $(document).ready(function(){
             return;
         }
 
-        htmlControl.html(updatedStr);
+        htmlControl.empty();
+        htmlControl.prepend(updatedStr);
+        // htmlControl.end();
 
         elementsWithModifiedContents.push(htmlControl.html());
     }
