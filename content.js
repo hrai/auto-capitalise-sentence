@@ -59,7 +59,7 @@ $(document).ready(function(){
         var text = getText(htmlControl, tagName);
 
         if(text.length == 1) {
-            setText(htmlControl, tagName, text.toUpperCase())
+            setText(htmlControl, tagName, text.toUpperCase());
             return;
         }
 
@@ -70,7 +70,7 @@ $(document).ready(function(){
             var lastChar = text.slice(-1);
             var updatedStr = text.substr(0, text.length-1) + lastChar.toUpperCase();
 
-            setText(htmlControl, tagName, updatedStr)
+            setText(htmlControl, tagName, updatedStr);
         }
 
         // console.log(event);
@@ -87,7 +87,7 @@ $(document).ready(function(){
 
 
         if(text.length == 1) {
-            setText(htmlControl, tagName, text.toUpperCase())
+            setText(htmlControl, tagName, text.toUpperCase());
             return;
         }
 
@@ -98,14 +98,14 @@ $(document).ready(function(){
             var lastChar = text.slice(-1);
             var updatedStr = text.substr(0, text.length-1) + lastChar.toUpperCase();
 
-            setText(htmlControl, tagName, updatedStr)
+            setText(htmlControl, tagName, updatedStr);
         }
 
         // console.log(event);
     }
 
     function hookupEventHandler() {
-        $(":text,textarea").keydown(function(event){
+        $(':text,textarea').keydown(function(event){
             capitaliseTextForInputTags(event.target);
         });
 
@@ -113,7 +113,7 @@ $(document).ready(function(){
     }
 
     function hookupHtmlChangeEventHandler(element) {
-        var observer = new MutationObserver(function(mutations, observer) {
+        var observer = new MutationObserver(function(mutations) {
             $.each(mutations, function (i, mutation) {
                 var target = $(mutation.target);
 
@@ -122,8 +122,6 @@ $(document).ready(function(){
         });
 
         var config = {
-            childList: true,
-            attributes: true,
             subtree: true,
             characterData: true
         };
@@ -132,12 +130,12 @@ $(document).ready(function(){
     }
 
     function wireupPtagHandlers() {
-        var target = document.querySelector("div");
+        var target = document.querySelector('div');
 
         var observer = new MutationObserver(function(mutations, observer) {
             $.each(mutations, function (i, mutation) {
                 var addedNodes = $(mutation.addedNodes);
-                var selector = "p"
+                var selector = 'p';
                 var filteredEls = addedNodes.find(selector).addBack(selector); // finds either added alone or as tree
                 filteredEls.each(function(index, element) {
                     hookupHtmlChangeEventHandler(element);
@@ -149,7 +147,7 @@ $(document).ready(function(){
         var config = {
             childList: true,
             subtree: true,
-            characterData: true
+            // characterData: true
         };
 
         observer.observe(target, config);
