@@ -76,15 +76,14 @@ $(document).ready(function(){
         // console.log(event);
     }
 
-    function capitaliseText(mutation) {
+    function capitaliseText(targetEl) {
 
-        var htmlControl = $(mutation.parent());
+        var htmlControl = $(targetEl.parent());
 
         var tagName = htmlControl.prop('tagName');
-        var text=mutation.text();
+        var text=targetEl.text();
         if(elementsWithModifiedContents.indexOf(text) >= 0)
             return;
-
 
         if(text.length == 1) {
             setText(htmlControl, tagName, text.toUpperCase());
