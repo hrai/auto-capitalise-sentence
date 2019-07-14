@@ -1,11 +1,10 @@
-
 {
   "name": "auto-capitalise-extension",
   "title": "Auto Capitalise Extension",
   "version": "1.0.0",
   "description": "Firefox add-on to automatically capitalise the first letter of a sentence while typing.",
   "devDependencies": {
-    "eslint": "^4.4.1"
+    "eslint": "^4.19.1"
   },
   "repository": {
     "type": "git",
