@@ -1,6 +1,6 @@
 
 $(document).ready(function(){
-    var sitesToExclude = [];
+    // var sitesToExclude = [];
 
     console.log('test');
 
