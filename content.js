@@ -95,8 +95,6 @@ $(document).ready(function(){
 
             setText(htmlControl, tagName, updatedStr);
         }
-
-        // console.log(event);
     }
 
     function capitaliseText(targetEl) {
@@ -121,8 +119,6 @@ $(document).ready(function(){
 
             setText(htmlControl, tagName, updatedStr);
         }
-
-        // console.log(event);
     }
 
     function hookupEventHandler() {
