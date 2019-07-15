@@ -2,9 +2,9 @@ $(document).ready(function(){
     var sitesToExclude = [];
     var elementsWithModifiedContents = [];
 
-    function excludeSite(site) {
-        sitesToExclude.push(site);
-    }
+    // function excludeSite(site) {
+    //     sitesToExclude.push(site);
+    // }
 
     //https://stackoverflow.com/questions/406192/get-current-url-with-jquery
     var currentUrlDomain = window.location.origin;
@@ -122,6 +122,8 @@ $(document).ready(function(){
     function getCapitalisedContent(text) {
         var lastChar = text.slice(-1);
         var updatedStr = text.substr(0, text.length-1) + lastChar.toUpperCase();
+
+        return updatedStr;
     }
 
     function hookupEventHandler() {
