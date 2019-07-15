@@ -46,7 +46,7 @@ $(document).ready(function(){
             htmlControl.val(updatedStr);
             return;
         }
-        
+
         htmlControl.prop('contenteditable', true);
         htmlControl.text(updatedStr);
         setEndOfContenteditable(htmlControl[0]);
@@ -67,7 +67,7 @@ $(document).ready(function(){
             selection.addRange(range);//make the range you have just created the visible selection
         }
         else if(document.selection)//IE 8 and lower
-        { 
+        {
             range = document.body.createTextRange();//Create a range (a range is a like the selection but invisible)
             range.moveToElementText(contentEditableElement);//Select the entire contents of the element with the range
             range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
@@ -100,7 +100,6 @@ $(document).ready(function(){
     }
 
     function capitaliseText(targetEl) {
-
         var htmlControl = $(targetEl.parent());
 
         var tagName = htmlControl.prop('tagName');
@@ -131,7 +130,8 @@ $(document).ready(function(){
             capitaliseTextForInputTags(event.target);
         });
 
-        wireupPtagHandlers();
+        wireupHtmlTagHandlers('p');
+        wireupHtmlTagHandlers('div');
     }
 
     function hookupHtmlChangeEventHandler(element) {
@@ -155,25 +155,23 @@ $(document).ready(function(){
         observer.observe(element, config);
     }
 
-    function wireupPtagHandlers() {
+    function wireupHtmlTagHandlers(tagName) {
         var target = document.querySelector('div');
 
         var observer = new MutationObserver(function(mutations, observer) {
             $.each(mutations, function (i, mutation) {
                 var addedNodes = $(mutation.addedNodes);
-                var selector = 'p';
-                var filteredEls = addedNodes.find(selector).addBack(selector); // finds either added alone or as tree
+
+                var filteredEls = addedNodes.find(tagName).addBack(tagName); // finds either added alone or as tree
                 filteredEls.each(function(index, element) {
                     hookupHtmlChangeEventHandler(element);
                 });
             });
         });
 
-
         var config = {
             childList: true,
             subtree: true,
-            // characterData: true
         };
 
         observer.observe(target, config);
