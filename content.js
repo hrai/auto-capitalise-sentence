@@ -34,11 +34,11 @@ $(document).ready(function(){
     }
 
     function getText(htmlControl, tagName) {
-      if(tagName.toUpperCase()==='INPUT' || tagName.toUpperCase()==='TEXTAREA') {
-          return htmlControl.val();
-      }
+        if(tagName.toUpperCase()==='INPUT' || tagName.toUpperCase()==='TEXTAREA') {
+            return htmlControl.val();
+        }
 
-      return htmlControl.html();
+        return htmlControl.html();
     }
 
     function setText(htmlControl, tagName, updatedStr) {
@@ -137,12 +137,12 @@ $(document).ready(function(){
         var processed = false;
         var observer = new MutationObserver(function(mutations) {
             $.each(mutations, function (i, mutation) {
-              if(!processed) {
-                var target = $(mutation.target);
+                if(!processed) {
+                    var target = $(mutation.target);
 
-                capitaliseTextForContentEditableElements(target);
-                processed = true;
-              }
+                    capitaliseTextForContentEditableElements(target);
+                    processed = true;
+                }
             });
         });
 
@@ -169,7 +169,7 @@ $(document).ready(function(){
         });
 
         var config = {
-          subtree: true,
+            subtree: true,
             childList: true,
             characterData: true
         };
