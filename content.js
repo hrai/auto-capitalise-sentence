@@ -93,8 +93,7 @@ $(document).ready(function(){
         }
 
         if(shouldCapitalise(text)) {
-            var lastChar = text.slice(-1);
-            var updatedStr = text.substr(0, text.length-1) + lastChar.toUpperCase();
+            var updatedStr = getCapitalisedContent(text);
 
             setText(htmlControl, tagName, updatedStr);
         }
@@ -114,11 +113,15 @@ $(document).ready(function(){
         }
 
         if(shouldCapitalise(text)) {
-            var lastChar = text.slice(-1);
-            var updatedStr = text.substr(0, text.length-1) + lastChar.toUpperCase();
+            var updatedStr = getCapitalisedContent(text);
 
             setText(htmlControl, tagName, updatedStr);
         }
+    }
+
+    function getCapitalisedContent(text) {
+        var lastChar = text.slice(-1);
+        var updatedStr = text.substr(0, text.length-1) + lastChar.toUpperCase();
     }
 
     function hookupEventHandler() {
@@ -138,12 +141,12 @@ $(document).ready(function(){
                 var target = $(mutation.target);
 
                 capitaliseTextForContentEditableElements(target);
+                processed = true;
               }
             });
         });
 
         var config = {
-            subtree: true,
             childList: true,
             characterData: true
         };
@@ -166,8 +169,8 @@ $(document).ready(function(){
         });
 
         var config = {
+          subtree: true,
             childList: true,
-            subtree: true,
             characterData: true
         };
 
