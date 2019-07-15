@@ -22,11 +22,13 @@ $(document).ready(function(){
                 if(!siteToExclude.includes(currentUrlDomain)) {
                     hookupEventHandler();
 
+                    // eslint-disable-next-line no-undef
                     throw BreakException;
                 }
             });
         }
         catch (e) {
+            // eslint-disable-next-line no-undef
             if (e !== BreakException) {
                 throw e;
             }
@@ -159,7 +161,7 @@ $(document).ready(function(){
     function wireupHtmlTagHandlers(tagName) {
         var target = document.querySelector('div');
 
-        var observer = new MutationObserver(function(mutations, observer) {
+        var observer = new MutationObserver(function(mutations) {
             $.each(mutations, function (i, mutation) {
                 var addedNodes = $(mutation.addedNodes);
 
