@@ -97,7 +97,7 @@ $(document).ready(function(){
         }
     }
 
-    function capitaliseText(targetEl) {
+    function capitaliseTextForContentEditableElements(targetEl) {
         var htmlControl = $(targetEl.parent());
 
         var tagName = htmlControl.prop('tagName');
@@ -137,7 +137,7 @@ $(document).ready(function(){
               if(!processed) {
                 var target = $(mutation.target);
 
-                capitaliseText(target);
+                capitaliseTextForContentEditableElements(target);
               }
             });
         });
