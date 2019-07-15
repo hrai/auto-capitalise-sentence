@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "description": "Firefox add-on to automatically capitalise the first letter of a sentence while typing.",
   "devDependencies": {
-    "eslint": "^4.19.1"
+    "eslint": "^4.19.1",
+    "husky": "^3.0.0"
   },
   "repository": {
     "type": "git",
@@ -14,6 +15,12 @@
     "test": "eslint .",
     "lint": "eslint .",
     "start:firefox": "web-ext run"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "eslint . --fix",
+      "pre-push": "eslint . --fix"
+    }
   },
   "license": "MIT",
   "bugs": {
