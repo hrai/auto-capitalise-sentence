@@ -86,15 +86,18 @@ $(document).ready(function(){
             return;
         }
 
-        var regex =/\w+\s*(\.|\?)+\s+\w$/;
-        var matches = regex.test(text);
-
-        if(matches) {
+        if(shouldCapitalise(text)) {
             var lastChar = text.slice(-1);
             var updatedStr = text.substr(0, text.length-1) + lastChar.toUpperCase();
 
             setText(htmlControl, tagName, updatedStr);
         }
+    }
+
+    function shouldCapitalise(text) {
+        var regex =/\w+\s*(\.|\?)+\s+\w$/;
+        var matches = regex.test(text);
+        return matches;
     }
 
     function capitaliseTextForContentEditableElements(targetEl) {
@@ -110,10 +113,7 @@ $(document).ready(function(){
             return;
         }
 
-        var regex =/\w+\s*(\.|\?)+\s+\w$/;
-        var matches = regex.test(text);
-
-        if(matches) {
+        if(shouldCapitalise(text)) {
             var lastChar = text.slice(-1);
             var updatedStr = text.substr(0, text.length-1) + lastChar.toUpperCase();
 
