@@ -33,6 +33,14 @@ $(document).ready(function(){
         }
     }
 
+    function getText(htmlControl, tagName) {
+      if(tagName.toUpperCase()==='INPUT' || tagName.toUpperCase()==='TEXTAREA') {
+          return htmlControl.val();
+      }
+
+      return htmlControl.html();
+    }
+
     function setText(htmlControl, tagName, updatedStr) {
         if(tagName.toUpperCase()==='INPUT' || tagName.toUpperCase()==='TEXTAREA') {
             htmlControl.val(updatedStr);
@@ -65,14 +73,6 @@ $(document).ready(function(){
             range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
             range.select();//Select the range (make it the visible selection
         }
-    }
-
-    function getText(htmlControl, tagName) {
-        if(tagName.toUpperCase()==='INPUT' || tagName.toUpperCase()==='TEXTAREA') {
-            return htmlControl.val();
-        }
-
-        return htmlControl.html();
     }
 
     function capitaliseTextForInputTags(element) {
@@ -135,16 +135,20 @@ $(document).ready(function(){
     }
 
     function hookupHtmlChangeEventHandler(element) {
+        var processed = false;
         var observer = new MutationObserver(function(mutations) {
             $.each(mutations, function (i, mutation) {
+              if(!processed) {
                 var target = $(mutation.target);
 
                 capitaliseText(target);
+              }
             });
         });
 
         var config = {
             subtree: true,
+            childList: true,
             characterData: true
         };
 
