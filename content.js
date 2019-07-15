@@ -75,6 +75,12 @@ $(document).ready(function(){
         }
     }
 
+    function shouldCapitalise(text) {
+        var regex =/\w+\s*(\.|\?)+\s+\w$/;
+        var matches = regex.test(text);
+        return matches;
+    }
+
     function capitaliseTextForInputTags(element) {
         var htmlControl = $(element);
 
@@ -94,17 +100,11 @@ $(document).ready(function(){
         }
     }
 
-    function shouldCapitalise(text) {
-        var regex =/\w+\s*(\.|\?)+\s+\w$/;
-        var matches = regex.test(text);
-        return matches;
-    }
-
     function capitaliseTextForContentEditableElements(targetEl) {
         var htmlControl = $(targetEl.parent());
 
         var tagName = htmlControl.prop('tagName');
-        var text=targetEl.text();
+        var text = targetEl.text();
         if(elementsWithModifiedContents.indexOf(text) >= 0)
             return;
 
@@ -168,6 +168,7 @@ $(document).ready(function(){
         var config = {
             childList: true,
             subtree: true,
+            characterData: true
         };
 
         observer.observe(target, config);
