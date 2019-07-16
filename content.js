@@ -164,7 +164,7 @@ $(document).ready(function(){
     }
 
     function wireupHtmlTagHandlers(tagName) {
-        var target = document.querySelector('div');
+        var target = document.querySelector('body');
 
         var observer = new MutationObserver(function(mutations) {
             $.each(mutations, function (i, mutation) {
