@@ -128,10 +128,14 @@ $(document).ready(function(){
         return updatedStr;
     }
 
-    function hookupEventHandler() {
+    function wireupInputTagHandlers() {
         $(':text,textarea').keydown(function(event){
             capitaliseTextForInputTags(event.target);
         });
+    }
+
+    function hookupEventHandler() {
+        wireupInputTagHandlers();
 
         wireupHtmlTagHandlers('p');
         // wireupHtmlTagHandlers('div');
@@ -171,6 +175,9 @@ $(document).ready(function(){
                     hookupHtmlChangeEventHandler(element);
                 });
             });
+
+            debugger
+            wireupInputTagHandlers();
         });
 
         var config = {
