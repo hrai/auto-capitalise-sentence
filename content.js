@@ -164,20 +164,25 @@ $(document).ready(function(){
     }
 
     function wireupHtmlTagHandlers(tagName) {
-        var target = document.querySelector('div');
+        var divTags = $('div');
+        var observers = [];
 
-        var observer = new MutationObserver(function(mutations) {
-            $.each(mutations, function (i, mutation) {
-                var addedNodes = $(mutation.addedNodes);
+        $.each(divTags, function(i, divTag) {
+            var observer = new MutationObserver(function(mutations) {
+                $.each(mutations, function (i, mutation) {
+                    var addedNodes = $(mutation.addedNodes);
 
-                var filteredEls = addedNodes.find(tagName).addBack(tagName); // finds either added alone or as tree
-                filteredEls.each(function(index, element) {
-                    hookupHtmlChangeEventHandler(element);
+                    var filteredEls = addedNodes.find(tagName).addBack(tagName); // finds either added alone or as tree
+                    filteredEls.each(function(index, element) {
+                        hookupHtmlChangeEventHandler(element);
+                    });
                 });
+
+                wireupInputTagHandlers();
             });
 
-            debugger
-            wireupInputTagHandlers();
+            observer.observe(divTag, config);
+            observers.push({[i]: observer});
         });
 
         var config = {
@@ -185,7 +190,5 @@ $(document).ready(function(){
             childList: true,
             characterData: true
         };
-
-        observer.observe(target, config);
     }
 });
