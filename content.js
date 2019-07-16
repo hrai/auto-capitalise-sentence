@@ -134,12 +134,12 @@ $(document).ready(function(){
         });
 
         wireupHtmlTagHandlers('p');
-        wireupHtmlTagHandlers('div');
+        // wireupHtmlTagHandlers('div');
     }
 
     function hookupHtmlChangeEventHandler(element) {
-        var processed = false;
         var observer = new MutationObserver(function(mutations) {
+            var processed = false;
             $.each(mutations, function (i, mutation) {
                 if(!processed) {
                     var target = $(mutation.target);
@@ -151,6 +151,7 @@ $(document).ready(function(){
         });
 
         var config = {
+            subtree: true,
             childList: true,
             characterData: true
         };
