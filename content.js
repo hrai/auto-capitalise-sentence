@@ -104,7 +104,12 @@ $(document).ready(function(){
     function capitaliseTextForContentEditableElements(targetEl) {
         var htmlControl = $(targetEl);
 
-        var tagName = htmlControl.prop('tagName');
+        var tagName = targetEl.prop('tagName');
+        if(!tagName) {
+            htmlControl = $(targetEl).parent();
+            tagName = htmlControl.prop('tagName');
+        }
+        
         var text = getText(htmlControl, tagName);
 
         if(elementsWithModifiedContents.indexOf(text) >= 0)
@@ -170,6 +175,7 @@ $(document).ready(function(){
         var config = {
             subtree: true,
             childList: true,
+            characterData: true
         };
 
         observer.observe(element, config);
@@ -196,7 +202,6 @@ $(document).ready(function(){
         var config = {
             subtree: true,
             childList: true,
-            // characterData: true
         };
 
         observer.observe(target, config);
