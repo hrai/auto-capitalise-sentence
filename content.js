@@ -141,6 +141,12 @@ $(document).ready(function(){
         // wireupHtmlTagHandlers('div');
     }
 
+    function containsHtmlContent(element) {
+        var regex = /<\/?\w+>/;
+
+        return regex.matches(element.html());
+    }
+
     function hookupHtmlChangeEventHandler(element) {
         var observer = new MutationObserver(function(mutations) {
             var processed = false;
@@ -148,6 +154,7 @@ $(document).ready(function(){
                 if(!processed) {
                     var target = $(mutation.target);
 
+                    debugger
                     capitaliseTextForContentEditableElements(target);
                     processed = true;
                 }
@@ -157,7 +164,6 @@ $(document).ready(function(){
         var config = {
             subtree: true,
             childList: true,
-            characterData: true
         };
 
         observer.observe(element, config);
@@ -172,18 +178,20 @@ $(document).ready(function(){
 
                 var filteredEls = addedNodes.find(tagName).addBack(tagName); // finds either added alone or as tree
                 filteredEls.each(function(index, element) {
+                    if(containsHtmlContent(element)) {
+                        return;
+                    }
+
                     hookupHtmlChangeEventHandler(element);
                 });
             });
 
-            debugger
             wireupInputTagHandlers();
         });
 
         var config = {
             subtree: true,
-            childList: true,
-            characterData: true
+            childList: true
         };
 
         observer.observe(target, config);
