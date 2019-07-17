@@ -149,7 +149,8 @@ $(document).ready(function(){
             return false;
 
         var regex = /<\/?\w+>/;
-        return regex.matches(content);
+        var hasHtmlTag = regex.test(content);
+        return hasHtmlTag;
     }
 
     function wireupTextChangeHandler(element) {
