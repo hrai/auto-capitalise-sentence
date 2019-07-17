@@ -105,7 +105,8 @@ $(document).ready(function(){
         var htmlControl = $(targetEl);
 
         var tagName = htmlControl.prop('tagName');
-        var text = targetEl.text();
+        var text = getText(htmlControl, tagName);
+
         if(elementsWithModifiedContents.indexOf(text) >= 0)
             return;
 
