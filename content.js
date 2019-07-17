@@ -102,7 +102,7 @@ $(document).ready(function(){
     }
 
     function capitaliseTextForContentEditableElements(targetEl) {
-        var htmlControl = $(targetEl.parent());
+        var htmlControl = $(targetEl);
 
         var tagName = htmlControl.prop('tagName');
         var text = targetEl.text();
