@@ -161,6 +161,10 @@ $(document).ready(function(){
     function wireupTextChangeHandler(element) {
         
         if(!containsHtmlContent(element)) {
+            if($(element).html()) {
+                capitaliseTextForContentEditableElements(element);
+            }
+
             var observer = new MutationObserver(function(mutations) {
                 var processed = false;
                 $.each(mutations, function (i, mutation) {
