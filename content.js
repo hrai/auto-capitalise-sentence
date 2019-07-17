@@ -102,14 +102,10 @@ $(document).ready(function(){
     }
 
     function capitaliseTextForContentEditableElements(targetEl) {
+        //to remove
         var htmlControl = $(targetEl);
 
-        var tagName = targetEl.prop('tagName');
-        if(!tagName) {
-            htmlControl = $(targetEl).parent();
-            tagName = htmlControl.prop('tagName');
-        }
-        
+        var tagName = htmlControl.prop('tagName');        
         var text = getText(htmlControl, tagName);
 
         if(elementsWithModifiedContents.indexOf(text) >= 0)
@@ -144,7 +140,11 @@ $(document).ready(function(){
         wireupInputTagHandlers();
 
         wireupHtmlTagsAddedHandlers('p');
-        // wireupHtmlTagHandlers('div');
+        wireupHtmlTagsAddedHandlers('span');
+        
+        // $('span').each(function(index, element) {
+        //     wireupTextChangeHandler(element);
+        // });
     }
 
     function containsHtmlContent(element) {
@@ -159,18 +159,25 @@ $(document).ready(function(){
     }
 
     function wireupTextChangeHandler(element) {
-        var observer = new MutationObserver(function(mutations) {
-            var processed = false;
-            $.each(mutations, function (i, mutation) {
-                if(!processed) {
-                    var target = $(mutation.target);
+        
+        if(!containsHtmlContent(element)) {
+            var observer = new MutationObserver(function(mutations) {
+                var processed = false;
+                $.each(mutations, function (i, mutation) {
+                    if(!processed) {
+                        var target = $(mutation.target);
 
-                    debugger
-                    capitaliseTextForContentEditableElements(target);
-                    processed = true;
-                }
+                        var tagName = target.prop('tagName');
+                        if(!tagName) {
+                            target = $(target).parent();
+                        }
+
+                        capitaliseTextForContentEditableElements(target);
+                        processed = true;
+                    }
+                });
             });
-        });
+        }
 
         var config = {
             subtree: true,
@@ -190,9 +197,7 @@ $(document).ready(function(){
 
                 var filteredEls = addedNodes.find(tagName).addBack(tagName); // finds either added alone or as tree
                 filteredEls.each(function(index, element) {
-                    if(!containsHtmlContent(element)) {
-                        wireupTextChangeHandler(element);
-                    }
+                    wireupTextChangeHandler(element);
                 });
             });
 
