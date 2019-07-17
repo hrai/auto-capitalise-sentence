@@ -142,9 +142,13 @@ $(document).ready(function(){
     }
 
     function containsHtmlContent(element) {
-        var regex = /<\/?\w+>/;
+        var content = $(element).html();
 
-        return regex.matches(element.html());
+        if(content && content === '<br>')
+            return false;
+
+        var regex = /<\/?\w+>/;
+        return regex.matches(content);
     }
 
     function wireupTextChangeHandler(element) {
@@ -178,11 +182,9 @@ $(document).ready(function(){
 
                 var filteredEls = addedNodes.find(tagName).addBack(tagName); // finds either added alone or as tree
                 filteredEls.each(function(index, element) {
-                    if(containsHtmlContent(element)) {
-                        return;
+                    if(!containsHtmlContent(element)) {
+                        wireupTextChangeHandler(element);
                     }
-
-                    wireupTextChangeHandler(element);
                 });
             });
 
@@ -191,7 +193,8 @@ $(document).ready(function(){
 
         var config = {
             subtree: true,
-            childList: true
+            childList: true,
+            // characterData: true
         };
 
         observer.observe(target, config);
