@@ -141,10 +141,6 @@ $(document).ready(function(){
 
         wireupHtmlTagsAddedHandlers('p');
         wireupHtmlTagsAddedHandlers('span');
-        
-        // $('span').each(function(index, element) {
-        //     wireupTextChangeHandler(element);
-        // });
     }
 
     function containsHtmlContent(element) {
