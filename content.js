@@ -137,7 +137,7 @@ $(document).ready(function(){
     function hookupEventHandler() {
         wireupInputTagHandlers();
 
-        wireupHtmlTagHandlers('p');
+        wireupHtmlTagsAddedHandlers('p');
         // wireupHtmlTagHandlers('div');
     }
 
@@ -147,7 +147,7 @@ $(document).ready(function(){
         return regex.matches(element.html());
     }
 
-    function hookupHtmlChangeEventHandler(element) {
+    function wireupTextChangeHandler(element) {
         var observer = new MutationObserver(function(mutations) {
             var processed = false;
             $.each(mutations, function (i, mutation) {
@@ -169,7 +169,7 @@ $(document).ready(function(){
         observer.observe(element, config);
     }
 
-    function wireupHtmlTagHandlers(tagName) {
+    function wireupHtmlTagsAddedHandlers(tagName) {
         var target = document.querySelector('body');
 
         var observer = new MutationObserver(function(mutations) {
@@ -182,7 +182,7 @@ $(document).ready(function(){
                         return;
                     }
 
-                    hookupHtmlChangeEventHandler(element);
+                    wireupTextChangeHandler(element);
                 });
             });
 
