@@ -1,1 +1,2 @@
 eslint ../ --fix
+echo 'test'

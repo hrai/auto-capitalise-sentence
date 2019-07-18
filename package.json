@@ -18,7 +18,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "eslint . --fix",
+      "pre-commit": "./hooks/precommit.sh",
       "pre-push": "eslint . -fix"
     }
   },
