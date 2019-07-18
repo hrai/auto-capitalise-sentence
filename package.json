@@ -19,7 +19,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "./hooks/precommit.sh",
-      "pre-push": "eslint . -fix"
+      "pre-push": "eslint . --fix"
     }
   },
   "license": "MIT",

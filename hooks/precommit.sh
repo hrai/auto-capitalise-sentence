@@ -1,2 +1,2 @@
-eslint ../ --fix
-echo 'test'
+echo 'Linting...'
+eslint ../
