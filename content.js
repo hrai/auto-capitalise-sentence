@@ -80,7 +80,7 @@ $(document).ready(function(){
         var regex =/\w+\s*(\.|\?)+\s+\w$/;
         var matches = regex.test(text);
 
-        return matches;
+    return matches;
     }
 
     function capitaliseTextForInputTags(element) {
