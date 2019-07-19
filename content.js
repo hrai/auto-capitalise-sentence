@@ -105,7 +105,7 @@ $(document).ready(function(){
         //to remove
         var htmlControl = $(targetEl);
 
-        var tagName = htmlControl.prop('tagName');        
+        var tagName = htmlControl.prop('tagName');
         var text = getText(htmlControl, tagName);
 
         if(elementsWithModifiedContents.indexOf(text) >= 0)
@@ -139,8 +139,10 @@ $(document).ready(function(){
     function hookupEventHandler() {
         wireupInputTagHandlers();
 
-        wireupHtmlTagsAddedHandlers('p');
-        wireupHtmlTagsAddedHandlers('span');
+        wireupHtmlTagsAddedHandlers();
+        // wireupHtmlTagsAddedHandlers('span');
+
+        // wireupHtmlTagsAddedHandlers('textarea');
     }
 
     function containsHtmlContent(element) {
@@ -155,7 +157,7 @@ $(document).ready(function(){
     }
 
     function wireupTextChangeHandler(element) {
-        
+
         if(!containsHtmlContent(element)) {
             if($(element).html()) {
                 capitaliseTextForContentEditableElements(element);
@@ -177,31 +179,48 @@ $(document).ready(function(){
                     }
                 });
             });
+
+            var config = {
+                subtree: true,
+                childList: true,
+                characterData: true
+            };
+
+            observer.observe(element, config);
         }
-
-        var config = {
-            subtree: true,
-            childList: true,
-            characterData: true
-        };
-
-        observer.observe(element, config);
     }
 
-    function wireupHtmlTagsAddedHandlers(tagName) {
+    function wireupHtmlTagsAddedHandlers() {
         var target = document.querySelector('body');
+
+        var tags = ['p','span'];
+        var inputTags = ["input[type='text']", 'textarea'];
 
         var observer = new MutationObserver(function(mutations) {
             $.each(mutations, function (i, mutation) {
                 var addedNodes = $(mutation.addedNodes);
 
-                var filteredEls = addedNodes.find(tagName).addBack(tagName); // finds either added alone or as tree
-                filteredEls.each(function(index, element) {
-                    wireupTextChangeHandler(element);
-                });
-            });
+                try {
+                    $.each(tags, function(i,tagName) {
+                        var filteredEls = addedNodes.find(tagName).addBack(tagName); // finds either added alone or as tree
+                        filteredEls.each(function(index, element) {
+                            wireupTextChangeHandler(element);
+                        });
+                    });
 
-            wireupInputTagHandlers();
+                    $.each(inputTags, function(i,tagName) {
+                        var filteredEls = addedNodes.find(tagName).addBack(tagName); // finds either added alone or as tree
+                        filteredEls.each(function(index, element) {
+                            $(element).keyup(function(event){
+                                capitaliseTextForInputTags(event.target);
+                            });
+                        });
+                    });
+                }
+                catch(err) {
+                    console.log(err);
+                }
+            });
         });
 
         var config = {
