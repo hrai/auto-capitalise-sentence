@@ -131,7 +131,7 @@ $(document).ready(function(){
     }
 
     function wireupInputTagHandlers() {
-        $(':text,textarea').keydown(function(event){
+        $(':text,textarea').on('input', function(event){
             capitaliseTextForInputTags(event.target);
         });
     }
@@ -211,7 +211,7 @@ $(document).ready(function(){
                     $.each(inputTags, function(i,tagName) {
                         var filteredEls = addedNodes.find(tagName).addBack(tagName); // finds either added alone or as tree
                         filteredEls.each(function(index, element) {
-                            $(element).keyup(function(event){
+                            $(element).on('input', function(event){
                                 capitaliseTextForInputTags(event.target);
                             });
                         });
