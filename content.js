@@ -79,6 +79,7 @@ $(document).ready(function(){
     function shouldCapitalise(text) {
         var regex =/\w+\s*(\.|\?)+\s+\w$/;
         var matches = regex.test(text);
+
         return matches;
     }
 
