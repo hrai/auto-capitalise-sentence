@@ -49,7 +49,6 @@ $(document).ready(function(){
             return;
         }
 
-        htmlControl.prop('contenteditable', true);
         htmlControl.text(updatedStr);
         setEndOfContenteditable(htmlControl[0]);
 
