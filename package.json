@@ -19,9 +19,14 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "./hooks/precommit.sh",
-      "pre-push": "eslint . --fix"
+      "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "license": "MIT",
   "bugs": {

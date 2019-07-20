@@ -80,7 +80,7 @@ $(document).ready(function(){
         var regex =/\w+\s*(\.|\?)+\s+\w$/;
         var matches = regex.test(text);
 
-    return matches;
+        return matches;
     }
 
     function capitaliseTextForInputTags(element) {
@@ -126,8 +126,7 @@ $(document).ready(function(){
     function getCapitalisedContent(text) {
         var lastChar = text.slice(-1);
         var updatedStr = text.substr(0, text.length-1) + lastChar.toUpperCase();
-
-        return updatedStr;
+     return updatedStr;
     }
 
     function wireupInputTagHandlers() {
@@ -194,7 +193,7 @@ $(document).ready(function(){
         var target = document.querySelector('body');
 
         var tags = ['p','span'];
-        var inputTags = ["input[type='text']", 'textarea'];
+        var inputTags = ['input[type=\'text\']', 'textarea'];
 
         var observer = new MutationObserver(function(mutations) {
             $.each(mutations, function (i, mutation) {
