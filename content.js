@@ -1,6 +1,6 @@
 $(document).ready(function(){
     var sitesToExclude = [];
-    var elementsWithModifiedContents = [];
+    // var elementsWithModifiedContents = [];
 
     // function excludeSite(site) {
     //     sitesToExclude.push(site);
@@ -81,6 +81,13 @@ $(document).ready(function(){
         return matches;
     }
 
+    function shouldCapitaliseForI(text) {
+        var regex =/\s+i(\s+|')$/;
+        var matches = regex.test(text);
+
+        return matches;
+    }
+
     function capitaliseText(element) {
         var htmlControl = $(element);
 
@@ -96,13 +103,27 @@ $(document).ready(function(){
             var updatedStr = getCapitalisedContent(text);
 
             setText(htmlControl, tagName, updatedStr);
+            return;
         }
+
+        if(shouldCapitaliseForI(text)) {
+            var updatedStr = getCapitalisedContentForI(text);
+
+            setText(htmlControl, tagName, updatedStr);
+            return;
+        }
+    }
+
+    function getCapitalisedContentForI(text) {
+        var lastTwoChars = text.slice(-2);
+        var updatedStr = text.substr(0, text.length-2) + lastTwoChars.toUpperCase();
+        return updatedStr;
     }
 
     function getCapitalisedContent(text) {
         var lastChar = text.slice(-1);
         var updatedStr = text.substr(0, text.length-1) + lastChar.toUpperCase();
-     return updatedStr;
+        return updatedStr;
     }
 
     function wireupInputTagHandlers() {
