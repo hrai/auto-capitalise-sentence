@@ -106,7 +106,8 @@ $(document).ready(function(){
             return;
         }
 
-        if(shouldCapitaliseForI(text)) {
+        if(text.length >= 2 && shouldCapitaliseForI(text)) {
+            debugger
             var updatedStr = getCapitalisedContentForI(text);
 
             setText(htmlControl, tagName, updatedStr);
