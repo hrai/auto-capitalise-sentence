@@ -1,6 +1,6 @@
 $(document).ready(function(){
     var sitesToExclude = [];
-    var elementsWithModifiedContents = [];
+    // var elementsWithModifiedContents = [];
 
     // function excludeSite(site) {
     //     sitesToExclude.push(site);
@@ -51,8 +51,6 @@ $(document).ready(function(){
 
         htmlControl.text(updatedStr);
         setEndOfContenteditable(htmlControl[0]);
-
-        elementsWithModifiedContents.push(htmlControl.html());
     }
 
     function setEndOfContenteditable(contentEditableElement)
@@ -83,7 +81,14 @@ $(document).ready(function(){
         return matches;
     }
 
-    function capitaliseTextForInputTags(element) {
+    function shouldCapitaliseForI(text) {
+        var regex =/\s+i(\s+|')$/;
+        var matches = regex.test(text);
+
+        return matches;
+    }
+
+    function capitaliseText(element) {
         var htmlControl = $(element);
 
         var tagName = htmlControl.prop('tagName');
@@ -98,40 +103,32 @@ $(document).ready(function(){
             var updatedStr = getCapitalisedContent(text);
 
             setText(htmlControl, tagName, updatedStr);
+            return;
+        }
+
+        if(text.length >= 2 && shouldCapitaliseForI(text)) {
+            var updatedStr = getCapitalisedContentForI(text);
+
+            setText(htmlControl, tagName, updatedStr);
+            return;
         }
     }
 
-    function capitaliseTextForContentEditableElements(targetEl) {
-        //to remove
-        var htmlControl = $(targetEl);
-
-        var tagName = htmlControl.prop('tagName');
-        var text = getText(htmlControl, tagName);
-
-        if(elementsWithModifiedContents.indexOf(text) >= 0)
-            return;
-
-        if(text.length == 1) {
-            setText(htmlControl, tagName, text.toUpperCase());
-            return;
-        }
-
-        if(shouldCapitalise(text)) {
-            var updatedStr = getCapitalisedContent(text);
-
-            setText(htmlControl, tagName, updatedStr);
-        }
+    function getCapitalisedContentForI(text) {
+        var lastTwoChars = text.slice(-2);
+        var updatedStr = text.substr(0, text.length-2) + lastTwoChars.toUpperCase();
+        return updatedStr;
     }
 
     function getCapitalisedContent(text) {
         var lastChar = text.slice(-1);
         var updatedStr = text.substr(0, text.length-1) + lastChar.toUpperCase();
-     return updatedStr;
+        return updatedStr;
     }
 
     function wireupInputTagHandlers() {
         $(':text,textarea').on('input', function(event){
-            capitaliseTextForInputTags(event.target);
+            capitaliseText(event.target);
         });
     }
 
@@ -139,9 +136,6 @@ $(document).ready(function(){
         wireupInputTagHandlers();
 
         wireupHtmlTagsAddedHandlers();
-        // wireupHtmlTagsAddedHandlers('span');
-
-        // wireupHtmlTagsAddedHandlers('textarea');
     }
 
     function containsHtmlContent(element) {
@@ -159,7 +153,7 @@ $(document).ready(function(){
 
         if(!containsHtmlContent(element)) {
             if($(element).html()) {
-                capitaliseTextForContentEditableElements(element);
+                capitaliseText(element);
             }
 
             var observer = new MutationObserver(function(mutations) {
@@ -173,7 +167,7 @@ $(document).ready(function(){
                             target = $(target).parent();
                         }
 
-                        capitaliseTextForContentEditableElements(target);
+                        capitaliseText(target);
                         processed = true;
                     }
                 });
@@ -211,7 +205,7 @@ $(document).ready(function(){
                         var filteredEls = addedNodes.find(tagName).addBack(tagName); // finds either added alone or as tree
                         filteredEls.each(function(index, element) {
                             $(element).on('input', function(event){
-                                capitaliseTextForInputTags(event.target);
+                                capitaliseText(event.target);
                             });
                         });
                     });
