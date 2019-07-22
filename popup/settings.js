@@ -1,7 +1,13 @@
 $(document).ready(function(){
     // var sitesToExclude = [];
 
-    $('#submitButton').click(function() {
+    var a=document.getElementById('submitButton');
+    console.log(a);
+    console.log($('#submitButton').val());
+
+
+    $(document).on('click', '#submitButton', function() {
+    // $('#submitButton').click(function() {
         var sites = getSites();
         console.log(sites);
 
