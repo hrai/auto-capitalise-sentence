@@ -10,13 +10,36 @@ $(document).ready(function(){
                 'sites_to_ignore': sites
             });
 
-        function getSites() {
-            var sitesBox = $('#sites');
-            var sites = sitesBox.val().split('\n');
-            return sites;
-        }
     });
 
+    function getSites() {
+        var sitesBoxVal = $('#sites').val();
+
+        if( sitesBoxVal) {
+            var sites = sitesBoxVal.split('\n');
+            return sites;
+        }
+
+        return '';
+    }
+
+    debugger
+    var sites = getSites();
+    console.log(sites);
+
+    browser.storage.local.set(
+        {
+            'sites_to_ignore': 'testing'
+        });
+    console.log(browser.storage.local.get('sites_to_ignore').then(processResponse, onError));
+
+    function processResponse(item) {
+        console.log(item);
+    }
+
+    function onError(error) {
+        console.log(error)
+    }
 
 });
 
