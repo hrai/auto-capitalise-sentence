@@ -1,13 +1,22 @@
-
 $(document).ready(function(){
     // var sitesToExclude = [];
 
-    console.log('test');
-
     $('#submitButton').click(function() {
-        var sitesBox = $('#sites');
-        console.log(sitesBox.val());
-    });
-});
+        var sites = getSites();
+        console.log(sites);
 
+        browser.storage.local.set(
+            {
+                'sites_to_ignore': sites
+            });
+
+        function getSites() {
+            var sitesBox = $('#sites');
+            var sites = sitesBox.val().split('\n');
+            return sites;
+        }
+    });
+
+
+});
 
