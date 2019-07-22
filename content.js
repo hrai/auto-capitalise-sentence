@@ -51,8 +51,6 @@ $(document).ready(function(){
 
         htmlControl.text(updatedStr);
         setEndOfContenteditable(htmlControl[0]);
-
-        elementsWithModifiedContents.push(htmlControl.html());
     }
 
     function setEndOfContenteditable(contentEditableElement)
@@ -83,33 +81,11 @@ $(document).ready(function(){
         return matches;
     }
 
-    function capitaliseTextForInputTags(element) {
+    function capitaliseText(element) {
         var htmlControl = $(element);
 
         var tagName = htmlControl.prop('tagName');
         var text = getText(htmlControl, tagName);
-
-        if(text.length == 1) {
-            setText(htmlControl, tagName, text.toUpperCase());
-            return;
-        }
-
-        if(shouldCapitalise(text)) {
-            var updatedStr = getCapitalisedContent(text);
-
-            setText(htmlControl, tagName, updatedStr);
-        }
-    }
-
-    function capitaliseTextForContentEditableElements(targetEl) {
-        //to remove
-        var htmlControl = $(targetEl);
-
-        var tagName = htmlControl.prop('tagName');
-        var text = getText(htmlControl, tagName);
-
-        if(elementsWithModifiedContents.indexOf(text) >= 0)
-            return;
 
         if(text.length == 1) {
             setText(htmlControl, tagName, text.toUpperCase());
@@ -131,7 +107,7 @@ $(document).ready(function(){
 
     function wireupInputTagHandlers() {
         $(':text,textarea').on('input', function(event){
-            capitaliseTextForInputTags(event.target);
+            capitaliseText(event.target);
         });
     }
 
@@ -139,9 +115,6 @@ $(document).ready(function(){
         wireupInputTagHandlers();
 
         wireupHtmlTagsAddedHandlers();
-        // wireupHtmlTagsAddedHandlers('span');
-
-        // wireupHtmlTagsAddedHandlers('textarea');
     }
 
     function containsHtmlContent(element) {
@@ -159,7 +132,7 @@ $(document).ready(function(){
 
         if(!containsHtmlContent(element)) {
             if($(element).html()) {
-                capitaliseTextForContentEditableElements(element);
+                capitaliseText(element);
             }
 
             var observer = new MutationObserver(function(mutations) {
@@ -173,7 +146,7 @@ $(document).ready(function(){
                             target = $(target).parent();
                         }
 
-                        capitaliseTextForContentEditableElements(target);
+                        capitaliseText(target);
                         processed = true;
                     }
                 });
@@ -211,7 +184,7 @@ $(document).ready(function(){
                         var filteredEls = addedNodes.find(tagName).addBack(tagName); // finds either added alone or as tree
                         filteredEls.each(function(index, element) {
                             $(element).on('input', function(event){
-                                capitaliseTextForInputTags(event.target);
+                                capitaliseText(event.target);
                             });
                         });
                     });
