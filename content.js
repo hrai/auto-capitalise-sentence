@@ -1,38 +1,51 @@
 $(document).ready(function(){
-    var sitesToExclude = [];
-    // var elementsWithModifiedContents = [];
-
     // function excludeSite(site) {
     //     sitesToExclude.push(site);
     // }
 
-    //https://stackoverflow.com/questions/406192/get-current-url-with-jquery
-    var currentUrlDomain = window.location.origin;
+    browser.storage.local.get('sites_to_ignore').then(processResponse, onError);
 
-    var totalSites =sitesToExclude.length;
-    if(totalSites ==0) {
-        hookupEventHandler();
-
-        return;
+    function hookupEventHandlers() {
+        wireupInputTagHandlers();
+        wireupHtmlTagsAddedHandlers();
     }
 
-    if(totalSites !=0) {
-        try {
-            sitesToExclude.forEach(function(siteToExclude) {
-                if(!siteToExclude.includes(currentUrlDomain)) {
-                    hookupEventHandler();
+    function processResponse(item) {
+        var sitesToExclude=item.sites_to_ignore;
 
-                    // eslint-disable-next-line no-undef
-                    throw BreakException;
+        if(item && sitesToExclude) {
+            //https://stackoverflow.com/questions/406192/get-current-url-with-jquery
+            var currentUrlDomain = window.location.origin;
+            var errorMsg ='breaking loop';
+
+            try {
+                var shouldEnableCapitalisingOnCurrentSite = true;
+
+                $.each(sitesToExclude, function (i, siteToExclude) {
+                    if(currentUrlDomain.includes(siteToExclude)) {
+                        shouldEnableCapitalisingOnCurrentSite=false;
+                    }
+                });
+
+                if(shouldEnableCapitalisingOnCurrentSite) {
+                    hookupEventHandlers();
+
+                    throw new Error(errorMsg);
                 }
-            });
-        }
-        catch (e) {
-            // eslint-disable-next-line no-undef
-            if (e !== BreakException) {
-                throw e;
+            }
+            catch (e) {
+                if (e.message !== errorMsg) {
+                    throw e;
+                }
             }
         }
+        else {
+            hookupEventHandlers();
+        }
+    }
+
+    function onError(error) {
+        console.log(error);
     }
 
     function getText(htmlControl, tagName) {
@@ -130,12 +143,6 @@ $(document).ready(function(){
         $(':text,textarea').on('input', function(event){
             capitaliseText(event.target);
         });
-    }
-
-    function hookupEventHandler() {
-        wireupInputTagHandlers();
-
-        wireupHtmlTagsAddedHandlers();
     }
 
     function containsHtmlContent(element) {
