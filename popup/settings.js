@@ -2,7 +2,8 @@ $(document).ready(function(){
     // var sitesToExclude = [];
 
     var a=document.getElementById('submitButton');
-    console.log(a);
+    debugger
+    console.log(document.body);
     console.log($('#submitButton').val());
 
 
@@ -29,7 +30,6 @@ $(document).ready(function(){
         return '';
     }
 
-    debugger
     var sites = getSites();
     console.log(sites);
 
