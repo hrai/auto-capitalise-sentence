@@ -14,41 +14,28 @@ $(document).ready(function(){
             //https://stackoverflow.com/questions/406192/get-current-url-with-jquery
             var currentUrlDomain = window.location.origin;
 
-            $.each(sitesToExclude, function (i, site) {
-                if(!site.indexOf(currentUrlDomain)) {
-                    hookupEventHandler();
+            try {
+                $.each(sitesToExclude, function (i, siteToExclude) {
+                    if(!siteToExclude.includes(currentUrlDomain)) {
+                        wireupInputTagHandlers();
+                        wireupHtmlTagsAddedHandlers();
+
+                        // eslint-disable-next-line no-undef
+                        throw BreakException;
+                    }
+                });
+            }
+            catch (e) {
+                // eslint-disable-next-line no-undef
+                if (e !== BreakException) {
+                    throw e;
                 }
-            });
+            }
         }
     }
 
     function onError(error) {
         console.log(error);
-    }
-
-    var totalSites =sitesToExclude.length;
-    if(totalSites ==0) {
-
-        return;
-    }
-
-    if(totalSites !=0) {
-        try {
-            sitesToExclude.forEach(function(siteToExclude) {
-                if(!siteToExclude.includes(currentUrlDomain)) {
-                    hookupEventHandler();
-
-                    // eslint-disable-next-line no-undef
-                    throw BreakException;
-                }
-            });
-        }
-        catch (e) {
-            // eslint-disable-next-line no-undef
-            if (e !== BreakException) {
-                throw e;
-            }
-        }
     }
 
     function getText(htmlControl, tagName) {
@@ -146,12 +133,6 @@ $(document).ready(function(){
         $(':text,textarea').on('input', function(event){
             capitaliseText(event.target);
         });
-    }
-
-    function hookupEventHandler() {
-        wireupInputTagHandlers();
-
-        wireupHtmlTagsAddedHandlers();
     }
 
     function containsHtmlContent(element) {
