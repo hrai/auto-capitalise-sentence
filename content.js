@@ -11,26 +11,31 @@ $(document).ready(function(){
     }
 
     function processResponse(item) {
-        debugger
         var sitesToExclude=item.sites_to_ignore;
 
         if(item && sitesToExclude) {
             //https://stackoverflow.com/questions/406192/get-current-url-with-jquery
             var currentUrlDomain = window.location.origin;
+            var errorMsg ='breaking loop';
 
             try {
-                $.each(sitesToExclude, function (i, siteToExclude) {
-                    if(!siteToExclude.includes(currentUrlDomain)) {
-                        hookupEventHandlers();
+                var shouldEnableCapitalisingOnCurrentSite = true;
 
-                        // eslint-disable-next-line no-undef
-                        throw BreakException;
+                $.each(sitesToExclude, function (i, siteToExclude) {
+                    if(currentUrlDomain.includes(siteToExclude)) {
+                        shouldEnableCapitalisingOnCurrentSite=false;
                     }
                 });
+
+                if(shouldEnableCapitalisingOnCurrentSite) {
+                    hookupEventHandlers();
+
+                    throw new Error(errorMsg);
+                }
             }
             catch (e) {
                 // eslint-disable-next-line no-undef
-                if (e !== BreakException) {
+                if (e.message !== errorMsg) {
                     throw e;
                 }
             }
