@@ -1,6 +1,4 @@
 $(document).ready(function(){
-    // var sitesToExclude = [];
-
     browser.storage.local.get('sites_to_ignore').then(processResponse, onError);
 
     $(document).on('click', '#submitButton', function() {
@@ -21,14 +19,6 @@ $(document).ready(function(){
         }
 
         return '';
-    }
-
-    function processResponse(item) {
-        console.log(item);
-    }
-
-    function onError(error) {
-        console.log(error);
     }
 
 });
