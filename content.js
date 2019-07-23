@@ -34,7 +34,6 @@ $(document).ready(function(){
                 }
             }
             catch (e) {
-                // eslint-disable-next-line no-undef
                 if (e.message !== errorMsg) {
                     throw e;
                 }
