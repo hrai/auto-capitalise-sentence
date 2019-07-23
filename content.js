@@ -1,17 +1,33 @@
 $(document).ready(function(){
-    var sitesToExclude = [];
-    // var elementsWithModifiedContents = [];
-
     // function excludeSite(site) {
     //     sitesToExclude.push(site);
     // }
 
-    //https://stackoverflow.com/questions/406192/get-current-url-with-jquery
-    var currentUrlDomain = window.location.origin;
+    browser.storage.local.get('sites_to_ignore').then(processResponse, onError);
+
+
+    function processResponse(item) {
+        debugger
+        if(item) {
+            var sitesToExclude=item.sites_to_ignore;
+
+            //https://stackoverflow.com/questions/406192/get-current-url-with-jquery
+            var currentUrlDomain = window.location.origin;
+
+            $.each(sitesToExclude, function (i, site) {
+                if(!site.indexOf(currentUrlDomain)) {
+                    hookupEventHandler();
+                }
+            });
+        }
+    }
+
+    function onError(error) {
+        console.log(error);
+    }
 
     var totalSites =sitesToExclude.length;
     if(totalSites ==0) {
-        hookupEventHandler();
 
         return;
     }
