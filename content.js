@@ -5,20 +5,23 @@ $(document).ready(function(){
 
     browser.storage.local.get('sites_to_ignore').then(processResponse, onError);
 
+    function hookupEventHandlers() {
+        wireupInputTagHandlers();
+        wireupHtmlTagsAddedHandlers();
+    }
 
     function processResponse(item) {
         debugger
-        if(item) {
-            var sitesToExclude=item.sites_to_ignore;
+        var sitesToExclude=item.sites_to_ignore;
 
+        if(item && sitesToExclude) {
             //https://stackoverflow.com/questions/406192/get-current-url-with-jquery
             var currentUrlDomain = window.location.origin;
 
             try {
                 $.each(sitesToExclude, function (i, siteToExclude) {
                     if(!siteToExclude.includes(currentUrlDomain)) {
-                        wireupInputTagHandlers();
-                        wireupHtmlTagsAddedHandlers();
+                        hookupEventHandlers();
 
                         // eslint-disable-next-line no-undef
                         throw BreakException;
@@ -31,6 +34,9 @@ $(document).ready(function(){
                     throw e;
                 }
             }
+        }
+        else {
+            hookupEventHandlers();
         }
     }
 
