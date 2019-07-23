@@ -7,7 +7,7 @@
     <body>
         <div class="form-group" style="margin:5% 5% 5% 5%">
             <textarea id="sites" rows="4" class="form-control" placeholder="Add sites to exclude" ></textarea>
-                    <label>Add each site in a separate row</label>
+                    <small class="form-text text-muted">Add each site in a separate row</small>
                     <span class="input-group-btn">
                         <input type="button" value="Submit" id="submitButton" class="btn btn-primary">
                     </span>
@@ -16,3 +16,8 @@
     <script charset="utf-8" src="/dependencies/jquery-3.4.1.min.js"></script>
     <script charset="utf-8" src="settings.js"></script>
 </html>
+<style type="text/css" media="screen">
+#submitButton {
+    margin-top: 3px;
+}
+</style>
