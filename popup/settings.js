@@ -1,22 +1,15 @@
 $(document).ready(function(){
     // var sitesToExclude = [];
 
-    var a=document.getElementById('submitButton');
-    debugger
-    console.log(document.body);
-    console.log($('#submitButton').val());
-
+    browser.storage.local.get('sites_to_ignore').then(processResponse, onError);
 
     $(document).on('click', '#submitButton', function() {
-    // $('#submitButton').click(function() {
         var sites = getSites();
-        console.log(sites);
 
         browser.storage.local.set(
             {
                 'sites_to_ignore': sites
             });
-
     });
 
     function getSites() {
@@ -30,21 +23,12 @@ $(document).ready(function(){
         return '';
     }
 
-    var sites = getSites();
-    console.log(sites);
-
-    browser.storage.local.set(
-        {
-            'sites_to_ignore': 'testing'
-        });
-    console.log(browser.storage.local.get('sites_to_ignore').then(processResponse, onError));
-
     function processResponse(item) {
         console.log(item);
     }
 
     function onError(error) {
-        console.log(error)
+        console.log(error);
     }
 
 });
