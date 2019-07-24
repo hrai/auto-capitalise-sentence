@@ -1,4 +1,4 @@
-$(window).load(function() {
+$(document).ready(function() {
     // function excludeSite(site) {
     //     sitesToExclude.push(site);
     // }
@@ -166,7 +166,10 @@ $(window).load(function() {
 
             var observer = new MutationObserver(function(mutations) {
                 var processed = false;
-                $.each(mutations, function(i, mutation) {
+                var filteredMutations = mutations.filter(function() {
+                    return mut.addedNodes && mut.addedNodes.length > 0;
+                });
+                $.each(filteredMutations, function(i, mutation) {
                     if (!processed) {
                         var target = $(mutation.target);
 
@@ -175,10 +178,8 @@ $(window).load(function() {
                             target = $(target).parent();
                         }
 
-                        if (isContentEditable(target)) {
-                            capitaliseText(target);
-                            processed = true;
-                        }
+                        capitaliseText(target);
+                        processed = true;
                     }
                 });
             });
@@ -220,7 +221,9 @@ $(window).load(function() {
                             var filteredEls = getFilteredElements(addedNodes, tagName);
 
                             filteredEls.each(function(index, element) {
-                                wireupTextChangeHandler(element);
+                                if (isContentEditable(element)) {
+                                    wireupTextChangeHandler(element);
+                                }
                             });
                         });
 
