@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(window).load(function() {
     // function excludeSite(site) {
     //     sitesToExclude.push(site);
     // }
