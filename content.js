@@ -197,6 +197,13 @@ $(document).ready(function() {
         return element && element.isContentEditable;
     }
 
+    function getFilteredElements(addedNodes, tagName) {
+        return $(addedNodes)
+            .find(tagName)
+            .addBack(tagName); // finds either added alone or as tree
+    }
+
+    /*eslint no-debugger: "error"*/
     function wireupHtmlTagsAddedHandlers() {
         var target = document.querySelector('body');
 
@@ -205,26 +212,30 @@ $(document).ready(function() {
 
         var observer = new MutationObserver(function(mutations) {
             $.each(mutations, function(i, mutation) {
-                var addedNodes = $(mutation.addedNodes);
+                var addedNodes = mutation.addedNodes;
 
                 try {
-                    $.each(tags, function(i, tagName) {
-                        var filteredEls = addedNodes.find(tagName).addBack(tagName); // finds either added alone or as tree
-                        filteredEls.each(function(index, element) {
-                            wireupTextChangeHandler(element);
-                        });
-                    });
+                    if (addedNodes && addedNodes.length > 0) {
+                        $.each(tags, function(i, tagName) {
+                            var filteredEls = getFilteredElements(addedNodes, tagName);
 
-                    $.each(inputTags, function(i, tagName) {
-                        var filteredEls = addedNodes.find(tagName).addBack(tagName); // finds either added alone or as tree
-                        filteredEls.each(function(index, element) {
-                            if (isContentEditable(element)) {
-                                $(element).on('input', function(event) {
-                                    capitaliseText(event.target);
-                                });
-                            }
+                            filteredEls.each(function(index, element) {
+                                wireupTextChangeHandler(element);
+                            });
                         });
-                    });
+
+                        $.each(inputTags, function(i, tagName) {
+                            var filteredEls = getFilteredElements(addedNodes, tagName);
+
+                            filteredEls.each(function(index, element) {
+                                if (isContentEditable(element)) {
+                                    $(element).on('input', function(event) {
+                                        capitaliseText(event.target);
+                                    });
+                                }
+                            });
+                        });
+                    }
                 } catch (err) {
                     console.log(err);
                 }
