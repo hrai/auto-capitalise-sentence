@@ -166,9 +166,10 @@ $(document).ready(function() {
 
             var observer = new MutationObserver(function(mutations) {
                 var processed = false;
-                var filteredMutations = mutations.filter(function() {
+                var filteredMutations = mutations.filter(function(mut) {
                     return mut.addedNodes && mut.addedNodes.length > 0;
                 });
+
                 $.each(filteredMutations, function(i, mutation) {
                     if (!processed) {
                         var target = $(mutation.target);
