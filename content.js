@@ -196,6 +196,15 @@ $(document).ready(function() {
 
                         var addedNodes = mutation.addedNodes;
                         if (addedNodes && addedNodes.length > 0) {
+                            // var textNodes=filterUnwantedNodes(addedNodes);
+                            // if(textNodes.length>0 && textNodes[0].parentNode){
+                            //     var element=textNodes[0].parentNode;
+                            //     if (shouldAttachHandler(element)) {
+                            //         capitaliseText(element);
+                            //     }
+
+                            //     throw new Error(errorMsg);
+                            // }
 
                             $.each(tags, function(i, tagName) {
                                 var filteredEls = getFilteredElements(addedNodes, tagName);
