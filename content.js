@@ -200,9 +200,16 @@ $(document).ready(function() {
     }
 
     function getFilteredElements(addedNodes, tagName) {
-        return $(addedNodes)
+        var filteredEls = $(addedNodes)
             .find(tagName)
             .addBack(tagName); // finds either added alone or as tree
+
+        if(filteredEls.length ===0){
+            return $( addedNodes ).filter(function(element) {
+                return element.nodeName=== '#text';
+            });
+        }
+        return filteredEls;
     }
 
     /*eslint no-debugger: "error"*/
@@ -213,32 +220,37 @@ $(document).ready(function() {
         var inputTags = ['input[type=\'text\']', 'textarea'];
 
         var observer = new MutationObserver(function(mutations) {
+            console.log(mutations);
+
             $.each(mutations, function(i, mutation) {
-                var addedNodes = mutation.addedNodes;
-
                 try {
-                    if (addedNodes && addedNodes.length > 0) {
-                        $.each(tags, function(i, tagName) {
-                            var filteredEls = getFilteredElements(addedNodes, tagName);
+                    if( mutation.type==='childList'){
+                        var addedNodes = mutation.addedNodes;
+                        if (addedNodes && addedNodes.length > 0) {
+                            $.each(tags, function(i, tagName) {
+                                var filteredEls = getFilteredElements(addedNodes, tagName);
 
-                            filteredEls.each(function(index, element) {
-                                if (isContentEditable(element)) {
-                                    wireupTextChangeHandler(element);
-                                }
+                                filteredEls.each(function(index, element) {
+                                    if (shouldAttachHandler(element)) {
+                                        // wireupTextChangeHandler(element);
+                                        capitaliseText(element);
+                                    }
+                                });
                             });
-                        });
 
-                        $.each(inputTags, function(i, tagName) {
-                            var filteredEls = getFilteredElements(addedNodes, tagName);
+                            $.each(inputTags, function(i, tagName) {
+                                var filteredEls = getFilteredElements(addedNodes, tagName);
 
-                            filteredEls.each(function(index, element) {
-                                if (isContentEditable(element)) {
+                                filteredEls.each(function(index, element) {
                                     $(element).on('input', function(event) {
                                         capitaliseText(event.target);
                                     });
-                                }
+                                });
                             });
-                        });
+                        }
+                    }
+                    else if( mutation.type==='characterData'){
+                        capitaliseText(mutation.target.parentNode);
                     }
                 } catch (err) {
                     console.log(err);
@@ -248,9 +260,14 @@ $(document).ready(function() {
 
         var config = {
             subtree: true,
-            childList: true
+            childList: true,
+            characterData:true
         };
 
         observer.observe(target, config);
+    }
+
+    function shouldAttachHandler(element) {
+        return isContentEditable(element) && !containsHtmlContent(element);
     }
 });
