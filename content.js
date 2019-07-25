@@ -198,7 +198,7 @@ $(document).ready(function() {
                                 var filteredEls = getFilteredElements(addedNodes, tagName);
 
                                 filteredEls.each(function(index, element) {
-                                    if (shouldAttachHandler(element)) {
+                                    if (shouldCapitaliseContent(element)) {
                                         capitaliseText(element);
                                     }
                                 });
@@ -235,7 +235,7 @@ $(document).ready(function() {
         observer.observe(target, config);
     }
 
-    function shouldAttachHandler(element) {
+    function shouldCapitaliseContent(element) {
         return isContentEditable(element) && !containsHtmlContent(element);
     }
 });
