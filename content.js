@@ -3,6 +3,7 @@ $(document).ready(function() {
     //     sitesToExclude.push(site);
     // }
 
+    var errorMsg = 'breaking loop';
     browser.storage.local.get('sites_to_ignore').then(processResponse, onError);
 
     function hookupEventHandlers() {
@@ -16,7 +17,6 @@ $(document).ready(function() {
         if (item && sitesToExclude) {
             //https://stackoverflow.com/questions/406192/get-current-url-with-jquery
             var currentUrlDomain = window.location.origin;
-            var errorMsg = 'breaking loop';
 
             try {
                 var shouldEnableCapitalisingOnCurrentSite = true;
@@ -185,43 +185,52 @@ $(document).ready(function() {
         var inputTags = ['input[type=\'text\']', 'textarea'];
 
         var observer = new MutationObserver(function(mutations) {
-            console.log(mutations);
+            // console.log(mutations);
 
             $.each(mutations, function(i, mutation) {
                 try {
                     if( mutation.type==='childList'){
 
                         var addedNodes = mutation.addedNodes;
-                        if (addedNodes){
-                            // addedNodes=filterUnwantedNodes(addedNodes);
-                            if(addedNodes.length > 0) {
-                                $.each(tags, function(i, tagName) {
-                                    var filteredEls = getFilteredElements(addedNodes, tagName);
+                        if (addedNodes && addedNodes.length > 0) {
+                            // var textNodes=filterUnwantedNodes(addedNodes);
+                            // if(textNodes.length>0 && textNodes[0].parentNode){
+                            //     var element=textNodes[0].parentNode;
+                            //     if (shouldAttachHandler(element)) {
+                            //         capitaliseText(element);
+                            //     }
 
-                                    filteredEls.each(function(index, element) {
-                                        if (shouldAttachHandler(element)) {
-                                            capitaliseText(element);
-                                        }
+                            //     throw new Error(errorMsg);
+                            // }
+
+                            $.each(tags, function(i, tagName) {
+                                var filteredEls = getFilteredElements(addedNodes, tagName);
+
+                                filteredEls.each(function(index, element) {
+                                    if (shouldAttachHandler(element)) {
+                                        capitaliseText(element);
+                                    }
+                                });
+                            });
+
+                            $.each(inputTags, function(i, tagName) {
+                                var filteredEls = getFilteredElements(addedNodes, tagName);
+
+                                filteredEls.each(function(index, element) {
+                                    $(element).on('input', function(event) {
+                                        capitaliseText(event.target);
                                     });
                                 });
-
-                                $.each(inputTags, function(i, tagName) {
-                                    var filteredEls = getFilteredElements(addedNodes, tagName);
-
-                                    filteredEls.each(function(index, element) {
-                                        $(element).on('input', function(event) {
-                                            capitaliseText(event.target);
-                                        });
-                                    });
-                                });
-                            }
+                            });
                         }
                     }
                     else if( mutation.type==='characterData'){
                         capitaliseText(mutation.target.parentNode);
                     }
                 } catch (err) {
-                    console.log(err);
+                    if (err.message !== errorMsg) {
+                        console.log(err);
+                    }
                 }
             });
         });
