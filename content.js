@@ -6,8 +6,8 @@ $(document).ready(function() {
     browser.storage.local.get('sites_to_ignore').then(processResponse, onError);
 
     function hookupEventHandlers() {
-        wireupInputTagHandlers();
-        wireupHtmlTagsAddedHandlers();
+        observeInputTags();
+        observeHtmlBody();
     }
 
     function processResponse(item) {
@@ -142,7 +142,7 @@ $(document).ready(function() {
         return updatedStr;
     }
 
-    function wireupInputTagHandlers() {
+    function observeInputTags() {
         $(':text,textarea').on('input', function(event) {
             capitaliseText(event.target);
         });
@@ -158,62 +158,27 @@ $(document).ready(function() {
         return hasHtmlTag;
     }
 
-    function wireupTextChangeHandler(element) {
-        if (!containsHtmlContent(element)) {
-            if ($(element).html()) {
-                capitaliseText(element);
-            }
-
-            var observer = new MutationObserver(function(mutations) {
-                var processed = false;
-                // var filteredMutations = mutations.filter(function(mut) {
-                //     return mut.addedNodes && mut.addedNodes.length > 0;
-                // });
-
-                $.each(mutations, function(i, mutation) {
-                    if (!processed) {
-                        var target = $(mutation.target);
-
-                        var tagName = target.prop('tagName');
-                        if (!tagName) {
-                            target = $(target).parent();
-                        }
-
-                        capitaliseText(target);
-                        processed = true;
-                    }
-                });
-            });
-
-            var config = {
-                subtree: true,
-                childList: true,
-                characterData: true
-            };
-
-            observer.observe(element, config);
-        }
-    }
-
     function isContentEditable(element) {
         return element && element.isContentEditable;
     }
 
+    function filterUnwantedNodes(nodes) {
+        return $( nodes ).filter(function(i, element) {
+            if(!element.tagName || element.tagName!=='BR')
+                return element.nodeName=== '#text';
+
+            return false;
+        });
+    }
+
     function getFilteredElements(addedNodes, tagName) {
-        var filteredEls = $(addedNodes)
+        return $(addedNodes)
             .find(tagName)
             .addBack(tagName); // finds either added alone or as tree
-
-        if(filteredEls.length ===0){
-            return $( addedNodes ).filter(function(element) {
-                return element.nodeName=== '#text';
-            });
-        }
-        return filteredEls;
     }
 
     /*eslint no-debugger: "error"*/
-    function wireupHtmlTagsAddedHandlers() {
+    function observeHtmlBody() {
         var target = document.querySelector('body');
 
         var tags = ['p', 'span'];
@@ -225,28 +190,31 @@ $(document).ready(function() {
             $.each(mutations, function(i, mutation) {
                 try {
                     if( mutation.type==='childList'){
+
                         var addedNodes = mutation.addedNodes;
-                        if (addedNodes && addedNodes.length > 0) {
-                            $.each(tags, function(i, tagName) {
-                                var filteredEls = getFilteredElements(addedNodes, tagName);
+                        if (addedNodes){
+                            addedNodes=filterUnwantedNodes(addedNodes);
+                            if(addedNodes.length > 0) {
+                                $.each(tags, function(i, tagName) {
+                                    var filteredEls = getFilteredElements(addedNodes, tagName);
 
-                                filteredEls.each(function(index, element) {
-                                    if (shouldAttachHandler(element)) {
-                                        // wireupTextChangeHandler(element);
-                                        capitaliseText(element);
-                                    }
-                                });
-                            });
-
-                            $.each(inputTags, function(i, tagName) {
-                                var filteredEls = getFilteredElements(addedNodes, tagName);
-
-                                filteredEls.each(function(index, element) {
-                                    $(element).on('input', function(event) {
-                                        capitaliseText(event.target);
+                                    filteredEls.each(function(index, element) {
+                                        if (shouldAttachHandler(element)) {
+                                            capitaliseText(element);
+                                        }
                                     });
                                 });
-                            });
+
+                                $.each(inputTags, function(i, tagName) {
+                                    var filteredEls = getFilteredElements(addedNodes, tagName);
+
+                                    filteredEls.each(function(index, element) {
+                                        $(element).on('input', function(event) {
+                                            capitaliseText(event.target);
+                                        });
+                                    });
+                                });
+                            }
                         }
                     }
                     else if( mutation.type==='characterData'){
