@@ -172,9 +172,16 @@ $(document).ready(function() {
     }
 
     function getFilteredElements(addedNodes, tagName) {
-        return $(addedNodes)
+        var filteredEls = $(addedNodes)
             .find(tagName)
             .addBack(tagName); // finds either added alone or as tree
+
+        if(filteredEls.length ===0){
+            return $( addedNodes ).filter(function(element) {
+                return element.nodeName=== '#text';
+            });
+        }
+        return filteredEls;
     }
 
     /*eslint no-debugger: "error"*/
