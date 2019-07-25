@@ -109,6 +109,11 @@ $(document).ready(function() {
         var tagName = htmlControl.prop('tagName');
         var text = getText(htmlControl, tagName);
 
+        //support for jira's comment section's p tags
+        var lastChar = text.trim().slice(-1);
+        if(lastChar.toUpperCase() === lastChar)
+            return;
+
         if (text.length == 1) {
             setText(htmlControl, tagName, text.toUpperCase());
             return;
@@ -184,18 +189,13 @@ $(document).ready(function() {
             $.each(mutations, function(i, mutation) {
                 try {
                     if( mutation.type==='childList'){
+                        if(mutation.target.nodeName==='P'){
+                            capitaliseText(mutation.target);
+                            throw new Error(errorMsg);
+                        }
 
                         var addedNodes = mutation.addedNodes;
                         if (addedNodes && addedNodes.length > 0) {
-                            // var textNodes=filterUnwantedNodes(addedNodes);
-                            // if(textNodes.length>0 && textNodes[0].parentNode){
-                            //     var element=textNodes[0].parentNode;
-                            //     if (shouldAttachHandler(element)) {
-                            //         capitaliseText(element);
-                            //     }
-
-                            //     throw new Error(errorMsg);
-                            // }
 
                             $.each(tags, function(i, tagName) {
                                 var filteredEls = getFilteredElements(addedNodes, tagName);
