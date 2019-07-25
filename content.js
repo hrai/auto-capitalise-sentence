@@ -162,26 +162,13 @@ $(document).ready(function() {
         return element && element.isContentEditable;
     }
 
-    function filterUnwantedNodes(nodes) {
-        return $( nodes ).filter(function(i, element) {
-            if(element.tagName && element.tagName==='BR')
-                return false;
 
-            return element.nodeName=== '#text';
-        });
-    }
+
 
     function getFilteredElements(addedNodes, tagName) {
-        var filteredEls = $(addedNodes)
+        return $(addedNodes)
             .find(tagName)
             .addBack(tagName); // finds either added alone or as tree
-
-        if(filteredEls.length ===0){
-            return $( addedNodes ).filter(function(element) {
-                return element.nodeName=== '#text';
-            });
-        }
-        return filteredEls;
     }
 
     /*eslint no-debugger: "error"*/
@@ -199,7 +186,7 @@ $(document).ready(function() {
                     if( mutation.type==='childList'){
 
                         var addedNodes = mutation.addedNodes;
-                        if (addedNodes && addedNodes.length > 0) {
+                        if (addedNodes){
                             // var textNodes=filterUnwantedNodes(addedNodes);
                             // if(textNodes.length>0 && textNodes[0].parentNode){
                             //     var element=textNodes[0].parentNode;
@@ -210,25 +197,26 @@ $(document).ready(function() {
                             //     throw new Error(errorMsg);
                             // }
 
-                            $.each(tags, function(i, tagName) {
-                                var filteredEls = getFilteredElements(addedNodes, tagName);
+                                $.each(tags, function(i, tagName) {
+                                    var filteredEls = getFilteredElements(addedNodes, tagName);
 
-                                filteredEls.each(function(index, element) {
-                                    if (shouldAttachHandler(element)) {
-                                        capitaliseText(element);
-                                    }
-                                });
-                            });
-
-                            $.each(inputTags, function(i, tagName) {
-                                var filteredEls = getFilteredElements(addedNodes, tagName);
-
-                                filteredEls.each(function(index, element) {
-                                    $(element).on('input', function(event) {
-                                        capitaliseText(event.target);
+                                    filteredEls.each(function(index, element) {
+                                        if (shouldAttachHandler(element)) {
+                                            capitaliseText(element);
+                                        }
                                     });
                                 });
-                            });
+
+                                $.each(inputTags, function(i, tagName) {
+                                    var filteredEls = getFilteredElements(addedNodes, tagName);
+
+                                    filteredEls.each(function(index, element) {
+                                        $(element).on('input', function(event) {
+                                            capitaliseText(event.target);
+                                        });
+                                    });
+                                });
+                            }
                         }
                     }
                     else if( mutation.type==='characterData'){
