@@ -164,10 +164,10 @@ $(document).ready(function() {
 
     function filterUnwantedNodes(nodes) {
         return $( nodes ).filter(function(i, element) {
-            if(!element.tagName || element.tagName!=='BR')
-                return element.nodeName=== '#text';
+            if(element.tagName && element.tagName==='BR')
+                return false;
 
-            return false;
+            return element.nodeName=== '#text';
         });
     }
 
@@ -193,7 +193,7 @@ $(document).ready(function() {
 
                         var addedNodes = mutation.addedNodes;
                         if (addedNodes){
-                            addedNodes=filterUnwantedNodes(addedNodes);
+                            // addedNodes=filterUnwantedNodes(addedNodes);
                             if(addedNodes.length > 0) {
                                 $.each(tags, function(i, tagName) {
                                     var filteredEls = getFilteredElements(addedNodes, tagName);
