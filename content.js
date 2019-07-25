@@ -167,9 +167,6 @@ $(document).ready(function() {
         return element && element.isContentEditable;
     }
 
-
-
-
     function getFilteredElements(addedNodes, tagName) {
         return $(addedNodes)
             .find(tagName)
