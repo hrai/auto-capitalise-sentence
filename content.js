@@ -3,11 +3,12 @@ $(document).ready(function() {
     //     sitesToExclude.push(site);
     // }
 
+    var errorMsg = 'breaking loop';
     browser.storage.local.get('sites_to_ignore').then(processResponse, onError);
 
     function hookupEventHandlers() {
-        wireupInputTagHandlers();
-        wireupHtmlTagsAddedHandlers();
+        observeInputTags();
+        observeHtmlBody();
     }
 
     function processResponse(item) {
@@ -16,7 +17,6 @@ $(document).ready(function() {
         if (item && sitesToExclude) {
             //https://stackoverflow.com/questions/406192/get-current-url-with-jquery
             var currentUrlDomain = window.location.origin;
-            var errorMsg = 'breaking loop';
 
             try {
                 var shouldEnableCapitalisingOnCurrentSite = true;
@@ -142,7 +142,7 @@ $(document).ready(function() {
         return updatedStr;
     }
 
-    function wireupInputTagHandlers() {
+    function observeInputTags() {
         $(':text,textarea').on('input', function(event) {
             capitaliseText(event.target);
         });
@@ -158,45 +158,17 @@ $(document).ready(function() {
         return hasHtmlTag;
     }
 
-    function wireupTextChangeHandler(element) {
-        if (!containsHtmlContent(element)) {
-            if ($(element).html()) {
-                capitaliseText(element);
-            }
-
-            var observer = new MutationObserver(function(mutations) {
-                var processed = false;
-                // var filteredMutations = mutations.filter(function(mut) {
-                //     return mut.addedNodes && mut.addedNodes.length > 0;
-                // });
-
-                $.each(mutations, function(i, mutation) {
-                    if (!processed) {
-                        var target = $(mutation.target);
-
-                        var tagName = target.prop('tagName');
-                        if (!tagName) {
-                            target = $(target).parent();
-                        }
-
-                        capitaliseText(target);
-                        processed = true;
-                    }
-                });
-            });
-
-            var config = {
-                subtree: true,
-                childList: true,
-                characterData: true
-            };
-
-            observer.observe(element, config);
-        }
-    }
-
     function isContentEditable(element) {
         return element && element.isContentEditable;
+    }
+
+    function filterUnwantedNodes(nodes) {
+        return $( nodes ).filter(function(i, element) {
+            if(element.tagName && element.tagName==='BR')
+                return false;
+
+            return element.nodeName=== '#text';
+        });
     }
 
     function getFilteredElements(addedNodes, tagName) {
@@ -206,51 +178,73 @@ $(document).ready(function() {
     }
 
     /*eslint no-debugger: "error"*/
-    function wireupHtmlTagsAddedHandlers() {
+    function observeHtmlBody() {
         var target = document.querySelector('body');
 
         var tags = ['p', 'span'];
         var inputTags = ['input[type=\'text\']', 'textarea'];
 
         var observer = new MutationObserver(function(mutations) {
+            // console.log(mutations);
+
             $.each(mutations, function(i, mutation) {
-                var addedNodes = mutation.addedNodes;
-
                 try {
-                    if (addedNodes && addedNodes.length > 0) {
-                        $.each(tags, function(i, tagName) {
-                            var filteredEls = getFilteredElements(addedNodes, tagName);
+                    if( mutation.type==='childList'){
 
-                            filteredEls.each(function(index, element) {
-                                if (isContentEditable(element)) {
-                                    wireupTextChangeHandler(element);
-                                }
+                        var addedNodes = mutation.addedNodes;
+                        if (addedNodes && addedNodes.length > 0) {
+                            // var textNodes=filterUnwantedNodes(addedNodes);
+                            // if(textNodes.length>0 && textNodes[0].parentNode){
+                            //     var element=textNodes[0].parentNode;
+                            //     if (shouldAttachHandler(element)) {
+                            //         capitaliseText(element);
+                            //     }
+
+                            //     throw new Error(errorMsg);
+                            // }
+
+                            $.each(tags, function(i, tagName) {
+                                var filteredEls = getFilteredElements(addedNodes, tagName);
+
+                                filteredEls.each(function(index, element) {
+                                    if (shouldAttachHandler(element)) {
+                                        capitaliseText(element);
+                                    }
+                                });
                             });
-                        });
 
-                        $.each(inputTags, function(i, tagName) {
-                            var filteredEls = getFilteredElements(addedNodes, tagName);
+                            $.each(inputTags, function(i, tagName) {
+                                var filteredEls = getFilteredElements(addedNodes, tagName);
 
-                            filteredEls.each(function(index, element) {
-                                if (isContentEditable(element)) {
+                                filteredEls.each(function(index, element) {
                                     $(element).on('input', function(event) {
                                         capitaliseText(event.target);
                                     });
-                                }
+                                });
                             });
-                        });
+                        }
+                    }
+                    else if( mutation.type==='characterData'){
+                        capitaliseText(mutation.target.parentNode);
                     }
                 } catch (err) {
-                    console.log(err);
+                    if (err.message !== errorMsg) {
+                        console.log(err);
+                    }
                 }
             });
         });
 
         var config = {
             subtree: true,
-            childList: true
+            childList: true,
+            characterData:true
         };
 
         observer.observe(target, config);
+    }
+
+    function shouldAttachHandler(element) {
+        return isContentEditable(element) && !containsHtmlContent(element);
     }
 });
