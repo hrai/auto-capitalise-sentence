@@ -66,7 +66,7 @@ $(document).ready(function() {
             return;
         }
 
-        htmlControl.text(updatedStr);
+        htmlControl.html(updatedStr);
         setEndOfContenteditable(htmlControl[0]);
     }
 
@@ -111,8 +111,7 @@ $(document).ready(function() {
 
         //support for jira's comment section's p tags
         var lastChar = text.trim().slice(-1);
-        if(lastChar.toUpperCase() === lastChar)
-            return;
+        if (lastChar.toUpperCase() === lastChar) return;
 
         if (text.length == 1) {
             setText(htmlControl, tagName, text.toUpperCase());
@@ -185,15 +184,14 @@ $(document).ready(function() {
 
             $.each(mutations, function(i, mutation) {
                 try {
-                    if( mutation.type==='childList'){
-                        if(mutation.target.nodeName==='P'){
+                    if (mutation.type === 'childList') {
+                        if (mutation.target.nodeName === 'P') {
                             capitaliseText(mutation.target);
                             throw new Error(errorMsg);
                         }
 
                         var addedNodes = mutation.addedNodes;
                         if (addedNodes && addedNodes.length > 0) {
-
                             $.each(tags, function(i, tagName) {
                                 var filteredEls = getFilteredElements(addedNodes, tagName);
 
@@ -214,8 +212,7 @@ $(document).ready(function() {
                                 });
                             });
                         }
-                    }
-                    else if( mutation.type==='characterData'){
+                    } else if (mutation.type === 'characterData') {
                         capitaliseText(mutation.target.parentNode);
                     }
                 } catch (err) {
@@ -229,7 +226,7 @@ $(document).ready(function() {
         var config = {
             subtree: true,
             childList: true,
-            characterData:true
+            characterData: true
         };
 
         observer.observe(target, config);
