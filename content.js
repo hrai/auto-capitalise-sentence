@@ -96,6 +96,10 @@ $(document).ready(function() {
         var regex = /\w+\s*(\.|\?)+\s+\w$/;
         var matches = regex.test(text);
 
+        if(!matches)  {
+            return text.length == 1;
+        }
+
         return matches;
     }
 
@@ -116,20 +120,15 @@ $(document).ready(function() {
         var tagName = htmlControl.prop('tagName');
         var text = getText(htmlControl, tagName);
 
-        var shouldAppendBr=false;
-        if(text.length >= 4 && text.slice(-4)==='<br>'){
-            text=text.slice(0,-4);
-            shouldAppendBr=true;
-        }
-
         //support for jira's comment section's p tags
         var lastChar = text.trim().slice(-1);
         if (lastChar.match(/[a-z]/i) && lastChar.toUpperCase() === lastChar) {return;
         }
 
-        if (text.length == 1) {
-            setText(htmlControl, tagName, text.toUpperCase(), shouldAppendBr);
-            return;
+        var shouldAppendBr=false;
+        if(text.length >= 4 && text.slice(-4)==='<br>'){
+            text=text.slice(0,-4);
+            shouldAppendBr=true;
         }
 
         if (shouldCapitalise(text)) {
@@ -201,7 +200,9 @@ $(document).ready(function() {
             $.each(mutations, function(i, mutation) {
                 try {
                     if (mutation.type === 'childList') {
-                        if (mutation.target.nodeName === 'P') {
+                        // add support for div block in gmail and outlook
+                        // if (['P','DIV'].includes(mutation.target.nodeName )) {
+                        if (['P'].includes(mutation.target.nodeName )) {
                             capitaliseText(mutation.target);
                             throw new Error(errorMsg);
                         }
