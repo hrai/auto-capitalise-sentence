@@ -57,13 +57,16 @@ $(document).ready(function() {
         return htmlControl.html();
     }
 
-    function setText(htmlControl, tagName, updatedStr) {
-        if (
-            tagName.toUpperCase() === 'INPUT' ||
+    function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
+        if ( tagName.toUpperCase() === 'INPUT' ||
       tagName.toUpperCase() === 'TEXTAREA'
         ) {
             htmlControl.val(updatedStr);
             return;
+        }
+
+        if(shouldAppendBr) {
+            updatedStr+='<br>';
         }
 
         htmlControl.html(updatedStr);
@@ -104,31 +107,42 @@ $(document).ready(function() {
     }
 
     function capitaliseText(element) {
+        if(! element.isContentEditable){
+            return;
+        }
+
         var htmlControl = $(element);
 
         var tagName = htmlControl.prop('tagName');
         var text = getText(htmlControl, tagName);
 
+        var shouldAppendBr=false;
+        if(text.length >= 4 && text.slice(-4)==='<br>'){
+            text=text.slice(0,-4);
+            shouldAppendBr=true;
+        }
+
         //support for jira's comment section's p tags
         var lastChar = text.trim().slice(-1);
-        if (lastChar.toUpperCase() === lastChar) return;
+        if (lastChar.match(/[a-z]/i) && lastChar.toUpperCase() === lastChar) {return;
+        }
 
         if (text.length == 1) {
-            setText(htmlControl, tagName, text.toUpperCase());
+            setText(htmlControl, tagName, text.toUpperCase(), shouldAppendBr);
             return;
         }
 
         if (shouldCapitalise(text)) {
             var updatedStr = getCapitalisedContent(text);
 
-            setText(htmlControl, tagName, updatedStr);
+            setText(htmlControl, tagName, updatedStr, shouldAppendBr);
             return;
         }
 
         if (text.length >= 2 && shouldCapitaliseForI(text)) {
             var updatedStr = getCapitalisedContentForI(text);
 
-            setText(htmlControl, tagName, updatedStr);
+            setText(htmlControl, tagName, updatedStr, shouldAppendBr);
             return;
         }
     }
@@ -155,7 +169,9 @@ $(document).ready(function() {
     function containsHtmlContent(element) {
         var content = $(element).html();
 
-        if (content && content === '<br>') return false;
+        var brRegex=/\s*<br>/;
+        if (content && brRegex.test(content))
+            return false;
 
         var regex = /<\/?\w+>/;
         var hasHtmlTag = regex.test(content);
@@ -176,7 +192,7 @@ $(document).ready(function() {
     function observeHtmlBody() {
         var target = document.querySelector('body');
 
-        var tags = ['p', 'span'];
+        var tags = ['p', 'span', 'div'];
         var inputTags = ['input[type=\'text\']', 'textarea'];
 
         var observer = new MutationObserver(function(mutations) {
