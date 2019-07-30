@@ -191,7 +191,8 @@ $(document).ready(function() {
     function observeHtmlBody() {
         var target = document.querySelector('body');
 
-        var tags = ['p', 'span', 'div'];
+        // var tags = ['p', 'span', 'div'];
+        var tags = ['p', 'span'];
         var inputTags = ['input[type=\'text\']', 'textarea'];
 
         var observer = new MutationObserver(function(mutations) {
