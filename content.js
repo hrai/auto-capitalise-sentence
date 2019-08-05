@@ -58,15 +58,16 @@ $(document).ready(function() {
     }
 
     function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
-        if ( tagName.toUpperCase() === 'INPUT' ||
+        if (
+            tagName.toUpperCase() === 'INPUT' ||
       tagName.toUpperCase() === 'TEXTAREA'
         ) {
             htmlControl.val(updatedStr);
             return;
         }
 
-        if(shouldAppendBr) {
-            updatedStr+='<br>';
+        if (shouldAppendBr) {
+            updatedStr += '<br>';
         }
 
         htmlControl.html(updatedStr);
@@ -93,10 +94,10 @@ $(document).ready(function() {
     }
 
     function shouldCapitalise(text) {
-        var regex = /\w+\s*(\.|\?)+\s+\w$/;
-        var matches = regex.test(text);
+        var sentenceRegex = /\w+\s*(\.|\?|\r)+\s+\w$/;
+        var matches = sentenceRegex.test(text);
 
-        if(!matches)  {
+        if (!matches) {
             return text.length == 1;
         }
 
@@ -111,7 +112,7 @@ $(document).ready(function() {
     }
 
     function capitaliseText(element) {
-        if(! element.isContentEditable){
+        if (!element.isContentEditable) {
             return;
         }
 
@@ -122,13 +123,14 @@ $(document).ready(function() {
 
         //support for jira's comment section's p tags
         var lastChar = text.trim().slice(-1);
-        if (lastChar.match(/[a-z]/i) && lastChar.toUpperCase() === lastChar) {return;
+        if (lastChar.match(/[a-z]/i) && lastChar.toUpperCase() === lastChar) {
+            return;
         }
 
-        var shouldAppendBr=false;
-        if(text.length >= 4 && text.slice(-4)==='<br>'){
-            text=text.slice(0,-4);
-            shouldAppendBr=true;
+        var shouldAppendBr = false;
+        if (text.length >= 4 && text.slice(-4) === '<br>') {
+            text = text.slice(0, -4);
+            shouldAppendBr = true;
         }
 
         if (shouldCapitalise(text)) {
@@ -168,9 +170,8 @@ $(document).ready(function() {
     function containsHtmlContent(element) {
         var content = $(element).html();
 
-        var brRegex=/\s*<br>/;
-        if (content && brRegex.test(content))
-            return false;
+        var brRegex = /\s*<br>/;
+        if (content && brRegex.test(content)) return false;
 
         var regex = /<\/?\w+>/;
         var hasHtmlTag = regex.test(content);
@@ -203,7 +204,7 @@ $(document).ready(function() {
                     if (mutation.type === 'childList') {
                         // add support for div block in gmail and outlook
                         // if (['P','DIV'].includes(mutation.target.nodeName )) {
-                        if (['P'].includes(mutation.target.nodeName )) {
+                        if (['P'].includes(mutation.target.nodeName)) {
                             capitaliseText(mutation.target);
                             throw new Error(errorMsg);
                         }
