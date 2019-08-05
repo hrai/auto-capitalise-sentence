@@ -94,7 +94,13 @@ $(document).ready(function() {
     }
 
     function shouldCapitalise(text) {
-        var sentenceRegex = /\w+\s*(\.|\?|\r)+\s+\w$/;
+        var multilineRegex = /\s*\n+\s*\w$/;
+        var matches = multilineRegex.test(text);
+
+        if(matches)
+        return true;
+
+        var sentenceRegex = /\w+\s*(\.|\?)+\s+\w$/;
         var matches = sentenceRegex.test(text);
 
         if (!matches) {
@@ -112,13 +118,14 @@ $(document).ready(function() {
     }
 
     function capitaliseText(element) {
-        if (!element.isContentEditable) {
+        var htmlControl = $(element);
+        var tagName = htmlControl.prop('tagName');
+
+        if (!element.isContentEditable &&
+            tagName.toUpperCase() !== 'TEXTAREA') {
             return;
         }
 
-        var htmlControl = $(element);
-
-        var tagName = htmlControl.prop('tagName');
         var text = getText(htmlControl, tagName);
 
         //support for jira's comment section's p tags
