@@ -97,11 +97,10 @@ $(document).ready(function() {
         var multilineRegex = /\s*\n+\s*\w$/;
         var matches = multilineRegex.test(text);
 
-        if(matches)
-        return true;
+        if (matches) return true;
 
         var sentenceRegex = /\w+\s*(\.|\?)+\s+\w$/;
-        var matches = sentenceRegex.test(text);
+        matches = sentenceRegex.test(text);
 
         if (!matches) {
             return text.length == 1;
@@ -121,8 +120,7 @@ $(document).ready(function() {
         var htmlControl = $(element);
         var tagName = htmlControl.prop('tagName');
 
-        if (!element.isContentEditable &&
-            tagName.toUpperCase() !== 'TEXTAREA') {
+        if (!element.isContentEditable && tagName.toUpperCase() !== 'TEXTAREA') {
             return;
         }
 
