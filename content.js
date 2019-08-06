@@ -117,6 +117,9 @@ $(document).ready(function() {
     }
 
     function capitaliseText(element) {
+        if(!element)
+            return;
+
         var htmlControl = $(element);
         var tagName = htmlControl.prop('tagName');
 
