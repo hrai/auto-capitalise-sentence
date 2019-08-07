@@ -120,7 +120,7 @@ $(document).ready(function() {
             shouldAppendBr = true;
         }
 
-        debugger
+        
         if (utils.shouldCapitalise(text)) {
             var updatedStr = getCapitalisedContent(text);
 

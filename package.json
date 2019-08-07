@@ -6,6 +6,7 @@
   "scripts": {
     "test": "eslint .",
     "lint": "eslint .",
+    "lint-fix": "eslint --fix .",
     "start:firefox": "web-ext run",
     "build": "babel src -d lib"
   },
