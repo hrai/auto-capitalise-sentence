@@ -3,6 +3,12 @@
   "title": "Auto Capitalise Extension",
   "version": "1.0.0",
   "description": "Firefox add-on to automatically capitalise the first letter of a sentence while typing.",
+  "scripts": {
+    "test": "eslint .",
+    "lint": "eslint .",
+    "start:firefox": "web-ext run",
+    "build": "babel src -d lib"
+  },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
@@ -13,11 +19,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/hrai/auto-capitalise"
-  },
-  "scripts": {
-    "test": "eslint .",
-    "lint": "eslint .",
-    "start:firefox": "web-ext run"
   },
   "husky": {
     "hooks": {

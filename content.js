@@ -1,4 +1,4 @@
-import * as utils from 'src/utilities.js';
+import * as utils from 'src/utilities';
 
 $(document).ready(function() {
     // function excludeSite(site) {
@@ -95,51 +95,22 @@ $(document).ready(function() {
         }
     }
 
-    function shouldCapitalise(text) {
-        var multilineRegex = /\s*\n+\s*\w$/;
-        var matches = multilineRegex.test(text);
-
-        if (matches) return true;
-
-        var sentenceRegex = /\w+\s*(\.|\?)+\s+\w$/;
-        matches = sentenceRegex.test(text);
-
-        if (matches) {
-            return true;
-        }
-        else {
-            return text.length == 1 && isAlphabet(text);
-        }
-    }
-
-    function isAlphabet(character) {
-        return character.match(/[a-z]/i);
-    }
-
-    function isEditableElement(element, tagName) {
-        return element.isContentEditable ||
-        tagName.toUpperCase() === 'INPUT' ||
-      tagName.toUpperCase() === 'TEXTAREA';
-    }
-
     function capitaliseText(element) {
-        if(!element )
+        if(!element)
             return;
 
         var htmlControl = $(element);
         var tagName = htmlControl.prop('tagName');
 
-        if(!isEditableElement(element, tagName)  )
+        if (!element.isContentEditable && tagName.toUpperCase() !== 'TEXTAREA') {
             return;
-
-        // console.log(element);
+        }
 
         var text = getText(htmlControl, tagName);
 
         //support for jira's comment section's p tags
         var lastChar = text.trim().slice(-1);
-
-        if (isAlphabet(lastChar) && lastChar.toUpperCase() === lastChar) {
+        if (lastChar.match(/[a-z]/i) && lastChar.toUpperCase() === lastChar) {
             return;
         }
 
@@ -149,7 +120,8 @@ $(document).ready(function() {
             shouldAppendBr = true;
         }
 
-        if (shouldCapitalise(text)) {
+        debugger
+        if (utils.shouldCapitalise(text)) {
             var updatedStr = getCapitalisedContent(text);
 
             setText(htmlControl, tagName, updatedStr, shouldAppendBr);
@@ -271,3 +243,4 @@ $(document).ready(function() {
         return isContentEditable(element) && !containsHtmlContent(element);
     }
 });
+
