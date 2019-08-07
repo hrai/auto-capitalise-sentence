@@ -1,4 +1,4 @@
-import * as utils from 'lib/utilities';
+import * as utils from 'utilities';
 
 $(document).ready(function() {
     // function excludeSite(site) {
