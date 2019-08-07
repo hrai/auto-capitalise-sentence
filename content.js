@@ -1,4 +1,4 @@
-import * as utils from 'src/utilities';
+import * as utils from 'lib/utilities';
 
 $(document).ready(function() {
     // function excludeSite(site) {
@@ -120,7 +120,6 @@ $(document).ready(function() {
             shouldAppendBr = true;
         }
 
-        
         if (utils.shouldCapitalise(text)) {
             var updatedStr = getCapitalisedContent(text);
 
