@@ -102,11 +102,16 @@ $(document).ready(function() {
         var sentenceRegex = /\w+\s*(\.|\?)+\s+\w$/;
         matches = sentenceRegex.test(text);
 
-        if (!matches) {
-            return text.length == 1;
+        if (matches) {
+            return true;
         }
+        else {
+            return text.length == 1 && isAlphabet(text);
+        }
+    }
 
-        return matches;
+    function isAlphabet(character) {
+        return character.match(/[a-z]/i);
     }
 
     function shouldCapitaliseForI(text) {
@@ -117,21 +122,24 @@ $(document).ready(function() {
     }
 
     function capitaliseText(element) {
-        if(!element)
+        if(!element || !element.isContentEditable  )
             return;
+
+        // console.log(element);
 
         var htmlControl = $(element);
         var tagName = htmlControl.prop('tagName');
 
-        if (!element.isContentEditable && tagName.toUpperCase() !== 'TEXTAREA') {
-            return;
-        }
+        // if (tagName.toUpperCase() !== 'TEXTAREA') {
+        //     return;
+        // }
 
         var text = getText(htmlControl, tagName);
 
         //support for jira's comment section's p tags
         var lastChar = text.trim().slice(-1);
-        if (lastChar.match(/[a-z]/i) && lastChar.toUpperCase() === lastChar) {
+
+        if (isAlphabet(lastChar) && lastChar.toUpperCase() === lastChar) {
             return;
         }
 
