@@ -121,18 +121,23 @@ $(document).ready(function() {
         return matches;
     }
 
-    function capitaliseText(element) {
-        if(!element || !element.isContentEditable  )
-            return;
+    function isEditableElement(element, tagName) {
+        return element.isContentEditable ||
+        tagName.toUpperCase() === 'INPUT' ||
+      tagName.toUpperCase() === 'TEXTAREA';
+    }
 
-        // console.log(element);
+    function capitaliseText(element) {
+        if(!element )
+            return;
 
         var htmlControl = $(element);
         var tagName = htmlControl.prop('tagName');
 
-        // if (tagName.toUpperCase() !== 'TEXTAREA') {
-        //     return;
-        // }
+        if(!isEditableElement(element, tagName)  )
+            return;
+
+        // console.log(element);
 
         var text = getText(htmlControl, tagName);
 
