@@ -1,50 +1,51 @@
 {
-  "name": "auto-capitalise-extension",
-  "title": "Auto Capitalise Extension",
-  "version": "1.0.0",
-  "description": "Firefox add-on to automatically capitalise the first letter of a sentence while typing.",
-  "scripts": {
-    "test": "eslint .",
-    "lint": "eslint .",
-    "lint-fix": "eslint --fix .",
-    "start:firefox": "web-ext run",
-    "build": "babel src -d lib"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.5.5",
-    "@babel/core": "^7.5.5",
-    "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
-    "babelify": "^10.0.0",
-    "eslint": "^4.19.1",
-    "husky": "^3.0.1",
-    "lint-staged": "^9.2.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/hrai/auto-capitalise"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
+    "name": "auto-capitalise-extension",
+    "title": "Auto Capitalise Extension",
+    "version": "1.0.0",
+    "description": "Firefox add-on to automatically capitalise the first letter of a sentence while typing.",
+    "scripts": {
+        "generate": " browserify src/content.js -o bundle.js -t [ babelify --presets [ @babel/preset-env  ] --plugins [ @babel/plugin-proposal-class-properties  ] ] ",
+        "test": "eslint .",
+        "lint": "eslint .",
+        "lint-fix": "eslint --fix .",
+        "start:firefox": "web-ext run",
+        "build": "babel src -d lib"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.5.5",
+        "@babel/core": "^7.5.5",
+        "@babel/plugin-proposal-class-properties": "^7.5.5",
+        "@babel/preset-env": "^7.5.5",
+        "babelify": "^10.0.0",
+        "eslint": "^4.19.1",
+        "husky": "^3.0.1",
+        "lint-staged": "^9.2.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/hrai/auto-capitalise"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.{js,jsx,ts,tsx}": [
+            "eslint --fix",
+            "git add"
+        ]
+    },
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/hrai/auto-capitalise/issues"
+    },
+    "keywords": [
+        "webextensions",
+        "auto-capitalise"
+    ],
+    "homepage": "https://github.com/hrai/auto-capitalise",
+    "dependencies": {
+        "babel-eslint": "^7.2.3"
     }
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "git add"
-    ]
-  },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/hrai/auto-capitalise/issues"
-  },
-  "keywords": [
-    "webextensions",
-    "auto-capitalise"
-  ],
-  "homepage": "https://github.com/hrai/auto-capitalise",
-  "dependencies": {
-    "babel-eslint": "^7.2.3"
-  }
 }
