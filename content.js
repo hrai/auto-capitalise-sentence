@@ -1,3 +1,5 @@
+import * as utils from 'src/utilities.js';
+
 $(document).ready(function() {
     // function excludeSite(site) {
     //     sitesToExclude.push(site);
@@ -114,13 +116,6 @@ $(document).ready(function() {
         return character.match(/[a-z]/i);
     }
 
-    function shouldCapitaliseForI(text) {
-        var regex = /\s+i(\s+|')$/;
-        var matches = regex.test(text);
-
-        return matches;
-    }
-
     function isEditableElement(element, tagName) {
         return element.isContentEditable ||
         tagName.toUpperCase() === 'INPUT' ||
@@ -161,7 +156,7 @@ $(document).ready(function() {
             return;
         }
 
-        if (text.length >= 2 && shouldCapitaliseForI(text)) {
+        if (text.length >= 2 && utils.shouldCapitaliseForI(text)) {
             var updatedStr = getCapitalisedContentForI(text);
 
             setText(htmlControl, tagName, updatedStr, shouldAppendBr);
