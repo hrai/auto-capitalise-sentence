@@ -39,6 +39,11 @@ describe('shouldCapitalise', () => {
         expect(utils.shouldCapitalise('    k ')).toBe(false);
         expect(utils.shouldCapitalise('    k ')).toBe(false);
         expect(utils.shouldCapitalise('    ')).toBe(false);
+
+        expect(utils.shouldCapitalise('')).toBe(false);
+        expect(() => {
+            utils.shouldCapitalise();
+        }).toThrow();
     });
 
     test('shouldCapitalise_multiLine', () => {
@@ -48,5 +53,9 @@ describe('shouldCapitalise', () => {
         expect(utils.shouldCapitalise('war? \n\n   k')).toBe(true);
         expect(utils.shouldCapitalise('war? \n\n   k')).toBe(true);
         expect(utils.shouldCapitalise('war? lasting \n peace \n\n   k')).toBe(true);
+    });
+
+    test('shouldCapitalise_singleChar', () => {
+        expect(utils.shouldCapitalise('w')).toBe(true);
     });
 });
