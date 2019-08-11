@@ -114,20 +114,20 @@ export function capitaliseText(element) {
     }
 }
 
-function getCapitalisedContentForI(text) {
+export function getCapitalisedContentForI(text) {
     var lastTwoChars = text.slice(-2);
     var updatedStr =
       text.substr(0, text.length - 2) + lastTwoChars.toUpperCase();
     return updatedStr;
 }
 
-function getCapitalisedContent(text) {
+export function getCapitalisedContent(text) {
     var lastChar = text.slice(-1);
     var updatedStr = text.substr(0, text.length - 1) + lastChar.toUpperCase();
     return updatedStr;
 }
 
-function containsHtmlContent(element) {
+export function containsHtmlContent(element) {
     var content = $(element).html();
 
     var brRegex = /\s*<br>/;
@@ -138,16 +138,16 @@ function containsHtmlContent(element) {
     return hasHtmlTag;
 }
 
-function isContentEditable(element) {
+export function isContentEditable(element) {
     return element && element.isContentEditable;
 }
 
-function getFilteredElements(addedNodes, tagName) {
+export function getFilteredElements(addedNodes, tagName) {
     return $(addedNodes)
         .find(tagName)
         .addBack(tagName); // finds either added alone or as tree
 }
 
-function shouldCapitaliseContent(element) {
+export function shouldCapitaliseContent(element) {
     return isContentEditable(element) && !containsHtmlContent(element);
 }
