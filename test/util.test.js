@@ -66,6 +66,7 @@ describe('utilities test', function() {
             '<div>' +
             '  <input type="text" id="username" value="Bingo" />' +
             '  <textarea id="about-me" rows="8" cols="40"></textarea> ' +
+            '  <span id="address">Please enter your address.</span> ' +
             '  <button id="button" />' +
             '</div>';
 
@@ -88,6 +89,16 @@ describe('utilities test', function() {
             expect(utils.getText($('#about-me'), '')).toBe('');
             expect(() => {
                 utils.getText($('#about-me'));
+            }).toThrow();
+        });
+
+        test('getText_HtmlContent', () => {
+            var element=$('#address');
+            expect(utils.getText(element, 'span')).toBe('Please enter your address.');
+            expect(utils.getText(element, 'input')).toBe('');
+            expect(utils.getText(element, '')).toBe('Please enter your address.');
+            expect(() => {
+                utils.getText(element);
             }).toThrow();
         });
     });
