@@ -5,4 +5,7 @@ test('getCapitalisedContent', () => {
     expect(utils.getCapitalisedContent('i')).toBe('I');
     expect(utils.getCapitalisedContent('i\'m')).toBe('i\'M');
     expect(utils.getCapitalisedContent('i. m')).toBe('i. M');
+    expect(utils.getCapitalisedContent('')).toBe('');
+    expect(() => {
+        utils.getCapitalisedContent();}).toThrow();
 });
