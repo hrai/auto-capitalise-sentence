@@ -62,12 +62,22 @@ describe('utilities test', function() {
     });
 
     describe('getText', () => {
-        // jest.mock('jquery');
+        document.body.innerHTML =
+            '<div>' +
+            '  <input type="text" id="username" value="Bingo" />' +
+            '  <textarea id="about-me" rows="8" cols="40">This is my life.</textarea> ' +
+            '  <button id="button" />' +
+            '</div>';
 
         const $ = require('jquery');
 
-        test('getText', () => {
-
+        test('getText_InputTag', () => {
+            expect(utils.getText($('#username'), 'input')).toBe('Bingo');
+            expect(utils.getText($('#username'), 'span')).toBe('');
+            expect(utils.getText($('#username'), '')).toBe('');
+            expect(() => {
+                utils.getText($('#username'));
+            }).toThrow();
         });
     });
 });
