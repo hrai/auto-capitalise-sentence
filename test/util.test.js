@@ -17,4 +17,18 @@ test('shouldCapitaliseForI', () => {
     expect(utils.shouldCapitaliseForI(' i\'')).toBe(true);
     expect(utils.shouldCapitaliseForI('    i\'')).toBe(true);
     expect(utils.shouldCapitaliseForI('    i ')).toBe(true);
+    expect(utils.shouldCapitalise('       k')).toBe(false);
+    expect(utils.shouldCapitalise('.       k')).toBe(false);
+    expect(utils.shouldCapitalise('    k ')).toBe(false);
+    expect(utils.shouldCapitalise('    ')).toBe(false);
+});
+
+test('shouldCapitalise', () => {
+    expect(utils.shouldCapitalise('war. k')).toBe(true);
+    expect(utils.shouldCapitalise('war.    k')).toBe(true);
+    expect(utils.shouldCapitalise('k')).toBe(true);
+    expect(utils.shouldCapitalise('       k')).toBe(false);
+    expect(utils.shouldCapitalise('.       k')).toBe(false);
+    expect(utils.shouldCapitalise('    k ')).toBe(false);
+    expect(utils.shouldCapitalise('    ')).toBe(false);
 });
