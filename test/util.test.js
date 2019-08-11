@@ -7,5 +7,14 @@ test('getCapitalisedContent', () => {
     expect(utils.getCapitalisedContent('i. m')).toBe('i. M');
     expect(utils.getCapitalisedContent('')).toBe('');
     expect(() => {
-        utils.getCapitalisedContent();}).toThrow();
+        utils.getCapitalisedContent();
+    }).toThrow();
+});
+
+test('shouldCapitaliseForI', () => {
+    expect(utils.shouldCapitaliseForI('war i ')).toBe(true);
+    expect(utils.shouldCapitaliseForI(' i ')).toBe(true);
+    expect(utils.shouldCapitaliseForI(' i\'')).toBe(true);
+    expect(utils.shouldCapitaliseForI('    i\'')).toBe(true);
+    expect(utils.shouldCapitaliseForI('    i ')).toBe(true);
 });
