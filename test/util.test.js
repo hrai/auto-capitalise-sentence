@@ -60,4 +60,14 @@ describe('utilities test', function() {
             expect(utils.shouldCapitalise('w')).toBe(true);
         });
     });
+
+    describe('getText', () => {
+        // jest.mock('jquery');
+
+        const $ = require('jquery');
+
+        test('getText', () => {
+
+        });
+    });
 });

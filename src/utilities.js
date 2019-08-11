@@ -25,7 +25,6 @@ export function onError(error) {
     console.log(error);
 }
 
-
 export function getText(htmlControl, tagName) {
     if (
         tagName.toUpperCase() === 'INPUT' ||
