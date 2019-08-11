@@ -65,7 +65,7 @@ describe('utilities test', function() {
         document.body.innerHTML =
             '<div>' +
             '  <input type="text" id="username" value="Bingo" />' +
-            '  <textarea id="about-me" rows="8" cols="40">This is my life.</textarea> ' +
+            '  <textarea id="about-me" rows="8" cols="40"></textarea> ' +
             '  <button id="button" />' +
             '</div>';
 
@@ -77,6 +77,17 @@ describe('utilities test', function() {
             expect(utils.getText($('#username'), '')).toBe('');
             expect(() => {
                 utils.getText($('#username'));
+            }).toThrow();
+        });
+
+        test('getText_TextareaTag', () => {
+            $('#about-me').val('This is my life.');
+
+            expect(utils.getText($('#about-me'), 'textarea')).toBe('This is my life.');
+            expect(utils.getText($('#about-me'), 'span')).toBe('');
+            expect(utils.getText($('#about-me'), '')).toBe('');
+            expect(() => {
+                utils.getText($('#about-me'));
             }).toThrow();
         });
     });
