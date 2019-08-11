@@ -73,22 +73,24 @@ describe('utilities test', function() {
         const $ = require('jquery');
 
         test('getText_InputTag', () => {
-            expect(utils.getText($('#username'), 'input')).toBe('Bingo');
-            expect(utils.getText($('#username'), 'span')).toBe('');
-            expect(utils.getText($('#username'), '')).toBe('');
+            var element=$('#username');
+            expect(utils.getText(element, 'input')).toBe('Bingo');
+            expect(utils.getText(element, 'span')).toBe('');
+            expect(utils.getText(element, '')).toBe('');
             expect(() => {
-                utils.getText($('#username'));
+                utils.getText(element);
             }).toThrow();
         });
 
         test('getText_TextareaTag', () => {
-            $('#about-me').val('This is my life.');
+            var element=$('#about-me');
+            element.val('This is my life.');
 
-            expect(utils.getText($('#about-me'), 'textarea')).toBe('This is my life.');
-            expect(utils.getText($('#about-me'), 'span')).toBe('');
-            expect(utils.getText($('#about-me'), '')).toBe('');
+            expect(utils.getText(element, 'textarea')).toBe('This is my life.');
+            expect(utils.getText(element, 'span')).toBe('');
+            expect(utils.getText(element, '')).toBe('');
             expect(() => {
-                utils.getText($('#about-me'));
+                utils.getText(element);
             }).toThrow();
         });
 
