@@ -23,12 +23,30 @@ test('shouldCapitaliseForI', () => {
     expect(utils.shouldCapitalise('    ')).toBe(false);
 });
 
-test('shouldCapitalise', () => {
-    expect(utils.shouldCapitalise('war. k')).toBe(true);
-    expect(utils.shouldCapitalise('war.    k')).toBe(true);
-    expect(utils.shouldCapitalise('k')).toBe(true);
-    expect(utils.shouldCapitalise('       k')).toBe(false);
-    expect(utils.shouldCapitalise('.       k')).toBe(false);
-    expect(utils.shouldCapitalise('    k ')).toBe(false);
-    expect(utils.shouldCapitalise('    ')).toBe(false);
+describe('shouldCapitalise', () => {
+    test('shouldCapitalise_singleLine', () => {
+        expect(utils.shouldCapitalise('war. k')).toBe(true);
+        expect(utils.shouldCapitalise('war.    k')).toBe(true);
+        expect(utils.shouldCapitalise('k')).toBe(true);
+        expect(utils.shouldCapitalise('k')).toBe(true);
+
+        expect(utils.shouldCapitalise('war? k')).toBe(true);
+        expect(utils.shouldCapitalise('war?    k')).toBe(true);
+
+        expect(utils.shouldCapitalise('       k')).toBe(false);
+        expect(utils.shouldCapitalise('.       k')).toBe(false);
+        expect(utils.shouldCapitalise('?       k')).toBe(false);
+        expect(utils.shouldCapitalise('    k ')).toBe(false);
+        expect(utils.shouldCapitalise('    k ')).toBe(false);
+        expect(utils.shouldCapitalise('    ')).toBe(false);
+    });
+
+    test('shouldCapitalise_multiLine', () => {
+        expect(utils.shouldCapitalise('war.\n k')).toBe(true);
+        expect(utils.shouldCapitalise('war. \n\n   k')).toBe(true);
+        expect(utils.shouldCapitalise('war. lasting \n peace \n\n   k')).toBe(true);
+        expect(utils.shouldCapitalise('war? \n\n   k')).toBe(true);
+        expect(utils.shouldCapitalise('war? \n\n   k')).toBe(true);
+        expect(utils.shouldCapitalise('war? lasting \n peace \n\n   k')).toBe(true);
+    });
 });
