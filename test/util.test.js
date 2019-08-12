@@ -144,17 +144,32 @@ describe('utilities test', function() {
             }).toThrow();
         });
 
-        // test('setText_TextareaTag', () => {
-        //     var element=$('#about-me');
-        //     element.val('This is my life.');
+        test('setText_TextareaTag', () => {
+            var element=$('#about-me');
+            var updatedStr='This is my life.';
+            element.val(updatedStr);
 
-        //     expect(utils.setText(element, 'textarea')).toBe('This is my life.');
-        //     expect(utils.setText(element, 'span')).toBe('');
-        //     expect(utils.setText(element, '')).toBe('');
-        //     expect(() => {
-        //         utils.setText(element);
-        //     }).toThrow();
-        // });
+            resetHtml();
+            var element=$('#about-me');
+            utils.setText(element, 'textarea', updatedStr, false);
+            expect(element.val()).toBe('This is my life.');
+
+            resetHtml();
+            var element=$('#about-me');
+            utils.setText(element, 'span', updatedStr, false);
+            expect(element.val()).toBe('This is my life.');
+
+            resetHtml();
+            var element=$('#about-me');
+            utils.setText(element, 'textarea', '', false);
+            expect(element.val()).toBe('');
+
+            expect(() => {
+                resetHtml();
+                var element=$('#about-me');
+                utils.setText(element);
+            }).toThrow();
+        });
 
         // test('setText_HtmlContent', () => {
         //     var element=$('#address');
