@@ -171,7 +171,7 @@ describe('utilities test', function() {
             }).toThrow();
         });
 
-        test('setText_HtmlContent', () => {
+        test('setText_HtmlContent_WithoutBrTags', () => {
             var element=$('#address');
             var updatedStr='This is my life.';
             element.val(updatedStr);
@@ -196,12 +196,33 @@ describe('utilities test', function() {
                 var element=$('#address');
                 utils.setText(element);
             }).toThrow();
-            // expect(utils.getText(element, 'span')).toBe('Please enter your address.');
-            // expect(utils.getText(element, 'input')).toBe('');
-            // expect(utils.getText(element, '')).toBe('Please enter your address.');
-            // expect(() => {
-            //     utils.getText(element);
-            // }).toThrow();
+        });
+
+        test('setText_HtmlContent_WithBrTags', () => {
+            var element=$('#address');
+            var updatedStr='This is my life.';
+            element.val(updatedStr);
+
+            resetHtml();
+            var element=$('#address');
+            utils.setText(element, 'span', updatedStr, true);
+            expect(element.html()).toBe('This is my life.<br>');
+
+            resetHtml();
+            var element=$('#address');
+            utils.setText(element, 'p', updatedStr, true);
+            expect(element.html()).toBe('This is my life.<br>');
+
+            resetHtml();
+            var element=$('#address');
+            utils.setText(element, 'span', '', true);
+            expect(element.html()).toBe('<br>');
+
+            expect(() => {
+                resetHtml();
+                var element=$('#address');
+                utils.setText(element);
+            }).toThrow();
         });
     });
 });
