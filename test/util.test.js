@@ -70,8 +70,6 @@ describe('utilities test', function() {
             '  <button id="button" />' +
             '</div>';
 
-        const $ = require('jquery');
-
         test('getText_InputTag', () => {
             var element=$('#username');
             expect(utils.getText(element, 'input')).toBe('Bingo');
@@ -116,8 +114,6 @@ describe('utilities test', function() {
             '  <button id="button" />' +
             '</div>';
         }
-
-        const $ = require('jquery');
 
         test('setText_InputTag', () => {
             var updatedStr='testing this';
@@ -223,6 +219,14 @@ describe('utilities test', function() {
                 var element=$('#address');
                 utils.setText(element);
             }).toThrow();
+        });
+    });
+
+    describe('capitaliseText', () => {
+        var element=jest.mock();
+        test('capitaliseText_HtmlContent', () => {
+            expect(utils.capitaliseText()).toBe(undefined);
+            expect(utils.capitaliseText(element)).toBe(undefined);
         });
     });
 });

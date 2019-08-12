@@ -6,6 +6,7 @@
   "scripts": {
     "build": "browserify src/content.js -o lib/bundle.js -t [ babelify --presets [ @babel/preset-env  ] --plugins [ @babel/plugin-proposal-class-properties  ] ] ",
     "test": "jest --env=jsdom",
+    "test-watch": "jest --env=jsdom --watch",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
     "start:firefox": "web-ext run"
