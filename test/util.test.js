@@ -171,14 +171,37 @@ describe('utilities test', function() {
             }).toThrow();
         });
 
-        // test('setText_HtmlContent', () => {
-        //     var element=$('#address');
-        //     expect(utils.setText(element, 'span')).toBe('Please enter your address.');
-        //     expect(utils.setText(element, 'input')).toBe('');
-        //     expect(utils.setText(element, '')).toBe('Please enter your address.');
-        //     expect(() => {
-        //         utils.setText(element);
-        //     }).toThrow();
-        // });
+        test('setText_HtmlContent', () => {
+            var element=$('#address');
+            var updatedStr='This is my life.';
+            element.val(updatedStr);
+
+            resetHtml();
+            var element=$('#address');
+            utils.setText(element, 'span', updatedStr, false);
+            expect(element.html()).toBe('This is my life.');
+
+            resetHtml();
+            var element=$('#address');
+            utils.setText(element, 'p', updatedStr, false);
+            expect(element.html()).toBe('This is my life.');
+
+            resetHtml();
+            var element=$('#address');
+            utils.setText(element, 'span', '', false);
+            expect(element.html()).toBe('');
+
+            expect(() => {
+                resetHtml();
+                var element=$('#address');
+                utils.setText(element);
+            }).toThrow();
+            // expect(utils.getText(element, 'span')).toBe('Please enter your address.');
+            // expect(utils.getText(element, 'input')).toBe('');
+            // expect(utils.getText(element, '')).toBe('Please enter your address.');
+            // expect(() => {
+            //     utils.getText(element);
+            // }).toThrow();
+        });
     });
 });
