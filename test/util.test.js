@@ -104,4 +104,66 @@ describe('utilities test', function() {
             }).toThrow();
         });
     });
+
+    describe('setText', () => {
+
+        function resetHtml() {
+            document.body.innerHTML =
+            '<div>' +
+            '  <input type="text" id="username" value="Bingo" />' +
+            '  <textarea id="about-me" rows="8" cols="40"></textarea> ' +
+            '  <span id="address">Please enter your address.</span> ' +
+            '  <button id="button" />' +
+            '</div>';
+        }
+
+        const $ = require('jquery');
+
+        test('setText_InputTag', () => {
+            var updatedStr='testing this';
+
+            resetHtml();
+            var element=$('#username');
+            utils.setText(element, 'input', updatedStr, false);
+            expect(element.val()).toBe('testing this');
+
+            resetHtml();
+            var element=$('#username');
+            utils.setText(element, 'span', updatedStr, false);
+            expect(element.val()).toBe('Bingo');
+
+            resetHtml();
+            var element=$('#username');
+            utils.setText(element, 'p', '', false);
+            expect(element.val()).toBe('Bingo');
+
+            expect(() => {
+                resetHtml();
+                var element=$('#username');
+                utils.setText(element);
+            }).toThrow();
+        });
+
+        // test('setText_TextareaTag', () => {
+        //     var element=$('#about-me');
+        //     element.val('This is my life.');
+
+        //     expect(utils.setText(element, 'textarea')).toBe('This is my life.');
+        //     expect(utils.setText(element, 'span')).toBe('');
+        //     expect(utils.setText(element, '')).toBe('');
+        //     expect(() => {
+        //         utils.setText(element);
+        //     }).toThrow();
+        // });
+
+        // test('setText_HtmlContent', () => {
+        //     var element=$('#address');
+        //     expect(utils.setText(element, 'span')).toBe('Please enter your address.');
+        //     expect(utils.setText(element, 'input')).toBe('');
+        //     expect(utils.setText(element, '')).toBe('Please enter your address.');
+        //     expect(() => {
+        //         utils.setText(element);
+        //     }).toThrow();
+        // });
+    });
 });
