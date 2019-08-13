@@ -41,7 +41,7 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
         tagName.toUpperCase() === 'INPUT' ||
       tagName.toUpperCase() === 'TEXTAREA'
     ) {
-        htmlControl.val(updatedStr);
+        htmlControl.value=updatedStr;
         return;
     }
 
@@ -49,8 +49,8 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
         updatedStr += '<br>';
     }
 
-    htmlControl.html(updatedStr);
-    setEndOfContenteditable(htmlControl[0]);
+    htmlControl.innerHTML = updatedStr;
+    setEndOfContenteditable(htmlControl);
 }
 
 export function setEndOfContenteditable(contentEditableElement) {
@@ -77,14 +77,13 @@ export function capitaliseText(element) {
     if(!element)
         return;
 
-    var htmlControl = element;
-    var tagName = htmlControl.tagName;
+    var tagName = element.tagName;
 
     if (!element.isContentEditable && tagName.toUpperCase() !== 'TEXTAREA') {
         return;
     }
 
-    var text = getText(htmlControl, tagName);
+    var text = getText(element, tagName);
 
     //support for jira's comment section's p tags
     var lastChar = text.trim().slice(-1);
@@ -101,7 +100,7 @@ export function capitaliseText(element) {
     if (this.shouldCapitalise(text)) {
         var updatedStr = getCapitalisedContent(text);
 
-        setText(htmlControl, tagName, updatedStr, shouldAppendBr);
+        setText(element, tagName, updatedStr, shouldAppendBr);
         return;
     }
 

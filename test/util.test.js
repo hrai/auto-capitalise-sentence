@@ -121,23 +121,23 @@ describe('utilities test', function() {
 
             resetHtml();
             var element=$('#username');
-            utils.setText(element, 'input', updatedStr, false);
+            utils.setText(element[0], 'input', updatedStr, false);
             expect(element.val()).toBe('testing this');
 
             resetHtml();
             var element=$('#username');
-            utils.setText(element, 'span', updatedStr, false);
+            utils.setText(element[0], 'span', updatedStr, false);
             expect(element.val()).toBe('Bingo');
 
             resetHtml();
             var element=$('#username');
-            utils.setText(element, 'p', '', false);
+            utils.setText(element[0], 'p', '', false);
             expect(element.val()).toBe('Bingo');
 
             expect(() => {
                 resetHtml();
                 var element=$('#username');
-                utils.setText(element);
+                utils.setText(element[0]);
             }).toThrow();
         });
 
@@ -148,23 +148,23 @@ describe('utilities test', function() {
 
             resetHtml();
             var element=$('#about-me');
-            utils.setText(element, 'textarea', updatedStr, false);
+            utils.setText(element[0], 'textarea', updatedStr, false);
             expect(element.val()).toBe('This is my life.');
 
             resetHtml();
             var element=$('#about-me');
-            utils.setText(element, 'span', updatedStr, false);
+            utils.setText(element[0], 'span', updatedStr, false);
             expect(element.val()).toBe('This is my life.');
 
             resetHtml();
             var element=$('#about-me');
-            utils.setText(element, 'textarea', '', false);
+            utils.setText(element[0], 'textarea', '', false);
             expect(element.val()).toBe('');
 
             expect(() => {
                 resetHtml();
                 var element=$('#about-me');
-                utils.setText(element);
+                utils.setText(element[0]);
             }).toThrow();
         });
 
@@ -175,23 +175,23 @@ describe('utilities test', function() {
 
             resetHtml();
             var element=$('#address');
-            utils.setText(element, 'span', updatedStr, false);
+            utils.setText(element[0], 'span', updatedStr, false);
             expect(element.html()).toBe('This is my life.');
 
             resetHtml();
             var element=$('#address');
-            utils.setText(element, 'p', updatedStr, false);
+            utils.setText(element[0], 'p', updatedStr, false);
             expect(element.html()).toBe('This is my life.');
 
             resetHtml();
             var element=$('#address');
-            utils.setText(element, 'span', '', false);
+            utils.setText(element[0], 'span', '', false);
             expect(element.html()).toBe('');
 
             expect(() => {
                 resetHtml();
                 var element=$('#address');
-                utils.setText(element);
+                utils.setText(element[0]);
             }).toThrow();
         });
 
@@ -202,23 +202,23 @@ describe('utilities test', function() {
 
             resetHtml();
             var element=$('#address');
-            utils.setText(element, 'span', updatedStr, true);
+            utils.setText(element[0], 'span', updatedStr, true);
             expect(element.html()).toBe('This is my life.<br>');
 
             resetHtml();
             var element=$('#address');
-            utils.setText(element, 'p', updatedStr, true);
+            utils.setText(element[0], 'p', updatedStr, true);
             expect(element.html()).toBe('This is my life.<br>');
 
             resetHtml();
             var element=$('#address');
-            utils.setText(element, 'span', '', true);
+            utils.setText(element[0], 'span', '', true);
             expect(element.html()).toBe('<br>');
 
             expect(() => {
                 resetHtml();
                 var element=$('#address');
-                utils.setText(element);
+                utils.setText(element[0]);
             }).toThrow();
         });
     });
