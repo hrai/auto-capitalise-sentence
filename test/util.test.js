@@ -230,8 +230,8 @@ describe('utilities test', function() {
     describe('capitaliseText', () => {
         var element=sinon.stub({
             isContentEditable: true,
-            tagName:'test',
-            innerHTML: 'dum',
+            tagName:'div',
+            innerHTML: 'I\'m the content of html tag.',
         });
 
         test('capitaliseText_HtmlContent', () => {
