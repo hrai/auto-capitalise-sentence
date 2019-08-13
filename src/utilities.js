@@ -30,10 +30,10 @@ export function getText(htmlControl, tagName) {
         tagName.toUpperCase() === 'INPUT' ||
       tagName.toUpperCase() === 'TEXTAREA'
     ) {
-        return htmlControl.value ? htmlControl.value:'';
+        return htmlControl.value ? htmlControl.value : '';
     }
 
-    return htmlControl.innerHTML;
+    return htmlControl.innerHTML ? htmlControl.innerHTML : '';
 }
 
 export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
