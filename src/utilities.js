@@ -30,10 +30,10 @@ export function getText(htmlControl, tagName) {
         tagName.toUpperCase() === 'INPUT' ||
       tagName.toUpperCase() === 'TEXTAREA'
     ) {
-        return htmlControl.val();
+        return htmlControl.value ? htmlControl.value:'';
     }
 
-    return htmlControl.html();
+    return htmlControl.innerHTML;
 }
 
 export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
@@ -77,8 +77,8 @@ export function capitaliseText(element) {
     if(!element)
         return;
 
-    var htmlControl = $(element);
-    var tagName = htmlControl.prop('tagName');
+    var htmlControl = element;
+    var tagName = htmlControl.tagName;
 
     if (!element.isContentEditable && tagName.toUpperCase() !== 'TEXTAREA') {
         return;
@@ -98,14 +98,14 @@ export function capitaliseText(element) {
         shouldAppendBr = true;
     }
 
-    if (utils.shouldCapitalise(text)) {
+    if (this.shouldCapitalise(text)) {
         var updatedStr = getCapitalisedContent(text);
 
         setText(htmlControl, tagName, updatedStr, shouldAppendBr);
         return;
     }
 
-    if (text.length >= 2 && utils.shouldCapitaliseForI(text)) {
+    if (text.length >= 2 && this.shouldCapitaliseForI(text)) {
         var updatedStr = getCapitalisedContentForI(text);
 
         setText(htmlControl, tagName, updatedStr, shouldAppendBr);

@@ -1,3 +1,4 @@
+import sinon from 'sinon';
 import * as utils from '../src/utilities.js';
 
 describe('utilities test', function() {
@@ -72,9 +73,9 @@ describe('utilities test', function() {
 
         test('getText_InputTag', () => {
             var element=$('#username');
-            expect(utils.getText(element, 'input')).toBe('Bingo');
-            expect(utils.getText(element, 'span')).toBe('');
-            expect(utils.getText(element, '')).toBe('');
+            expect(utils.getText(element[0], 'input')).toBe('Bingo');
+            expect(utils.getText(element[0], 'span')).toBe('');
+            expect(utils.getText(element[0], '')).toBe('');
             expect(() => {
                 utils.getText(element);
             }).toThrow();
@@ -84,9 +85,9 @@ describe('utilities test', function() {
             var element=$('#about-me');
             element.val('This is my life.');
 
-            expect(utils.getText(element, 'textarea')).toBe('This is my life.');
-            expect(utils.getText(element, 'span')).toBe('');
-            expect(utils.getText(element, '')).toBe('');
+            expect(utils.getText(element[0], 'textarea')).toBe('This is my life.');
+            expect(utils.getText(element[0], 'span')).toBe('');
+            expect(utils.getText(element[0], '')).toBe('');
             expect(() => {
                 utils.getText(element);
             }).toThrow();
@@ -94,9 +95,9 @@ describe('utilities test', function() {
 
         test('getText_HtmlContent', () => {
             var element=$('#address');
-            expect(utils.getText(element, 'span')).toBe('Please enter your address.');
-            expect(utils.getText(element, 'input')).toBe('');
-            expect(utils.getText(element, '')).toBe('Please enter your address.');
+            expect(utils.getText(element[0], 'span')).toBe('Please enter your address.');
+            expect(utils.getText(element[0], 'input')).toBe('');
+            expect(utils.getText(element[0], '')).toBe('Please enter your address.');
             expect(() => {
                 utils.getText(element);
             }).toThrow();
@@ -222,8 +223,17 @@ describe('utilities test', function() {
         });
     });
 
+    // afterEach(() => {
+    //     sinon.restore();
+    // });
+
     describe('capitaliseText', () => {
-        var element=jest.mock();
+        var element=sinon.stub({
+            isContentEditable: true,
+            tagName:'test',
+            innerHTML: 'dum',
+        });
+
         test('capitaliseText_HtmlContent', () => {
             expect(utils.capitaliseText()).toBe(undefined);
             expect(utils.capitaliseText(element)).toBe(undefined);
