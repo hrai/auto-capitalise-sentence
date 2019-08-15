@@ -228,15 +228,18 @@ describe('utilities test', function() {
     // });
 
     describe('capitaliseText', () => {
+        var editableSpy=sinon.spy();
         var element=sinon.stub({
             isContentEditable: true,
+            // isContentEditable: editableSpy,
             tagName:'div',
             innerHTML: 'I\'m the content of html tag.',
         });
 
         test('capitaliseText_HtmlContent', () => {
             expect(utils.capitaliseText()).toBe(undefined);
-            expect(utils.capitaliseText(element)).toBe(undefined);
+            expect(element.isContentEditable.calledOnce).toBeTruthy;
+            expect(element.tagName.calledOnce).toBeTruthy;
         });
     });
 });
