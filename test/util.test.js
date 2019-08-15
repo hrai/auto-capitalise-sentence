@@ -231,15 +231,18 @@ describe('utilities test', function() {
         var editableSpy=sinon.spy();
         var element=sinon.stub({
             isContentEditable: true,
-            // isContentEditable: editableSpy,
             tagName:'div',
             innerHTML: 'I\'m the content of html tag.',
         });
+        var shouldCapitaliseFake=sinon.fake();
 
         test('capitaliseText_HtmlContent', () => {
-            expect(utils.capitaliseText(element, utils.shouldCapitalise, utils.shouldCapitaliseForI)).toBe(undefined);
+            expect(utils.capitaliseText(element, shouldCapitaliseFake, utils.shouldCapitaliseForI)).toBe(undefined);
             expect(element.isContentEditable.calledOnce).toBeTruthy;
             expect(element.tagName.calledOnce).toBeTruthy;
+
+            expect(shouldCapitaliseFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
+            //assert shouldCapitaliseForI
         });
     });
 });
