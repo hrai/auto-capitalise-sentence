@@ -72,8 +72,7 @@ export function setEndOfContenteditable(contentEditableElement) {
     }
 }
 
-
-export function capitaliseText(element) {
+export function capitaliseText(element, shouldCapitalise, shouldCapitaliseForI) {
     if(!element)
         return;
 
@@ -97,14 +96,14 @@ export function capitaliseText(element) {
         shouldAppendBr = true;
     }
 
-    if (this.shouldCapitalise(text)) {
+    if (shouldCapitalise(text)) {
         var updatedStr = getCapitalisedContent(text);
 
         setText(element, tagName, updatedStr, shouldAppendBr);
         return;
     }
 
-    if (text.length >= 2 && this.shouldCapitaliseForI(text)) {
+    if (text.length >= 2 && shouldCapitaliseForI(text)) {
         var updatedStr = getCapitalisedContentForI(text);
 
         setText(htmlControl, tagName, updatedStr, shouldAppendBr);
