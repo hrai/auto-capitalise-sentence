@@ -237,7 +237,7 @@ describe('utilities test', function() {
         });
 
         test('capitaliseText_HtmlContent', () => {
-            expect(utils.capitaliseText()).toBe(undefined);
+            expect(utils.capitaliseText(element, utils.shouldCapitalise, utils.shouldCapitaliseForI)).toBe(undefined);
             expect(element.isContentEditable.calledOnce).toBeTruthy;
             expect(element.tagName.calledOnce).toBeTruthy;
         });
