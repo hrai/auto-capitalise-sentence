@@ -7,7 +7,7 @@ export function shouldCapitaliseForI(text) {
 
 export function shouldCapitalise(text) {
     const multilineRegex = /\s*\n+\s*\w$/;
-    var matches = multilineRegex.test(text);
+    let matches = multilineRegex.test(text);
 
     if (matches) return true;
 
