@@ -6,7 +6,7 @@ $(document).ready(function() {
     // }
 
     var errorMsg = 'breaking loop';
-    browser.storage.local.get('sites_to_ignore').then(processResponse, onError);
+    browser.storage.local.get('sites_to_ignore').then(processResponse, utils.onError);
 
     function hookupEventHandlers() {
         observeInputTags();
