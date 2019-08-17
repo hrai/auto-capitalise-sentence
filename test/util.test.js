@@ -235,7 +235,7 @@ describe('utilities test', function() {
             expect(element.tagName.calledOnce).toBeTruthy;
 
             expect(shouldCapitaliseFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
-            //assert shouldCapitaliseForI
+            expect(shouldCapitaliseForIFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
         });
     });
 });
