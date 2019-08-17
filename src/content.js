@@ -114,7 +114,8 @@ $(document).ready(function() {
     }
 
     function capitaliseText(element) {
-        utils.capitaliseText(element, utils.shouldCapitalise, utils.shouldCapitaliseForI);
+        utils.capitaliseText(element, utils.shouldCapitalise, utils.shouldCapitaliseForI,
+            utils.getText , utils.setText);
     }
 });
 

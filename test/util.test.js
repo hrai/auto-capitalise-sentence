@@ -230,8 +230,11 @@ describe('utilities test', function() {
             });
             const shouldCapitaliseFake=sinon.fake();
             const shouldCapitaliseForIFake=sinon.fake();
+            const getTextFake=sinon.fake();
+            const setTextFake=sinon.fake();
 
-            expect(utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake)).toBe(undefined);
+            expect(utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake, utils.getText,
+                setTextFake)).toBe(undefined);
             expect(element.isContentEditable.calledOnce).toBeTruthy;
             expect(element.tagName.calledOnce).toBeTruthy;
 
@@ -247,8 +250,11 @@ describe('utilities test', function() {
             });
             const shouldCapitaliseFake=sinon.fake();
             const shouldCapitaliseForIFake=sinon.fake();
+            const getTextFake=sinon.fake();
+            const setTextFake=sinon.fake();
 
-            expect(utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake)).toBe(undefined);
+            expect(utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake, utils.getText,
+                setTextFake)).toBe(undefined);
             expect(element.isContentEditable.calledOnce).toBeFalsy;
             expect(element.tagName.calledOnce).toBeFalsy;
 
@@ -264,8 +270,10 @@ describe('utilities test', function() {
             });
             const shouldCapitaliseFake=sinon.fake();
             const shouldCapitaliseForIFake=sinon.fake();
+            const setTextFake=sinon.fake();
 
-            expect(utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake)).toBe(undefined);
+            expect(utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake, utils.getText,
+                setTextFake)).toBe(undefined);
             expect(element.isContentEditable.calledOnce).toBeFalsy;
             expect(element.tagName.calledOnce).toBeFalsy;
 
@@ -281,8 +289,11 @@ describe('utilities test', function() {
                 });
                 const shouldCapitaliseFake=sinon.fake();
                 const shouldCapitaliseForIFake=sinon.fake();
+                const getTextFake=sinon.fake();
+                const setTextFake=sinon.fake();
 
-                utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake);
+                utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake, getTextFake,
+                    setTextFake);
             }).toThrow();
 
             // expect(() => {

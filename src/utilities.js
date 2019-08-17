@@ -72,7 +72,7 @@ export function setEndOfContenteditable(contentEditableElement) {
     }
 }
 
-export function capitaliseText(element, shouldCapitalise, shouldCapitaliseForI) {
+export function capitaliseText(element, shouldCapitalise, shouldCapitaliseForI, getText, setText) {
     if(!element)
         return;
 
