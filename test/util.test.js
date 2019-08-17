@@ -142,9 +142,7 @@ describe('utilities test', function() {
         });
 
         test('setText_TextareaTag', () => {
-            // const element=$('#about-me');
             const updatedStr='This is my life.';
-            // element.val(updatedStr);
 
             resetHtml();
             var element=$('#about-me');
@@ -169,9 +167,7 @@ describe('utilities test', function() {
         });
 
         test('setText_HtmlContent_WithoutBrTags', () => {
-            // const element=$('#address');
             const updatedStr='This is my life.';
-            // element.val(updatedStr);
 
             resetHtml();
             var element=$('#address');
@@ -222,10 +218,6 @@ describe('utilities test', function() {
             }).toThrow();
         });
     });
-
-    // afterEach(() => {
-    //     sinon.restore();
-    // });
 
     describe('capitaliseText', () => {
         var editableSpy=sinon.spy();
