@@ -221,21 +221,59 @@ describe('utilities test', function() {
 
     describe('capitaliseText', () => {
         var editableSpy=sinon.spy();
-        var element=sinon.stub({
-            isContentEditable: true,
-            tagName:'div',
-            innerHTML: 'I\'m the content of html tag.',
-        });
-        const shouldCapitaliseFake=sinon.fake();
-        const shouldCapitaliseForIFake=sinon.fake();
 
         test('capitaliseText_HtmlContent', () => {
+            const element=sinon.stub({
+                isContentEditable: true,
+                tagName:'div',
+                innerHTML: 'I\'m the content of html tag.',
+            });
+            const shouldCapitaliseFake=sinon.fake();
+            const shouldCapitaliseForIFake=sinon.fake();
+
             expect(utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake)).toBe(undefined);
             expect(element.isContentEditable.calledOnce).toBeTruthy;
             expect(element.tagName.calledOnce).toBeTruthy;
 
             expect(shouldCapitaliseFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
             expect(shouldCapitaliseForIFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
+        });
+
+        test('capitaliseText_HtmlContent_LastLetterCapital', () => {
+            const element=sinon.stub({
+                isContentEditable: true,
+                tagName:'div',
+                innerHTML: 'I\'m the content of html taG',
+            });
+            const shouldCapitaliseFake=sinon.fake();
+            const shouldCapitaliseForIFake=sinon.fake();
+
+            expect(utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake)).toBe(undefined);
+            expect(element.isContentEditable.calledOnce).toBeFalsy;
+            expect(element.tagName.calledOnce).toBeFalsy;
+
+            expect(shouldCapitaliseFake.getCall(0)).toBeNull();
+            expect(shouldCapitaliseForIFake.getCall(0)).toBeNull();
+        });
+
+        test('capitaliseText_HtmlContent_Exceptions', () => {
+            expect(() => {
+                const element=sinon.stub({
+                    isContentEditable: true,
+                    innerHTML: 'I\'m the content of html tag.',
+                });
+
+                utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake);
+            }).toThrow();
+
+            // expect(() => {
+            //     const element=sinon.stub({
+            //         tagName:'div',
+            //         innerHTML: 'I\'m the content of html tag.',
+            //     });
+
+            //     utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake);
+            // }).toThrow();
         });
     });
 });
