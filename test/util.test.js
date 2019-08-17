@@ -279,6 +279,8 @@ describe('utilities test', function() {
                     isContentEditable: true,
                     innerHTML: 'I\'m the content of html tag.',
                 });
+                const shouldCapitaliseFake=sinon.fake();
+                const shouldCapitaliseForIFake=sinon.fake();
 
                 utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake);
             }).toThrow();
