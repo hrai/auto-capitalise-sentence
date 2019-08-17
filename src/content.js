@@ -15,7 +15,7 @@ $(document).ready(function() {
 
     function observeInputTags() {
         $(':text,textarea').on('input', function(event) {
-            utils.capitaliseText(event.target, utils.shouldCapitalise, utils.shouldCapitaliseForI);
+            capitaliseText(event.target);
         });
     }
 
@@ -67,7 +67,7 @@ $(document).ready(function() {
                         // add support for div block in gmail and outlook
                         // if (['P','DIV'].includes(mutation.target.nodeName )) {
                         if (['P'].includes(mutation.target.nodeName)) {
-                            utils.capitaliseText(mutation.target, utils.shouldCapitalise, utils.shouldCapitaliseForI);
+                            capitaliseText(mutation.target);
                             throw new Error(errorMsg);
                         }
 
@@ -78,7 +78,7 @@ $(document).ready(function() {
 
                                 filteredEls.each(function(index, element) {
                                     if (utils.shouldCapitaliseContent(element)) {
-                                        utils.capitaliseText(element, utils.shouldCapitalise, utils.shouldCapitaliseForI);
+                                        capitaliseText(element);
                                     }
                                 });
                             });
