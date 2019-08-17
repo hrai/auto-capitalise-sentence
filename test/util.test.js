@@ -250,6 +250,26 @@ describe('utilities test', function() {
             });
             const shouldCapitaliseFake=sinon.fake();
             const shouldCapitaliseForIFake=sinon.fake();
+            const getTextFake=sinon.fake.returns('I\'m the content of html taG');
+            const setTextFake=sinon.fake();
+
+            expect(utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake, getTextFake,
+                setTextFake)).toBe(undefined);
+            expect(element.isContentEditable.calledOnce).toBeFalsy;
+            expect(element.tagName.calledOnce).toBeFalsy;
+
+            expect(shouldCapitaliseFake.getCall(0)).toBeNull();
+            expect(shouldCapitaliseForIFake.getCall(0)).toBeNull();
+        });
+
+        test('capitaliseText_HtmlContent_WithLastLetterCapital', () => {
+            const element=sinon.stub({
+                isContentEditable: true,
+                tagName:'div',
+                innerHTML: 'I\'m the content of html taG',
+            });
+            const shouldCapitaliseFake=sinon.fake();
+            const shouldCapitaliseForIFake=sinon.fake();
             const getTextFake=sinon.fake();
             const setTextFake=sinon.fake();
 
@@ -281,7 +301,7 @@ describe('utilities test', function() {
             expect(shouldCapitaliseForIFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
         });
 
-        test('capitaliseText_HtmlContent_Exceptions', () => {
+        test('capitaliseText_Exceptions', () => {
             expect(() => {
                 const element=sinon.stub({
                     isContentEditable: true,
