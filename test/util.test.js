@@ -343,14 +343,8 @@ describe('utilities test', function() {
                 utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake, getTextFake,
                     null);
             }).toThrow();
-            // expect(() => {
-            //     const element=sinon.stub({
-            //         tagName:'div',
-            //         innerHTML: 'I\'m the content of html tag.',
-            //     });
 
-            //     utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake);
-            // }).toThrow();
+            //assert getTextFake and setTextFake
         });
     });
 });
