@@ -72,7 +72,7 @@ describe('utilities test', function() {
             '</div>';
 
         test('getText_InputTag', () => {
-            var element=$('#username');
+            const element=$('#username');
             expect(utils.getText(element[0], 'input')).toBe('Bingo');
             expect(utils.getText(element[0], 'span')).toBe('');
             expect(utils.getText(element[0], '')).toBe('');
@@ -82,7 +82,7 @@ describe('utilities test', function() {
         });
 
         test('getText_TextareaTag', () => {
-            var element=$('#about-me');
+            const element=$('#about-me');
             element.val('This is my life.');
 
             expect(utils.getText(element[0], 'textarea')).toBe('This is my life.');
@@ -94,7 +94,7 @@ describe('utilities test', function() {
         });
 
         test('getText_HtmlContent', () => {
-            var element=$('#address');
+            const element=$('#address');
             expect(utils.getText(element[0], 'span')).toBe('Please enter your address.');
             expect(utils.getText(element[0], 'input')).toBe('');
             expect(utils.getText(element[0], '')).toBe('Please enter your address.');
@@ -117,64 +117,64 @@ describe('utilities test', function() {
         }
 
         test('setText_InputTag', () => {
-            var updatedStr='testing this';
+            const updatedStr='testing this';
 
             resetHtml();
-            var element=$('#username');
+            const element=$('#username');
             utils.setText(element[0], 'input', updatedStr, false);
             expect(element.val()).toBe('testing this');
 
             resetHtml();
-            var element=$('#username');
+            const element=$('#username');
             utils.setText(element[0], 'span', updatedStr, false);
             expect(element.val()).toBe('Bingo');
 
             resetHtml();
-            var element=$('#username');
+            const element=$('#username');
             utils.setText(element[0], 'p', '', false);
             expect(element.val()).toBe('Bingo');
 
             expect(() => {
                 resetHtml();
-                var element=$('#username');
+                const element=$('#username');
                 utils.setText(element[0]);
             }).toThrow();
         });
 
         test('setText_TextareaTag', () => {
-            var element=$('#about-me');
-            var updatedStr='This is my life.';
+            const element=$('#about-me');
+            const updatedStr='This is my life.';
             element.val(updatedStr);
 
             resetHtml();
-            var element=$('#about-me');
+            const element=$('#about-me');
             utils.setText(element[0], 'textarea', updatedStr, false);
             expect(element.val()).toBe('This is my life.');
 
             resetHtml();
-            var element=$('#about-me');
+            const element=$('#about-me');
             utils.setText(element[0], 'span', updatedStr, false);
             expect(element.val()).toBe('This is my life.');
 
             resetHtml();
-            var element=$('#about-me');
+            const element=$('#about-me');
             utils.setText(element[0], 'textarea', '', false);
             expect(element.val()).toBe('');
 
             expect(() => {
                 resetHtml();
-                var element=$('#about-me');
+                const element=$('#about-me');
                 utils.setText(element[0]);
             }).toThrow();
         });
 
         test('setText_HtmlContent_WithoutBrTags', () => {
-            var element=$('#address');
-            var updatedStr='This is my life.';
+            const element=$('#address');
+            const updatedStr='This is my life.';
             element.val(updatedStr);
 
             resetHtml();
-            var element=$('#address');
+            const element=$('#address');
             utils.setText(element[0], 'span', updatedStr, false);
             expect(element.html()).toBe('This is my life.');
 
@@ -234,10 +234,11 @@ describe('utilities test', function() {
             tagName:'div',
             innerHTML: 'I\'m the content of html tag.',
         });
-        var shouldCapitaliseFake=sinon.fake();
+        const shouldCapitaliseFake=sinon.fake();
+        const shouldCapitaliseForIFake=sinon.fake();
 
         test('capitaliseText_HtmlContent', () => {
-            expect(utils.capitaliseText(element, shouldCapitaliseFake, utils.shouldCapitaliseForI)).toBe(undefined);
+            expect(utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake)).toBe(undefined);
             expect(element.isContentEditable.calledOnce).toBeTruthy;
             expect(element.tagName.calledOnce).toBeTruthy;
 
