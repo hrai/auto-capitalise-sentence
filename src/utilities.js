@@ -106,7 +106,7 @@ export function capitaliseText(element, shouldCapitalise, shouldCapitaliseForI) 
     if (text.length >= 2 && shouldCapitaliseForI(text)) {
         var updatedStr = getCapitalisedContentForI(text);
 
-        setText(htmlControl, tagName, updatedStr, shouldAppendBr);
+        setText(element, tagName, updatedStr, shouldAppendBr);
         return;
     }
 }
