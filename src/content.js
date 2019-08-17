@@ -88,15 +88,13 @@ $(document).ready(function() {
 
                                 filteredEls.each(function(index, element) {
                                     $(element).on('input', function(event) {
-                                        utils.capitaliseText(event.target, utils.shouldCapitalise,
-                                            utils.shouldCapitaliseForI);
+                                        capitaliseText(event.target);
                                     });
                                 });
                             });
                         }
                     } else if (mutation.type === 'characterData') {
-                        utils.capitaliseText(mutation.target.parentNode, utils.shouldCapitalise,
-                            utils.shouldCapitaliseForI);
+                        capitaliseText(mutation.target.parentNode);
                     }
                 } catch (err) {
                     if (err.message !== errorMsg) {
@@ -115,5 +113,8 @@ $(document).ready(function() {
         observer.observe(target, config);
     }
 
+    function capitaliseText(element) {
+        utils.capitaliseText(element, utils.shouldCapitalise, utils.shouldCapitaliseForI);
+    }
 });
 
