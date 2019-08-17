@@ -1,17 +1,17 @@
 export function shouldCapitaliseForI(text) {
-    var regex = /\s+i(\s+|')$/;
-    var matches = regex.test(text);
+    const regex = /\s+i(\s+|')$/;
+    const matches = regex.test(text);
 
     return matches;
 }
 
 export function shouldCapitalise(text) {
-    var multilineRegex = /\s*\n+\s*\w$/;
+    const multilineRegex = /\s*\n+\s*\w$/;
     var matches = multilineRegex.test(text);
 
     if (matches) return true;
 
-    var sentenceRegex = /\w+\s*(\.|\?)+\s+\w$/;
+    const sentenceRegex = /\w+\s*(\.|\?)+\s+\w$/;
     matches = sentenceRegex.test(text);
 
     if (!matches) {
@@ -54,7 +54,7 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
 }
 
 export function setEndOfContenteditable(contentEditableElement) {
-    var range, selection;
+    let range, selection;
     if (document.createRange) {
         //Firefox, Chrome, Opera, Safari, IE 9+
         range = document.createRange(); //Create a range (a range is a like the selection but invisible)
@@ -76,35 +76,35 @@ export function capitaliseText(element, shouldCapitalise, shouldCapitaliseForI) 
     if(!element)
         return;
 
-    var tagName = element.tagName;
+    let tagName = element.tagName;
 
     if (!element.isContentEditable && tagName.toUpperCase() !== 'TEXTAREA') {
         return;
     }
 
-    var text = getText(element, tagName);
+    let text = getText(element, tagName);
 
     //support for jira's comment section's p tags
-    var lastChar = text.trim().slice(-1);
+    let lastChar = text.trim().slice(-1);
     if (lastChar.match(/[a-z]/i) && lastChar.toUpperCase() === lastChar) {
         return;
     }
 
-    var shouldAppendBr = false;
+    let shouldAppendBr = false;
     if (text.length >= 4 && text.slice(-4) === '<br>') {
         text = text.slice(0, -4);
         shouldAppendBr = true;
     }
 
     if (shouldCapitalise(text)) {
-        var updatedStr = getCapitalisedContent(text);
+        const updatedStr = getCapitalisedContent(text);
 
         setText(element, tagName, updatedStr, shouldAppendBr);
         return;
     }
 
     if (text.length >= 2 && shouldCapitaliseForI(text)) {
-        var updatedStr = getCapitalisedContentForI(text);
+        const updatedStr = getCapitalisedContentForI(text);
 
         setText(element, tagName, updatedStr, shouldAppendBr);
         return;
@@ -112,26 +112,26 @@ export function capitaliseText(element, shouldCapitalise, shouldCapitaliseForI) 
 }
 
 export function getCapitalisedContentForI(text) {
-    var lastTwoChars = text.slice(-2);
-    var updatedStr =
+    const lastTwoChars = text.slice(-2);
+    const updatedStr =
       text.substr(0, text.length - 2) + lastTwoChars.toUpperCase();
     return updatedStr;
 }
 
 export function getCapitalisedContent(text) {
-    var lastChar = text.slice(-1);
-    var updatedStr = text.substr(0, text.length - 1) + lastChar.toUpperCase();
+    const lastChar = text.slice(-1);
+    const updatedStr = text.substr(0, text.length - 1) + lastChar.toUpperCase();
     return updatedStr;
 }
 
 export function containsHtmlContent(element) {
-    var content = $(element).html();
+    const content = $(element).html();
 
-    var brRegex = /\s*<br>/;
+    const brRegex = /\s*<br>/;
     if (content && brRegex.test(content)) return false;
 
-    var regex = /<\/?\w+>/;
-    var hasHtmlTag = regex.test(content);
+    const regex = /<\/?\w+>/;
+    const hasHtmlTag = regex.test(content);
     return hasHtmlTag;
 }
 
