@@ -120,61 +120,61 @@ describe('utilities test', function() {
             const updatedStr='testing this';
 
             resetHtml();
-            const element=$('#username');
+            var element=$('#username');
             utils.setText(element[0], 'input', updatedStr, false);
             expect(element.val()).toBe('testing this');
 
             resetHtml();
-            const element=$('#username');
+            var element=$('#username');
             utils.setText(element[0], 'span', updatedStr, false);
             expect(element.val()).toBe('Bingo');
 
             resetHtml();
-            const element=$('#username');
+            var element=$('#username');
             utils.setText(element[0], 'p', '', false);
             expect(element.val()).toBe('Bingo');
 
             expect(() => {
                 resetHtml();
-                const element=$('#username');
+                var element=$('#username');
                 utils.setText(element[0]);
             }).toThrow();
         });
 
         test('setText_TextareaTag', () => {
-            const element=$('#about-me');
+            // const element=$('#about-me');
             const updatedStr='This is my life.';
-            element.val(updatedStr);
+            // element.val(updatedStr);
 
             resetHtml();
-            const element=$('#about-me');
+            var element=$('#about-me');
             utils.setText(element[0], 'textarea', updatedStr, false);
             expect(element.val()).toBe('This is my life.');
 
             resetHtml();
-            const element=$('#about-me');
+            var element=$('#about-me');
             utils.setText(element[0], 'span', updatedStr, false);
             expect(element.val()).toBe('This is my life.');
 
             resetHtml();
-            const element=$('#about-me');
+            var element=$('#about-me');
             utils.setText(element[0], 'textarea', '', false);
             expect(element.val()).toBe('');
 
             expect(() => {
                 resetHtml();
-                const element=$('#about-me');
+                var element=$('#about-me');
                 utils.setText(element[0]);
             }).toThrow();
         });
 
         test('setText_HtmlContent_WithoutBrTags', () => {
-            const element=$('#address');
+            // const element=$('#address');
             const updatedStr='This is my life.';
-            element.val(updatedStr);
+            // element.val(updatedStr);
 
             resetHtml();
-            const element=$('#address');
+            var element=$('#address');
             utils.setText(element[0], 'span', updatedStr, false);
             expect(element.html()).toBe('This is my life.');
 
