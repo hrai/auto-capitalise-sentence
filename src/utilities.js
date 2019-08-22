@@ -72,15 +72,20 @@ export function setEndOfContenteditable(contentEditableElement) {
     }
 }
 
+function isEditableElement(element, tagName) {
+    return element.isContentEditable ||
+                    tagName.toUpperCase() === 'INPUT' ||
+                  tagName.toUpperCase() === 'TEXTAREA';
+}
+
 export function capitaliseText(element, shouldCapitalise, shouldCapitaliseForI, getText, setText) {
     if(!element)
         return;
 
     let tagName = element.tagName;
 
-    if (!element.isContentEditable && tagName.toUpperCase() !== 'TEXTAREA') {
+    if(!isEditableElement(element, tagName)  )
         return;
-    }
 
     let text = getText(element, tagName);
 
