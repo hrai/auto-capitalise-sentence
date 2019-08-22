@@ -72,12 +72,6 @@ export function setEndOfContenteditable(contentEditableElement) {
     }
 }
 
-function isEditableElement(element, tagName) {
-    return element.isContentEditable ||
-                    tagName.toUpperCase() === 'INPUT' ||
-                  tagName.toUpperCase() === 'TEXTAREA';
-}
-
 export function capitaliseText(element, shouldCapitalise, shouldCapitaliseForI, getText, setText) {
     if(!element)
         return;
@@ -153,3 +147,10 @@ export function getFilteredElements(addedNodes, tagName) {
 export function shouldCapitaliseContent(element) {
     return isContentEditable(element) && !containsHtmlContent(element);
 }
+
+export function isEditableElement(element, tagName) {
+    return element.isContentEditable ||
+                    tagName.toUpperCase() === 'INPUT' ||
+                  tagName.toUpperCase() === 'TEXTAREA';
+}
+
