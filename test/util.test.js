@@ -366,5 +366,47 @@ describe('utilities test', function() {
             expect(getTextFake.getCall(0).args[0]).toBe(dummyElement);
             expect(shouldCapitaliseFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
         });
+
+        test('capitaliseText_SetText_ShouldCapitaliseTrue', () => {
+            const dummyElement={
+                isContentEditable: true,
+                tagName:'div',
+                innerHTML: 'I\'m the content of html tag.',
+            };
+
+            const element=sinon.stub(dummyElement);
+            const shouldCapitaliseFake=sinon.fake.returns(true);
+            const shouldCapitaliseForIFake=sinon.fake();
+            const getTextFake=sinon.fake.returns('I\'m the content of html tag.');
+            const setTextFake=sinon.fake();
+
+            utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake, getTextFake, setTextFake);
+
+            expect(shouldCapitaliseFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
+            expect(shouldCapitaliseForIFake.getCall(0)).toBeNull();
+            expect(getTextFake.getCall(0).args[0]).toBe(dummyElement);
+            expect(shouldCapitaliseFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
+        });
+
+        test('capitaliseText_SetText_ShouldCapitaliseFalse', () => {
+            const dummyElement={
+                isContentEditable: true,
+                tagName:'div',
+                innerHTML: 'I\'m the content of html tag.',
+            };
+
+            const element=sinon.stub(dummyElement);
+            const shouldCapitaliseFake=sinon.fake.returns(false);
+            const shouldCapitaliseForIFake=sinon.fake();
+            const getTextFake=sinon.fake.returns('I\'m the content of html tag.');
+            const setTextFake=sinon.fake();
+
+            utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake, getTextFake, setTextFake);
+
+            expect(shouldCapitaliseFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
+            expect(shouldCapitaliseForIFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
+            expect(getTextFake.getCall(0).args[0]).toBe(dummyElement);
+            expect(shouldCapitaliseFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
+        });
     });
 });
