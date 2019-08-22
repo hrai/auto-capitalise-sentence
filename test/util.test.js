@@ -230,7 +230,6 @@ describe('utilities test', function() {
             });
             const shouldCapitaliseFake=sinon.fake();
             const shouldCapitaliseForIFake=sinon.fake();
-            const getTextFake=sinon.fake();
             const setTextFake=sinon.fake();
 
             expect(utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake, utils.getText,
@@ -345,6 +344,27 @@ describe('utilities test', function() {
             }).toThrow();
 
             //assert getTextFake and setTextFake
+        });
+
+        test('capitaliseText_GetText', () => {
+            const dummyElement={
+                isContentEditable: true,
+                tagName:'div',
+                innerHTML: 'I\'m the content of html tag.',
+            };
+
+            const element=sinon.stub(dummyElement);
+            const shouldCapitaliseFake=sinon.fake();
+            const shouldCapitaliseForIFake=sinon.fake();
+            const getTextFake=sinon.fake.returns('I\'m the content of html tag.');
+            const setTextFake=sinon.fake();
+
+            utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake, getTextFake, setTextFake);
+
+            expect(shouldCapitaliseFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
+            expect(shouldCapitaliseForIFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
+            expect(getTextFake.getCall(0).args[0]).toBe(dummyElement);
+            expect(shouldCapitaliseFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
         });
     });
 });
