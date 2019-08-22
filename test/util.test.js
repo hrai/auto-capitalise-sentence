@@ -120,23 +120,23 @@ describe('utilities test', function() {
             const updatedStr='testing this';
 
             resetHtml();
-            var element=$('#username');
+            let element=$('#username');
             utils.setText(element[0], 'input', updatedStr, false);
             expect(element.val()).toBe('testing this');
 
             resetHtml();
-            var element=$('#username');
+            element=$('#username');
             utils.setText(element[0], 'span', updatedStr, false);
             expect(element.val()).toBe('Bingo');
 
             resetHtml();
-            var element=$('#username');
+            element=$('#username');
             utils.setText(element[0], 'p', '', false);
             expect(element.val()).toBe('Bingo');
 
             expect(() => {
                 resetHtml();
-                var element=$('#username');
+                element=$('#username');
                 utils.setText(element[0]);
             }).toThrow();
         });
@@ -145,23 +145,23 @@ describe('utilities test', function() {
             const updatedStr='This is my life.';
 
             resetHtml();
-            var element=$('#about-me');
+            let element=$('#about-me');
             utils.setText(element[0], 'textarea', updatedStr, false);
             expect(element.val()).toBe('This is my life.');
 
             resetHtml();
-            var element=$('#about-me');
+            element=$('#about-me');
             utils.setText(element[0], 'span', updatedStr, false);
             expect(element.val()).toBe('This is my life.');
 
             resetHtml();
-            var element=$('#about-me');
+            element=$('#about-me');
             utils.setText(element[0], 'textarea', '', false);
             expect(element.val()).toBe('');
 
             expect(() => {
                 resetHtml();
-                var element=$('#about-me');
+                element=$('#about-me');
                 utils.setText(element[0]);
             }).toThrow();
         });
