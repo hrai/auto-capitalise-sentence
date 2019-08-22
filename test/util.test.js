@@ -170,58 +170,56 @@ describe('utilities test', function() {
             const updatedStr='This is my life.';
 
             resetHtml();
-            var element=$('#address');
+            let element=$('#address');
             utils.setText(element[0], 'span', updatedStr, false);
             expect(element.html()).toBe('This is my life.');
 
             resetHtml();
-            var element=$('#address');
+            element=$('#address');
             utils.setText(element[0], 'p', updatedStr, false);
             expect(element.html()).toBe('This is my life.');
 
             resetHtml();
-            var element=$('#address');
+            element=$('#address');
             utils.setText(element[0], 'span', '', false);
             expect(element.html()).toBe('');
 
             expect(() => {
                 resetHtml();
-                var element=$('#address');
+                element=$('#address');
                 utils.setText(element[0]);
             }).toThrow();
         });
 
         test('setText_HtmlContent_WithBrTags', () => {
-            var element=$('#address');
-            var updatedStr='This is my life.';
+            let element=$('#address');
+            const updatedStr='This is my life.';
             element.val(updatedStr);
 
             resetHtml();
-            var element=$('#address');
+            element=$('#address');
             utils.setText(element[0], 'span', updatedStr, true);
             expect(element.html()).toBe('This is my life.<br>');
 
             resetHtml();
-            var element=$('#address');
+            element=$('#address');
             utils.setText(element[0], 'p', updatedStr, true);
             expect(element.html()).toBe('This is my life.<br>');
 
             resetHtml();
-            var element=$('#address');
+            element=$('#address');
             utils.setText(element[0], 'span', '', true);
             expect(element.html()).toBe('<br>');
 
             expect(() => {
                 resetHtml();
-                var element=$('#address');
+                element=$('#address');
                 utils.setText(element[0]);
             }).toThrow();
         });
     });
 
     describe('capitaliseText', () => {
-        var editableSpy=sinon.spy();
-
         test('capitaliseText_HtmlContent', () => {
             const element=sinon.stub({
                 isContentEditable: true,
@@ -269,7 +267,6 @@ describe('utilities test', function() {
             });
             const shouldCapitaliseFake=sinon.fake();
             const shouldCapitaliseForIFake=sinon.fake();
-            const getTextFake=sinon.fake();
             const setTextFake=sinon.fake();
 
             expect(utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake, utils.getText,
