@@ -1,5 +1,5 @@
 import sinon from 'sinon';
-import * as utils from '../src/utilities.js';
+import * as utils from '../src/utils.js';
 
 describe('utilities test', function() {
     test('getCapitalisedContent', () => {
