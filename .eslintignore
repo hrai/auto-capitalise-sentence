@@ -1,2 +1,5 @@
 dependencies/*.js
 dependencies/*.css
+lib/
+jest.config.js
+test-env.js

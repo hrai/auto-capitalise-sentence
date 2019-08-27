@@ -1,6 +1,15 @@
 {
+  "parserOptions": {
+    "ecmaVersion": 7,
+    "sourceType": "module",
+    "ecmaFeatures": {
+        "modules": true
+        }
+    },
     "env": {
+        "jest": true,
         "browser": true,
+        "webextensions": true,
         "jquery": true
     },
     "extends": "eslint:recommended",
