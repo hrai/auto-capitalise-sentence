@@ -8,7 +8,6 @@
     },
     "env": {
         "jest": true,
-        "browser": true,
         "webextensions": true,
         "jquery": true
     },
