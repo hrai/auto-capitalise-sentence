@@ -59,6 +59,7 @@ export function setEndOfContenteditable(contentEditableElement) {
         //Firefox, Chrome, Opera, Safari, IE 9+
         range = document.createRange(); //Create a range (a range is a like the selection but invisible)
         const childNodes=contentEditableElement.childNodes;
+        console.log(childNodes.length);
         const childNode=childNodes.length==1?childNodes[0]: childNodes[childNodes.length-2];
         range.setStart(childNode.data, childNode.length);
         range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start

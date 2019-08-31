@@ -436,10 +436,12 @@ describe('utilities test', function() {
             };
 
             Object.defineProperty(document, 'createRange', {
-              value: sinon.fake.returns(range)
+                value: sinon.fake.returns(range),
+                configurable: true
             });
             Object.defineProperty(window, 'getSelection', {
-              value: sinon.fake.returns(windowObj)
+              value: sinon.fake.returns(windowObj),
+                configurable: true
             });
 
             const element=$('#text_block_without_br')[0];
@@ -447,6 +449,39 @@ describe('utilities test', function() {
             const expectedArg='Item is not Kryptonite.';
             var args=range.setStart.getCall(0).args;
 
+            expect(args[0]).toBe(expectedArg);
+            expect(args[1]).toBe(expectedArg.length);
+
+            // delete document.createRange;
+        });
+
+        test('setEndOfContenteditable_WithBr', () => {
+            setInnerHtmlForContentEditableElement();
+
+            const range= {
+                setStart:sinon.fake(),
+                collapse:sinon.fake()
+            };
+            const windowObj= {
+                removeAllRanges:sinon.fake(),
+                addRange:sinon.fake()
+            };
+
+            Object.defineProperty(document, 'createRange', {
+                value: sinon.fake.returns(range),
+                configurable:true
+            });
+            Object.defineProperty(window, 'getSelection', {
+                value: sinon.fake.returns(windowObj),
+                configurable:true
+            });
+
+            const element=$('#text_block_without_br')[0];
+            utils.setEndOfContenteditable(element);
+            const expectedArg='Item is not Kryptonite.';
+            var args=range.setStart.getCall(0).args;
+
+            console.log(args);
             expect(args[0]).toBe(expectedArg);
             expect(args[1]).toBe(expectedArg.length);
         });
