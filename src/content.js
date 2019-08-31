@@ -69,6 +69,13 @@ $(document).ready(function() {
 
                         var addedNodes = mutation.addedNodes;
                         if (addedNodes && addedNodes.length > 0) {
+                            addedNodes.forEach((node) => {
+                                if (utils.isFirstTextOfEditableTextNode(node)) {
+                                    capitaliseText(node.parentNode);
+                                    addedNodes = addedNodes.filter(addedNode=>{addedNode != node;});
+                                }
+                            });
+
                             $.each(tags, function(i, tagName) {
                                 var filteredEls = utils.getFilteredElements(addedNodes, tagName);
 

@@ -53,6 +53,20 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
     setEndOfContenteditable(htmlControl);
 }
 
+export function isFirstTextOfEditableTextNode(node) {
+    const data = node.data;
+    const textNode='#text';
+
+    if(node.nodeName===textNode &&
+        data.length === 1 &&
+        data.toUpperCase()!= data &&
+        shouldCapitaliseContent(node.parentNode)){
+        return true;
+    }
+
+    return false;
+}
+
 export function setEndOfContenteditable(contentEditableElement) {
     let range, selection;
     if (document.createRange) {
@@ -85,7 +99,7 @@ export function setEndOfContenteditable(contentEditableElement) {
         range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
         range.select(); //Select the range (make it the visible selection
     }
-                    // throw new Error('test');
+    // throw new Error('test');
 }
 
 export function capitaliseText(element, shouldCapitalise, shouldCapitaliseForI, getText, setText) {
