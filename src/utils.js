@@ -59,10 +59,22 @@ export function setEndOfContenteditable(contentEditableElement) {
         //Firefox, Chrome, Opera, Safari, IE 9+
         range = document.createRange(); //Create a range (a range is a like the selection but invisible)
         const childNodes=contentEditableElement.childNodes;
-        console.log(childNodes.length);
         const childNode=childNodes.length==1?childNodes[0]: childNodes[childNodes.length-2];
-        range.setStart(childNode.data, childNode.length);
-        range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
+        // childNodes.forEach(x=>console.log(x.outerHTML));
+
+        if(childNode.nodeName==='#text'){
+            range.setStart(childNode, childNode.data.length);
+            range.collapse(false);
+        }
+        else if(childNode.outerHTML==='<br>'){
+            range.setStart(childNode, 0);
+            range.collapse(true);
+        }
+        else{
+            range.selectNodeContents(contentEditableElement); //Select the entire contents of the element with the range
+            range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
+        }
+
         selection = window.getSelection(); //get the selection object (allows you to change selection)
         selection.removeAllRanges(); //remove any selections already made
         selection.addRange(range); //make the range you have just created the visible selection

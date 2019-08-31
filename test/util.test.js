@@ -415,14 +415,49 @@ describe('utilities test', function() {
     function setInnerHtmlForContentEditableElement() {
         document.body.innerHTML =
             '<div id="text_block">' +
+            '<p>test block that is hidden</p>'+
             'Item is not. K<br>kryptonite. M<br>e and mine<br> ' +
             '</div>'+
+            // '<div id="text_block_without_br"><p></p>' +
             '<div id="text_block_without_br">' +
             'Item is not Kryptonite.' +
             '</div>';
     }
 
     describe('setEndOfContenteditable', () => {
+        test('setEndOfContenteditable_WithBr', () => {
+            setInnerHtmlForContentEditableElement();
+
+            const range= {
+                setStart:sinon.fake(),
+                collapse:sinon.fake()
+            };
+            const windowObj= {
+                removeAllRanges:sinon.fake(),
+                addRange:sinon.fake()
+            };
+
+            delete document.createRange;
+            delete window.getSelection;
+
+            Object.defineProperty(document, 'createRange', {
+                value: sinon.fake.returns(range),
+                configurable:true
+            });
+            Object.defineProperty(window, 'getSelection', {
+                value: sinon.fake.returns(windowObj),
+                configurable:true
+            });
+
+            const element=$('#text_block')[0];
+            utils.setEndOfContenteditable(element);
+            const expectedArg='<br>';
+            var args=range.setStart.getCall(0).args;
+
+            expect(args[0].outerHTML).toBe(expectedArg);
+            expect(args[1]).toBe(0);
+        });
+
         test('setEndOfContenteditable_WithoutBr', () => {
             setInnerHtmlForContentEditableElement();
 
@@ -434,6 +469,9 @@ describe('utilities test', function() {
                 removeAllRanges:sinon.fake(),
                 addRange:sinon.fake()
             };
+
+            delete document.createRange;
+            delete window.getSelection;
 
             Object.defineProperty(document, 'createRange', {
                 value: sinon.fake.returns(range),
@@ -449,40 +487,7 @@ describe('utilities test', function() {
             const expectedArg='Item is not Kryptonite.';
             var args=range.setStart.getCall(0).args;
 
-            expect(args[0]).toBe(expectedArg);
-            expect(args[1]).toBe(expectedArg.length);
-
-            // delete document.createRange;
-        });
-
-        test('setEndOfContenteditable_WithBr', () => {
-            setInnerHtmlForContentEditableElement();
-
-            const range= {
-                setStart:sinon.fake(),
-                collapse:sinon.fake()
-            };
-            const windowObj= {
-                removeAllRanges:sinon.fake(),
-                addRange:sinon.fake()
-            };
-
-            Object.defineProperty(document, 'createRange', {
-                value: sinon.fake.returns(range),
-                configurable:true
-            });
-            Object.defineProperty(window, 'getSelection', {
-                value: sinon.fake.returns(windowObj),
-                configurable:true
-            });
-
-            const element=$('#text_block_without_br')[0];
-            utils.setEndOfContenteditable(element);
-            const expectedArg='Item is not Kryptonite.';
-            var args=range.setStart.getCall(0).args;
-
-            console.log(args);
-            expect(args[0]).toBe(expectedArg);
+            expect(args[0].data).toBe(expectedArg);
             expect(args[1]).toBe(expectedArg.length);
         });
     });
