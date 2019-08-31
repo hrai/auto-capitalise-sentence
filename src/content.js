@@ -1,10 +1,6 @@
 import * as utils from './utils';
 
 $(document).ready(function() {
-    // function excludeSite(site) {
-    //     sitesToExclude.push(site);
-    // }
-
     var errorMsg = 'breaking loop';
     browser.storage.local.get('sites_to_ignore').then(processResponse, utils.onError);
 

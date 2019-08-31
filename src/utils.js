@@ -58,7 +58,9 @@ export function setEndOfContenteditable(contentEditableElement) {
     if (document.createRange) {
         //Firefox, Chrome, Opera, Safari, IE 9+
         range = document.createRange(); //Create a range (a range is a like the selection but invisible)
-        range.selectNodeContents(contentEditableElement); //Select the entire contents of the element with the range
+        const childNodes=contentEditableElement.childNodes;
+        const childNode=childNodes.length==1?childNodes[0]: childNodes[childNodes.length-2];
+        range.setStart(childNode.data, childNode.length);
         range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
         selection = window.getSelection(); //get the selection object (allows you to change selection)
         selection.removeAllRanges(); //remove any selections already made
@@ -70,6 +72,7 @@ export function setEndOfContenteditable(contentEditableElement) {
         range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
         range.select(); //Select the range (make it the visible selection
     }
+                    // throw new Error('test');
 }
 
 export function capitaliseText(element, shouldCapitalise, shouldCapitaliseForI, getText, setText) {

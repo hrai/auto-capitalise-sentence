@@ -62,7 +62,7 @@ describe('utilities test', function() {
         });
     });
 
-    describe('getText', () => {
+    function setInnerHtml(){
         document.body.innerHTML =
             '<div>' +
             '  <input type="text" id="username" value="Bingo" />' +
@@ -70,8 +70,11 @@ describe('utilities test', function() {
             '  <span id="address">Please enter your address.</span> ' +
             '  <button id="button" />' +
             '</div>';
+    }
 
+    describe('getText', () => {
         test('getText_InputTag', () => {
+            setInnerHtml();
             const element=$('#username');
             expect(utils.getText(element[0], 'input')).toBe('Bingo');
             expect(utils.getText(element[0], 'span')).toBe('');
@@ -82,6 +85,7 @@ describe('utilities test', function() {
         });
 
         test('getText_TextareaTag', () => {
+            setInnerHtml();
             const element=$('#about-me');
             element.val('This is my life.');
 
@@ -94,6 +98,7 @@ describe('utilities test', function() {
         });
 
         test('getText_HtmlContent', () => {
+            setInnerHtml();
             const element=$('#address');
             expect(utils.getText(element[0], 'span')).toBe('Please enter your address.');
             expect(utils.getText(element[0], 'input')).toBe('');
@@ -404,6 +409,46 @@ describe('utilities test', function() {
             expect(shouldCapitaliseForIFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
             expect(getTextFake.getCall(0).args[0]).toBe(dummyElement);
             expect(shouldCapitaliseFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
+        });
+    });
+
+    function setInnerHtmlForContentEditableElement() {
+        document.body.innerHTML =
+            '<div id="text_block">' +
+            'Item is not. K<br>kryptonite. M<br>e and mine<br> ' +
+            '</div>'+
+            '<div id="text_block_without_br">' +
+            'Item is not Kryptonite.' +
+            '</div>';
+    }
+
+    describe('setEndOfContenteditable', () => {
+        test('setEndOfContenteditable_WithoutBr', () => {
+            setInnerHtmlForContentEditableElement();
+
+            const range= {
+                setStart:sinon.fake(),
+                collapse:sinon.fake()
+            };
+            const windowObj= {
+                removeAllRanges:sinon.fake(),
+                addRange:sinon.fake()
+            };
+
+            Object.defineProperty(document, 'createRange', {
+              value: sinon.fake.returns(range)
+            });
+            Object.defineProperty(window, 'getSelection', {
+              value: sinon.fake.returns(windowObj)
+            });
+
+            const element=$('#text_block_without_br')[0];
+            utils.setEndOfContenteditable(element);
+            const expectedArg='Item is not Kryptonite.';
+            var args=range.setStart.getCall(0).args;
+
+            expect(args[0]).toBe(expectedArg);
+            expect(args[1]).toBe(expectedArg.length);
         });
     });
 });
