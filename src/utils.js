@@ -110,9 +110,9 @@ export function capitaliseText(element, shouldCapitalise, shouldCapitaliseForI, 
     if(!isEditableElement(element, tagName)  )
         return;
 
-    let text = getText(element, tagName).trim();
+    let text = getText(element, tagName);
 
-    let lastChar = text.slice(-1);
+    let lastChar = text.trim().slice(-1);
 
     if(lastChar=='@') {
         return;
