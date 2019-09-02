@@ -99,11 +99,6 @@ export function setEndOfContenteditable(contentEditableElement) {
         range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
         range.select(); //Select the range (make it the visible selection
     }
-    // throw new Error('test');
-}
-
-export function isAlphabet(character) {
-    return character.match(/[a-z]/i);
 }
 
 export function capitaliseText(element, shouldCapitalise, shouldCapitaliseForI, getText, setText) {
@@ -119,7 +114,7 @@ export function capitaliseText(element, shouldCapitalise, shouldCapitaliseForI, 
 
     let lastChar = text.slice(-1);
 
-    if(text.length ==1 && !isAlphabet(lastChar)) {
+    if(lastChar=='@') {
         return;
     }
 
