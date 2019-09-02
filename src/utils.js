@@ -102,6 +102,10 @@ export function setEndOfContenteditable(contentEditableElement) {
     // throw new Error('test');
 }
 
+export function isAlphabet(character) {
+    return character.match(/[a-z]/i);
+}
+
 export function capitaliseText(element, shouldCapitalise, shouldCapitaliseForI, getText, setText) {
     if(!element)
         return;
@@ -111,10 +115,15 @@ export function capitaliseText(element, shouldCapitalise, shouldCapitaliseForI, 
     if(!isEditableElement(element, tagName)  )
         return;
 
-    let text = getText(element, tagName);
+    let text = getText(element, tagName).trim();
+
+    let lastChar = text.slice(-1);
+
+    if(text.length ==1 && !isAlphabet(lastChar)) {
+        return;
+    }
 
     //support for jira's comment section's p tags
-    let lastChar = text.trim().slice(-1);
     if (lastChar.match(/[a-z]/i) && lastChar.toUpperCase() === lastChar) {
         return;
     }
