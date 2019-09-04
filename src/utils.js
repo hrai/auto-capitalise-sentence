@@ -112,14 +112,15 @@ export function capitaliseText(element, shouldCapitalise, shouldCapitaliseForI, 
 
     let text = getText(element, tagName);
 
-    let lastChar = text.trim().slice(-1);
+    const lastChar = text.trim().slice(-1);
+    const isLastCharAnAlphabet = lastChar.match(/[a-z]/i);
 
-    if(lastChar=='@') {
+    if(text.length == 1 && !isLastCharAnAlphabet) {
         return;
     }
 
     //support for jira's comment section's p tags
-    if (lastChar.match(/[a-z]/i) && lastChar.toUpperCase() === lastChar) {
+    if (isLastCharAnAlphabet && lastChar.toUpperCase() === lastChar) {
         return;
     }
 
