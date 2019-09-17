@@ -7,6 +7,7 @@ describe('utilities test', function() {
         expect(utils.getCapitalisedContent('i')).toBe('I');
         expect(utils.getCapitalisedContent('i\'m')).toBe('i\'M');
         expect(utils.getCapitalisedContent('i. m')).toBe('i. M');
+        expect(utils.getCapitalisedContent('i? m')).toBe('i? M');
         expect(utils.getCapitalisedContent('')).toBe('');
         expect(() => {
             utils.getCapitalisedContent();
@@ -29,7 +30,9 @@ describe('utilities test', function() {
     describe('shouldCapitalise', () => {
         test('shouldCapitalise_singleLine', () => {
             expect(utils.shouldCapitalise('war. k')).toBe(true);
+            expect(utils.shouldCapitalise('war? k')).toBe(true);
             expect(utils.shouldCapitalise('war.    k')).toBe(true);
+            expect(utils.shouldCapitalise('war?    k')).toBe(true);
             expect(utils.shouldCapitalise('k')).toBe(true);
             expect(utils.shouldCapitalise('k')).toBe(true);
 
@@ -52,10 +55,14 @@ describe('utilities test', function() {
         test('shouldCapitalise_multiLine', () => {
             expect(utils.shouldCapitalise('war.\n k')).toBe(true);
             expect(utils.shouldCapitalise('war. \n\n   k')).toBe(true);
-            expect(utils.shouldCapitalise('war. lasting \n peace \n\n   k')).toBe(true);
+            expect(utils.shouldCapitalise('war. lasting \n peace \n\n   k')).toBe(
+                true
+            );
             expect(utils.shouldCapitalise('war? \n\n   k')).toBe(true);
             expect(utils.shouldCapitalise('war? \n\n   k')).toBe(true);
-            expect(utils.shouldCapitalise('war? lasting \n peace \n\n   k')).toBe(true);
+            expect(utils.shouldCapitalise('war? lasting \n peace \n\n   k')).toBe(
+                true
+            );
         });
 
         test('shouldCapitalise_singleChar', () => {
@@ -63,20 +70,20 @@ describe('utilities test', function() {
         });
     });
 
-    function setInnerHtml(){
+    function setInnerHtml() {
         document.body.innerHTML =
-            '<div>' +
-            '  <input type="text" id="username" value="Bingo" />' +
-            '  <textarea id="about-me" rows="8" cols="40"></textarea> ' +
-            '  <span id="address">Please enter your address.</span> ' +
-            '  <button id="button" />' +
-            '</div>';
+      '<div>' +
+      '  <input type="text" id="username" value="Bingo" />' +
+      '  <textarea id="about-me" rows="8" cols="40"></textarea> ' +
+      '  <span id="address">Please enter your address.</span> ' +
+      '  <button id="button" />' +
+      '</div>';
     }
 
     describe('getText', () => {
         test('getText_InputTag', () => {
             setInnerHtml();
-            const element=$('#username');
+            const element = $('#username');
             expect(utils.getText(element[0], 'input')).toBe('Bingo');
             expect(utils.getText(element[0], 'span')).toBe('');
             expect(utils.getText(element[0], '')).toBe('');
@@ -87,7 +94,7 @@ describe('utilities test', function() {
 
         test('getText_TextareaTag', () => {
             setInnerHtml();
-            const element=$('#about-me');
+            const element = $('#about-me');
             element.val('This is my life.');
 
             expect(utils.getText(element[0], 'textarea')).toBe('This is my life.');
@@ -100,8 +107,10 @@ describe('utilities test', function() {
 
         test('getText_HtmlContent', () => {
             setInnerHtml();
-            const element=$('#address');
-            expect(utils.getText(element[0], 'span')).toBe('Please enter your address.');
+            const element = $('#address');
+            expect(utils.getText(element[0], 'span')).toBe(
+                'Please enter your address.'
+            );
             expect(utils.getText(element[0], 'input')).toBe('');
             expect(utils.getText(element[0], '')).toBe('Please enter your address.');
             expect(() => {
@@ -111,115 +120,114 @@ describe('utilities test', function() {
     });
 
     describe('setText', () => {
-
         function resetHtml() {
             document.body.innerHTML =
-            '<div>' +
-            '  <input type="text" id="username" value="Bingo" />' +
-            '  <textarea id="about-me" rows="8" cols="40"></textarea> ' +
-            '  <span id="address">Please enter your address.</span> ' +
-            '  <button id="button" />' +
-            '</div>';
+        '<div>' +
+        '  <input type="text" id="username" value="Bingo" />' +
+        '  <textarea id="about-me" rows="8" cols="40"></textarea> ' +
+        '  <span id="address">Please enter your address.</span> ' +
+        '  <button id="button" />' +
+        '</div>';
         }
 
         test('setText_InputTag', () => {
-            const updatedStr='testing this';
+            const updatedStr = 'testing this';
 
             resetHtml();
-            let element=$('#username');
+            let element = $('#username');
             utils.setText(element[0], 'input', updatedStr, false);
             expect(element.val()).toBe('testing this');
 
             resetHtml();
-            element=$('#username');
+            element = $('#username');
             utils.setText(element[0], 'span', updatedStr, false);
             expect(element.val()).toBe('Bingo');
 
             resetHtml();
-            element=$('#username');
+            element = $('#username');
             utils.setText(element[0], 'p', '', false);
             expect(element.val()).toBe('Bingo');
 
             expect(() => {
                 resetHtml();
-                element=$('#username');
+                element = $('#username');
                 utils.setText(element[0]);
             }).toThrow();
         });
 
         test('setText_TextareaTag', () => {
-            const updatedStr='This is my life.';
+            const updatedStr = 'This is my life.';
 
             resetHtml();
-            let element=$('#about-me');
+            let element = $('#about-me');
             utils.setText(element[0], 'textarea', updatedStr, false);
             expect(element.val()).toBe('This is my life.');
 
             resetHtml();
-            element=$('#about-me');
+            element = $('#about-me');
             utils.setText(element[0], 'span', updatedStr, false);
             expect(element.val()).toBe('This is my life.');
 
             resetHtml();
-            element=$('#about-me');
+            element = $('#about-me');
             utils.setText(element[0], 'textarea', '', false);
             expect(element.val()).toBe('');
 
             expect(() => {
                 resetHtml();
-                element=$('#about-me');
+                element = $('#about-me');
                 utils.setText(element[0]);
             }).toThrow();
         });
 
         test('setText_HtmlContent_WithoutBrTags', () => {
-            const updatedStr='This is my life.';
+            const updatedStr = 'This is my life.';
 
             resetHtml();
-            let element=$('#address');
+            let element = $('#address');
             utils.setText(element[0], 'span', updatedStr, false);
             expect(element.html()).toBe('This is my life.');
 
             resetHtml();
-            element=$('#address');
+            element = $('#address');
             utils.setText(element[0], 'p', updatedStr, false);
             expect(element.html()).toBe('This is my life.');
 
             resetHtml();
-            element=$('#address');
+            element = $('#address');
             utils.setText(element[0], 'span', '', false);
             expect(element.html()).toBe('');
 
             expect(() => {
                 resetHtml();
-                element=$('#address');
+                element = $('#address');
                 utils.setText(element[0]);
             }).toThrow();
         });
 
         test('setText_HtmlContent_WithBrTags', () => {
-            let element=$('#address');
-            const updatedStr='This is my life.';
+            let element = $('#address');
+            const updatedStr = 'This is my life.';
             element.val(updatedStr);
 
             resetHtml();
-            element=$('#address');
+            element = $('#address');
             utils.setText(element[0], 'span', updatedStr, true);
             expect(element.html()).toBe('This is my life.<br>');
 
             resetHtml();
-            element=$('#address');
+            element = $('#address');
             utils.setText(element[0], 'p', updatedStr, true);
             expect(element.html()).toBe('This is my life.<br>');
 
             resetHtml();
-            element=$('#address');
+            element = $('#address');
             utils.setText(element[0], 'span', '', true);
             expect(element.html()).toBe('<br>');
 
             expect(() => {
                 resetHtml();
-                element=$('#address');
+                element = $('#address');
                 utils.setText(element[0]);
             }).toThrow();
         });
@@ -227,37 +235,55 @@ describe('utilities test', function() {
 
     describe('capitaliseText', () => {
         test('capitaliseText_HtmlContent', () => {
-            const element=sinon.stub({
+            const element = sinon.stub({
                 isContentEditable: true,
-                tagName:'div',
-                innerHTML: 'I\'m the content of html tag.',
+                tagName: 'div',
+                innerHTML: 'I\'m the content of html tag.'
             });
-            const shouldCapitaliseFake=sinon.fake();
-            const shouldCapitaliseForIFake=sinon.fake();
-            const setTextFake=sinon.fake();
+            const shouldCapitaliseFake = sinon.fake();
+            const shouldCapitaliseForIFake = sinon.fake();
+            const setTextFake = sinon.fake();
 
-            expect(utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake, utils.getText,
-                setTextFake)).toBe(undefined);
+            expect(
+                utils.capitaliseText(
+                    element,
+                    shouldCapitaliseFake,
+                    shouldCapitaliseForIFake,
+                    utils.getText,
+                    setTextFake
+                )
+            ).toBe(undefined);
             expect(element.isContentEditable.calledOnce).toBeTruthy;
             expect(element.tagName.calledOnce).toBeTruthy;
 
-            expect(shouldCapitaliseFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
-            expect(shouldCapitaliseForIFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
+            expect(shouldCapitaliseFake.getCall(0).args[0]).toBe(
+                'I\'m the content of html tag.'
+            );
+            expect(shouldCapitaliseForIFake.getCall(0).args[0]).toBe(
+                'I\'m the content of html tag.'
+            );
         });
 
         test('capitaliseText_Symbol_@', () => {
-            const element=sinon.stub({
+            const element = sinon.stub({
                 isContentEditable: true,
-                tagName:'div',
-                innerHTML: '@',
+                tagName: 'div',
+                innerHTML: '@'
             });
-            const shouldCapitaliseFake=sinon.fake();
-            const shouldCapitaliseForIFake=sinon.fake();
-            const getTextFake=sinon.fake.returns('@');
-            const setTextFake=sinon.fake();
+            const shouldCapitaliseFake = sinon.fake();
+            const shouldCapitaliseForIFake = sinon.fake();
+            const getTextFake = sinon.fake.returns('@');
+            const setTextFake = sinon.fake();
 
-            expect(utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake, getTextFake,
-                setTextFake)).toBe(undefined);
+            expect(
+                utils.capitaliseText(
+                    element,
+                    shouldCapitaliseFake,
+                    shouldCapitaliseForIFake,
+                    getTextFake,
+                    setTextFake
+                )
+            ).toBe(undefined);
             expect(element.isContentEditable.calledOnce).toBeFalsy;
             expect(element.tagName.calledOnce).toBeFalsy;
 
@@ -266,18 +292,25 @@ describe('utilities test', function() {
         });
 
         test('capitaliseText_Symbol_Period', () => {
-            const element=sinon.stub({
+            const element = sinon.stub({
                 isContentEditable: true,
-                tagName:'div',
-                innerHTML: '.',
+                tagName: 'div',
+                innerHTML: '.'
             });
-            const shouldCapitaliseFake=sinon.fake();
-            const shouldCapitaliseForIFake=sinon.fake();
-            const getTextFake=sinon.fake.returns('.');
-            const setTextFake=sinon.fake();
+            const shouldCapitaliseFake = sinon.fake();
+            const shouldCapitaliseForIFake = sinon.fake();
+            const getTextFake = sinon.fake.returns('.');
+            const setTextFake = sinon.fake();
 
-            expect(utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake, getTextFake,
-                setTextFake)).toBe(undefined);
+            expect(
+                utils.capitaliseText(
+                    element,
+                    shouldCapitaliseFake,
+                    shouldCapitaliseForIFake,
+                    getTextFake,
+                    setTextFake
+                )
+            ).toBe(undefined);
             expect(element.isContentEditable.calledOnce).toBeFalsy;
             expect(element.tagName.calledOnce).toBeFalsy;
 
@@ -286,18 +319,25 @@ describe('utilities test', function() {
         });
 
         test('capitaliseText_Symbol_Slash', () => {
-            const element=sinon.stub({
+            const element = sinon.stub({
                 isContentEditable: true,
-                tagName:'div',
-                innerHTML: '/',
+                tagName: 'div',
+                innerHTML: '/'
             });
-            const shouldCapitaliseFake=sinon.fake();
-            const shouldCapitaliseForIFake=sinon.fake();
-            const getTextFake=sinon.fake.returns('/');
-            const setTextFake=sinon.fake();
+            const shouldCapitaliseFake = sinon.fake();
+            const shouldCapitaliseForIFake = sinon.fake();
+            const getTextFake = sinon.fake.returns('/');
+            const setTextFake = sinon.fake();
 
-            expect(utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake, getTextFake,
-                setTextFake)).toBe(undefined);
+            expect(
+                utils.capitaliseText(
+                    element,
+                    shouldCapitaliseFake,
+                    shouldCapitaliseForIFake,
+                    getTextFake,
+                    setTextFake
+                )
+            ).toBe(undefined);
             expect(element.isContentEditable.calledOnce).toBeFalsy;
             expect(element.tagName.calledOnce).toBeFalsy;
 
@@ -306,18 +346,25 @@ describe('utilities test', function() {
         });
 
         test('capitaliseText_HtmlContent_WithLastLetterCapital', () => {
-            const element=sinon.stub({
+            const element = sinon.stub({
                 isContentEditable: true,
-                tagName:'div',
-                innerHTML: 'I\'m the content of html taG',
+                tagName: 'div',
+                innerHTML: 'I\'m the content of html taG'
             });
-            const shouldCapitaliseFake=sinon.fake();
-            const shouldCapitaliseForIFake=sinon.fake();
-            const getTextFake=sinon.fake.returns('I\'m the content of html taG');
-            const setTextFake=sinon.fake();
+            const shouldCapitaliseFake = sinon.fake();
+            const shouldCapitaliseForIFake = sinon.fake();
+            const getTextFake = sinon.fake.returns('I\'m the content of html taG');
+            const setTextFake = sinon.fake();
 
-            expect(utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake, getTextFake,
-                setTextFake)).toBe(undefined);
+            expect(
+                utils.capitaliseText(
+                    element,
+                    shouldCapitaliseFake,
+                    shouldCapitaliseForIFake,
+                    getTextFake,
+                    setTextFake
+                )
+            ).toBe(undefined);
             expect(element.isContentEditable.calledOnce).toBeFalsy;
             expect(element.tagName.calledOnce).toBeFalsy;
 
@@ -326,17 +373,24 @@ describe('utilities test', function() {
         });
 
         test('capitaliseText_HtmlContent_WithLastLetterCapital', () => {
-            const element=sinon.stub({
+            const element = sinon.stub({
                 isContentEditable: true,
-                tagName:'div',
-                innerHTML: 'I\'m the content of html taG',
+                tagName: 'div',
+                innerHTML: 'I\'m the content of html taG'
             });
-            const shouldCapitaliseFake=sinon.fake();
-            const shouldCapitaliseForIFake=sinon.fake();
-            const setTextFake=sinon.fake();
+            const shouldCapitaliseFake = sinon.fake();
+            const shouldCapitaliseForIFake = sinon.fake();
+            const setTextFake = sinon.fake();
 
-            expect(utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake, utils.getText,
-                setTextFake)).toBe(undefined);
+            expect(
+                utils.capitaliseText(
+                    element,
+                    shouldCapitaliseFake,
+                    shouldCapitaliseForIFake,
+                    utils.getText,
+                    setTextFake
+                )
+            ).toBe(undefined);
             expect(element.isContentEditable.calledOnce).toBeFalsy;
             expect(element.tagName.calledOnce).toBeFalsy;
 
@@ -345,157 +399,217 @@ describe('utilities test', function() {
         });
 
         test('capitaliseText_HtmlContent_WithTrailingBrTag', () => {
-            const element=sinon.stub({
+            const element = sinon.stub({
                 isContentEditable: true,
-                tagName:'div',
-                innerHTML: 'I\'m the content of html tag.<br>',
+                tagName: 'div',
+                innerHTML: 'I\'m the content of html tag.<br>'
             });
-            const shouldCapitaliseFake=sinon.fake();
-            const shouldCapitaliseForIFake=sinon.fake();
-            const setTextFake=sinon.fake();
+            const shouldCapitaliseFake = sinon.fake();
+            const shouldCapitaliseForIFake = sinon.fake();
+            const setTextFake = sinon.fake();
 
-            expect(utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake, utils.getText,
-                setTextFake)).toBe(undefined);
+            expect(
+                utils.capitaliseText(
+                    element,
+                    shouldCapitaliseFake,
+                    shouldCapitaliseForIFake,
+                    utils.getText,
+                    setTextFake
+                )
+            ).toBe(undefined);
             expect(element.isContentEditable.calledOnce).toBeFalsy;
             expect(element.tagName.calledOnce).toBeFalsy;
 
-            expect(shouldCapitaliseFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
-            expect(shouldCapitaliseForIFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
+            expect(shouldCapitaliseFake.getCall(0).args[0]).toBe(
+                'I\'m the content of html tag.'
+            );
+            expect(shouldCapitaliseForIFake.getCall(0).args[0]).toBe(
+                'I\'m the content of html tag.'
+            );
         });
 
         test('capitaliseText_Exceptions', () => {
             expect(() => {
-                const element=sinon.stub({
+                const element = sinon.stub({
                     isContentEditable: true,
-                    innerHTML: 'I\'m the content of html tag.',
+                    innerHTML: 'I\'m the content of html tag.'
                 });
-                const shouldCapitaliseFake=sinon.fake();
-                const shouldCapitaliseForIFake=sinon.fake();
-                const getTextFake=sinon.fake();
-                const setTextFake=sinon.fake();
+                const shouldCapitaliseFake = sinon.fake();
+                const shouldCapitaliseForIFake = sinon.fake();
+                const getTextFake = sinon.fake();
+                const setTextFake = sinon.fake();
 
-                utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake, getTextFake,
-                    setTextFake);
+                utils.capitaliseText(
+                    element,
+                    shouldCapitaliseFake,
+                    shouldCapitaliseForIFake,
+                    getTextFake,
+                    setTextFake
+                );
             }).toThrow();
 
             expect(() => {
-                const element=sinon.stub({
+                const element = sinon.stub({
                     isContentEditable: true,
-                    tagName:'div',
-                    innerHTML: 'I\'m the content of html tag.<br>',
+                    tagName: 'div',
+                    innerHTML: 'I\'m the content of html tag.<br>'
                 });
-                const shouldCapitaliseFake=sinon.fake();
-                const shouldCapitaliseForIFake=sinon.fake();
-                const setTextFake=sinon.fake();
+                const shouldCapitaliseFake = sinon.fake();
+                const shouldCapitaliseForIFake = sinon.fake();
+                const setTextFake = sinon.fake();
 
-                utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake, null,
-                    setTextFake);
+                utils.capitaliseText(
+                    element,
+                    shouldCapitaliseFake,
+                    shouldCapitaliseForIFake,
+                    null,
+                    setTextFake
+                );
             }).toThrow();
 
             expect(() => {
-                const element=sinon.stub({
+                const element = sinon.stub({
                     isContentEditable: true,
-                    tagName:'div',
-                    innerHTML: 'I\'m the content of html tag.<br>',
+                    tagName: 'div',
+                    innerHTML: 'I\'m the content of html tag.<br>'
                 });
-                const shouldCapitaliseFake=sinon.fake();
-                const shouldCapitaliseForIFake=sinon.fake();
-                const getTextFake=sinon.fake();
+                const shouldCapitaliseFake = sinon.fake();
+                const shouldCapitaliseForIFake = sinon.fake();
+                const getTextFake = sinon.fake();
 
-                utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake, getTextFake,
-                    null);
+                utils.capitaliseText(
+                    element,
+                    shouldCapitaliseFake,
+                    shouldCapitaliseForIFake,
+                    getTextFake,
+                    null
+                );
             }).toThrow();
 
             //assert getTextFake and setTextFake
         });
 
         test('capitaliseText_GetText', () => {
-            const dummyElement={
+            const dummyElement = {
                 isContentEditable: true,
-                tagName:'div',
-                innerHTML: 'I\'m the content of html tag.',
+                tagName: 'div',
+                innerHTML: 'I\'m the content of html tag.'
             };
 
-            const element=sinon.stub(dummyElement);
-            const shouldCapitaliseFake=sinon.fake();
-            const shouldCapitaliseForIFake=sinon.fake();
-            const getTextFake=sinon.fake.returns('I\'m the content of html tag.');
-            const setTextFake=sinon.fake();
+            const element = sinon.stub(dummyElement);
+            const shouldCapitaliseFake = sinon.fake();
+            const shouldCapitaliseForIFake = sinon.fake();
+            const getTextFake = sinon.fake.returns('I\'m the content of html tag.');
+            const setTextFake = sinon.fake();
 
-            utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake, getTextFake, setTextFake);
+            utils.capitaliseText(
+                element,
+                shouldCapitaliseFake,
+                shouldCapitaliseForIFake,
+                getTextFake,
+                setTextFake
+            );
 
-            expect(shouldCapitaliseFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
-            expect(shouldCapitaliseForIFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
+            expect(shouldCapitaliseFake.getCall(0).args[0]).toBe(
+                'I\'m the content of html tag.'
+            );
+            expect(shouldCapitaliseForIFake.getCall(0).args[0]).toBe(
+                'I\'m the content of html tag.'
+            );
             expect(getTextFake.getCall(0).args[0]).toBe(dummyElement);
-            expect(shouldCapitaliseFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
+            expect(shouldCapitaliseFake.getCall(0).args[0]).toBe(
+                'I\'m the content of html tag.'
+            );
         });
 
         test('capitaliseText_SetText_ShouldCapitaliseTrue', () => {
-            const dummyElement={
+            const dummyElement = {
                 isContentEditable: true,
-                tagName:'div',
-                innerHTML: 'I\'m the content of html tag.',
+                tagName: 'div',
+                innerHTML: 'I\'m the content of html tag.'
             };
 
-            const element=sinon.stub(dummyElement);
-            const shouldCapitaliseFake=sinon.fake.returns(true);
-            const shouldCapitaliseForIFake=sinon.fake();
-            const getTextFake=sinon.fake.returns('I\'m the content of html tag.');
-            const setTextFake=sinon.fake();
+            const element = sinon.stub(dummyElement);
+            const shouldCapitaliseFake = sinon.fake.returns(true);
+            const shouldCapitaliseForIFake = sinon.fake();
+            const getTextFake = sinon.fake.returns('I\'m the content of html tag.');
+            const setTextFake = sinon.fake();
 
-            utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake, getTextFake, setTextFake);
+            utils.capitaliseText(
+                element,
+                shouldCapitaliseFake,
+                shouldCapitaliseForIFake,
+                getTextFake,
+                setTextFake
+            );
 
-            expect(shouldCapitaliseFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
+            expect(shouldCapitaliseFake.getCall(0).args[0]).toBe(
+                'I\'m the content of html tag.'
+            );
             expect(shouldCapitaliseForIFake.getCall(0)).toBeNull();
             expect(getTextFake.getCall(0).args[0]).toBe(dummyElement);
-            expect(shouldCapitaliseFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
+            expect(shouldCapitaliseFake.getCall(0).args[0]).toBe(
+                'I\'m the content of html tag.'
+            );
         });
 
         test('capitaliseText_SetText_ShouldCapitaliseFalse', () => {
-            const dummyElement={
+            const dummyElement = {
                 isContentEditable: true,
-                tagName:'div',
-                innerHTML: 'I\'m the content of html tag.',
+                tagName: 'div',
+                innerHTML: 'I\'m the content of html tag.'
             };
 
-            const element=sinon.stub(dummyElement);
-            const shouldCapitaliseFake=sinon.fake.returns(false);
-            const shouldCapitaliseForIFake=sinon.fake();
-            const getTextFake=sinon.fake.returns('I\'m the content of html tag.');
-            const setTextFake=sinon.fake();
+            const element = sinon.stub(dummyElement);
+            const shouldCapitaliseFake = sinon.fake.returns(false);
+            const shouldCapitaliseForIFake = sinon.fake();
+            const getTextFake = sinon.fake.returns('I\'m the content of html tag.');
+            const setTextFake = sinon.fake();
 
-            utils.capitaliseText(element, shouldCapitaliseFake, shouldCapitaliseForIFake, getTextFake, setTextFake);
+            utils.capitaliseText(
+                element,
+                shouldCapitaliseFake,
+                shouldCapitaliseForIFake,
+                getTextFake,
+                setTextFake
+            );
 
-            expect(shouldCapitaliseFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
-            expect(shouldCapitaliseForIFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
+            expect(shouldCapitaliseFake.getCall(0).args[0]).toBe(
+                'I\'m the content of html tag.'
+            );
+            expect(shouldCapitaliseForIFake.getCall(0).args[0]).toBe(
+                'I\'m the content of html tag.'
+            );
             expect(getTextFake.getCall(0).args[0]).toBe(dummyElement);
-            expect(shouldCapitaliseFake.getCall(0).args[0]).toBe('I\'m the content of html tag.');
+            expect(shouldCapitaliseFake.getCall(0).args[0]).toBe(
+                'I\'m the content of html tag.'
+            );
         });
     });
 
     function setInnerHtmlForContentEditableElement() {
         document.body.innerHTML =
-            '<div id="text_block">' +
-            '<p>test block that is hidden</p>'+
-            'Item is not. K<br>kryptonite. M<br>e and mine<br> ' +
-            '</div>'+
-            // '<div id="text_block_without_br"><p></p>' +
-            '<div id="text_block_without_br">' +
-            'Item is not Kryptonite.' +
-            '</div>';
+      '<div id="text_block">' +
+      '<p>test block that is hidden</p>' +
+      'Item is not. K<br>kryptonite. M<br>e and mine<br> ' +
+      '</div>' +
+      // '<div id="text_block_without_br"><p></p>' +
+      '<div id="text_block_without_br">' +
+      'Item is not Kryptonite.' +
+      '</div>';
     }
 
     describe('setEndOfContenteditable', () => {
         test('setEndOfContenteditable_WithBr', () => {
             setInnerHtmlForContentEditableElement();
 
-            const range= {
-                setStart:sinon.fake(),
-                collapse:sinon.fake()
+            const range = {
+                setStart: sinon.fake(),
+                collapse: sinon.fake()
             };
-            const windowObj= {
-                removeAllRanges:sinon.fake(),
-                addRange:sinon.fake()
+            const windowObj = {
+                removeAllRanges: sinon.fake(),
+                addRange: sinon.fake()
             };
 
             delete document.createRange;
@@ -503,17 +617,17 @@ describe('utilities test', function() {
 
             Object.defineProperty(document, 'createRange', {
                 value: sinon.fake.returns(range),
-                configurable:true
+                configurable: true
             });
             Object.defineProperty(window, 'getSelection', {
                 value: sinon.fake.returns(windowObj),
-                configurable:true
+                configurable: true
             });
 
-            const element=$('#text_block')[0];
+            const element = $('#text_block')[0];
             utils.setEndOfContenteditable(element);
-            const expectedArg='<br>';
-            var args=range.setStart.getCall(0).args;
+            const expectedArg = '<br>';
+            var args = range.setStart.getCall(0).args;
 
             expect(args[0].outerHTML).toBe(expectedArg);
             expect(args[1]).toBe(0);
@@ -522,13 +636,13 @@ describe('utilities test', function() {
         test('setEndOfContenteditable_WithoutBr', () => {
             setInnerHtmlForContentEditableElement();
 
-            const range= {
-                setStart:sinon.fake(),
-                collapse:sinon.fake()
+            const range = {
+                setStart: sinon.fake(),
+                collapse: sinon.fake()
             };
-            const windowObj= {
-                removeAllRanges:sinon.fake(),
-                addRange:sinon.fake()
+            const windowObj = {
+                removeAllRanges: sinon.fake(),
+                addRange: sinon.fake()
             };
 
             delete document.createRange;
@@ -539,14 +653,14 @@ describe('utilities test', function() {
                 configurable: true
             });
             Object.defineProperty(window, 'getSelection', {
-              value: sinon.fake.returns(windowObj),
+                value: sinon.fake.returns(windowObj),
                 configurable: true
             });
 
-            const element=$('#text_block_without_br')[0];
+            const element = $('#text_block_without_br')[0];
             utils.setEndOfContenteditable(element);
-            const expectedArg='Item is not Kryptonite.';
-            var args=range.setStart.getCall(0).args;
+            const expectedArg = 'Item is not Kryptonite.';
+            var args = range.setStart.getCall(0).args;
 
             expect(args[0].data).toBe(expectedArg);
             expect(args[1]).toBe(expectedArg.length);
