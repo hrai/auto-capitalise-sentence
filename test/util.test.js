@@ -25,15 +25,17 @@ describe('utilities test', function() {
         expect(utils.shouldCapitalise('.       k')).toBe(false);
         expect(utils.shouldCapitalise('    k ')).toBe(false);
         expect(utils.shouldCapitalise('    ')).toBe(false);
+        expect(utils.shouldCapitalise(' !   ')).toBe(false);
     });
 
     describe('shouldCapitalise', () => {
         test('shouldCapitalise_singleLine', () => {
             expect(utils.shouldCapitalise('war. k')).toBe(true);
             expect(utils.shouldCapitalise('war? k')).toBe(true);
+            expect(utils.shouldCapitalise('war! k')).toBe(true);
             expect(utils.shouldCapitalise('war.    k')).toBe(true);
+            expect(utils.shouldCapitalise('war!    k')).toBe(true);
             expect(utils.shouldCapitalise('war?    k')).toBe(true);
-            expect(utils.shouldCapitalise('k')).toBe(true);
             expect(utils.shouldCapitalise('k')).toBe(true);
 
             expect(utils.shouldCapitalise('war? k')).toBe(true);
@@ -46,6 +48,9 @@ describe('utilities test', function() {
             expect(utils.shouldCapitalise('    k ')).toBe(false);
             expect(utils.shouldCapitalise('    ')).toBe(false);
 
+            expect(utils.shouldCapitalise('?')).toBe(true);
+            expect(utils.shouldCapitalise('!')).toBe(true);
+            expect(utils.shouldCapitalise('.')).toBe(true);
             expect(utils.shouldCapitalise('')).toBe(false);
             expect(() => {
                 utils.shouldCapitalise();
