@@ -11,7 +11,7 @@ export function shouldCapitalise(text) {
 
     if (matches) return true;
 
-    const sentenceRegex = /\w+\s*(\.|\?)+\s+\w$/;
+    const sentenceRegex = /\w+\s*([.?!])+\s+\w$/;
     matches = sentenceRegex.test(text);
 
     if (!matches) {
