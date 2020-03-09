@@ -149,17 +149,13 @@ export function getCapitalisedContentForI(text) {
     const lastTwoChars = text.slice(-2);
     const updatedStr =
       text.substr(0, text.length - 2) + lastTwoChars.toUpperCase();
-    return trim(updatedStr);
+    return updatedStr;
 }
 
 export function getCapitalisedContent(text) {
     const lastChar = text.slice(-1);
     const updatedStr = text.substr(0, text.length - 1) + lastChar.toUpperCase();
-    return trim(updatedStr);
-}
-
-export function trim(text){
-    return text && text.trim();
+    return updatedStr;
 }
 
 export function containsHtmlContent(element) {

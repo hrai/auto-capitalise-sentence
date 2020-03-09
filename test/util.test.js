@@ -671,18 +671,4 @@ describe('utilities test', function() {
             expect(args[1]).toBe(expectedArg.length);
         });
     });
-
-    describe('trim', () => {
-        test('trim_null', () => {
-            expect(utils.trim(null)).toBe(null);
-        });
-
-        test('trim', () => {
-            expect(utils.trim(' test ')).toBe('test');
-            expect(utils.trim(' test \r')).toBe('test');
-            expect(utils.trim(' \t test    \r\n')).toBe('test');
-            expect(utils.trim(' \t test    \r\n this')).toBe('test    \r\n this');
-            expect(utils.trim(' \t test    \r\n this  \r')).toBe('test    \r\n this');
-        });
-    });
 });
