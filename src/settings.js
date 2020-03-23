@@ -1,3 +1,5 @@
+import browser from 'webextension-polyfill';
+
 $(document).ready(function(){
 
     browser.storage.local.get('sites_to_ignore').then(processResponse, onError);

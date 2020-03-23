@@ -4,7 +4,7 @@
   "version": "2.0.0",
   "description": "Firefox add-on to automatically capitalise the first letter of a sentence while typing.",
   "scripts": {
-    "build": "browserify src/content.js -o lib/bundle.js -t [ babelify --presets [ @babel/preset-env  ] --plugins [ @babel/plugin-proposal-class-properties  ] ] ",
+    "build": "browserify src/content.js src/settings.js -o lib/bundle.js -t [ babelify --presets [ @babel/preset-env  ] --plugins [ @babel/plugin-proposal-class-properties  ] ] ",
     "test": "jest",
     "test-watch": "jest --watch",
     "lint": "eslint .",
@@ -24,7 +24,8 @@
     "jest": "^24.9.0",
     "jquery": "^3.4.1",
     "lint-staged": "^9.5.0",
-    "sinon": "^7.5.0"
+    "sinon": "^7.5.0",
+    "webextension-polyfill": "^0.6.0"
   },
   "repository": {
     "type": "git",

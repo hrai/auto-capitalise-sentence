@@ -1,4 +1,5 @@
 import * as utils from './utils';
+import browser from 'webextension-polyfill';
 
 $(document).ready(function() {
     var errorMsg = 'breaking loop';
