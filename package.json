@@ -12,19 +12,19 @@
     "start:firefox": "web-ext run"
   },
   "devDependencies": {
-    "@babel/cli": "^7.5.5",
-    "@babel/core": "^7.5.5",
-    "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
-    "babel-jest": "^24.8.0",
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/preset-env": "^7.9.0",
+    "babel-jest": "^24.9.0",
     "babelify": "^10.0.0",
     "browserify": "^16.5.0",
     "eslint": "^4.19.1",
-    "husky": "^3.0.1",
-    "jest": "^24.8.0",
+    "husky": "^3.1.0",
+    "jest": "^24.9.0",
     "jquery": "^3.4.1",
-    "lint-staged": "^9.2.0",
-    "sinon": "^7.4.1"
+    "lint-staged": "^9.5.0",
+    "sinon": "^7.5.0"
   },
   "repository": {
     "type": "git",
