@@ -24,7 +24,6 @@ $(document).ready(function () {
             .then((tabs) => {
                 var hostname = getUrlDomain(tabs[0].url);
                 var sites = getSites();
-                console.log(typeof sites);
                 sites.push(hostname);
 
                 browser.storage.local.set(
@@ -32,6 +31,7 @@ $(document).ready(function () {
                         'sites_to_ignore': sites
                     });
 
+                $('#sites').val(sites.join('\n'));
                 $(this).prop('disabled', true);
                 $(this).val('Site added to ignore list');
             });
