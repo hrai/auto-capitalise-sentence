@@ -1,10 +1,10 @@
-$(document).ready(function(){
+$(document).ready(function () {
 
     browser.storage.local.get('sites_to_ignore').then(processResponse, onError);
 
     function processResponse(item) {
-        var sitesToExclude =item.sites_to_ignore;
-        if(sitesToExclude) {
+        var sitesToExclude = item.sites_to_ignore;
+        if (sitesToExclude) {
             $('#sites').val(sitesToExclude.join('\n'));
         }
     }
@@ -13,7 +13,31 @@ $(document).ready(function(){
         console.log(error);
     }
 
-    $(document).on('click', '#submitButton', function() {
+    function getUrlDomain(data) {
+        var a = document.createElement('a');
+        a.href = data;
+        return a.hostname;
+    }
+
+    $(document).on('click', '#ignoreSiteButton', function () {
+        browser.tabs.query({currentWindow: true, active: true})
+            .then((tabs) => {
+                var hostname = getUrlDomain(tabs[0].url);
+                var sites = getSites();
+                sites.push(hostname);
+
+                browser.storage.local.set(
+                    {
+                        'sites_to_ignore': sites
+                    });
+
+                $('#sites').val(sites.join('\n'));
+                $(this).prop('disabled', true);
+                $(this).val('Site added to ignore list');
+            });
+    });
+
+    $(document).on('click', '#submitButton', function () {
         var sites = getSites();
 
         browser.storage.local.set(
@@ -28,12 +52,12 @@ $(document).ready(function(){
     function getSites() {
         var sitesBoxVal = $('#sites').val();
 
-        if(sitesBoxVal) {
+        if (sitesBoxVal) {
             var sites = sitesBoxVal.split('\n');
             return sites;
         }
 
-        return '';
+        return [];
     }
 
 });

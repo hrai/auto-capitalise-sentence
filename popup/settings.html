@@ -5,13 +5,16 @@
         <link rel="stylesheet" href="/dependencies/bootstrap.min.css" type="text/css" charset="utf-8">
     </head>
     <body>
-        <div class="form-group" style="margin:5% 5% 5% 5%">
-            <textarea id="sites" rows="4" class="form-control" placeholder="Add sites to exclude" ></textarea>
-                    <small class="form-text text-muted">Add each site in a separate row</small>
-                    <span class="input-group-btn">
-                        <input type="button" value="Submit" id="submitButton" class="btn btn-primary">
-                    </span>
-                </div>
+        <div class="container">
+            <div class="form-group" style="margin-top:5%">
+                <textarea id="sites" rows="4" class="form-control" placeholder="Add sites to exclude" ></textarea>
+                <small class="form-text text-muted">Add each site in a separate row</small>
+                <span class="input-group-btn">
+                    <input type="button" value="Save" id="submitButton" class="btn btn-primary">
+                    <input type="button" value="Add site to ignore list" id="ignoreSiteButton" class="btn btn-secondary">
+                </span>
+            </div>
+        </div>
     </body>
     <script charset="utf-8" src="/dependencies/jquery-3.4.1.min.js"></script>
     <script charset="utf-8" src="settings.js"></script>
@@ -19,5 +22,9 @@
 <style type="text/css" media="screen">
 #submitButton {
     margin-top: 3px;
+}
+
+.container{
+    min-width:"100px"
 }
 </style>
