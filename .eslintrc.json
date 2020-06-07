@@ -3,33 +3,32 @@
     "ecmaVersion": 7,
     "sourceType": "module",
     "ecmaFeatures": {
-        "modules": true
-        }
-    },
-    "env": {
-        "jest": true,
-        "browser": true,
-        "webextensions": true,
-        "jquery": true
-    },
-    "extends": "eslint:recommended",
-    "rules": {
-        "indent": [
-            "error",
-            4
-        ],
-        "linebreak-style": [
-            "error",
-            "unix"
-        ],
-        "quotes": [
-            "error",
-            "single"
-        ],
-        "semi": [
-            "error",
-            "always"
-        ],
-        "no-console": "off"
+      "modules": true
     }
+  },
+  "env": {
+    "jest": true,
+    "browser": true,
+    "webextensions": true,
+    "jquery": true
+  },
+  "extends": "eslint:recommended",
+  "rules": {
+    "indent": [
+      "error"
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "semi": [
+      "error",
+      "always"
+    ],
+    "no-console": "off"
+  }
 }
