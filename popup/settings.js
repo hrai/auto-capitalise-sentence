@@ -1,8 +1,8 @@
 $(document).ready(function () {
 
-    browser.storage.local.get('sites_to_ignore').then(processResponse, onError);
+    browser.storage.local.get('sites_to_ignore').then(updateSiteIgnoreList, onError);
 
-    function processResponse(item) {
+    function updateSiteIgnoreList(item) {
         var sitesToExclude = item.sites_to_ignore;
         if (sitesToExclude) {
             $('#sites').val(sitesToExclude.join('\n'));
