@@ -25,7 +25,7 @@ $(document).ready(function() {
       try {
         var shouldEnableCapitalisingOnCurrentSite = true;
 
-        $.each(sitesToExclude, function(i, siteToExclude) {
+        $.each(sitesToExclude, function(_i, siteToExclude) {
           if (currentUrlDomain.includes(siteToExclude)) {
             shouldEnableCapitalisingOnCurrentSite = false;
           }
@@ -57,7 +57,7 @@ $(document).ready(function() {
     var observer = new MutationObserver(function(mutations) {
       // console.log(mutations);
 
-      $.each(mutations, function(i, mutation) {
+      $.each(mutations, function(_i, mutation) {
         try {
           if (mutation.type === 'childList') {
             // add support for div block in gmail and outlook
@@ -76,20 +76,20 @@ $(document).ready(function() {
                 }
               });
 
-              $.each(tags, function(i, tagName) {
+              $.each(tags, function(_i, tagName) {
                 var filteredEls = utils.getFilteredElements(addedNodes, tagName);
 
-                filteredEls.each(function(index, element) {
+                filteredEls.each(function(_index, element) {
                   if (utils.shouldCapitaliseContent(element)) {
                     capitaliseText(element);
                   }
                 });
               });
 
-              $.each(inputTags, function(i, tagName) {
+              $.each(inputTags, function(_i, tagName) {
                 var filteredEls = utils.getFilteredElements(addedNodes, tagName);
 
-                filteredEls.each(function(index, element) {
+                filteredEls.each(function(_index, element) {
                   $(element).on('input', function(event) {
                     capitaliseText(event.target);
                   });
