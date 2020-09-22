@@ -11,6 +11,12 @@
     "lint-fix": "eslint --fix .",
     "start:firefox": "web-ext run"
   },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": true
+  },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.0",

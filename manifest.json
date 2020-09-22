@@ -3,15 +3,17 @@
   "description": "Firefox add-on to automatically capitalise the first letter of a sentence while typing.",
   "homepage_url": "https://github.com/hrai/auto-capitalise-sentence/",
   "manifest_version": 2,
-  "version": "2.14",
+  "version": "2.15",
   "browser_action": {
-    "default_icon": "icons/icon.jpg",
+    "default_icon": "icons/auto-capitalise-sentence.jpg",
     "default_title": "Auto-capitalise sentence",
     "default_popup": "popup/settings.html"
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
+      "matches": [
+        "<all_urls>"
+      ],
       "js": ["/node_modules/webextension-polyfill/dist/browser-polyfill.min.js", "/node_modules/jquery/dist/jquery.min.js", "lib/bundle.js"]
     }
   ],
@@ -20,5 +22,5 @@
     "48": "icons/icon.jpg",
     "128": "icons/icon.jpg"
   },
-  "permissions": ["storage"]
+  "permissions": ["storage", "tabs"]
 }
