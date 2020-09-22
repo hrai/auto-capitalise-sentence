@@ -1,4 +1,3 @@
-dependencies/*.js
 dependencies/*.css
 lib/
 jest.config.js
