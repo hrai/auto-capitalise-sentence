@@ -2,7 +2,9 @@ import * as utils from './utils';
 import browser from 'webextension-polyfill';
 
 var errorMsg = 'breaking loop';
-browser.storage.local.get('sites_to_ignore').then(processResponse, utils.onError);
+browser.storage.local
+  .get('sites_to_ignore')
+  .then(processResponse, utils.onError);
 
 function hookupEventHandlers() {
   observeInputTags();
@@ -69,10 +71,12 @@ function observeHtmlBody() {
 
           var addedNodes = mutation.addedNodes;
           if (addedNodes && addedNodes.length > 0) {
-            addedNodes.forEach((node) => {
+            addedNodes.forEach(node => {
               if (utils.isFirstTextOfEditableTextNode(node)) {
                 capitaliseText(node.parentNode);
-                addedNodes = addedNodes.filter(addedNode=>{addedNode != node;});
+                addedNodes = addedNodes.filter(addedNode => {
+                  addedNode != node;
+                });
               }
             });
 
@@ -110,14 +114,18 @@ function observeHtmlBody() {
   var config = {
     subtree: true,
     childList: true,
-    characterData: true
+    characterData: true,
   };
 
   observer.observe(target, config);
 }
 
 function capitaliseText(element) {
-  utils.capitaliseText(element, utils.shouldCapitalise, utils.shouldCapitaliseForI,
-    utils.getText , utils.setText);
+  utils.capitaliseText(
+    element,
+    utils.shouldCapitalise,
+    utils.shouldCapitaliseForI,
+    utils.getText,
+    utils.setText
+  );
 }
-
