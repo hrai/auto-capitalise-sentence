@@ -46,6 +46,10 @@ $(document).on('click', '#submitButton', function() {
   $(this).val('Saved');
 });
 
+$(document).on('change', '#shouldCapitaliseI', function () {
+  console.log('test');
+});
+
 function getSites() {
   var sitesBoxVal = $('#sites').val();
 
