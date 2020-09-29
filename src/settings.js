@@ -46,8 +46,11 @@ $(document).on('click', '#submitButton', function() {
   $(this).val('Saved');
 });
 
-$(document).on('change', '#shouldCapitaliseI', function () {
-  console.log('test');
+$(document).on('change', '#shouldCapitaliseI', function(data) {
+  // alert('test');
+  browser.storage.local.get('should_capitalise_i', items => {
+    console.log(items.kitten); // -> {name:"Mog", eats:"mice"}
+  });
 });
 
 function getSites() {
@@ -60,4 +63,3 @@ function getSites() {
 
   return [];
 }
-
