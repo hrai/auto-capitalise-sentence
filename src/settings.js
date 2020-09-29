@@ -56,8 +56,9 @@ $(document).on('change', '#shouldCapitaliseI', function(event) {
       should_capitalise_i: false,
     });
   }
+
   browser.storage.local.get('should_capitalise_i', items => {
-    console.log(items.should_capitalise_i); // -> {name:"Mog", eats:"mice"}
+    console.log(items.should_capitalise_i);
   });
 });
 
