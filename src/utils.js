@@ -28,7 +28,7 @@ export function onError(error) {
 export function getText(htmlControl, tagName) {
   if (
     tagName.toUpperCase() === 'INPUT' ||
-      tagName.toUpperCase() === 'TEXTAREA'
+    tagName.toUpperCase() === 'TEXTAREA'
   ) {
     return htmlControl.value ? htmlControl.value : '';
   }
@@ -39,9 +39,9 @@ export function getText(htmlControl, tagName) {
 export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
   if (
     tagName.toUpperCase() === 'INPUT' ||
-      tagName.toUpperCase() === 'TEXTAREA'
+    tagName.toUpperCase() === 'TEXTAREA'
   ) {
-    htmlControl.value=updatedStr;
+    htmlControl.value = updatedStr;
     return;
   }
 
@@ -55,12 +55,14 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
 
 export function isFirstTextOfEditableTextNode(node) {
   const data = node.data;
-  const textNode='#text';
+  const textNode = '#text';
 
-  if(node.nodeName===textNode &&
-        data.length === 1 &&
-        data.toUpperCase()!= data &&
-        shouldCapitaliseContent(node.parentNode)){
+  if (
+    node.nodeName === textNode &&
+    data.length === 1 &&
+    data.toUpperCase() != data &&
+    shouldCapitaliseContent(node.parentNode)
+  ) {
     return true;
   }
 
@@ -72,19 +74,18 @@ export function setEndOfContenteditable(contentEditableElement) {
   if (document.createRange) {
     //Firefox, Chrome, Opera, Safari, IE 9+
     range = document.createRange(); //Create a range (a range is a like the selection but invisible)
-    const childNodes=contentEditableElement.childNodes;
-    const childNode=childNodes.length==1?childNodes[0]: childNodes[childNodes.length-2];
+    const childNodes = contentEditableElement.childNodes;
+    const childNode =
+      childNodes.length == 1 ? childNodes[0] : childNodes[childNodes.length - 2];
     // childNodes.forEach(x=>console.log(x.outerHTML));
 
-    if(childNode.nodeName==='#text'){
+    if (childNode.nodeName === '#text') {
       range.setStart(childNode, childNode.data.length);
       range.collapse(false);
-    }
-    else if(childNode.outerHTML==='<br>'){
+    } else if (childNode.outerHTML === '<br>') {
       range.setStart(childNode, 0);
       range.collapse(true);
-    }
-    else{
+    } else {
       range.selectNodeContents(contentEditableElement); //Select the entire contents of the element with the range
       range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
     }
@@ -101,21 +102,25 @@ export function setEndOfContenteditable(contentEditableElement) {
   }
 }
 
-export function capitaliseText(element, shouldCapitalise, shouldCapitaliseForI, getText, setText) {
-  if(!element)
-    return;
+export function capitaliseText(
+  element,
+  shouldCapitalise,
+  shouldCapitaliseForI,
+  getText,
+  setText
+) {
+  if (!element) return;
 
   let tagName = element.tagName;
 
-  if(!isEditableElement(element, tagName)  )
-    return;
+  if (!isEditableElement(element, tagName)) return;
 
   let text = getText(element, tagName);
 
   const lastChar = text.trim().slice(-1);
   const isLastCharAnAlphabet = lastChar.match(/[a-z]/i);
 
-  if(text.length == 1 && !isLastCharAnAlphabet) {
+  if (text.length == 1 && !isLastCharAnAlphabet) {
     return;
   }
 
@@ -138,9 +143,13 @@ export function capitaliseText(element, shouldCapitalise, shouldCapitaliseForI, 
   }
 
   if (text.length >= 2 && shouldCapitaliseForI(text)) {
-    const updatedStr = getCapitalisedContentForI(text);
+    browser.storage.local.get('should_capitalise_i', items => {
+      if (items.should_capitalise_i) {
+        const updatedStr = getCapitalisedContentForI(text);
 
-    setText(element, tagName, updatedStr, shouldAppendBr);
+        setText(element, tagName, updatedStr, shouldAppendBr);
+      }
+    });
     return;
   }
 }
@@ -148,7 +157,7 @@ export function capitaliseText(element, shouldCapitalise, shouldCapitaliseForI, 
 export function getCapitalisedContentForI(text) {
   const lastTwoChars = text.slice(-2);
   const updatedStr =
-      text.substr(0, text.length - 2) + lastTwoChars.toUpperCase();
+    text.substr(0, text.length - 2) + lastTwoChars.toUpperCase();
   return updatedStr;
 }
 
@@ -184,8 +193,9 @@ export function shouldCapitaliseContent(element) {
 }
 
 export function isEditableElement(element, tagName) {
-  return element.isContentEditable ||
-                    tagName.toUpperCase() === 'INPUT' ||
-                  tagName.toUpperCase() === 'TEXTAREA';
+  return (
+    element.isContentEditable ||
+    tagName.toUpperCase() === 'INPUT' ||
+    tagName.toUpperCase() === 'TEXTAREA'
+  );
 }
-
