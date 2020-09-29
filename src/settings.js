@@ -46,10 +46,18 @@ $(document).on('click', '#submitButton', function() {
   $(this).val('Saved');
 });
 
-$(document).on('change', '#shouldCapitaliseI', function(data) {
-  // alert('test');
+$(document).on('change', '#shouldCapitaliseI', function(event) {
+  if ($(event.target).prop('checked')) {
+    browser.storage.local.set({
+      should_capitalise_i: true,
+    });
+  } else {
+    browser.storage.local.set({
+      should_capitalise_i: false,
+    });
+  }
   browser.storage.local.get('should_capitalise_i', items => {
-    console.log(items.kitten); // -> {name:"Mog", eats:"mice"}
+    console.log(items.should_capitalise_i); // -> {name:"Mog", eats:"mice"}
   });
 });
 
