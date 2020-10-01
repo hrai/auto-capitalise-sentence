@@ -46,6 +46,31 @@ $(document).on('click', '#submitButton', function() {
   $(this).val('Saved');
 });
 
+// setting the value of checkbox
+browser.storage.local.get('should_capitalise_i', items => {
+  if (items.should_capitalise_i) {
+    $('#shouldCapitaliseI').prop('checked', true);
+    set_should_capitalise_i_variable(true);
+  } else {
+    $('#shouldCapitaliseI').prop('checked', false);
+    set_should_capitalise_i_variable(false);
+  }
+});
+
+$(document).on('change', '#shouldCapitaliseI', function(event) {
+  if ($(event.target).prop('checked')) {
+    set_should_capitalise_i_variable(true);
+  } else {
+    set_should_capitalise_i_variable(false);
+  }
+});
+
+function set_should_capitalise_i_variable(value) {
+  browser.storage.local.set({
+    should_capitalise_i: value,
+  });
+}
+
 function getSites() {
   var sitesBoxVal = $('#sites').val();
 
@@ -56,4 +81,3 @@ function getSites() {
 
   return [];
 }
-

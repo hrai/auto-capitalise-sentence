@@ -57,8 +57,6 @@ function observeHtmlBody() {
   var inputTags = ['input[type=\'text\']', 'textarea'];
 
   var observer = new MutationObserver(function(mutations) {
-    // console.log(mutations);
-
     $.each(mutations, function(_i, mutation) {
       try {
         if (mutation.type === 'childList') {
