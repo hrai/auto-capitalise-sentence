@@ -143,7 +143,7 @@ export function capitaliseText(
   }
 
   if (text.length >= 2 && shouldCapitaliseForI(text)) {
-    browser.storage.local.get('should_capitalise_i', items => {
+    browser.storage.local.get('should_capitalise_i').then(items => {
       if (items.should_capitalise_i) {
         const updatedStr = getCapitalisedContentForI(text);
 
