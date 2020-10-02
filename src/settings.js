@@ -47,7 +47,7 @@ $(document).on('click', '#submitButton', function() {
 });
 
 // setting the value of checkbox
-browser.storage.local.get('should_capitalise_i', items => {
+browser.storage.local.get('should_capitalise_i').then(items => {
   if (items.should_capitalise_i) {
     $('#shouldCapitaliseI').prop('checked', true);
     set_should_capitalise_i_variable(true);
