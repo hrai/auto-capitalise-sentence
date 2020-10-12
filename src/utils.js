@@ -7,6 +7,12 @@ export function shouldCapitaliseForI(text) {
   return matches;
 }
 
+export function setShouldCapitaliseI(value) {
+  if (value != null) {
+    should_capitalise_i = value;
+  }
+}
+
 export function shouldCapitalise(text) {
   const multilineRegex = /\s*\n+\s*\w$/;
   let matches = multilineRegex.test(text);
