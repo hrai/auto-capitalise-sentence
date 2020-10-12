@@ -1,9 +1,11 @@
 import * as utils from './utils';
 import browser from 'webextension-polyfill';
 
-var errorMsg = 'breaking loop';
+const errorMsg = 'breaking loop';
+const sitesToExclude;
+
 browser.storage.local
-  .get('sites_to_ignore')
+  .get(['sites_to_ignore', 'should_capitalise_i'])
   .then(processResponse, utils.onError);
 
 function hookupEventHandlers() {
@@ -18,7 +20,8 @@ function observeInputTags() {
 }
 
 function processResponse(item) {
-  var sitesToExclude = item.sites_to_ignore;
+  sitesToExclude= item.sites_to_ignore;
+  utils.should_capitalise_i = item.should_capitalise_i;
 
   if (item && sitesToExclude) {
     //https://stackoverflow.com/questions/406192/get-current-url-with-jquery
