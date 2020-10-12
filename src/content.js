@@ -2,7 +2,7 @@ import * as utils from './utils';
 import browser from 'webextension-polyfill';
 
 const errorMsg = 'breaking loop';
-const sitesToExclude;
+const sitesToExclude = [];
 
 browser.storage.local
   .get(['sites_to_ignore', 'should_capitalise_i'])
@@ -20,7 +20,7 @@ function observeInputTags() {
 }
 
 function processResponse(item) {
-  sitesToExclude= item.sites_to_ignore;
+  sitesToExclude = item.sites_to_ignore;
   utils.should_capitalise_i = item.should_capitalise_i;
 
   if (item && sitesToExclude) {
