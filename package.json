@@ -8,8 +8,8 @@
     "web-ext-win": "yarn web-ext run --verbose --firefox='/mnt/c/Program Files/Firefox Developer Edition/firefox.exe'",
     "watch": "watchify src/*.js -o lib/bundle.js -t [ babelify --presets [ @babel/preset-env  ] --plugins [ @babel/plugin-proposal-class-properties  ] ]",
     "web-ext-linux": "yarn web-ext run",
-    "test": "jest",
-    "test-watch": "jest --watch",
+    "test": "jest test/",
+    "test-watch": "jest --watch test/",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
     "start:firefox": "web-ext run"
