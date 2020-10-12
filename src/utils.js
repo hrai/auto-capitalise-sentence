@@ -1,8 +1,16 @@
+export let should_capitalise_i = false;
+
 export function shouldCapitaliseForI(text) {
   const regex = /\s+i(\s+|')$/;
   const matches = regex.test(text);
 
   return matches;
+}
+
+export function setShouldCapitaliseI(value) {
+  if (value != null) {
+    should_capitalise_i = value;
+  }
 }
 
 export function shouldCapitalise(text) {
@@ -142,14 +150,10 @@ export function capitaliseText(
     return;
   }
 
-  if (text.length >= 2 && shouldCapitaliseForI(text)) {
-    browser.storage.local.get('should_capitalise_i').then(items => {
-      if (items.should_capitalise_i) {
-        const updatedStr = getCapitalisedContentForI(text);
+  if (text.length >= 2 && shouldCapitaliseForI(text) && should_capitalise_i) {
+    const updatedStr = getCapitalisedContentForI(text);
 
-        setText(element, tagName, updatedStr, shouldAppendBr);
-      }
-    });
+    setText(element, tagName, updatedStr, shouldAppendBr);
     return;
   }
 }
