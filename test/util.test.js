@@ -670,5 +670,19 @@ describe('utilities test', function() {
       expect(args[0].data).toBe(expectedArg);
       expect(args[1]).toBe(expectedArg.length);
     });
+
+    test('getIndexOfMatchingConstantWord', () => {
+      let str = 'I\'m the content of html monday.';
+      expect(utils.getIndexOfMatchingConstantWord(str)[0]).toBe(0);
+      expect(utils.getIndexOfMatchingConstantWord(str)[1]).toBe('monday');
+
+      str = 'I\'M THE CONTENT OF HTML MONDAY!';
+      expect(utils.getIndexOfMatchingConstantWord(str)[0]).toBe(0);
+      expect(utils.getIndexOfMatchingConstantWord(str)[1]).toBe('MONDAY');
+
+      str = 'I\'m the content of html.';
+      expect(utils.getIndexOfMatchingConstantWord(str)[0]).toBe(-1);
+      expect(utils.getIndexOfMatchingConstantWord(str)[1]).toBe('html');
+    });
   });
 });
