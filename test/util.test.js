@@ -687,11 +687,11 @@ describe('utilities test', function() {
 
     test('getIndexOfMatchingConstantWord_Months', () => {
       let str = 'I\'m the content of html january.';
-      expect(utils.getIndexOfMatchingConstantWord(str)[0]).toBe(0);
+      expect(utils.getIndexOfMatchingConstantWord(str)[0]).toBe(7);
       expect(utils.getIndexOfMatchingConstantWord(str)[1]).toBe('january');
 
       str = 'I\'M THE CONTENT OF HTML JANUARY!';
-      expect(utils.getIndexOfMatchingConstantWord(str)[0]).toBe(0);
+      expect(utils.getIndexOfMatchingConstantWord(str)[0]).toBe(7);
       expect(utils.getIndexOfMatchingConstantWord(str)[1]).toBe('JANUARY');
 
       str = 'I\'m the content of html.';
