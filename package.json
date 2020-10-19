@@ -71,5 +71,16 @@
   "homepage": "https://github.com/hrai/auto-capitalise",
   "dependencies": {
     "babel-eslint": "^10.1.0"
-  }
+  },
+	"webExt": {
+		"sourceDir": "distribution",
+		"run": {
+			"keepProfileChanges": true,
+			"firefoxProfile": "./test/web-ext-profile",
+			"chromiumProfile": "./test/web-ext-profile",
+			"startUrl": [
+				"github.com"
+			]
+		}
+	}
 }
