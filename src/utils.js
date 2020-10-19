@@ -46,9 +46,9 @@ export function getIndexOfMatchingConstantWord(text) {
 
       return [index, matchedWord];
     }
-
-    return [-1, ''];
   }
+
+  return [-1, ''];
 }
 
 export function onError(error) {
