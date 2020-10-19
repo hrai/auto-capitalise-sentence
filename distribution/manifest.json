@@ -15,6 +15,9 @@
       "matches": ["<all_urls>"],
       "js": [
         "lib/bundle.js"
+      ],
+      "css":[
+        "dependencies/bootstrap.min.css"
       ]
     }
   ],
