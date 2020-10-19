@@ -5,13 +5,17 @@
   "description": "Firefox add-on to automatically capitalise the first letter of a sentence while typing.",
   "scripts": {
     "build": "browserify src/*.js -o lib/bundle.js -t [ babelify --presets [ @babel/preset-env  ] --plugins [ @babel/plugin-proposal-class-properties  ] ] ",
-    "web-ext-win": "yarn web-ext run --verbose --firefox='/mnt/c/Program Files/Firefox Developer Edition/firefox.exe'",
     "watch": "watchify src/*.js -o lib/bundle.js -t [ babelify --presets [ @babel/preset-env  ] --plugins [ @babel/plugin-proposal-class-properties  ] ]",
-    "web-ext-linux": "yarn web-ext run",
+    "web-ext-linux": "web-ext run",
+    "web-ext-win": "web-ext run --verbose --firefox='c:/Program Files/Firefox Developer Edition/firefox.exe'",
     "test": "jest test/",
     "test-watch": "jest --watch test/",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
+    "version": "yarn dot-json manifest.json version $VER",
+    "release": "VER=$(daily-version) run-s build version",
+    "release:amo": "web-ext-submit --source-dir distribution",
+    "release:cws": "webstore upload --source=distribution --auto-publish",
     "start:firefox": "web-ext run"
   },
   "prettier": {
@@ -28,15 +32,20 @@
     "babel-jest": "^26.5.2",
     "babelify": "^10.0.0",
     "browserify": "^17.0.0",
+    "daily-version": "^2.0.0",
+    "dot-json": "^1.2.1",
     "eslint": "^7.11.0",
     "husky": "^4.3.0",
     "jest": "^24.9.0",
     "jquery": "^3.5.1",
     "lint-staged": "^10.4.0",
+    "npm-run-all": "^4.1.5",
     "sinon": "^7.5.0",
     "watchify": "^3.11.1",
     "web-ext": "^5.2.0",
-    "webextension-polyfill": "^0.6.0"
+    "webextension-polyfill": "^0.6.0",
+    "webpack": "^5.1.3",
+    "webpack-cli": "^4.0.0"
   },
   "repository": {
     "type": "git",
@@ -64,5 +73,14 @@
   "homepage": "https://github.com/hrai/auto-capitalise",
   "dependencies": {
     "babel-eslint": "^10.1.0"
+  },
+  "webExt": {
+    "sourceDir": "distribution",
+    "run": {
+      "keepProfileChanges": true,
+      "startUrl": [
+        "github.com"
+      ]
+    }
   }
 }

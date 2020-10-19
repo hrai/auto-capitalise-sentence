@@ -1,0 +1,58 @@
+# Copied from https://github.com/notlmn/browser-extension-template/blob/master/.github/workflows/release.yml
+name: Release
+
+on:
+  workflow_dispatch:
+  # You can manually trigger a deployment on GitHub.com
+  # https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/
+  schedule:
+    - cron: '30 10 * * 1' #https://crontab.guru/#30_10_*_*_1
+
+jobs:
+  Version:
+    outputs:
+      created: ${{ steps.daily-version.outputs.created }}
+      version: ${{ steps.daily-version.outputs.version }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 20
+      - run: yarn install
+      - run: yarn test
+      - uses: fregante/daily-version-action@v1
+        name: Create tag if necessary
+        id: daily-version
+      - uses: notlmn/release-with-changelog@v3
+        if: steps.daily-version.outputs.created
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          exclude: '^Meta|^Document|^Readme|^Lint'
+
+  Build:
+    needs: Version
+    if: github.event_name == 'push' || needs.Version.outputs.created
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+    - uses: actions/checkout@v2
+    - run: yarn install --frozen-lockfile
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: yarn install, build, and test
+      run: |
+        yarn build --if-present
+        yarn test
+    - name: Update extension’s meta
+      env:
+        VER: ${{ needs.Version.outputs.version }}
+      run: |
+        yarn version
+    - uses: actions/upload-artifact@v2
+      with:
+        path: distribution
