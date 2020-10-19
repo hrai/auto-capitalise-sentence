@@ -43,7 +43,9 @@
     "sinon": "^7.5.0",
     "watchify": "^3.11.1",
     "web-ext": "^5.2.0",
-    "webextension-polyfill": "^0.6.0"
+    "webextension-polyfill": "^0.6.0",
+    "webpack": "^5.1.3",
+    "webpack-cli": "^4.0.0"
   },
   "repository": {
     "type": "git",
@@ -72,13 +74,13 @@
   "dependencies": {
     "babel-eslint": "^10.1.0"
   },
-	"webExt": {
-		"sourceDir": "distribution",
-		"run": {
-			"keepProfileChanges": true,
-			"startUrl": [
-				"github.com"
-			]
-		}
-	}
+  "webExt": {
+    "sourceDir": "distribution",
+    "run": {
+      "keepProfileChanges": true,
+      "startUrl": [
+        "github.com"
+      ]
+    }
+  }
 }
