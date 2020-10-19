@@ -2775,6 +2775,13 @@ cssstyle@^1.0.0:
   dependencies:
     cssom "0.3.x"
 
+daily-version@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/daily-version/-/daily-version-2.0.0.tgz#ccf32bfd120527b0febf64d26f17b636a5cd0bec"
+  integrity sha512-VwLGd9tLophN8vwgz7Ba3Ly0pkb6R8ZpcQ795W8VvU4+t2P3I85VEQONM/eZz3UTnpSjibuV8IuS7f68f61ofg==
+  dependencies:
+    utc-version "^2.0.1"
+
 dash-ast@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/dash-ast/-/dash-ast-1.0.0.tgz#12029ba5fb2f8aa6f0a861795b23c1b4b6c27d37"
@@ -7904,6 +7911,11 @@ use@^3.1.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/use/-/use-3.1.1.tgz#d50c8cac79a19fbc20f2911f56eb973f4e10070f"
   integrity sha512-cwESVXlO3url9YWlFW/TA9cshCEhtu7IKJ/p5soJ/gGpj7vbvFrAY/eIioQ6Dw23KjZhYgiIo8HOs1nQ2vr/oQ==
+
+utc-version@^2.0.1:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/utc-version/-/utc-version-2.0.2.tgz#45afcec3eebf8a738c44bfe39cf9ca5a621c89ae"
+  integrity sha512-DblGt/1KFe3Jl1BbTZN7P8SFNw6L0zU/zahdgCJ+a/LPW6SE7VPY3RfpEg0W0ksyx6NewZYu7WD/7NzV7xljlA==
 
 util-deprecate@^1.0.1, util-deprecate@~1.0.1:
   version "1.0.2"
