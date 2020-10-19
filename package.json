@@ -12,7 +12,7 @@
     "test-watch": "jest --watch test/",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
-    "version": "dot-json distribution/manifest.json version $VER",
+    "version": "dot-json manifest.json version $VER",
     "start:firefox": "web-ext run"
   },
   "prettier": {
