@@ -51,8 +51,7 @@ jobs:
     - name: Update extension’s meta
       env:
         VER: ${{ needs.Version.outputs.version }}
-      run: |
-        echo https://github.com/$GITHUB_REPOSITORY/tree/$VER > distribution/SOURCE_URL.txt
+      run:
         npm run version
     - uses: actions/upload-artifact@v2
       with:
