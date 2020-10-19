@@ -76,8 +76,6 @@
 		"sourceDir": "distribution",
 		"run": {
 			"keepProfileChanges": true,
-			"firefoxProfile": "./test/web-ext-profile",
-			"chromiumProfile": "./test/web-ext-profile",
 			"startUrl": [
 				"github.com"
 			]
