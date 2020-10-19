@@ -12,7 +12,7 @@
     "test-watch": "jest --watch test/",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
-    "version": "npm run dot-json manifest.json version $VER",
+    "version": "yarn dot-json manifest.json version $VER",
     "release": "VER=$(daily-version) run-s build version",
     "release:amo": "web-ext-submit --source-dir distribution",
     "release:cws": "webstore upload --source=distribution --auto-publish",
