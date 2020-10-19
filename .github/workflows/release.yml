@@ -18,8 +18,8 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 20
-      - run: npm install
-      - run: npm test
+      - run: yarn install
+      - run: yarn test
       - uses: fregante/daily-version-action@v1
         name: Create tag if necessary
         id: daily-version
@@ -38,22 +38,21 @@ jobs:
         node-version: [14.x]
     steps:
     - uses: actions/checkout@v2
-    #- run: npm ci
-    
+    - run: yarn install --frozen-lockfile
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: 
-        npm install
-        npm run build --if-present
-        npm test
+    - name: yarn install, build, and test
+      run: |
+        yarn build --if-present
+        yarn test
     - name: Update extension’s meta
       env:
         VER: ${{ needs.Version.outputs.version }}
       run: |
-        echo https://github.com/$GITHUB_REPOSITORY/tree/$VER > distribution/SOURCE_URL.txt
-        npm run version
+        yarn version
     - uses: actions/upload-artifact@v2
       with:
         path: distribution
