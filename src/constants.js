@@ -1,5 +1,3 @@
-export let constants = days.concat(months);
-
 const days=[
   'Monday',
   'Tuesday',
@@ -24,3 +22,6 @@ const months=[
   'November',
   'December'
 ];
+
+export let constants = days.concat(months);
+

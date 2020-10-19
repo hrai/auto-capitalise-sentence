@@ -671,7 +671,7 @@ describe('utilities test', function() {
       expect(args[1]).toBe(expectedArg.length);
     });
 
-    test('getIndexOfMatchingConstantWord', () => {
+    test('getIndexOfMatchingConstantWord_Days', () => {
       let str = 'I\'m the content of html monday.';
       expect(utils.getIndexOfMatchingConstantWord(str)[0]).toBe(0);
       expect(utils.getIndexOfMatchingConstantWord(str)[1]).toBe('monday');
@@ -679,6 +679,20 @@ describe('utilities test', function() {
       str = 'I\'M THE CONTENT OF HTML MONDAY!';
       expect(utils.getIndexOfMatchingConstantWord(str)[0]).toBe(0);
       expect(utils.getIndexOfMatchingConstantWord(str)[1]).toBe('MONDAY');
+
+      str = 'I\'m the content of html.';
+      expect(utils.getIndexOfMatchingConstantWord(str)[0]).toBe(-1);
+      expect(utils.getIndexOfMatchingConstantWord(str)[1]).toBe('html');
+    });
+
+    test('getIndexOfMatchingConstantWord_Months', () => {
+      let str = 'I\'m the content of html january.';
+      expect(utils.getIndexOfMatchingConstantWord(str)[0]).toBe(0);
+      expect(utils.getIndexOfMatchingConstantWord(str)[1]).toBe('january');
+
+      str = 'I\'M THE CONTENT OF HTML JANUARY!';
+      expect(utils.getIndexOfMatchingConstantWord(str)[0]).toBe(0);
+      expect(utils.getIndexOfMatchingConstantWord(str)[1]).toBe('JANUARY');
 
       str = 'I\'m the content of html.';
       expect(utils.getIndexOfMatchingConstantWord(str)[0]).toBe(-1);
