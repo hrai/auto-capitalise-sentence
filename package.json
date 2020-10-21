@@ -31,7 +31,6 @@
     "@babel/preset-env": "^7.9.0",
     "babel-jest": "^26.5.2",
     "babelify": "^10.0.0",
-    "browserify": "^17.0.0",
     "daily-version": "^2.0.0",
     "dot-json": "^1.2.1",
     "eslint": "^7.11.0",
