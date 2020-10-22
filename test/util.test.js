@@ -1,5 +1,6 @@
 import sinon from 'sinon';
 import * as utils from '../src/utils.js';
+const $ = require('jquery');
 
 describe('utilities test', function() {
   test('getCapitalisedContent', () => {
@@ -135,11 +136,13 @@ describe('utilities test', function() {
         '</div>';
     }
 
-    test('setText_InputTag', () => {
+    test.only('setText_InputTag', () => {
       const updatedStr = 'testing this';
 
       resetHtml();
       let element = $('#username');
+      console.log(Object.keys(element[0]));
+
       utils.setText(element[0], 'input', updatedStr, false);
       expect(element.val()).toBe('testing this');
 
