@@ -136,7 +136,7 @@ describe('utilities test', function() {
         '</div>';
     }
 
-    test.only('setText_InputTag', () => {
+    test('setText_InputTag', () => {
       const updatedStr = 'testing this';
 
       resetHtml();
