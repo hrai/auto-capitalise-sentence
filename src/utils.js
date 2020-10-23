@@ -1,3 +1,5 @@
+import { constants } from './constants';
+
 export let should_capitalise_i = false;
 
 export function shouldCapitaliseForI(text) {
@@ -27,6 +29,26 @@ export function shouldCapitalise(text) {
   }
 
   return matches;
+}
+
+export function getIndexOfMatchingConstantWord(text) {
+  const lastWordRegex = /\b(\w+)[.?!\s]+$/;
+
+  let match = lastWordRegex.exec(text);
+
+  if (match) {
+    const matchedWord = match[1];
+
+    if (matchedWord != null) {
+      let index = constants.findIndex(
+        item => matchedWord.toLowerCase() == item.toLowerCase()
+      );
+
+      return [index, matchedWord];
+    }
+  }
+
+  return [-1, ''];
 }
 
 export function onError(error) {
@@ -155,6 +177,12 @@ export function capitaliseText(
 
     setText(element, tagName, updatedStr, shouldAppendBr);
     return;
+  }
+
+  const [index, matchedWord] = getIndexOfMatchingConstantWord(text);
+  if (index >= 0) {
+    let updatedStr = text.replace(matchedWord, constants[index]);
+    setText(element, tagName, updatedStr, false);
   }
 }
 

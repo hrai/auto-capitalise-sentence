@@ -1,5 +1,6 @@
 import sinon from 'sinon';
 import * as utils from '../src/utils.js';
+const $ = require('jquery');
 
 describe('utilities test', function() {
   test('getCapitalisedContent', () => {
@@ -140,6 +141,8 @@ describe('utilities test', function() {
 
       resetHtml();
       let element = $('#username');
+      console.log(Object.keys(element[0]));
+
       utils.setText(element[0], 'input', updatedStr, false);
       expect(element.val()).toBe('testing this');
 
@@ -669,6 +672,34 @@ describe('utilities test', function() {
 
       expect(args[0].data).toBe(expectedArg);
       expect(args[1]).toBe(expectedArg.length);
+    });
+
+    test('getIndexOfMatchingConstantWord_Days', () => {
+      let str = 'I\'m the content of html monday.';
+      expect(utils.getIndexOfMatchingConstantWord(str)[0]).toBe(0);
+      expect(utils.getIndexOfMatchingConstantWord(str)[1]).toBe('monday');
+
+      str = 'I\'M THE CONTENT OF HTML MONDAY!';
+      expect(utils.getIndexOfMatchingConstantWord(str)[0]).toBe(0);
+      expect(utils.getIndexOfMatchingConstantWord(str)[1]).toBe('MONDAY');
+
+      str = 'I\'m the content of html.';
+      expect(utils.getIndexOfMatchingConstantWord(str)[0]).toBe(-1);
+      expect(utils.getIndexOfMatchingConstantWord(str)[1]).toBe('html');
+    });
+
+    test('getIndexOfMatchingConstantWord_Months', () => {
+      let str = 'I\'m the content of html january.';
+      expect(utils.getIndexOfMatchingConstantWord(str)[0]).toBe(7);
+      expect(utils.getIndexOfMatchingConstantWord(str)[1]).toBe('january');
+
+      str = 'I\'M THE CONTENT OF HTML JANUARY!';
+      expect(utils.getIndexOfMatchingConstantWord(str)[0]).toBe(7);
+      expect(utils.getIndexOfMatchingConstantWord(str)[1]).toBe('JANUARY');
+
+      str = 'I\'m the content of html.';
+      expect(utils.getIndexOfMatchingConstantWord(str)[0]).toBe(-1);
+      expect(utils.getIndexOfMatchingConstantWord(str)[1]).toBe('html');
     });
   });
 });
