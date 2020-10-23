@@ -109,6 +109,11 @@ export function setEndOfContenteditable(contentEditableElement) {
       childNodes.length == 1 ? childNodes[0] : childNodes[childNodes.length - 2];
     // childNodes.forEach(x=>console.log(x.outerHTML));
 
+    if (childNode === undefined) {
+      console.log(contentEditableElement);
+      return;
+    }
+
     if (childNode.nodeName === '#text') {
       range.setStart(childNode, childNode.data.length);
       range.collapse(false);

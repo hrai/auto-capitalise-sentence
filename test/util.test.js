@@ -140,7 +140,6 @@ describe('utilities test', function() {
 
       resetHtml();
       let element = $('#username');
-      console.log(Object.keys(element[0]));
 
       utils.setText(element[0], 'input', updatedStr, false);
       expect(element.val()).toBe('testing this');
