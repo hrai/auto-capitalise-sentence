@@ -3,11 +3,11 @@ import * as utils from '../src/utils.js';
 
 describe('capitaliseText', () => {
   test('capitaliseText_HtmlContent', () => {
-    const element = sinon.stub({
+    const element = {
       isContentEditable: true,
       tagName: 'div',
       innerHTML: 'I\'m the content of html tag.',
-    });
+    };
     const shouldCapitaliseFake = sinon.fake();
     const shouldCapitaliseForIFake = sinon.fake();
     const setTextFake = sinon.fake();
@@ -33,11 +33,11 @@ describe('capitaliseText', () => {
   });
 
   test('capitaliseText_Symbol_@', () => {
-    const element = sinon.stub({
+    const element = {
       isContentEditable: true,
       tagName: 'div',
       innerHTML: '@',
-    });
+    };
     const shouldCapitaliseFake = sinon.fake();
     const shouldCapitaliseForIFake = sinon.fake();
     const getTextFake = sinon.fake.returns('@');
@@ -60,11 +60,11 @@ describe('capitaliseText', () => {
   });
 
   test('capitaliseText_Symbol_Period', () => {
-    const element = sinon.stub({
+    const element = {
       isContentEditable: true,
       tagName: 'div',
       innerHTML: '.',
-    });
+    };
     const shouldCapitaliseFake = sinon.fake();
     const shouldCapitaliseForIFake = sinon.fake();
     const getTextFake = sinon.fake.returns('.');
@@ -87,11 +87,11 @@ describe('capitaliseText', () => {
   });
 
   test('capitaliseText_Symbol_Slash', () => {
-    const element = sinon.stub({
+    const element = {
       isContentEditable: true,
       tagName: 'div',
       innerHTML: '/',
-    });
+    };
     const shouldCapitaliseFake = sinon.fake();
     const shouldCapitaliseForIFake = sinon.fake();
     const getTextFake = sinon.fake.returns('/');
@@ -114,11 +114,11 @@ describe('capitaliseText', () => {
   });
 
   test('capitaliseText_HtmlContent_WithLastLetterCapital', () => {
-    const element = sinon.stub({
+    const element = {
       isContentEditable: true,
       tagName: 'div',
       innerHTML: 'I\'m the content of html taG',
-    });
+    };
     const shouldCapitaliseFake = sinon.fake();
     const shouldCapitaliseForIFake = sinon.fake();
     const getTextFake = sinon.fake.returns('I\'m the content of html taG');
@@ -141,11 +141,11 @@ describe('capitaliseText', () => {
   });
 
   test('capitaliseText_HtmlContent_WithLastLetterCapital', () => {
-    const element = sinon.stub({
+    const element = {
       isContentEditable: true,
       tagName: 'div',
       innerHTML: 'I\'m the content of html taG',
-    });
+    };
     const shouldCapitaliseFake = sinon.fake();
     const shouldCapitaliseForIFake = sinon.fake();
     const setTextFake = sinon.fake();
@@ -167,11 +167,11 @@ describe('capitaliseText', () => {
   });
 
   test('capitaliseText_HtmlContent_WithTrailingBrTag', () => {
-    const element = sinon.stub({
+    const element = {
       isContentEditable: true,
       tagName: 'div',
       innerHTML: 'I\'m the content of html tag.<br>',
-    });
+    };
     const shouldCapitaliseFake = sinon.fake();
     const shouldCapitaliseForIFake = sinon.fake();
     const setTextFake = sinon.fake();
@@ -198,10 +198,10 @@ describe('capitaliseText', () => {
 
   test('capitaliseText_Exceptions', () => {
     expect(() => {
-      const element = sinon.stub({
+      const element = {
         isContentEditable: true,
         innerHTML: 'I\'m the content of html tag.',
-      });
+      };
       const shouldCapitaliseFake = sinon.fake();
       const shouldCapitaliseForIFake = sinon.fake();
       const getTextFake = sinon.fake();
@@ -217,11 +217,11 @@ describe('capitaliseText', () => {
     }).toThrow();
 
     expect(() => {
-      const element = sinon.stub({
+      const element = {
         isContentEditable: true,
         tagName: 'div',
         innerHTML: 'I\'m the content of html tag.<br>',
-      });
+      };
       const shouldCapitaliseFake = sinon.fake();
       const shouldCapitaliseForIFake = sinon.fake();
       const setTextFake = sinon.fake();
@@ -236,11 +236,11 @@ describe('capitaliseText', () => {
     }).toThrow();
 
     expect(() => {
-      const element = sinon.stub({
+      const element = {
         isContentEditable: true,
         tagName: 'div',
         innerHTML: 'I\'m the content of html tag.<br>',
-      });
+      };
       const shouldCapitaliseFake = sinon.fake();
       const shouldCapitaliseForIFake = sinon.fake();
       const getTextFake = sinon.fake();
@@ -258,13 +258,12 @@ describe('capitaliseText', () => {
   });
 
   test('capitaliseText_GetText', () => {
-    const dummyElement = {
+    const element = {
       isContentEditable: true,
       tagName: 'div',
       innerHTML: 'I\'m the content of html tag.',
     };
 
-    const element = sinon.stub(dummyElement);
     const shouldCapitaliseFake = sinon.fake();
     const shouldCapitaliseForIFake = sinon.fake();
     const getTextFake = sinon.fake.returns('I\'m the content of html tag.');
@@ -284,20 +283,19 @@ describe('capitaliseText', () => {
     expect(shouldCapitaliseForIFake.getCall(0).args[0]).toBe(
       'I\'m the content of html tag.'
     );
-    expect(getTextFake.getCall(0).args[0]).toBe(dummyElement);
+    expect(getTextFake.getCall(0).args[0]).toBe(element);
     expect(shouldCapitaliseFake.getCall(0).args[0]).toBe(
       'I\'m the content of html tag.'
     );
   });
 
   test('capitaliseText_SetText_ShouldCapitaliseTrue', () => {
-    const dummyElement = {
+    const element = {
       isContentEditable: true,
       tagName: 'div',
       innerHTML: 'I\'m the content of html tag.',
     };
 
-    const element = sinon.stub(dummyElement);
     const shouldCapitaliseFake = sinon.fake.returns(true);
     const shouldCapitaliseForIFake = sinon.fake();
     const getTextFake = sinon.fake.returns('I\'m the content of html tag.');
@@ -315,20 +313,19 @@ describe('capitaliseText', () => {
       'I\'m the content of html tag.'
     );
     expect(shouldCapitaliseForIFake.getCall(0)).toBeNull();
-    expect(getTextFake.getCall(0).args[0]).toBe(dummyElement);
+    expect(getTextFake.getCall(0).args[0]).toBe(element);
     expect(shouldCapitaliseFake.getCall(0).args[0]).toBe(
       'I\'m the content of html tag.'
     );
   });
 
   test('capitaliseText_SetText_ShouldCapitaliseFalse', () => {
-    const dummyElement = {
+    const element = {
       isContentEditable: true,
       tagName: 'div',
       innerHTML: 'I\'m the content of html tag.',
     };
 
-    const element = sinon.stub(dummyElement);
     const shouldCapitaliseFake = sinon.fake.returns(false);
     const shouldCapitaliseForIFake = sinon.fake();
     const getTextFake = sinon.fake.returns('I\'m the content of html tag.');
@@ -348,7 +345,7 @@ describe('capitaliseText', () => {
     expect(shouldCapitaliseForIFake.getCall(0).args[0]).toBe(
       'I\'m the content of html tag.'
     );
-    expect(getTextFake.getCall(0).args[0]).toBe(dummyElement);
+    expect(getTextFake.getCall(0).args[0]).toBe(element);
     expect(shouldCapitaliseFake.getCall(0).args[0]).toBe(
       'I\'m the content of html tag.'
     );
