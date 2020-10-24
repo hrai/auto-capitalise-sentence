@@ -48,10 +48,10 @@ $(document).on('click', '#submitButton', function() {
 
 // setting the value of checkbox
 browser.storage.local.get('should_capitalise_i').then(items => {
-  const shouldCapitaliseI=items.should_capitalise_i;
+  const shouldCapitaliseI = items.should_capitalise_i;
 
-  if (shouldCapitaliseI===true
-    || shouldCapitaliseI===undefined) { //value not set yet/ext just installed
+  if (shouldCapitaliseI === true || shouldCapitaliseI === undefined) {
+    //value not set yet/ext just installed
     $('#shouldCapitaliseI').prop('checked', true);
     set_should_capitalise_i_variable(true);
   } else {
@@ -66,6 +66,10 @@ $(document).on('change', '#shouldCapitaliseI', function(event) {
   } else {
     set_should_capitalise_i_variable(false);
   }
+});
+
+$('#sites').on('input', function() {
+  $('#submitButton').prop('disabled', false);
 });
 
 function set_should_capitalise_i_variable(value) {
