@@ -13,9 +13,7 @@
     {
       "run_at": "document_end",
       "matches": ["<all_urls>"],
-      "js": [
-        "lib/bundle.js"
-      ]
+      "js": ["lib/bundle.js"]
     }
   ],
   "icons": {

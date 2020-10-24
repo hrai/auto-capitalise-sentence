@@ -16,7 +16,8 @@
     "release": "VER=$(daily-version) run-s build version",
     "release:amo": "web-ext-submit --source-dir distribution",
     "release:cws": "webstore upload --source=distribution --auto-publish",
-    "start:firefox": "web-ext run"
+    "start": "web-ext run",
+    "start:chrome": "cd distribution && web-ext run -t chromium"
   },
   "prettier": {
     "trailingComma": "es5",
