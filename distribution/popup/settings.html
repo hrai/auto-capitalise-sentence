@@ -5,13 +5,13 @@
         <link rel="stylesheet" href="/dependencies/bootstrap.min.css" type="text/css" charset="utf-8">
     </head>
     <body>
-        <div class="container">
+        <div class="container" id="settings">
             <div class="form-group" style="margin-top:5%">
                 <textarea id="sites" rows="4" class="form-control" placeholder="Add sites to exclude" ></textarea>
                 <small class="form-text text-muted">Add each site in a separate row</small>
                 <span class="input-group-btn">
-                    <input type="button" value="Save" id="submitButton" class="btn btn-primary">
-                    <input type="button" value="Add site to ignore list" id="ignoreSiteButton" class="btn btn-secondary">
+                    <input type="button" value="Save" id="submitButton" class="btn btn-primary btn-block" disabled>
+                    <input type="button" value="Add current site to ignore list" id="ignoreSiteButton" class="btn btn-secondary btn-block">
                 </span>
             </div>
             <div class="form-group" style="margin-top:5%">
@@ -20,15 +20,15 @@
             </div>
         </div>
     </body>
-    <script charset="utf-8" src="/node_modules/jquery/dist/jquery.min.js"></script>
-    <script charset="utf-8" src="/lib/bundle.js"></script>
+    <script charset="utf-8" src="/lib/settings.bundle.js"></script>
 </html>
-<style type="text/css" media="screen">
+
+<style type="text/css" >
 #submitButton {
     margin-top: 3px;
 }
 
-.container{
-    min-width:"100px"
+#settings{
+    width: 400px;
 }
 </style>

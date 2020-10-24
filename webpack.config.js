@@ -4,10 +4,11 @@ const webpack = require('webpack');
 
 module.exports = {
   entry: {
-    app: ['./src/content.js', './src/settings.js', './src/utils.js'],
+    main: ['./src/content.js', './src/utils.js'],
+    settings: ['./src/settings.js', './src/utils.js'],
   },
   output: {
-    filename: 'bundle.js',
+    filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'distribution/lib'),
   },
   plugins: [
