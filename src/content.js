@@ -1,5 +1,6 @@
 import * as utils from './utils';
 import browser from 'webextension-polyfill';
+import { pluginNamespace } from './constants';
 
 const errorMsg = 'breaking loop';
 let sitesToExclude = [];
@@ -14,7 +15,7 @@ function hookupEventHandlers() {
 }
 
 function observeInputTags() {
-  $(':text,textarea').on('input', function(event) {
+  $(':text,textarea').on(`input.${pluginNamespace}`, function(event) {
     capitaliseText(event.target);
   });
 }
@@ -95,7 +96,7 @@ function observeHtmlBody() {
               var filteredEls = utils.getFilteredElements(addedNodes, tagName);
 
               filteredEls.each(function(_index, element) {
-                $(element).on('input', function(event) {
+                $(element).on(`input.${pluginNamespace}`, function(event) {
                   capitaliseText(event.target);
                 });
               });

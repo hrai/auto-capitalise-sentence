@@ -1,14 +1,14 @@
-const days=[
+const days = [
   'Monday',
   'Tuesday',
   'Wednesday',
   'Thursday',
   'Friday',
   'Saturday',
-  'Sunday'
+  'Sunday',
 ];
 
-const months=[
+const months = [
   'January',
   'February',
   'March',
@@ -19,9 +19,11 @@ const months=[
   'September',
   'October',
   'November',
-  'December'
+  'December',
 ];
 
-export let constants = days.concat(months);
+const pluginNamespace = 'autoCapitaliseSentence';
 
+let constants = days.concat(months);
 
+export { pluginNamespace, constants };
