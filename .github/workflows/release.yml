@@ -52,7 +52,7 @@ jobs:
       env:
         VER: ${{ needs.Version.outputs.version }}
       run: |
-        yarn version
+        yarn update-version
     - uses: actions/upload-artifact@v2
       with:
         path: distribution
