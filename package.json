@@ -6,8 +6,8 @@
   "scripts": {
     "build": "yarn webpack",
     "watch": "yarn webpack --watch",
-    "web-ext-linux": "web-ext run",
-    "web-ext-win": "web-ext run --verbose --firefox='c:/Program Files/Firefox Developer Edition/firefox.exe'",
+    "web-ext-linux": "yarn build && web-ext run",
+    "web-ext-win": "yarn build && web-ext run --firefox=\"c:/Program Files/Firefox Developer Edition/firefox.exe\"",
     "test": "yarn jest",
     "test-watch": "yarn jest --watch test/",
     "lint": "eslint .",

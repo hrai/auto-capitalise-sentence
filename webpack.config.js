@@ -11,6 +11,7 @@ module.exports = {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'distribution/lib'),
   },
+  devtool: 'inline-source-map',
   plugins: [
     new ESLintPlugin({
       // /*options*/ useEslintrc: true,
