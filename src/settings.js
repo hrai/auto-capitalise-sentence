@@ -1,5 +1,5 @@
 import browser from 'webextension-polyfill';
-import { pluginNamespace } from './constants';
+import { pluginNamespace } from './plugin-constants';
 
 browser.storage.local.get('sites_to_ignore').then(updateSiteIgnoreList, onError);
 
