@@ -1,6 +1,6 @@
 import * as utils from './utils';
 import browser from 'webextension-polyfill';
-import { pluginNamespace } from './constants';
+import { pluginNamespace } from './plugin-constants';
 
 const errorMsg = 'breaking loop';
 let sitesToExclude = [];
