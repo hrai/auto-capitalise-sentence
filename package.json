@@ -4,19 +4,19 @@
   "version": "2.0.0",
   "description": "Firefox add-on to automatically capitalise the first letter of a sentence while typing.",
   "scripts": {
+    "start": "run-script-os",
+    "start:win32": "yarn build && web-ext run --firefox=\"c:/Program Files/Firefox Developer Edition/firefox.exe\"",
+    "start:darwin:linux": "yarn webpack && web-ext run",
     "build": "yarn webpack",
     "watch": "yarn webpack --watch",
-    "web-ext-linux": "web-ext run",
-    "web-ext-win": "web-ext run --verbose --firefox='c:/Program Files/Firefox Developer Edition/firefox.exe'",
     "test": "yarn jest",
     "test-watch": "yarn jest --watch test/",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
-    "version": "yarn dot-json manifest.json version $VER",
+    "update-version": "yarn dot-json distribution/manifest.json version $VER",
     "release": "VER=$(daily-version) run-s build version",
     "release:amo": "web-ext-submit --source-dir distribution",
     "release:cws": "webstore upload --source=distribution --auto-publish",
-    "start": "web-ext run",
     "start:chrome": "cd distribution && web-ext run -t chromium"
   },
   "prettier": {
@@ -66,7 +66,9 @@
     "auto-capitalise"
   ],
   "homepage": "https://github.com/hrai/auto-capitalise",
-  "dependencies": {},
+  "dependencies": {
+    "run-script-os": "^1.1.3"
+  },
   "webExt": {
     "sourceDir": "distribution",
     "run": {

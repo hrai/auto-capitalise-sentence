@@ -11,7 +11,6 @@ const days = [
 const months = [
   'January',
   'February',
-  'March',
   'April',
   'June',
   'July',
@@ -22,8 +21,37 @@ const months = [
   'December',
 ];
 
-const pluginNamespace = 'autoCapitaliseSentence';
+const abbreviations = [
+  'AFAIK',
+  'AKA',
+  'API',
+  'ATM',
+  'BTW',
+  'DIY',
+  'FAQ',
+  'FTW',
+  'FYI',
+  'ICYMI',
+  'IDK',
+  'IMO',
+  'IOW',
+  'ITT',
+  'LOL',
+  'MMW',
+  'OMG',
+  'OTOH',
+  'POV',
+  'ROTFL',
+  'RSVP',
+  'TBA',
+  'TBC',
+  'TGIF',
+  'THX',
+  'TIA',
+  'TTYL',
+  'USB',
+  'WTF',
+  'WTH',
+];
 
-let constants = days.concat(months);
-
-export { pluginNamespace, constants };
+export let constants = days.concat(months, abbreviations);

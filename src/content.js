@@ -9,6 +9,21 @@ browser.storage.local
   .get(['sites_to_ignore', 'should_capitalise_i'])
   .then(processResponse, utils.onError);
 
+/* Updating the value of this local storage variable in settings.js happens AFTER content.js.
+ * The browser doesn't register the change and doesn't capitalise I by dfeault after installing the extension.
+ * This block will capture the event and update the value of 'should_capitalise_i'.
+ */
+browser.storage.onChanged.addListener(function(
+  changes, // object
+  areaName // string
+) {
+  if (areaName === 'local') {
+    if (changes.should_capitalise_i != null) {
+      utils.setShouldCapitaliseI(changes.should_capitalise_i);
+    }
+  }
+});
+
 function hookupEventHandlers() {
   observeInputTags();
   observeHtmlBody();
