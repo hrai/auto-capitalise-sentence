@@ -1,17 +1,16 @@
-const days=[
+const days = [
   'Monday',
   'Tuesday',
   'Wednesday',
   'Thursday',
   'Friday',
   'Saturday',
-  'Sunday'
+  'Sunday',
 ];
 
-const months=[
+const months = [
   'January',
   'February',
-  'March',
   'April',
   'June',
   'July',
@@ -19,9 +18,39 @@ const months=[
   'September',
   'October',
   'November',
-  'December'
+  'December',
 ];
 
-export let constants = days.concat(months);
+const abbreviations = [
+  'AFAIK',
+  'AKA',
+  'API',
+  'BTW',
+  'DIY',
+  'FAQ',
+  'FTW',
+  'FYI',
+  'ICYMI',
+  'IDK',
+  'IMO',
+  'IOW',
+  'ITT',
+  'LOL',
+  'MMW',
+  'OMG',
+  'OTOH',
+  'POV',
+  'ROTFL',
+  'RSVP',
+  'TBA',
+  'TBC',
+  'TGIF',
+  'THX',
+  'TIA',
+  'TTYL',
+  'USB',
+  'WTF',
+  'WTH',
+];
 
-
+export let constants = days.concat(months, abbreviations);
