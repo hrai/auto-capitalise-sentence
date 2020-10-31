@@ -25,6 +25,7 @@ const abbreviations = [
   'AFAIK',
   'AKA',
   'API',
+  'ATM',
   'BTW',
   'DIY',
   'FAQ',
