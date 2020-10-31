@@ -1,12 +1,16 @@
 import * as utils from './utils';
 import browser from 'webextension-polyfill';
-import { pluginNamespace } from './plugin-constants';
+import {
+  pluginNamespace,
+  sites_to_ignore,
+  should_capitalise_i,
+} from './plugin-constants';
 
 const errorMsg = 'breaking loop';
 let sitesToExclude = [];
 
 browser.storage.local
-  .get(['sites_to_ignore', 'should_capitalise_i'])
+  .get([sites_to_ignore, should_capitalise_i])
   .then(processResponse, utils.onError);
 
 /* Updating the value of this local storage variable in settings.js happens AFTER content.js.

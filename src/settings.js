@@ -1,7 +1,11 @@
 import browser from 'webextension-polyfill';
-import { pluginNamespace } from './plugin-constants';
+import {
+  pluginNamespace,
+  sites_to_ignore,
+  should_capitalise_i,
+} from './plugin-constants';
 
-browser.storage.local.get('sites_to_ignore').then(updateSiteIgnoreList, onError);
+browser.storage.local.get(sites_to_ignore).then(updateSiteIgnoreList, onError);
 
 function updateSiteIgnoreList(item) {
   var sitesToExclude = item.sites_to_ignore;
@@ -48,7 +52,7 @@ $(document).on(`click.${pluginNamespace}`, '#submitButton', function() {
 });
 
 // setting the value of checkbox
-browser.storage.local.get('should_capitalise_i').then(items => {
+browser.storage.local.get(should_capitalise_i).then(items => {
   const shouldCapitaliseI = items.should_capitalise_i;
 
   if (shouldCapitaliseI === true || shouldCapitaliseI === undefined) {
