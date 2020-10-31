@@ -1,6 +1,11 @@
 import browser from 'webextension-polyfill';
+import {
+  pluginNamespace,
+  sites_to_ignore,
+  should_capitalise_i,
+} from './plugin-constants';
 
-browser.storage.local.get('sites_to_ignore').then(updateSiteIgnoreList, onError);
+browser.storage.local.get(sites_to_ignore).then(updateSiteIgnoreList, onError);
 
 function updateSiteIgnoreList(item) {
   var sitesToExclude = item.sites_to_ignore;
@@ -19,7 +24,7 @@ function getUrlDomain(data) {
   return a.hostname;
 }
 
-$(document).on('click', '#ignoreSiteButton', function() {
+$(document).on(`click.${pluginNamespace}`, '#ignoreSiteButton', function() {
   browser.tabs.query({ currentWindow: true, active: true }).then(tabs => {
     var hostname = getUrlDomain(tabs[0].url);
     var sites = getSites();
@@ -35,7 +40,7 @@ $(document).on('click', '#ignoreSiteButton', function() {
   });
 });
 
-$(document).on('click', '#submitButton', function() {
+$(document).on(`click.${pluginNamespace}`, '#submitButton', function() {
   var sites = getSites();
 
   browser.storage.local.set({
@@ -47,7 +52,7 @@ $(document).on('click', '#submitButton', function() {
 });
 
 // setting the value of checkbox
-browser.storage.local.get('should_capitalise_i').then(items => {
+browser.storage.local.get(should_capitalise_i).then(items => {
   const shouldCapitaliseI = items.should_capitalise_i;
 
   if (shouldCapitaliseI === true || shouldCapitaliseI === undefined) {
@@ -60,7 +65,9 @@ browser.storage.local.get('should_capitalise_i').then(items => {
   }
 });
 
-$(document).on('change', '#shouldCapitaliseI', function(event) {
+$(document).on(`change.${pluginNamespace}`, '#shouldCapitaliseI', function(
+  event
+) {
   if ($(event.target).prop('checked')) {
     set_should_capitalise_i_variable(true);
   } else {
@@ -68,7 +75,7 @@ $(document).on('change', '#shouldCapitaliseI', function(event) {
   }
 });
 
-$('#sites').on('input', function() {
+$('#sites').on(`input.${pluginNamespace}`, function() {
   $('#submitButton').prop('disabled', false);
 });
 
