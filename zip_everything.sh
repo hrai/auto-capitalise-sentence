@@ -5,7 +5,8 @@ if [ -f "$PUBLISHED_FILE" ]; then
     rm -f $PUBLISHED_FILE
 fi
 
-zip -r9 $PUBLISHED_FILE background.js dependencies icons jest.config.js lib LICENSE manifest.json popup src \
+zip -r9 $PUBLISHED_FILE background.js jest.config.js LICENSE popup src \
+        distribution \
         node_modules/webextension-polyfill/dist/browser-polyfill.min.js \
         node_modules/jquery/dist/jquery.min.js
 
