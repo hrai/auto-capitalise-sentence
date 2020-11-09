@@ -178,6 +178,8 @@ export function capitaliseText(
   }
 
   if (text.length >= 2 && shouldCapitaliseForI(text) && should_capitalise_i) {
+    console.log(should_capitalise_i);
+
     const updatedStr = getCapitalisedContentForI(text);
 
     setText(element, tagName, updatedStr, shouldAppendBr);
