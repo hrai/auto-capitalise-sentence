@@ -23,7 +23,11 @@ browser.storage.onChanged.addListener(function(
 ) {
   if (areaName === 'local') {
     if (changes.should_capitalise_i != null) {
-      utils.setShouldCapitaliseI(changes.should_capitalise_i);
+      const newValue = changes.should_capitalise_i.newValue;
+
+      if (newValue != null) {
+        utils.setShouldCapitaliseI(newValue);
+      }
     }
   }
 });
