@@ -6,7 +6,7 @@
   "scripts": {
     "start": "run-script-os",
     "start:win32": "yarn build && web-ext run --firefox=\"c:/Program Files/Firefox Developer Edition/firefox.exe\"",
-    "start:darwin:linux": "yarn webpack && web-ext run",
+    "start:darwin:linux": "yarn webpack && web-ext run --firefox=firefox-developer",
     "build": "yarn webpack",
     "watch": "yarn webpack --watch",
     "test": "yarn jest",
