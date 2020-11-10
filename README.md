@@ -1,4 +1,4 @@
-# auto-capitalise-extension
+# What is this extension?
 
 Firefox/Microsoft Edge Chromium add-on to automatically capitalise the first letter of a sentence while typing.
 
