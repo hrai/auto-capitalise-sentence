@@ -14,4 +14,6 @@ Firefox/Microsoft Edge Chromium add-on to automatically capitalise the first let
 - [Firefox](https://addons.mozilla.org/en-US/firefox/addon/auto-capitalise-sentence/)
 - [Microsoft Edge](https://microsoftedge.microsoft.com/addons/detail/auto-capitalise-sentence/ifebcbphlfoifeajpbecncpgjflpbann)
 
-## Raise issues in the [issues link](https://github.com/hrai/auto-capitalise-extension/issues)
+## Do you have issues?
+
+Please feel free to raise issues [here](https://github.com/hrai/auto-capitalise-extension/issues)
