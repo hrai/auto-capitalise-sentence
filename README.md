@@ -6,8 +6,8 @@ Firefox/Microsoft Edge Chromium add-on to automatically capitalise the first let
 
 - Capitalise the first letter of a sentence.
 - Capitalise `I`.
-- Capitalise constants such as [days](https://github.com/hrai/auto-capitalise-sentence/blob/6c02e173fdd85ed149fa1c0463c52a9b8f04fca7/src/constants.js#L1), [months](https://github.com/hrai/auto-capitalise-sentence/blob/6c02e173fdd85ed149fa1c0463c52a9b8f04fca7/src/constants.js#L11)
-- Capitalise common [abbreviations](https://github.com/hrai/auto-capitalise-sentence/blob/6c02e173fdd85ed149fa1c0463c52a9b8f04fca7/src/constants.js#L24)
+- Capitalise constants such as [days](src/constants.js#L1), [months](src/constants.js#L11)
+- Capitalise common [abbreviations](src/constants.js#L24)
 
 ## Configuration
 
