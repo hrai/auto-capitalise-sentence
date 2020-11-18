@@ -41,7 +41,7 @@ export function getIndexOfMatchingConstantWord(text) {
 
     if (matchedWord != null) {
       let index = constants.findIndex(
-        item => matchedWord.toLowerCase() == item.toLowerCase()
+        (item) => matchedWord.toLowerCase() == item.toLowerCase()
       );
 
       return [index, matchedWord];
@@ -152,6 +152,8 @@ export function capitaliseText(
 
   let text = getText(element, tagName);
 
+  if (text == null) return;
+
   const lastChar = text.trim().slice(-1);
   const isLastCharAnAlphabet = lastChar.match(/[a-z]/i);
 
@@ -220,9 +222,7 @@ export function isContentEditable(element) {
 }
 
 export function getFilteredElements(addedNodes, tagName) {
-  return $(addedNodes)
-    .find(tagName)
-    .addBack(tagName); // finds either added alone or as tree
+  return $(addedNodes).find(tagName).addBack(tagName); // finds either added alone or as tree
 }
 
 export function shouldCapitaliseContent(element) {
