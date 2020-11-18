@@ -110,7 +110,6 @@ export function setEndOfContenteditable(contentEditableElement) {
     // childNodes.forEach(x=>console.log(x.outerHTML));
 
     if (childNode === undefined) {
-      console.log(contentEditableElement);
       return;
     }
 
