@@ -32,6 +32,53 @@ describe('capitaliseText', () => {
     );
   });
 
+  test('capitaliseText_NoTagName', () => {
+    const element = {
+      isContentEditable: true,
+      innerHTML: 'I\'m the content of html tag.',
+    };
+    const shouldCapitaliseFake = sinon.fake();
+    const shouldCapitaliseForIFake = sinon.fake();
+    const getTextFake = sinon.fake();
+    const setTextFake = sinon.fake();
+
+    utils.capitaliseText(
+      element,
+      shouldCapitaliseFake,
+      shouldCapitaliseForIFake,
+      getTextFake,
+      setTextFake
+    );
+
+    expect(shouldCapitaliseFake.getCall(0)).toBeNull();
+    expect(shouldCapitaliseForIFake.getCall(0)).toBeNull();
+    expect(getTextFake.getCall(0).args[0]).toBe(element);
+  });
+
+  test('capitaliseText_GetText_EmptyResponse', () => {
+    const element = {
+      isContentEditable: true,
+      tagName: 'div',
+      innerHTML: 'I\'m the content of html tag.<br>',
+    };
+
+    const shouldCapitaliseFake = sinon.fake();
+    const shouldCapitaliseForIFake = sinon.fake();
+    const getTextFake = sinon.fake();
+
+    utils.capitaliseText(
+      element,
+      shouldCapitaliseFake,
+      shouldCapitaliseForIFake,
+      getTextFake,
+      null
+    );
+
+    expect(shouldCapitaliseFake.getCall(0)).toBeNull();
+    expect(shouldCapitaliseForIFake.getCall(0)).toBeNull();
+    expect(getTextFake.getCall(0).args[0]).toBe(element);
+  });
+
   test('capitaliseText_Symbol_@', () => {
     const element = {
       isContentEditable: true,
@@ -200,25 +247,6 @@ describe('capitaliseText', () => {
     expect(() => {
       const element = {
         isContentEditable: true,
-        innerHTML: 'I\'m the content of html tag.',
-      };
-      const shouldCapitaliseFake = sinon.fake();
-      const shouldCapitaliseForIFake = sinon.fake();
-      const getTextFake = sinon.fake();
-      const setTextFake = sinon.fake();
-
-      utils.capitaliseText(
-        element,
-        shouldCapitaliseFake,
-        shouldCapitaliseForIFake,
-        getTextFake,
-        setTextFake
-      );
-    }).toThrow();
-
-    expect(() => {
-      const element = {
-        isContentEditable: true,
         tagName: 'div',
         innerHTML: 'I\'m the content of html tag.<br>',
       };
@@ -232,25 +260,6 @@ describe('capitaliseText', () => {
         shouldCapitaliseForIFake,
         null,
         setTextFake
-      );
-    }).toThrow();
-
-    expect(() => {
-      const element = {
-        isContentEditable: true,
-        tagName: 'div',
-        innerHTML: 'I\'m the content of html tag.<br>',
-      };
-      const shouldCapitaliseFake = sinon.fake();
-      const shouldCapitaliseForIFake = sinon.fake();
-      const getTextFake = sinon.fake();
-
-      utils.capitaliseText(
-        element,
-        shouldCapitaliseFake,
-        shouldCapitaliseForIFake,
-        getTextFake,
-        null
       );
     }).toThrow();
 
