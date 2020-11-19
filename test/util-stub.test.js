@@ -32,7 +32,7 @@ describe('capitaliseText', () => {
     );
   });
 
-  test('capitaliseText_Constant', () => {
+  test('capitaliseText_ShouldNotCallSetText_WhenConstantMatchesExactly', () => {
     const element = {
       isContentEditable: true,
       tagName: 'div',
