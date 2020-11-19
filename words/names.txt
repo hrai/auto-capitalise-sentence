@@ -194,7 +194,6 @@ Antonio
 Antwan
 Apalachicola
 Apatosaurus
-Apple
 Aquafresh
 Aquino
 Araceli
@@ -202,6 +201,7 @@ Arafat
 Araguaya
 Aral
 Aramco
+Arbin
 Arbitron
 Archibald
 Archie
@@ -218,7 +218,6 @@ Arneb
 Arnulfo
 Aron
 Arron
-Art
 Artaxerxes
 Artie
 Arturo
@@ -248,7 +247,6 @@ Audra
 Audrey
 Aurelia
 Aurelio
-Autumn
 Ava
 Avery
 Avila
@@ -301,6 +299,7 @@ Barrera
 Barrett
 Barron
 Bartholdi
+Bashie
 Basho
 Bass
 Bastille
@@ -325,7 +324,6 @@ Beatles
 Beatrice
 Beatrix
 Beatriz
-Beau
 Beauregard
 Bechtel
 Beck
@@ -378,7 +376,6 @@ Bertram
 Bertrand
 Beryl
 Bessemer
-Best
 Beth
 Betsy
 Bette
@@ -395,7 +392,6 @@ BigQuery
 Biggles
 Biko
 Bilbo
-Bill
 Billie
 Billy
 Bimini
@@ -403,7 +399,6 @@ Biogen
 Bioko
 Birdseye
 Biscayne
-Bishop
 Bismark
 Bisquick
 BitTorrent
@@ -421,14 +416,12 @@ Blevins
 Blockbuster
 Blondel
 Blondie
-Bloom
 Bloomingdale
 Blu
 Blucher
 Bluetooth
 Blythe
 Boas
-Bob
 Bobbi
 Bobbie
 Bobbitt
@@ -438,7 +431,6 @@ Boeing
 Bojangles
 Bollywood
 Bolshoi
-Bond
 Bonhoeffer
 Bonita
 Bonner
@@ -479,10 +471,8 @@ Branden
 Brandi
 Brandie
 Brandon
-Brandy
 Brant
 Brattain
-Bray
 Brazos
 Breakspear
 Breckenridge
@@ -528,8 +518,6 @@ Brzezinski
 Buchwald
 Buckley
 Buckner
-Bud
-Buddy
 Budweiser
 Buffy
 Buford
@@ -544,7 +532,6 @@ Bumppo
 Bundesbank
 Bunker
 Burch
-Burger
 Burks
 Burl
 Burris
@@ -569,7 +556,6 @@ Callahan
 Callie
 Caloocan
 Camacho
-Camel
 Cameron
 Camilla
 Camille
@@ -581,7 +567,6 @@ Cancun
 Candace
 Candice
 Candide
-Candy
 Cannon
 Canon
 Cantor
@@ -612,7 +597,6 @@ Carmichael
 Carmine
 Carnation
 Carney
-Carol
 Carole
 Carolyn
 Carpathian
@@ -656,7 +640,6 @@ Chaitanya
 Chaitin
 Challenger
 Chan
-Chance
 Chandon
 Chandra
 Chandrasekhar
@@ -687,7 +670,6 @@ Cherie
 Chernenko
 Chernobyl
 Chernomyrdin
-Cherry
 Cheryl
 Chevrolet
 Chevron
@@ -707,8 +689,6 @@ Christi
 Christine
 Christoper
 Chrysler
-Chrystal
-Chuck
 Chung
 Churriguera
 Cindy
@@ -766,7 +746,6 @@ Colin
 Colleen
 Collier
 Collin
-Colon
 Combs
 Compaq
 CompuServe
@@ -810,26 +789,20 @@ CosmosDB
 Costco
 Costello
 Costner
-Cote
-Cotton
 Coulter
 Courtney
-Coy
 Cozumel
 Craft
 Crawford
-Cray
 Crayola
 Crecy
 Creighton
 Cressida
-Crest
 Crisco
 Cristina
 Cronin
 Cronkite
 Crowley
-Cruise
 Crusoe
 Cruz
 Cryptozoic
@@ -920,6 +893,7 @@ Denis
 Denise
 Dennis
 Denny
+Denuka
 Deon
 Depp
 Derek
@@ -933,7 +907,6 @@ Devin
 Dewayne
 Dewitt
 DiCaprio
-Dial
 Diane
 Diann
 Dianna
@@ -964,7 +937,6 @@ Doctorow
 Dodge
 Dodoma
 Dodson
-Dole
 Dollie
 Dolly
 Dolores
@@ -990,14 +962,12 @@ Dorothea
 Dorothy
 Dorsey
 Dorthy
-Dot
 Dotson
 Douay
 Doubleday
 Doug
 Downy
 Drano
-Drew
 Dristan
 Dropbox
 Drudge
@@ -1029,7 +999,6 @@ DynamoDB
 Dyson
 Dzerzhinsky
 ECMAScript
-Earl
 Earle
 Earlene
 Earline
@@ -1204,7 +1173,6 @@ Fatah
 Fauntleroy
 Faustino
 Faustus
-Fay
 Faye
 Federico
 Felecia
@@ -1216,7 +1184,6 @@ Felix
 Ferber
 Ferguson
 Ferlinghetti
-Fern
 Fernandez
 Fernando
 Ferrari
@@ -1306,8 +1273,6 @@ Gail
 Gaiman
 Gaines
 Galapagos
-Gale
-Gall
 Gallagher
 Gallegos
 Gallo
@@ -1317,7 +1282,6 @@ Gamble
 Gamow
 Gangtok
 Gantry
-Gap
 Garcia
 Gardner
 Gareth
@@ -1343,7 +1307,6 @@ Genet
 Genevieve
 Genghis
 Gentry
-Geo
 Geoffrey
 Georgina
 Gerald
@@ -1482,15 +1445,14 @@ Halliburton
 Hallie
 Hallmark
 Halon
-Ham
 Haman
 Hamilcar
 Hamill
 Hamlin
 Hammett
 Haney
+Hangjit
 Hangul
-Hank
 Hanna
 Hansel
 Hansen
@@ -1514,14 +1476,11 @@ Hatsheput
 Hattie
 Hausdorff
 Havoline
-Hay
 Hayden
 Haynes
-Hays
 Haywood
 Hayworth
 Hazel
-Head
 Heather
 Hebert
 Heep
@@ -1711,6 +1670,7 @@ Jamal
 Jamar
 Jame
 Jamel
+James
 Jami
 Jamie
 Jana
@@ -1917,7 +1877,6 @@ Kilroy
 Kim
 Kimberly
 Kinney
-Kip
 Kirby
 Kirchner
 Kirghistan
@@ -1925,7 +1884,6 @@ Kirinyaga
 Kirkland
 Kirkpatrick
 Kirsten
-Kit
 Kitty
 Klaus
 Klein
@@ -2032,10 +1990,10 @@ Lavonne
 Lawanda
 Layla
 Lazaro
-Le
 Lea
 Leach
 Lean
+Leandro
 Leann
 Leanna
 Leanne
@@ -2234,7 +2192,6 @@ Magoo
 Magsaysay
 Mahavira
 Mahfouz
-Mai
 Maidenform
 Maigret
 Maiman
@@ -2242,6 +2199,7 @@ Maisie
 Maitreya
 Majorca
 Makarios
+Maks
 Malabar
 Malaprop
 Maldive
@@ -2321,9 +2279,9 @@ Marquez
 Marquita
 Marrakesh
 Marriott
-Marsh
 Marsha
 Marta
+Martin
 Martina
 Martinez
 Marty
@@ -2353,7 +2311,6 @@ Maurine
 Mauro
 Mauryan
 Mavis
-Max
 Maxine
 Maynard
 Mayra
@@ -2488,6 +2445,7 @@ Mimosa
 Minamoto
 Mindy
 Mingus
+Minh
 Minnelli
 Minnie
 Minolta
@@ -2532,12 +2490,10 @@ Monera
 MongoDB
 Monica
 Monique
-Monk
 Monsanto
 Monte
 Montoya
 Monty
-Moon
 Mooney
 Morales
 Moran
@@ -2551,7 +2507,6 @@ Morrow
 Mort
 Morton
 Mosley
-Moss
 Motorola
 Mouthe
 Mouton
@@ -2632,7 +2587,6 @@ Nell
 Nellie
 Nelly
 Nelsen
-Neo
 Nescafe
 Nestle
 Netflix
@@ -2739,11 +2693,9 @@ Olson
 Omar
 Oneal
 Onegin
-Onion
 Ono
 Onsager
 Oort
-Opal
 Opel
 OpenOffice
 Ophelia
@@ -2799,7 +2751,6 @@ Paramount
 Parkinson
 Parsifal
 Pasquale
-Pate
 Patel
 Patrica
 Patrice
@@ -2843,6 +2794,7 @@ Perl
 Perot
 Persepolis
 Pete
+Peter
 Petersen
 Peterson
 Petty
@@ -2909,6 +2861,8 @@ Powers
 Poznan
 Prada
 Prado
+Prakash
+Pramila
 Pratchett
 Pratt
 Pravda
@@ -3007,6 +2961,7 @@ Redgrave
 Redis
 Redshift
 Reebok
+Reema
 Reese
 Reeves
 Refugio
@@ -3032,7 +2987,6 @@ Rhiannon
 Rhoda
 Rhode
 Rhonda
-Rich
 Richie
 Rick
 Rickenbacker
@@ -3049,10 +3003,10 @@ Rigoletto
 Ringling
 Ringo
 Rita
+Ritesh
 Ritz
 Rivas
 Roach
-Rob
 Robbie
 Robbin
 Robbins
@@ -3063,7 +3017,6 @@ Roberta
 Roberto
 Roberts
 Robertson
-Robin
 Robitussin
 Robles
 Robt
@@ -3075,7 +3028,6 @@ Roche
 Rochelle
 Rockne
 Rocky
-Rod
 Roddenberry
 Roderick
 Rodger
@@ -3112,7 +3064,6 @@ Rosalyn
 Rosanna
 Rosanne
 Roscoe
-Rose
 Roseann
 Rosecrans
 Rosella
@@ -3141,7 +3092,6 @@ Rubbermaid
 Ruben
 Rubik
 Rubin
-Ruby
 Ruchbah
 Rudolph
 Rudy
@@ -3151,7 +3101,6 @@ Ruiz
 Rukeyser
 Rumpelstiltskin
 Rumsfeld
-Rush
 Rushdie
 Russel
 Russo
@@ -3343,8 +3292,8 @@ Shi'ite
 Shields
 Shirley
 Shockley
-Short
 Shostakovitch
+Shova
 Shrek
 Shula
 Shylockian
@@ -3404,6 +3353,7 @@ Sosa
 Soto
 Souphanouvong
 Sourceforge
+Sova
 Soyinka
 Spaatz
 Spahn
@@ -3488,6 +3438,7 @@ Superbowl
 Superfund
 Superglue
 Superman
+Surbhi
 Surya
 Susan
 Susana
@@ -3585,6 +3536,7 @@ Thespis
 Thessaloníki
 Thessaly
 Thieu
+Thomas
 Thornton
 Thunderbird
 Thurman
@@ -3682,7 +3634,6 @@ Tweedledum
 Twila
 Twitter
 Twizzlers
-Ty
 Tyree
 Tyson
 UBS
@@ -3704,7 +3655,7 @@ Urban
 Uris
 Ursa
 Usenet
-VBA
+Usman
 Vader
 Val
 Valarie
@@ -3754,7 +3705,6 @@ Vincent
 Vindemiatrix
 Vinson
 Viola
-Violet
 Virgie
 Visa
 Vitim
@@ -3777,7 +3727,6 @@ Vorster
 Voyager
 Vuitton
 Waite
-Wake
 Wald
 Waldemar
 Walden
@@ -3786,8 +3735,6 @@ Waldorf
 Walgreen
 Walgreens
 Walker
-Wall
-Walls
 Walmart
 Walpole
 Walsh
@@ -3829,7 +3776,6 @@ Wheatstone
 Wheeler
 Wheeling
 Whipple
-Whirlpool
 Whitefield
 Whiteley
 Whitfield
@@ -3857,7 +3803,6 @@ Wilhelm
 Wilhelmina
 Wilkerson
 Wilkinson
-Will
 Willa
 Willamette
 Willie
@@ -3877,9 +3822,7 @@ Winkle
 Winston
 Winters
 Winthrop
-Wise
 Witt
-Wm
 Wobegon
 Wodehouse
 Wolfgang
@@ -3908,29 +3851,14 @@ Wycherley
 Wycliffe
 Wylie
 Wynn
-XEmacs
 Xamarin
-Xenakis
-Xenia
 Xi'an
-Xiaoping
-Xingu
-Xiongnu
-Xochipilli
 Xuzhou
-Yacc
 Yahtzee
-Yalow
 Yamagata
 Yamaha
 Yaobang
 Yataro
-Yeager
-Yerkes
-Yesenia
-Yevtushenko
-Yoda
-Yoknapatawpha
 Yoko
 Yolanda
 Yong
@@ -3946,15 +3874,12 @@ Yvonne
 Zachariah
 Zachary
 Zachery
-Zamenhof
 Zane
 Zanuck
 Zappa
 Zara
 Zealand
-Zedekiah
 Zedong
-Zeffirelli
 Zeke
 Zelma
 Zenger
@@ -3968,16 +3893,7 @@ Zimmerman
 Zoe
 Zorro
 Zosma
-Zubenelgenubi
-Zubeneschamali
-Zukor
-Zwingli
-Zyrtec
-Zyuganov
-d'Arezzo
-d'Estaing
 eBay
-eMusic
 iOS
 iPad
 iPhone
