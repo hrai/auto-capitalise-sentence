@@ -32,6 +32,37 @@ describe('capitaliseText', () => {
     );
   });
 
+  test('capitaliseText_Constant', () => {
+    const element = {
+      isContentEditable: true,
+      tagName: 'div',
+      innerHTML:
+        '<ts-mention data-id="UKTQJ356U" data-label="@Hangjit Rai" spellcheck="false" class="c-member_slug c-member_slug--link ts_tip_texty c-member_slug--mention" dir="ltr">@Hangjit Rai</ts-mention> Monday ',
+    };
+
+    const shouldCapitaliseFake = sinon.fake();
+    const shouldCapitaliseForIFake = sinon.fake();
+    const setTextFake = sinon.fake();
+
+    utils.capitaliseText(
+      element,
+      shouldCapitaliseFake,
+      shouldCapitaliseForIFake,
+      utils.getText,
+      setTextFake
+    );
+    expect(element.isContentEditable.calledOnce).toBeTruthy;
+    expect(element.tagName.calledOnce).toBeTruthy;
+
+    expect(shouldCapitaliseFake.getCall(0).args[0]).toBe(
+      '<ts-mention data-id="UKTQJ356U" data-label="@Hangjit Rai" spellcheck="false" class="c-member_slug c-member_slug--link ts_tip_texty c-member_slug--mention" dir="ltr">@Hangjit Rai</ts-mention> Monday '
+    );
+    expect(shouldCapitaliseForIFake.getCall(0).args[0]).toBe(
+      '<ts-mention data-id="UKTQJ356U" data-label="@Hangjit Rai" spellcheck="false" class="c-member_slug c-member_slug--link ts_tip_texty c-member_slug--mention" dir="ltr">@Hangjit Rai</ts-mention> Monday '
+    );
+    expect(setTextFake.getCall(0)).toBeNull();
+  });
+
   test('capitaliseText_NoTagName', () => {
     const element = {
       isContentEditable: true,
@@ -441,7 +472,11 @@ describe('setEndOfContenteditable', () => {
   });
 
   test('getIndexOfMatchingConstantWord_Days', () => {
-    let str = 'I\'m the content of html monday.';
+    let str = 'I\'m the content of html Monday.';
+    expect(utils.getIndexOfMatchingConstantWord(str)[0]).toBe(0);
+    expect(utils.getIndexOfMatchingConstantWord(str)[1]).toBe('Monday');
+
+    str = 'I\'m the content of html monday.';
     expect(utils.getIndexOfMatchingConstantWord(str)[0]).toBe(0);
     expect(utils.getIndexOfMatchingConstantWord(str)[1]).toBe('monday');
 

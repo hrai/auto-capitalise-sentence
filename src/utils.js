@@ -19,12 +19,16 @@ export function shouldCapitalise(text) {
   const multilineRegex = /\s*\n+\s*\w$/;
   let matches = multilineRegex.test(text);
 
-  if (matches) return true;
+  if (matches) {
+    return true;
+  }
 
   const sentenceRegex = /\w+\s*([.?!])+\s+\w$/;
   matches = sentenceRegex.test(text);
 
   if (!matches) {
+    // console.log(text);
+    // console.log(text.length);
     return text.length == 1;
   }
 
@@ -105,11 +109,14 @@ export function setEndOfContenteditable(contentEditableElement) {
     //Firefox, Chrome, Opera, Safari, IE 9+
     range = document.createRange(); //Create a range (a range is a like the selection but invisible)
     const childNodes = contentEditableElement.childNodes;
+
+    if (childNodes == null) return;
+
     const childNode =
       childNodes.length == 1 ? childNodes[0] : childNodes[childNodes.length - 2];
     // childNodes.forEach(x=>console.log(x.outerHTML));
 
-    if (childNode === undefined) {
+    if (childNode == null) {
       return;
     }
 
@@ -187,8 +194,11 @@ export function capitaliseText(
 
   const [index, matchedWord] = getIndexOfMatchingConstantWord(text);
   if (index >= 0) {
-    let updatedStr = text.replace(matchedWord, constants[index]);
-    setText(element, tagName, updatedStr, false);
+    const constant = constants[index];
+    if (constant !== matchedWord) {
+      let updatedStr = text.replace(matchedWord, constant);
+      setText(element, tagName, updatedStr, false);
+    }
   }
 }
 
