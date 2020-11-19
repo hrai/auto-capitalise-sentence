@@ -7,6 +7,7 @@
     "start": "run-script-os",
     "start:win32": "yarn build && web-ext run --firefox=\"c:/Program Files/Firefox Developer Edition/firefox.exe\"",
     "start:darwin:linux": "yarn webpack && web-ext run --firefox=firefox-developer",
+    "start:chrome": "cd distribution && web-ext run -t chromium"
     "build": "yarn webpack",
     "watch": "yarn webpack --watch",
     "test": "yarn jest",
@@ -14,10 +15,7 @@
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
     "update-version": "yarn dot-json distribution/manifest.json version $VER",
-    "release": "VER=$(daily-version) run-s build version",
-    "release:amo": "web-ext-submit --source-dir distribution",
-    "release:cws": "webstore upload --source=distribution --auto-publish",
-    "start:chrome": "cd distribution && web-ext run -t chromium"
+    "release:firefox": "cd distribution && web-ext-submit"
   },
   "prettier": {
     "trailingComma": "es5",
