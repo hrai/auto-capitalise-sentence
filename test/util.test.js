@@ -1,7 +1,7 @@
 import * as utils from '../src/utils.js';
 const $ = require('jquery');
 
-describe('utilities test', function() {
+describe('utilities test', function () {
   test('getCapitalisedContent', () => {
     expect(utils.getCapitalisedContent('blah')).toBe('blaH');
     expect(utils.getCapitalisedContent('i')).toBe('I');
@@ -26,6 +26,10 @@ describe('utilities test', function() {
     expect(utils.shouldCapitalise('    k ')).toBe(false);
     expect(utils.shouldCapitalise('    ')).toBe(false);
     expect(utils.shouldCapitalise(' !   ')).toBe(false);
+    const slackText =
+      '<ts-mention data-id="UKTQJ356U" data-label="@Hangjit Rai" spellcheck="false" class="c-member_slug c-member_slug--link ts_tip_texty c-member_slug--mention" dir="ltr">@Hangjit Rai</ts-mention> Monday ';
+    expect(utils.shouldCapitalise(slackText)).toBe(false);
+    expect(utils.shouldCapitaliseForI(slackText)).toBe(false);
   });
 
   describe('shouldCapitalise', () => {
