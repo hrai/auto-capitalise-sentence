@@ -23,6 +23,8 @@ const months = [
   'December',
 ];
 
+const common_tech_words = ['DevOps', 'UI'];
+
 const abbreviations = [
   'AFAIK',
   'AKA',
@@ -57,4 +59,9 @@ const abbreviations = [
   'WTH',
 ];
 
-export let constants = days.concat(months, abbreviations, names);
+export let constants = days.concat(
+  months,
+  abbreviations,
+  names,
+  common_tech_words
+);
