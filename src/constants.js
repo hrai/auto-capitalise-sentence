@@ -1,3 +1,5 @@
+import { names } from './name-constants';
+
 const days = [
   'Monday',
   'Tuesday',
@@ -54,4 +56,4 @@ const abbreviations = [
   'WTH',
 ];
 
-export let constants = days.concat(months, abbreviations);
+export let constants = days.concat(months, abbreviations, names);
