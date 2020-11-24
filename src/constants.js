@@ -31,6 +31,7 @@ const abbreviations = [
   'API',
   'ATM',
   'BTW',
+  'CRE',
   'DIY',
   'FAQ',
   'FTW',
