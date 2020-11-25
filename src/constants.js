@@ -1,6 +1,4 @@
 import { names } from './name-constants';
-import browser from 'webextension-polyfill';
-// import { constants_key_val } from './plugin-constants';
 
 const days = [
   'Monday',
@@ -62,18 +60,10 @@ const abbreviations = [
   'WTH',
 ];
 
-export let constants = days.concat(
-  months,
-  abbreviations,
-  names,
-  common_tech_words
-);
+let constants = days.concat(months, abbreviations, names, common_tech_words);
 
-const constants_map = constants.reduce((obj, val) => {
+//convert array to key-value pairs
+export let constants_key_val = constants.reduce((obj, val) => {
   obj[val.toLowerCase()] = val;
   return obj;
 }, {});
-
-browser.storage.local.set({
-  constants_key_val: constants_map,
-});

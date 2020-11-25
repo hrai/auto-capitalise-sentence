@@ -10,7 +10,7 @@
     "default_popup": "popup/settings.html"
   },
   "background": {
-    "scripts": ["lib/constants.bundle.js"]
+    "scripts": ["lib/background.bundle.js"]
   },
   "content_scripts": [
     {

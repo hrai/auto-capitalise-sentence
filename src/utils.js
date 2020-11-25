@@ -16,7 +16,6 @@ export function setShouldCapitaliseI(value) {
 
 export function setConstants(value) {
   if (value != null) {
-    alert(value);
     constants = value;
   }
 }
@@ -41,7 +40,7 @@ export function shouldCapitalise(text) {
   return matches;
 }
 
-export function getIndexOfMatchingConstantWord(text) {
+export function getMatchingAndCorrectedWords(text) {
   const lastWordRegex = /\b(\w+)[.?!\s]+$/;
 
   let match = lastWordRegex.exec(text);
@@ -198,7 +197,7 @@ export function capitaliseText(
     return;
   }
 
-  const [matchedWord, correctedWord] = getIndexOfMatchingConstantWord(text);
+  const [matchedWord, correctedWord] = getMatchingAndCorrectedWords(text);
   if (matchedWord !== '') {
     if (matchedWord !== correctedWord) {
       let updatedStr = text.replace(matchedWord, correctedWord);
