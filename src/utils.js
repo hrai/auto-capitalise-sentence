@@ -1,6 +1,5 @@
-import { constants } from './constants';
-
 export let should_capitalise_i = false;
+export let constants = {};
 
 export function shouldCapitaliseForI(text) {
   const regex = /\s+i(\s+|')$/;
@@ -12,6 +11,13 @@ export function shouldCapitaliseForI(text) {
 export function setShouldCapitaliseI(value) {
   if (value != null) {
     should_capitalise_i = value;
+  }
+}
+
+export function setConstants(value) {
+  if (value != null) {
+    alert(value);
+    constants = value;
   }
 }
 
@@ -44,15 +50,15 @@ export function getIndexOfMatchingConstantWord(text) {
     const matchedWord = match[1];
 
     if (matchedWord != null) {
-      let index = constants.findIndex(
-        (item) => matchedWord.toLowerCase() == item.toLowerCase()
-      );
+      let correctedWord = constants[matchedWord.toLowerCase()];
 
-      return [index, matchedWord];
+      if (correctedWord != null) {
+        return [matchedWord, correctedWord];
+      }
     }
   }
 
-  return [-1, ''];
+  return ['', ''];
 }
 
 export function onError(error) {
@@ -192,11 +198,10 @@ export function capitaliseText(
     return;
   }
 
-  const [index, matchedWord] = getIndexOfMatchingConstantWord(text);
-  if (index >= 0) {
-    const constant = constants[index];
-    if (constant !== matchedWord) {
-      let updatedStr = text.replace(matchedWord, constant);
+  const [matchedWord, correctedWord] = getIndexOfMatchingConstantWord(text);
+  if (matchedWord !== '') {
+    if (matchedWord !== correctedWord) {
+      let updatedStr = text.replace(matchedWord, correctedWord);
       setText(element, tagName, updatedStr, false);
     }
   }

@@ -74,7 +74,6 @@ const constants_map = constants.reduce((obj, val) => {
   return obj;
 }, {});
 
-alert('a');
 browser.storage.local.set({
   constants_key_val: constants_map,
 });

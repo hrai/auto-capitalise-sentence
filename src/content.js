@@ -4,13 +4,14 @@ import {
   pluginNamespace,
   sites_to_ignore,
   should_capitalise_i,
+  constants_key_val,
 } from './plugin-constants';
 
 const errorMsg = 'breaking loop';
 let sitesToExclude = [];
 
 browser.storage.local
-  .get([sites_to_ignore, should_capitalise_i])
+  .get([sites_to_ignore, should_capitalise_i, constants_key_val])
   .then(processResponse, utils.onError);
 
 /* Updating the value of this local storage variable in settings.js happens AFTER content.js.
@@ -46,6 +47,7 @@ function observeInputTags() {
 function processResponse(item) {
   sitesToExclude = item.sites_to_ignore;
   utils.setShouldCapitaliseI(item.should_capitalise_i);
+  utils.setConstants(item.constants_key_val);
 
   if (item && sitesToExclude) {
     //https://stackoverflow.com/questions/406192/get-current-url-with-jquery
