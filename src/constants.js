@@ -1,4 +1,6 @@
 import { names } from './name-constants';
+import browser from 'webextension-polyfill';
+// import { constants_key_val } from './plugin-constants';
 
 const days = [
   'Monday',
@@ -66,3 +68,13 @@ export let constants = days.concat(
   names,
   common_tech_words
 );
+
+const constants_map = constants.reduce((obj, val) => {
+  obj[val.toLowerCase()] = val;
+  return obj;
+}, {});
+
+alert('a');
+browser.storage.local.set({
+  constants_key_val: constants_map,
+});

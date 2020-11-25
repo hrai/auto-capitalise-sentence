@@ -6,6 +6,7 @@ module.exports = {
   entry: {
     main: ['./src/content.js', './src/utils.js'],
     settings: ['./src/settings.js', './src/utils.js'],
+    constants: ['./src/constants.js'],
   },
   output: {
     filename: '[name].bundle.js',

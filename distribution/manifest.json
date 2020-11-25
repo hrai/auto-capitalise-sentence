@@ -9,6 +9,9 @@
     "default_title": "Auto-capitalise sentence",
     "default_popup": "popup/settings.html"
   },
+  "background": {
+    "scripts": ["lib/constants.bundle.js"]
+  },
   "content_scripts": [
     {
       "run_at": "document_end",
