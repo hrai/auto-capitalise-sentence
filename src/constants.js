@@ -23,12 +23,11 @@ const months = [
   'December',
 ];
 
-const common_tech_words = ['DevOps', 'UI'];
+const common_tech_words = ['DevOps', 'UI', 'PR', 'API'];
 
 const abbreviations = [
   'AFAIK',
   'AKA',
-  'API',
   'ATM',
   'BTW',
   'CRE',
@@ -46,7 +45,6 @@ const abbreviations = [
   'OMG',
   'OTOH',
   'POV',
-  'PR',
   'ROTFL',
   'RSVP',
   'TBA',
@@ -56,6 +54,7 @@ const abbreviations = [
   'TIA',
   'TTYL',
   'USB',
+  'WFH',
   'WTF',
   'WTH',
 ];
