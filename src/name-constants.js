@@ -608,7 +608,6 @@ export let names = [
   'Carrillo',
   'Casandra',
   'Cascades',
-  'Case',
   'Casey',
   'Casio',
   'Cassie',
