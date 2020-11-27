@@ -183,6 +183,7 @@ export let names = [
   'Anselmo',
   'Anshan',
   'Anthropocene',
+  'Anthony',
   'Antipas',
   'Antoine',
   'Anton',
