@@ -67,6 +67,8 @@ const abbreviations = [
   'APM',
   'AFAIK',
   'HBO',
+  'SMH',
+  'AFR',
   'HSBC',
   'IKEA',
   'ING',
