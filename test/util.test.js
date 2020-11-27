@@ -302,4 +302,25 @@ describe('utilities test', function() {
     expect(matchingAndCorrectWords(str)[0]).toBe('');
     expect(matchingAndCorrectWords(str)[1]).toBe('');
   });
+
+  test('getIndexOfMatchingNameWords_OtherPunctuation', () => {
+    let str = 'I\'m the content of html \'James\'';
+    let matchingAndCorrectWords = text =>
+      utils.getMatchingAndCorrectedWords(text, names_key_val);
+
+    expect(matchingAndCorrectWords(str)[0]).toBe('James');
+    expect(matchingAndCorrectWords(str)[1]).toBe('James');
+
+    str = 'I\'m the content of html james!';
+    expect(matchingAndCorrectWords(str)[0]).toBe('james');
+    expect(matchingAndCorrectWords(str)[1]).toBe('James');
+
+    str = 'I\'M THE CONTENT OF HTML "JAMES"';
+    expect(matchingAndCorrectWords(str)[0]).toBe('JAMES');
+    expect(matchingAndCorrectWords(str)[1]).toBe('James');
+
+    str = 'I\'m the content of html.';
+    expect(matchingAndCorrectWords(str)[0]).toBe('');
+    expect(matchingAndCorrectWords(str)[1]).toBe('');
+  });
 });

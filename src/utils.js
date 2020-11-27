@@ -55,7 +55,7 @@ export function shouldCapitalise(text) {
 }
 
 export function getMatchingAndCorrectedWords(text, key_val) {
-  const lastWordRegex = /\b(\w+)[.?!\s]+$/;
+  const lastWordRegex = /\b(\w+)\W$/;
 
   let match = lastWordRegex.exec(text);
 
@@ -261,7 +261,9 @@ export function isContentEditable(element) {
 }
 
 export function getFilteredElements(addedNodes, tagName) {
-  return $(addedNodes).find(tagName).addBack(tagName); // finds either added alone or as tree
+  return $(addedNodes)
+    .find(tagName)
+    .addBack(tagName); // finds either added alone or as tree
 }
 
 export function shouldCapitaliseContent(element) {
