@@ -3690,7 +3690,6 @@ export let names = [
   'Vinson',
   'Viola',
   'Virgie',
-  'Visa',
   'Vitim',
   'Vito',
   'Vitus',
