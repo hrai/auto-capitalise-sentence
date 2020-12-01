@@ -15,7 +15,7 @@
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
     "update-version": "yarn dot-json distribution/manifest.json version $VER",
-    "release:firefox": "cd distribution && web-ext-submit"
+    "release:firefox": "cd distribution && yarn web-ext-submit"
   },
   "prettier": {
     "trailingComma": "es5",
@@ -65,7 +65,8 @@
   ],
   "homepage": "https://github.com/hrai/auto-capitalise",
   "dependencies": {
-    "run-script-os": "^1.1.3"
+    "run-script-os": "^1.1.3",
+    "web-ext-submit": "^5.4.0"
   },
   "webExt": {
     "sourceDir": "distribution",
