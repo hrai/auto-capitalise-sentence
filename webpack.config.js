@@ -25,7 +25,7 @@ module.exports = {
       patterns: [
         {
           from: './node_modules/jquery/dist/jquery.min.js',
-          to: path.resolve(__dirname, 'distribution/dependencies',
+          to: path.resolve(__dirname, 'distribution/dependencies'),
         },
       ],
     }),
