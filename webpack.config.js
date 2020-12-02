@@ -1,5 +1,5 @@
 const path = require('path');
-const ESLintPlugin = require('eslint-webpack-plugin');
+// const ESLintPlugin = require('eslint-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
@@ -13,9 +13,9 @@ module.exports = {
   },
   devtool: 'inline-source-map',
   plugins: [
-    new ESLintPlugin({
-      // /*options*/ useEslintrc: true,
-    }),
+    // new ESLintPlugin({
+    //   // /*options*/ useEslintrc: true,
+    // }),
     new CopyPlugin({
       patterns: [
         {

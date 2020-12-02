@@ -16,7 +16,11 @@
     {
       "run_at": "document_end",
       "matches": ["<all_urls>"],
-      "js": ["lib/main.bundle.js", "lib/settings.bundle.js"]
+      "js": [
+        "lib/main.bundle.js",
+        "lib/settings.bundle.js",
+        "dependencies/jquery.min.js"
+      ]
     }
   ],
   "icons": {
