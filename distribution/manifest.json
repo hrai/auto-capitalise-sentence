@@ -17,9 +17,9 @@
       "run_at": "document_end",
       "matches": ["<all_urls>"],
       "js": [
+        "dependencies/jquery.min.js",
         "lib/main.bundle.js",
-        "lib/settings.bundle.js",
-        "dependencies/jquery.min.js"
+        "lib/settings.bundle.js"
       ]
     }
   ],
