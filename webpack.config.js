@@ -1,7 +1,6 @@
 const path = require('path');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const webpack = require('webpack');
 
 module.exports = {
   entry: {
@@ -17,15 +16,12 @@ module.exports = {
     new ESLintPlugin({
       // /*options*/ useEslintrc: true,
     }),
-    new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery',
-    }),
     new CopyPlugin({
       patterns: [
         {
           from: './node_modules/jquery/dist/jquery.min.js',
           to: path.resolve(__dirname, 'distribution/dependencies'),
+          force: true,
         },
       ],
     }),
