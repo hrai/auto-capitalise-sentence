@@ -73,10 +73,15 @@ const abbreviations = [
   'WTH',
 ];
 
-let constants = days.concat(months, abbreviations, names, common_tech_words);
+let constants = days.concat(months, abbreviations, common_tech_words);
 
 //convert array to key-value pairs
 export let constants_key_val = constants.reduce((obj, val) => {
+  obj[val.toLowerCase()] = val;
+  return obj;
+}, {});
+
+export let names_key_val = names.reduce((obj, val) => {
   obj[val.toLowerCase()] = val;
   return obj;
 }, {});

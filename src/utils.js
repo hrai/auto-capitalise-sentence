@@ -1,5 +1,7 @@
 export let should_capitalise_i = false;
-export let constants = {};
+export let should_capitalise_names = false;
+export let constants_key_val = {};
+export let names_key_val = {};
 
 export function shouldCapitaliseForI(text) {
   const regex = /\s+i(\s+|')$/;
@@ -14,9 +16,21 @@ export function setShouldCapitaliseI(value) {
   }
 }
 
-export function setConstants(value) {
+export function setShouldCapitaliseNames(value) {
   if (value != null) {
-    constants = value;
+    should_capitalise_names = value;
+  }
+}
+
+export function setConstantsKeyVal(value) {
+  if (value != null) {
+    constants_key_val = value;
+  }
+}
+
+export function setNamesKeyVal(value) {
+  if (value != null) {
+    names_key_val = value;
   }
 }
 
@@ -40,7 +54,7 @@ export function shouldCapitalise(text) {
   return matches;
 }
 
-export function getMatchingAndCorrectedWords(text) {
+export function getMatchingAndCorrectedWords(text, key_val) {
   const lastWordRegex = /\b(\w+)[.?!\s]+$/;
 
   let match = lastWordRegex.exec(text);
@@ -49,7 +63,7 @@ export function getMatchingAndCorrectedWords(text) {
     const matchedWord = match[1];
 
     if (matchedWord != null) {
-      let correctedWord = constants[matchedWord.toLowerCase()];
+      let correctedWord = key_val[matchedWord.toLowerCase()];
 
       if (correctedWord != null) {
         return [matchedWord, correctedWord];
@@ -197,7 +211,19 @@ export function capitaliseText(
     return;
   }
 
-  const [matchedWord, correctedWord] = getMatchingAndCorrectedWords(text);
+  updateConstant(text, element, tagName, constants_key_val);
+
+  // console.log(should_capitalise_names);
+  if (should_capitalise_names) {
+    updateConstant(text, element, tagName, names_key_val);
+  }
+}
+
+function updateConstant(text, element, tagName, key_val) {
+  const [matchedWord, correctedWord] = getMatchingAndCorrectedWords(
+    text,
+    key_val
+  );
   if (matchedWord !== '') {
     if (matchedWord !== correctedWord) {
       let updatedStr = text.replace(matchedWord, correctedWord);

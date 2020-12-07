@@ -4,14 +4,22 @@ import {
   pluginNamespace,
   sites_to_ignore,
   should_capitalise_i,
+  should_capitalise_names,
   constants_key_val,
+  names_key_val,
 } from './plugin-constants';
 
 const errorMsg = 'breaking loop';
 let sitesToExclude = [];
 
 browser.storage.local
-  .get([sites_to_ignore, should_capitalise_i, constants_key_val])
+  .get([
+    sites_to_ignore,
+    should_capitalise_i,
+    should_capitalise_names,
+    constants_key_val,
+    names_key_val,
+  ])
   .then(processResponse, utils.onError);
 
 /* Updating the value of this local storage variable in settings.js happens AFTER content.js.
@@ -28,6 +36,14 @@ browser.storage.onChanged.addListener(function (
 
       if (newValue != null) {
         utils.setShouldCapitaliseI(newValue);
+      }
+    }
+
+    if (changes.should_capitalise_names != null) {
+      const newValue = changes.should_capitalise_names.newValue;
+
+      if (newValue != null) {
+        utils.setShouldCapitaliseNames(newValue);
       }
     }
   }
@@ -47,7 +63,9 @@ function observeInputTags() {
 function processResponse(item) {
   sitesToExclude = item.sites_to_ignore;
   utils.setShouldCapitaliseI(item.should_capitalise_i);
-  utils.setConstants(item.constants_key_val);
+  utils.setShouldCapitaliseNames(item.should_capitalise_names);
+  utils.setConstantsKeyVal(item.constants_key_val);
+  utils.setNamesKeyVal(item.names_key_val);
 
   if (item && sitesToExclude) {
     //https://stackoverflow.com/questions/406192/get-current-url-with-jquery
