@@ -23,7 +23,7 @@ const months = [
   'December',
 ];
 
-const common_tech_words = ['DevOps', 'UI', 'PR', 'PRs', 'APIs', 'API'];
+const common_tech_words = ['DevOps', 'UI', 'PR', 'PRs', 'APIs', 'API', 'MVC'];
 
 const abbreviations = [
   'AFAIK',
