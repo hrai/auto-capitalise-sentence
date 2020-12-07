@@ -29,7 +29,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           exclude: '^Meta|^Document|^Readme|^Lint'
 
-  Build:
+  Build and upload artifacts:
     needs: Version
     if: github.event_name == 'push' || needs.Version.outputs.created
     runs-on: ubuntu-latest
@@ -72,7 +72,9 @@ jobs:
       - run: yarn install
       - run: yarn build
       - name: Update extension’s meta
-        run: >-
+        env:
+          VER: ${{ needs.Version.outputs.version }}
+        run: |
           yarn update-version
       - run: 'yarn release:${{ matrix.command }}'
         env:
