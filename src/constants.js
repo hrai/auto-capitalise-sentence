@@ -53,6 +53,8 @@ const abbreviations = [
   'ITT',
   'LOL',
   'MMW',
+  'NP',
+  'NW',
   'OMG',
   'OTOH',
   'POV',
