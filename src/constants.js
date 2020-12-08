@@ -23,16 +23,38 @@ const months = [
   'December',
 ];
 
-const common_tech_words = ['DevOps', 'UI', 'PR', 'PRs', 'APIs', 'API', 'MVC'];
+const common_tech_words = [
+  'DevOps',
+  'UI',
+  'PR',
+  'PRs',
+  'APIs',
+  'API',
+  'MVC',
+  'GitHub',
+  'Google',
+  'JavaScript',
+];
 
 const abbreviations = [
+  'IBM',
+  'KFC',
+  'AMD',
+  'AOL',
+  'AWS',
   'AFAIK',
+  'HBO',
+  'HSBC',
+  'IKEA',
+  'ING',
+  'ISO',
   'AKA',
   'ATM',
   'BTW',
   'BBB',
   'BMW',
   'BP',
+  'JFK',
   'BRB',
   'BSD',
   'CRE',
@@ -51,6 +73,7 @@ const abbreviations = [
   'IMO',
   'IOW',
   'ITT',
+  'LGTM',
   'LOL',
   'MMW',
   'NP',
