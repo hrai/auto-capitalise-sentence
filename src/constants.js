@@ -64,6 +64,7 @@ const abbreviations = [
   'AMD',
   'AOL',
   'AWS',
+  'APM',
   'AFAIK',
   'HBO',
   'HSBC',
