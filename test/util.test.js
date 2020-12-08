@@ -1,4 +1,5 @@
 import * as utils from '../src/utils.js';
+import { constants_key_val, names_key_val } from '../src/constants.js';
 const $ = require('jquery');
 
 describe('utilities test', function() {

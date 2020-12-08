@@ -1,6 +1,5 @@
 import sinon from 'sinon';
 import * as utils from '../src/utils.js';
-import { constants_key_val, names_key_val } from '../src/constants.js';
 
 describe('capitaliseText', () => {
   test('capitaliseText_HtmlContent', () => {
