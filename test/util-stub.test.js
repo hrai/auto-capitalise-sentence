@@ -1,6 +1,6 @@
 import sinon from 'sinon';
 import * as utils from '../src/utils.js';
-import { constants_key_val } from '../src/constants.js';
+import { constants_key_val, names_key_val } from '../src/constants.js';
 
 describe('capitaliseText', () => {
   test('capitaliseText_HtmlContent', () => {
@@ -470,42 +470,5 @@ describe('setEndOfContenteditable', () => {
 
     expect(args[0].data).toBe(expectedArg);
     expect(args[1]).toBe(expectedArg.length);
-  });
-
-  let matchingAndCorrectWords = text =>
-    utils.getMatchingAndCorrectedWords(text, constants_key_val);
-
-  test('getIndexOfMatchingConstantWord_Days', () => {
-    let str = 'I\'m the content of html Monday.';
-
-    expect(matchingAndCorrectWords(str)[0]).toBe('Monday');
-    expect(matchingAndCorrectWords(str)[1]).toBe('Monday');
-
-    str = 'I\'m the content of html monday.';
-    expect(matchingAndCorrectWords(str)[0]).toBe('monday');
-    expect(matchingAndCorrectWords(str)[1]).toBe('Monday');
-
-    str = 'I\'M THE CONTENT OF HTML MONDAY!';
-    expect(matchingAndCorrectWords(str)[0]).toBe('MONDAY');
-    expect(matchingAndCorrectWords(str)[1]).toBe('Monday');
-
-    str = 'I\'m the content of html.';
-    expect(matchingAndCorrectWords(str)[0]).toBe('');
-    expect(matchingAndCorrectWords(str)[1]).toBe('');
-  });
-
-  test('getIndexOfMatchingConstantWord_Months', () => {
-    let str = 'I\'m the content of html january.';
-
-    expect(matchingAndCorrectWords(str)[0]).toBe('january');
-    expect(matchingAndCorrectWords(str)[1]).toBe('January');
-
-    str = 'I\'M THE CONTENT OF HTML JANUARY!';
-    expect(matchingAndCorrectWords(str)[0]).toBe('JANUARY');
-    expect(matchingAndCorrectWords(str)[1]).toBe('January');
-
-    str = 'I\'m the content of html.';
-    expect(matchingAndCorrectWords(str)[0]).toBe('');
-    expect(matchingAndCorrectWords(str)[1]).toBe('');
   });
 });

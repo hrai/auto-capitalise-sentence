@@ -1,7 +1,7 @@
 import * as utils from '../src/utils.js';
 const $ = require('jquery');
 
-describe('utilities test', function () {
+describe('utilities test', function() {
   test('getCapitalisedContent', () => {
     expect(utils.getCapitalisedContent('blah')).toBe('blaH');
     expect(utils.getCapitalisedContent('i')).toBe('I');
@@ -241,5 +241,64 @@ describe('utilities test', function () {
         utils.setText(element[0]);
       }).toThrow();
     });
+  });
+
+  test('getIndexOfMatchingConstantWord_Days', () => {
+    let str = 'I\'m the content of html Monday.';
+    let matchingAndCorrectWords = text =>
+      utils.getMatchingAndCorrectedWords(text, constants_key_val);
+
+    expect(matchingAndCorrectWords(str)[0]).toBe('Monday');
+    expect(matchingAndCorrectWords(str)[1]).toBe('Monday');
+
+    str = 'I\'m the content of html monday.';
+    expect(matchingAndCorrectWords(str)[0]).toBe('monday');
+    expect(matchingAndCorrectWords(str)[1]).toBe('Monday');
+
+    str = 'I\'M THE CONTENT OF HTML MONDAY!';
+    expect(matchingAndCorrectWords(str)[0]).toBe('MONDAY');
+    expect(matchingAndCorrectWords(str)[1]).toBe('Monday');
+
+    str = 'I\'m the content of html.';
+    expect(matchingAndCorrectWords(str)[0]).toBe('');
+    expect(matchingAndCorrectWords(str)[1]).toBe('');
+  });
+
+  test('getIndexOfMatchingConstantWord_Months', () => {
+    let str = 'I\'m the content of html january.';
+    let matchingAndCorrectWords = text =>
+      utils.getMatchingAndCorrectedWords(text, constants_key_val);
+
+    expect(matchingAndCorrectWords(str)[0]).toBe('january');
+    expect(matchingAndCorrectWords(str)[1]).toBe('January');
+
+    str = 'I\'M THE CONTENT OF HTML JANUARY!';
+    expect(matchingAndCorrectWords(str)[0]).toBe('JANUARY');
+    expect(matchingAndCorrectWords(str)[1]).toBe('January');
+
+    str = 'I\'m the content of html.';
+    expect(matchingAndCorrectWords(str)[0]).toBe('');
+    expect(matchingAndCorrectWords(str)[1]).toBe('');
+  });
+
+  test('getIndexOfMatchingNameWords', () => {
+    let str = 'I\'m the content of html James.';
+    let matchingAndCorrectWords = text =>
+      utils.getMatchingAndCorrectedWords(text, names_key_val);
+
+    expect(matchingAndCorrectWords(str)[0]).toBe('James');
+    expect(matchingAndCorrectWords(str)[1]).toBe('James');
+
+    str = 'I\'m the content of html james.';
+    expect(matchingAndCorrectWords(str)[0]).toBe('james');
+    expect(matchingAndCorrectWords(str)[1]).toBe('James');
+
+    str = 'I\'M THE CONTENT OF HTML JAMES!';
+    expect(matchingAndCorrectWords(str)[0]).toBe('JAMES');
+    expect(matchingAndCorrectWords(str)[1]).toBe('James');
+
+    str = 'I\'m the content of html.';
+    expect(matchingAndCorrectWords(str)[0]).toBe('');
+    expect(matchingAndCorrectWords(str)[1]).toBe('');
   });
 });
