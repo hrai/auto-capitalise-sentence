@@ -475,7 +475,6 @@ describe('setEndOfContenteditable', () => {
   test('getIndexOfMatchingConstantWord_Days', () => {
     let str = 'I\'m the content of html Monday.';
 
-    utils.setConstantsKeyVal(constants_key_val);
     expect(utils.getMatchingAndCorrectedWords(str, constants_key_val)[0]).toBe(
       'Monday'
     );
