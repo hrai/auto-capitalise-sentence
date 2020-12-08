@@ -50,6 +50,7 @@ const common_tech_words = [
   'SQLite',
   'Scala',
   'Sega',
+  'S3',
   'SUSE',
   'SVN',
   'Redshift',
