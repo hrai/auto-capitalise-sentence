@@ -474,37 +474,62 @@ describe('setEndOfContenteditable', () => {
 
   test('getIndexOfMatchingConstantWord_Days', () => {
     let str = 'I\'m the content of html Monday.';
-    utils.setConstants(constants_key_val);
 
-    expect(utils.getMatchingAndCorrectedWords(str)[0]).toBe('Monday');
-    expect(utils.getMatchingAndCorrectedWords(str)[1]).toBe('Monday');
+    utils.setConstantsKeyVal(constants_key_val);
+    expect(utils.getMatchingAndCorrectedWords(str, constants_key_val)[0]).toBe(
+      'Monday'
+    );
+    expect(utils.getMatchingAndCorrectedWords(str, constants_key_val)[1]).toBe(
+      'Monday'
+    );
 
     str = 'I\'m the content of html monday.';
-    expect(utils.getMatchingAndCorrectedWords(str)[0]).toBe('monday');
-    expect(utils.getMatchingAndCorrectedWords(str)[1]).toBe('Monday');
+    expect(utils.getMatchingAndCorrectedWords(str, constants_key_val)[0]).toBe(
+      'monday'
+    );
+    expect(utils.getMatchingAndCorrectedWords(str, constants_key_val)[1]).toBe(
+      'Monday'
+    );
 
     str = 'I\'M THE CONTENT OF HTML MONDAY!';
-    expect(utils.getMatchingAndCorrectedWords(str)[0]).toBe('MONDAY');
-    expect(utils.getMatchingAndCorrectedWords(str)[1]).toBe('Monday');
+    expect(utils.getMatchingAndCorrectedWords(str, constants_key_val)[0]).toBe(
+      'MONDAY'
+    );
+    expect(utils.getMatchingAndCorrectedWords(str,constants_key_val)[1]).toBe('Monday');
 
     str = 'I\'m the content of html.';
-    expect(utils.getMatchingAndCorrectedWords(str)[0]).toBe('');
-    expect(utils.getMatchingAndCorrectedWords(str)[1]).toBe('');
+    expect(utils.getMatchingAndCorrectedWords(str, constants_key_val)[0]).toBe(
+      ''
+    );
+    expect(utils.getMatchingAndCorrectedWords(str, constants_key_val)[1]).toBe(
+      ''
+    );
   });
 
   test('getIndexOfMatchingConstantWord_Months', () => {
     let str = 'I\'m the content of html january.';
-    utils.setConstants(constants_key_val);
 
-    expect(utils.getMatchingAndCorrectedWords(str)[0]).toBe('january');
-    expect(utils.getMatchingAndCorrectedWords(str)[1]).toBe('January');
+    expect(utils.getMatchingAndCorrectedWords(str, constants_key_val)[0]).toBe(
+      'january'
+    );
+    expect(utils.getMatchingAndCorrectedWords(str, constants_key_val)[1]).toBe(
+      'January'
+    );
 
     str = 'I\'M THE CONTENT OF HTML JANUARY!';
-    expect(utils.getMatchingAndCorrectedWords(str)[0]).toBe('JANUARY');
-    expect(utils.getMatchingAndCorrectedWords(str)[1]).toBe('January');
+    expect(utils.getMatchingAndCorrectedWords(str, constants_key_val)[0]).toBe(
+      'JANUARY'
+    );
+    expect(utils.getMatchingAndCorrectedWords(str, constants_key_val)[1]).toBe(
+      'January'
+    );
 
     str = 'I\'m the content of html.';
-    expect(utils.getMatchingAndCorrectedWords(str)[0]).toBe('');
-    expect(utils.getMatchingAndCorrectedWords(str)[1]).toBe('');
+    expect(utils.getMatchingAndCorrectedWords(str, constants_key_val)[0]).toBe(
+      ''
+    );
+    expect(utils.getMatchingAndCorrectedWords(str, constants_key_val)[1]).toBe(
+      ''
+    );
   });
 });
