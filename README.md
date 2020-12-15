@@ -1,6 +1,6 @@
 # What is this extension?
 
-Firefox/Microsoft Edge Chromium add-on to automatically capitalise the first letter of a sentence while typing.
+Firefox/Microsoft Edge Chromium add-on to automatically capitalise words while typing.
 
 ## Features
 
