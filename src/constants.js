@@ -99,6 +99,7 @@ const abbreviations = [
   'LGTM',
   'LOL',
   'MMW',
+  'MSDN',
   'NP',
   'NW',
   'OMG',
