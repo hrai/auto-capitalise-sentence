@@ -59,8 +59,6 @@ const common_tech_words = [
 ];
 
 const abbreviations = [
-  'IBM',
-  'KFC',
   'AMD',
   'AOL',
   'APM',
