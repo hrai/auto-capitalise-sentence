@@ -10,7 +10,7 @@
     "default_popup": "popup/settings.html"
   },
   "background": {
-    "scripts": ["dependencies/jquery.min.js"]
+    "scripts": ["dependencies/jquery.min.js", "lib/background.bundle.js"]
   },
   "content_scripts": [
     {

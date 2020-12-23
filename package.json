@@ -11,7 +11,7 @@
     "build": "yarn webpack",
     "watch": "yarn webpack --watch",
     "test": "yarn jest",
-    "test-watch": "yarn jest --watch test/",
+    "test:watch": "yarn jest --watch test/",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
     "update-version": "yarn dot-json distribution/manifest.json version $VER",
