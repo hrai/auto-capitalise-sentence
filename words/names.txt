@@ -3714,8 +3714,6 @@ Vivekananda
 Vivienne
 Vlad
 Vlasic
-VoIP
-Vogue
 Volcker
 Voldemort
 Volkswagen
@@ -3724,7 +3722,6 @@ Volvo
 Vonda
 Vonnegut
 Vorster
-Voyager
 Vuitton
 Waite
 Wald
@@ -3744,7 +3741,6 @@ Wanamaker
 Wanda
 Wang
 Wankel
-Ware
 Waring
 Warner
 Wasatch
@@ -3753,7 +3749,6 @@ Watkins
 Weaver
 Webern
 Weddell
-Weeks
 Wei
 Weierstrass
 Weill
