@@ -17,6 +17,7 @@ export let names = [
   'Acrux',
   'Acuff',
   'Ada',
+  'Adam',
   'Adan',
   'Adderley',
   'Addie',
