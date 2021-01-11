@@ -26,6 +26,7 @@ const months = [
 const common_tech_words = [
   'API',
   'APIs',
+  'CLI',
   'CSS',
   'CosmosDB',
   'DevOps',
@@ -44,6 +45,7 @@ const common_tech_words = [
   'Mozilla',
   'MySQL',
   'MySpace',
+  'NuGet',
   'Ocaml',
   'OpenOffice',
   'PHP',
