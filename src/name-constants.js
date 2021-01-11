@@ -492,6 +492,7 @@ export let names = [
   'Brontosaurus',
   'Brooks',
   'Brownian',
+  'Bruce',
   'Brummel',
   'Brunhilde',
   'Brut',
