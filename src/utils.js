@@ -54,7 +54,15 @@ export function shouldCapitalise(text) {
   return matches;
 }
 
-export function getMatchingAndCorrectedWords(text, key_val) {
+export function getCaseInsensitiveMatchingAndCorrectedWords(text, key_val) {
+  return getMatchingAndCorrectedWords(text, key_val, true);
+}
+
+export function getCaseSensitiveMatchingAndCorrectedWords(text, key_val) {
+  return getMatchingAndCorrectedWords(text, key_val, false);
+}
+
+export function getMatchingAndCorrectedWords(text, key_val, case_insensitive) {
   const lastWordRegex = /\b(\w+)\W$/;
 
   let match = lastWordRegex.exec(text);
@@ -63,7 +71,10 @@ export function getMatchingAndCorrectedWords(text, key_val) {
     const matchedWord = match[1];
 
     if (matchedWord != null) {
-      let correctedWord = key_val[matchedWord.toLowerCase()];
+      let correctedWord =
+        case_insensitive === true
+          ? key_val[matchedWord.toLowerCase()]
+          : key_val[matchedWord];
 
       if (correctedWord != null) {
         return [matchedWord, correctedWord];
@@ -211,19 +222,21 @@ export function capitaliseText(
     return;
   }
 
-  updateConstant(text, element, tagName, constants_key_val);
+  const case_sensitive = true;
+  updateConstant(text, element, tagName, constants_key_val, case_sensitive);
 
   // console.log(should_capitalise_names);
   if (should_capitalise_names) {
-    updateConstant(text, element, tagName, names_key_val);
+    updateConstant(text, element, tagName, names_key_val, !case_sensitive);
   }
 }
 
-function updateConstant(text, element, tagName, key_val) {
-  const [matchedWord, correctedWord] = getMatchingAndCorrectedWords(
-    text,
-    key_val
-  );
+function updateConstant(text, element, tagName, key_val, case_sensitive) {
+  const [matchedWord, correctedWord] =
+    case_sensitive === true
+      ? getCaseSensitiveMatchingAndCorrectedWords(text, key_val)
+      : getCaseInsensitiveMatchingAndCorrectedWords(text, key_val);
+
   if (matchedWord !== '') {
     if (matchedWord !== correctedWord) {
       let updatedStr = text.replace(matchedWord, correctedWord);
