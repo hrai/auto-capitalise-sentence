@@ -244,7 +244,7 @@ describe('utilities test', function() {
     });
   });
 
-  test('getIndexOfMatchingConstantWord_Days', () => {
+  test('getCaseInsensitiveMatchingAndCorrectedWords_Days', () => {
     let str = 'I\'m the content of html Monday.';
     let matchingAndCorrectWords = text =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(text, constants_key_val);
@@ -265,7 +265,7 @@ describe('utilities test', function() {
     expect(matchingAndCorrectWords(str)[1]).toBe('');
   });
 
-  test('getIndexOfMatchingConstantWord_Months', () => {
+  test('getCaseInsensitiveMatchingAndCorrectedWords_Months', () => {
     let str = 'I\'m the content of html january.';
     let matchingAndCorrectWords = text =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(text, constants_key_val);
@@ -282,28 +282,7 @@ describe('utilities test', function() {
     expect(matchingAndCorrectWords(str)[1]).toBe('');
   });
 
-  test('getIndexOfMatchingConstantWord_ApostropheWords', () => {
-    let str = 'I cant.';
-    let matchingAndCorrectWords = text =>
-      utils.getCaseInsensitiveMatchingAndCorrectedWords(text, constants_key_val);
-
-    expect(matchingAndCorrectWords(str)[0]).toBe('cant');
-    expect(matchingAndCorrectWords(str)[1]).toBe('can\'t');
-
-    str = 'I CANT ';
-    expect(matchingAndCorrectWords(str)[0]).toBe('CANT');
-    expect(matchingAndCorrectWords(str)[1]).toBe('');
-
-    str = 'I wont ';
-    expect(matchingAndCorrectWords(str)[0]).toBe('wont');
-    expect(matchingAndCorrectWords(str)[1]).toBe('won\'t');
-
-    str = 'I Wont.';
-    expect(matchingAndCorrectWords(str)[0]).toBe('Wont');
-    expect(matchingAndCorrectWords(str)[1]).toBe('');
-  });
-
-  test('getIndexOfMatchingNameWords', () => {
+  test('getCaseInsensitiveMatchingAndCorrectedWords', () => {
     let str = 'I\'m the content of html James.';
     let matchingAndCorrectWords = text =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(text, names_key_val);
@@ -324,7 +303,7 @@ describe('utilities test', function() {
     expect(matchingAndCorrectWords(str)[1]).toBe('');
   });
 
-  test('getIndexOfMatchingNameWords_OtherPunctuation', () => {
+  test('getCaseInsensitiveMatchingAndCorrectedWords_OtherPunctuation', () => {
     let str = 'I\'m the content of html \'James\'';
     let matchingAndCorrectWords = text =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(text, names_key_val);
@@ -341,6 +320,27 @@ describe('utilities test', function() {
     expect(matchingAndCorrectWords(str)[1]).toBe('James');
 
     str = 'I\'m the content of html.';
+    expect(matchingAndCorrectWords(str)[0]).toBe('');
+    expect(matchingAndCorrectWords(str)[1]).toBe('');
+  });
+  
+  test('getCaseSensitiveMatchingAndCorrectedWords_ApostropheWords', () => {
+    let str = 'I cant.';
+    let matchingAndCorrectWords = text =>
+      utils.getCaseSensitiveMatchingAndCorrectedWords(text, constants_key_val);
+
+    expect(matchingAndCorrectWords(str)[0]).toBe('cant');
+    expect(matchingAndCorrectWords(str)[1]).toBe('can\'t');
+
+    str = 'I CANT ';
+    expect(matchingAndCorrectWords(str)[0]).toBe('');
+    expect(matchingAndCorrectWords(str)[1]).toBe('');
+
+    str = 'I wont ';
+    expect(matchingAndCorrectWords(str)[0]).toBe('wont');
+    expect(matchingAndCorrectWords(str)[1]).toBe('won\'t');
+
+    str = 'I Wont.';
     expect(matchingAndCorrectWords(str)[0]).toBe('');
     expect(matchingAndCorrectWords(str)[1]).toBe('');
   });

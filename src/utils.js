@@ -55,6 +55,14 @@ export function shouldCapitalise(text) {
 }
 
 export function getCaseInsensitiveMatchingAndCorrectedWords(text, key_val) {
+  return getMatchingAndCorrectedWords(text, key_val, true);
+}
+
+export function getCaseSensitiveMatchingAndCorrectedWords(text, key_val) {
+  return getMatchingAndCorrectedWords(text, key_val, false);
+}
+
+export function getMatchingAndCorrectedWords(text, key_val, case_insensitive) {
   const lastWordRegex = /\b(\w+)\W$/;
 
   let match = lastWordRegex.exec(text);
@@ -62,9 +70,8 @@ export function getCaseInsensitiveMatchingAndCorrectedWords(text, key_val) {
   if (match) {
     const matchedWord = match[1];
 
-    console.log(matchedWord);
     if (matchedWord != null) {
-      let correctedWord = key_val[matchedWord.toLowerCase()];
+      let correctedWord = case_insensitive === true?key_val[matchedWord.toLowerCase()]:key_val[matchedWord];
 
       if (correctedWord != null) {
         return [matchedWord, correctedWord];
