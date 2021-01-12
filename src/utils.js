@@ -219,15 +219,28 @@ export function capitaliseText(
     return;
   }
 
-  updateConstant(text, element, tagName, constants_key_val);
+  updateCaseSensitiveConstant(text, element, tagName, constants_key_val);
 
   // console.log(should_capitalise_names);
   if (should_capitalise_names) {
-    updateConstant(text, element, tagName, names_key_val);
+    updateCaseInsensitiveConstant(text, element, tagName, names_key_val);
   }
 }
 
-function updateConstant(text, element, tagName, key_val) {
+function updateCaseSensitiveConstant(text, element, tagName, key_val) {
+  const [matchedWord, correctedWord] = getCaseSensitiveMatchingAndCorrectedWords(
+    text,
+    key_val
+  );
+  if (matchedWord !== '') {
+    if (matchedWord !== correctedWord) {
+      let updatedStr = text.replace(matchedWord, correctedWord);
+      setText(element, tagName, updatedStr, false);
+    }
+  }
+}
+
+function updateCaseInsensitiveConstant(text, element, tagName, key_val) {
   const [matchedWord, correctedWord] = getCaseInsensitiveMatchingAndCorrectedWords(
     text,
     key_val
