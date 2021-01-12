@@ -71,7 +71,10 @@ export function getMatchingAndCorrectedWords(text, key_val, case_insensitive) {
     const matchedWord = match[1];
 
     if (matchedWord != null) {
-      let correctedWord = case_insensitive === true?key_val[matchedWord.toLowerCase()]:key_val[matchedWord];
+      let correctedWord =
+        case_insensitive === true
+          ? key_val[matchedWord.toLowerCase()]
+          : key_val[matchedWord];
 
       if (correctedWord != null) {
         return [matchedWord, correctedWord];
@@ -228,10 +231,10 @@ export function capitaliseText(
 }
 
 function updateCaseSensitiveConstant(text, element, tagName, key_val) {
-  const [matchedWord, correctedWord] = getCaseSensitiveMatchingAndCorrectedWords(
-    text,
-    key_val
-  );
+  const [
+    matchedWord,
+    correctedWord,
+  ] = getCaseSensitiveMatchingAndCorrectedWords(text, key_val);
   if (matchedWord !== '') {
     if (matchedWord !== correctedWord) {
       let updatedStr = text.replace(matchedWord, correctedWord);
@@ -241,10 +244,10 @@ function updateCaseSensitiveConstant(text, element, tagName, key_val) {
 }
 
 function updateCaseInsensitiveConstant(text, element, tagName, key_val) {
-  const [matchedWord, correctedWord] = getCaseInsensitiveMatchingAndCorrectedWords(
-    text,
-    key_val
-  );
+  const [
+    matchedWord,
+    correctedWord,
+  ] = getCaseInsensitiveMatchingAndCorrectedWords(text, key_val);
   if (matchedWord !== '') {
     if (matchedWord !== correctedWord) {
       let updatedStr = text.replace(matchedWord, correctedWord);
