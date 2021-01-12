@@ -222,32 +222,21 @@ export function capitaliseText(
     return;
   }
 
-  updateCaseSensitiveConstant(text, element, tagName, constants_key_val);
+  const case_sensitive = true;
+  updateConstant(text, element, tagName, constants_key_val, case_sensitive);
 
   // console.log(should_capitalise_names);
   if (should_capitalise_names) {
-    updateCaseInsensitiveConstant(text, element, tagName, names_key_val);
+    updateConstant(text, element, tagName, names_key_val, !case_sensitive);
   }
 }
 
-function updateCaseSensitiveConstant(text, element, tagName, key_val) {
-  const [
-    matchedWord,
-    correctedWord,
-  ] = getCaseSensitiveMatchingAndCorrectedWords(text, key_val);
-  if (matchedWord !== '') {
-    if (matchedWord !== correctedWord) {
-      let updatedStr = text.replace(matchedWord, correctedWord);
-      setText(element, tagName, updatedStr, false);
-    }
-  }
-}
+function updateConstant(text, element, tagName, key_val, case_sensitive) {
+  const [matchedWord, correctedWord] =
+    case_sensitive === true
+      ? getCaseSensitiveMatchingAndCorrectedWords(text, key_val)
+      : getCaseInsensitiveMatchingAndCorrectedWords(text, key_val);
 
-function updateCaseInsensitiveConstant(text, element, tagName, key_val) {
-  const [
-    matchedWord,
-    correctedWord,
-  ] = getCaseInsensitiveMatchingAndCorrectedWords(text, key_val);
   if (matchedWord !== '') {
     if (matchedWord !== correctedWord) {
       let updatedStr = text.replace(matchedWord, correctedWord);
