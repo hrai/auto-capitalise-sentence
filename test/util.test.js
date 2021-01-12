@@ -247,7 +247,7 @@ describe('utilities test', function() {
   test('getIndexOfMatchingConstantWord_Days', () => {
     let str = 'I\'m the content of html Monday.';
     let matchingAndCorrectWords = text =>
-      utils.getMatchingAndCorrectedWords(text, constants_key_val);
+      utils.getCaseInsensitiveMatchingAndCorrectedWords(text, constants_key_val);
 
     expect(matchingAndCorrectWords(str)[0]).toBe('Monday');
     expect(matchingAndCorrectWords(str)[1]).toBe('Monday');
@@ -268,7 +268,7 @@ describe('utilities test', function() {
   test('getIndexOfMatchingConstantWord_Months', () => {
     let str = 'I\'m the content of html january.';
     let matchingAndCorrectWords = text =>
-      utils.getMatchingAndCorrectedWords(text, constants_key_val);
+      utils.getCaseInsensitiveMatchingAndCorrectedWords(text, constants_key_val);
 
     expect(matchingAndCorrectWords(str)[0]).toBe('january');
     expect(matchingAndCorrectWords(str)[1]).toBe('January');
@@ -282,11 +282,10 @@ describe('utilities test', function() {
     expect(matchingAndCorrectWords(str)[1]).toBe('');
   });
 
-  test.only('getIndexOfMatchingConstantWord_ApostropheWords', () => {
+  test('getIndexOfMatchingConstantWord_ApostropheWords', () => {
     let str = 'I cant.';
     let matchingAndCorrectWords = text =>
-      utils.getMatchingAndCorrectedWords(text, constants_key_val);
-    // console.log(constants_key_val);
+      utils.getCaseInsensitiveMatchingAndCorrectedWords(text, constants_key_val);
 
     expect(matchingAndCorrectWords(str)[0]).toBe('cant');
     expect(matchingAndCorrectWords(str)[1]).toBe('can\'t');
@@ -307,7 +306,7 @@ describe('utilities test', function() {
   test('getIndexOfMatchingNameWords', () => {
     let str = 'I\'m the content of html James.';
     let matchingAndCorrectWords = text =>
-      utils.getMatchingAndCorrectedWords(text, names_key_val);
+      utils.getCaseInsensitiveMatchingAndCorrectedWords(text, names_key_val);
 
     expect(matchingAndCorrectWords(str)[0]).toBe('James');
     expect(matchingAndCorrectWords(str)[1]).toBe('James');
@@ -328,7 +327,7 @@ describe('utilities test', function() {
   test('getIndexOfMatchingNameWords_OtherPunctuation', () => {
     let str = 'I\'m the content of html \'James\'';
     let matchingAndCorrectWords = text =>
-      utils.getMatchingAndCorrectedWords(text, names_key_val);
+      utils.getCaseInsensitiveMatchingAndCorrectedWords(text, names_key_val);
 
     expect(matchingAndCorrectWords(str)[0]).toBe('James');
     expect(matchingAndCorrectWords(str)[1]).toBe('James');

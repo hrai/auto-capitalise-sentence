@@ -54,7 +54,7 @@ export function shouldCapitalise(text) {
   return matches;
 }
 
-export function getMatchingAndCorrectedWords(text, key_val) {
+export function getCaseInsensitiveMatchingAndCorrectedWords(text, key_val) {
   const lastWordRegex = /\b(\w+)\W$/;
 
   let match = lastWordRegex.exec(text);
@@ -221,7 +221,7 @@ export function capitaliseText(
 }
 
 function updateConstant(text, element, tagName, key_val) {
-  const [matchedWord, correctedWord] = getMatchingAndCorrectedWords(
+  const [matchedWord, correctedWord] = getCaseInsensitiveMatchingAndCorrectedWords(
     text,
     key_val
   );
