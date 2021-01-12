@@ -62,6 +62,7 @@ export function getMatchingAndCorrectedWords(text, key_val) {
   if (match) {
     const matchedWord = match[1];
 
+    console.log(matchedWord);
     if (matchedWord != null) {
       let correctedWord = key_val[matchedWord.toLowerCase()];
 

@@ -282,6 +282,28 @@ describe('utilities test', function() {
     expect(matchingAndCorrectWords(str)[1]).toBe('');
   });
 
+  test.only('getIndexOfMatchingConstantWord_ApostropheWords', () => {
+    let str = 'I cant.';
+    let matchingAndCorrectWords = text =>
+      utils.getMatchingAndCorrectedWords(text, constants_key_val);
+    // console.log(constants_key_val);
+
+    expect(matchingAndCorrectWords(str)[0]).toBe('cant');
+    expect(matchingAndCorrectWords(str)[1]).toBe('can\'t');
+
+    str = 'I CANT ';
+    expect(matchingAndCorrectWords(str)[0]).toBe('CANT');
+    expect(matchingAndCorrectWords(str)[1]).toBe('');
+
+    str = 'I wont ';
+    expect(matchingAndCorrectWords(str)[0]).toBe('wont');
+    expect(matchingAndCorrectWords(str)[1]).toBe('won\'t');
+
+    str = 'I Wont.';
+    expect(matchingAndCorrectWords(str)[0]).toBe('Wont');
+    expect(matchingAndCorrectWords(str)[1]).toBe('');
+  });
+
   test('getIndexOfMatchingNameWords', () => {
     let str = 'I\'m the content of html James.';
     let matchingAndCorrectWords = text =>
