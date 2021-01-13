@@ -155,6 +155,7 @@ const abbreviations = [
 ]
 
 let words_with_apostrophe = {
+  arent: "aren't",
   doesnt: "doesn't",
   cant: "can't",
   wont: "won't",
