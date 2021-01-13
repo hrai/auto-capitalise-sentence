@@ -54,9 +54,23 @@ function hookupEventHandlers() {
   observeHtmlBody();
 }
 
-$('iframe').on('load', () => {
-  alert('lid');
+$('iframe').on('load', event => {
+  observeIframeInputTags(event.target);
 });
+
+function observeIframeInputTags(iframe) {
+  // $(iframe).contents().find(':text,textarea').each((item) => {
+  $(iframe)
+    .contents()
+    .find(':text,textarea')
+    .each((_, item) => {
+      console.log(item);
+
+      $(item).on(`input.${pluginNamespace}`, function(event) {
+        capitaliseText(event.target);
+      });
+    });
+}
 
 function observeInputTags() {
   $(':text,textarea').on(`input.${pluginNamespace}`, function(event) {
