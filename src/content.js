@@ -52,24 +52,24 @@ browser.storage.onChanged.addListener(function(
 function hookupEventHandlers() {
   observeInputTags();
   observeHtmlBody();
+
+  observeIframeInputTags();
 }
 
-$('iframe').on('load', event => {
-  observeIframeInputTags(event.target);
-});
+function observeIframeInputTags() {
+  $('iframe').on('load', event => {
+    let iframe = event.target;
+    $(iframe)
+      .contents()
+      .find(':text,textarea')
+      .each((_, item) => {
+        //console.log(item);
 
-function observeIframeInputTags(iframe) {
-  // $(iframe).contents().find(':text,textarea').each((item) => {
-  $(iframe)
-    .contents()
-    .find(':text,textarea')
-    .each((_, item) => {
-      console.log(item);
-
-      $(item).on(`input.${pluginNamespace}`, function(event) {
-        capitaliseText(event.target);
+        $(item).on(`input.${pluginNamespace}`, function(event) {
+          capitaliseText(event.target);
+        });
       });
-    });
+  });
 }
 
 function observeInputTags() {
@@ -117,7 +117,6 @@ function processResponse(item) {
 function observeHtmlBody() {
   var target = document.querySelector('body');
 
-  // var tags = ['p', 'span', 'div'];
   var tags = ['p', 'span'];
   var inputTags = ['input[type=\'text\']', 'textarea'];
 
@@ -126,7 +125,6 @@ function observeHtmlBody() {
       try {
         if (mutation.type === 'childList') {
           // add support for div block in gmail and outlook
-          // if (['P','DIV'].includes(mutation.target.nodeName )) {
           if (['P'].includes(mutation.target.nodeName)) {
             capitaliseText(mutation.target);
             throw new Error(errorMsg);
