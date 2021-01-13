@@ -138,6 +138,7 @@ const abbreviations = [
   'SMH',
   'TBA',
   'TBC',
+  'TBH',
   'TC',
   'TGIF',
   'THX',
