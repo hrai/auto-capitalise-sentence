@@ -108,7 +108,6 @@ const abbreviations = [
   'IDK',
   'IKEA',
   'IMO',
-  'ING',
   'IOW',
   'ISO',
   'ITT',
