@@ -1,4 +1,4 @@
-import { names } from './name-constants';
+import { names } from './name-constants'
 
 const days = [
   'Monday',
@@ -8,7 +8,7 @@ const days = [
   'Friday',
   'Saturday',
   'Sunday',
-];
+]
 
 const months = [
   'January',
@@ -21,7 +21,7 @@ const months = [
   'October',
   'November',
   'December',
-];
+]
 
 const common_tech_words = [
   'API',
@@ -75,7 +75,7 @@ const common_tech_words = [
   'iPhone',
   'iPod',
   'iTunes',
-];
+]
 
 const abbreviations = [
   'AFR',
@@ -154,17 +154,35 @@ const abbreviations = [
   'WSL',
   'WTF',
   'WTH',
-];
+]
 
-let constants = days.concat(months, abbreviations, common_tech_words);
+let words_with_apostrophe = {
+  doesnt: "doesn't",
+  cant: "can't",
+  wont: "won't",
+  dont: "don't",
+  shes: "she's",
+  hes: "he's",
+  theres: "there's",
+  theyre: "they're",
+  youve: "you've",
+  youre: "you're",
+  couldnt: "couldn't",
+  shouldnt: "shouldn't",
+  wouldnt: "wouldn't",
+}
+
+let constants = days.concat(months, abbreviations, common_tech_words)
+
+let constants_map = constants.reduce((obj, val) => {
+  obj[val.toLowerCase()] = val
+  return obj
+}, {})
 
 //convert array to key-value pairs
-export let constants_key_val = constants.reduce((obj, val) => {
-  obj[val.toLowerCase()] = val;
-  return obj;
-}, {});
+export let constants_key_val = { ...constants_map, ...words_with_apostrophe }
 
 export let names_key_val = names.reduce((obj, val) => {
-  obj[val.toLowerCase()] = val;
-  return obj;
-}, {});
+  obj[val.toLowerCase()] = val
+  return obj
+}, {})
