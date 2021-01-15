@@ -26,6 +26,7 @@ const common_abbreviations = [
   'GTG',
   'HBO',
   'HSBC',
+  'HTML',
   'IBM',
   'ICYMI',
   'IDK',
