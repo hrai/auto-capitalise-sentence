@@ -110,7 +110,6 @@ const abbreviations = [
   'IDK',
   'IKEA',
   'IMO',
-  'ING',
   'IOW',
   'ISO',
   'ITT',
@@ -140,6 +139,7 @@ const abbreviations = [
   'SMH',
   'TBA',
   'TBC',
+  'TBH',
   'TC',
   'TGIF',
   'THX',
@@ -157,6 +157,7 @@ const abbreviations = [
 ]
 
 let words_with_apostrophe = {
+  arent: "aren't",
   doesnt: "doesn't",
   cant: "can't",
   wont: "won't",

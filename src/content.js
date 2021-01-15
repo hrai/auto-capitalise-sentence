@@ -26,7 +26,7 @@ browser.storage.local
  * The browser doesn't register the change and doesn't capitalise I by dfeault after installing the extension.
  * This block will capture the event and update the value of 'should_capitalise_i'.
  */
-browser.storage.onChanged.addListener(function (
+browser.storage.onChanged.addListener(function(
   changes, // object
   areaName // string
 ) {
@@ -52,10 +52,28 @@ browser.storage.onChanged.addListener(function (
 function hookupEventHandlers() {
   observeInputTags();
   observeHtmlBody();
+
+  observeIframeInputTags();
+}
+
+function observeIframeInputTags() {
+  $('iframe').on('load', event => {
+    let iframe = event.target;
+    $(iframe)
+      .contents()
+      .find(':text,textarea')
+      .each((_, item) => {
+        //console.log(item);
+
+        $(item).on(`input.${pluginNamespace}`, function(event) {
+          capitaliseText(event.target);
+        });
+      });
+  });
 }
 
 function observeInputTags() {
-  $(':text,textarea').on(`input.${pluginNamespace}`, function (event) {
+  $(':text,textarea').on(`input.${pluginNamespace}`, function(event) {
     capitaliseText(event.target);
   });
 }
@@ -74,7 +92,7 @@ function processResponse(item) {
     try {
       var shouldEnableCapitalisingOnCurrentSite = true;
 
-      $.each(sitesToExclude, function (_i, siteToExclude) {
+      $.each(sitesToExclude, function(_i, siteToExclude) {
         if (currentUrlDomain.includes(siteToExclude)) {
           shouldEnableCapitalisingOnCurrentSite = false;
         }
@@ -99,16 +117,14 @@ function processResponse(item) {
 function observeHtmlBody() {
   var target = document.querySelector('body');
 
-  // var tags = ['p', 'span', 'div'];
   var tags = ['p', 'span'];
   var inputTags = ['input[type=\'text\']', 'textarea'];
 
-  var observer = new MutationObserver(function (mutations) {
-    $.each(mutations, function (_i, mutation) {
+  var observer = new MutationObserver(function(mutations) {
+    $.each(mutations, function(_i, mutation) {
       try {
         if (mutation.type === 'childList') {
           // add support for div block in gmail and outlook
-          // if (['P','DIV'].includes(mutation.target.nodeName )) {
           if (['P'].includes(mutation.target.nodeName)) {
             capitaliseText(mutation.target);
             throw new Error(errorMsg);
@@ -116,30 +132,30 @@ function observeHtmlBody() {
 
           var addedNodes = mutation.addedNodes;
           if (addedNodes && addedNodes.length > 0) {
-            addedNodes.forEach((node) => {
+            addedNodes.forEach(node => {
               if (utils.isFirstTextOfEditableTextNode(node)) {
                 capitaliseText(node.parentNode);
-                addedNodes = addedNodes.filter((addedNode) => {
+                addedNodes = addedNodes.filter(addedNode => {
                   addedNode != node;
                 });
               }
             });
 
-            $.each(tags, function (_i, tagName) {
+            $.each(tags, function(_i, tagName) {
               var filteredEls = utils.getFilteredElements(addedNodes, tagName);
 
-              filteredEls.each(function (_index, element) {
+              filteredEls.each(function(_index, element) {
                 if (utils.shouldCapitaliseContent(element)) {
                   capitaliseText(element);
                 }
               });
             });
 
-            $.each(inputTags, function (_i, tagName) {
+            $.each(inputTags, function(_i, tagName) {
               var filteredEls = utils.getFilteredElements(addedNodes, tagName);
 
-              filteredEls.each(function (_index, element) {
-                $(element).on(`input.${pluginNamespace}`, function (event) {
+              filteredEls.each(function(_index, element) {
+                $(element).on(`input.${pluginNamespace}`, function(event) {
                   capitaliseText(event.target);
                 });
               });
