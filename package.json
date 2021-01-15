@@ -76,7 +76,7 @@
     "run": {
       "keepProfileChanges": true,
       "startUrl": [
-        "github.com"
+        "http://localhost:3000"
       ]
     }
   }
