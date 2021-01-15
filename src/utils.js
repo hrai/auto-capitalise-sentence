@@ -1,7 +1,9 @@
 export let should_capitalise_i = false;
 export let should_capitalise_names = false;
+export let should_capitalise_abbreviations = false;
 export let constants_key_val = {};
 export let names_key_val = {};
+export let abbreviations_key_val = {};
 
 export function shouldCapitaliseForI(text) {
   const regex = /\s+i(\s+|')$/;
@@ -22,6 +24,12 @@ export function setShouldCapitaliseNames(value) {
   }
 }
 
+export function setShouldCapitaliseAbbreviations(value) {
+  if (value != null) {
+    should_capitalise_abbreviations = value;
+  }
+}
+
 export function setConstantsKeyVal(value) {
   if (value != null) {
     constants_key_val = value;
@@ -31,6 +39,12 @@ export function setConstantsKeyVal(value) {
 export function setNamesKeyVal(value) {
   if (value != null) {
     names_key_val = value;
+  }
+}
+
+export function setAbbreviationsKeyVal(value) {
+  if (value != null) {
+    abbreviations_key_val = value;
   }
 }
 
@@ -225,9 +239,12 @@ export function capitaliseText(
   const case_sensitive = true;
   updateConstant(text, element, tagName, constants_key_val, case_sensitive);
 
-  // console.log(should_capitalise_names);
   if (should_capitalise_names) {
     updateConstant(text, element, tagName, names_key_val, !case_sensitive);
+  }
+  
+  if (should_capitalise_abbreviations) {
+    updateConstant(text, element, tagName, abbreviations_key_val, !case_sensitive);
   }
 }
 

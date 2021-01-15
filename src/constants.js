@@ -1,4 +1,5 @@
 import { names } from './name-constants'
+import { abbreviations } from './abbreviation-constants'
 
 const days = [
   'Monday',
@@ -77,85 +78,6 @@ const common_tech_words = [
   'iTunes',
 ]
 
-const abbreviations = [
-  'AFR',
-  'AMD',
-  'AOL',
-  'APM',
-  'ATM',
-  'AWS',
-  'BBB',
-  'BMW',
-  'BP',
-  'BRB',
-  'BSD',
-  'BTW',
-  'CRE',
-  'CVS',
-  'DIY',
-  'FAQ',
-  'FDR',
-  'FNMA',
-  'FSF',
-  'FTW',
-  'FYI',
-  'GE',
-  'GNU',
-  'GTE',
-  'GTG',
-  'HBO',
-  'HSBC',
-  'IBM',
-  'ICYMI',
-  'IDK',
-  'IKEA',
-  'IMO',
-  'IOW',
-  'ISO',
-  'ITT',
-  'JFK',
-  'KFC',
-  'LGTM',
-  'LOL',
-  'MCI',
-  'MGM',
-  'MIT',
-  'MMW',
-  'MSDN',
-  'NASCAR',
-  'NORAD',
-  'NP',
-  'NSA',
-  'NVIDIA',
-  'NW',
-  'OMG',
-  'OTOH',
-  'POV',
-  'RCA',
-  'RDS',
-  'ROTFL',
-  'RSVP',
-  'SARS',
-  'SMH',
-  'TBA',
-  'TBC',
-  'TBH',
-  'TC',
-  'TGIF',
-  'THX',
-  'TIA',
-  'TTYL',
-  'TWA',
-  'UBS',
-  'UCLA',
-  'UPS',
-  'USB',
-  'WFH',
-  'WSL',
-  'WTF',
-  'WTH',
-]
-
 let words_with_apostrophe = {
   arent: "aren't",
   doesnt: "doesn't",
@@ -173,17 +95,17 @@ let words_with_apostrophe = {
   wouldnt: "wouldn't",
 }
 
-let constants = days.concat(months, abbreviations, common_tech_words)
+let constants = days.concat(months, common_tech_words)
 
-let constants_map = constants.reduce((obj, val) => {
+let string_to_key_val = (obj, val) => {
   obj[val.toLowerCase()] = val
   return obj
-}, {})
+}
+
+let constants_map = constants.reduce(string_to_key_val, {})
 
 //convert array to key-value pairs
 export let constants_key_val = { ...constants_map, ...words_with_apostrophe }
 
-export let names_key_val = names.reduce((obj, val) => {
-  obj[val.toLowerCase()] = val
-  return obj
-}, {})
+export let names_key_val = names.reduce(string_to_key_val, {})
+export let abbreviations_key_val = abbreviations.reduce(string_to_key_val, {})

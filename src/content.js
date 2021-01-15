@@ -7,6 +7,7 @@ import {
   should_capitalise_names,
   constants_key_val,
   names_key_val,
+  abbreviations_key_val,
 } from './plugin-constants';
 
 const errorMsg = 'breaking loop';
@@ -19,6 +20,7 @@ browser.storage.local
     should_capitalise_names,
     constants_key_val,
     names_key_val,
+    abbreviations_key_val,
   ])
   .then(processResponse, utils.onError);
 
@@ -44,6 +46,14 @@ browser.storage.onChanged.addListener(function(
 
       if (newValue != null) {
         utils.setShouldCapitaliseNames(newValue);
+      }
+    }
+
+    if (changes.should_capitalise_abbreviations != null) {
+      const newValue = changes.should_capitalise_abbreviations.newValue;
+
+      if (newValue != null) {
+        utils.setShouldCapitaliseAbbreviations(newValue);
       }
     }
   }
@@ -82,8 +92,10 @@ function processResponse(item) {
   sitesToExclude = item.sites_to_ignore;
   utils.setShouldCapitaliseI(item.should_capitalise_i);
   utils.setShouldCapitaliseNames(item.should_capitalise_names);
+  utils.setShouldCapitaliseAbbreviations(item.should_capitalise_abbreviations);
   utils.setConstantsKeyVal(item.constants_key_val);
   utils.setNamesKeyVal(item.names_key_val);
+  utils.setAbbreviationsKeyVal(item.abbreviations_key_val);
 
   if (item && sitesToExclude) {
     //https://stackoverflow.com/questions/406192/get-current-url-with-jquery
