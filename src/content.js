@@ -5,8 +5,10 @@ import {
   sites_to_ignore,
   should_capitalise_i,
   should_capitalise_names,
+  should_capitalise_abbreviations,
   constants_key_val,
   names_key_val,
+  abbreviations_key_val,
 } from './plugin-constants';
 
 const errorMsg = 'breaking loop';
@@ -17,8 +19,10 @@ browser.storage.local
     sites_to_ignore,
     should_capitalise_i,
     should_capitalise_names,
+    should_capitalise_abbreviations,
     constants_key_val,
     names_key_val,
+    abbreviations_key_val,
   ])
   .then(processResponse, utils.onError);
 
@@ -26,7 +30,7 @@ browser.storage.local
  * The browser doesn't register the change and doesn't capitalise I by dfeault after installing the extension.
  * This block will capture the event and update the value of 'should_capitalise_i'.
  */
-browser.storage.onChanged.addListener(function(
+browser.storage.onChanged.addListener(function (
   changes, // object
   areaName // string
 ) {
@@ -46,6 +50,14 @@ browser.storage.onChanged.addListener(function(
         utils.setShouldCapitaliseNames(newValue);
       }
     }
+
+    if (changes.should_capitalise_abbreviations != null) {
+      const newValue = changes.should_capitalise_abbreviations.newValue;
+
+      if (newValue != null) {
+        utils.setShouldCapitaliseAbbreviations(newValue);
+      }
+    }
   }
 });
 
@@ -57,7 +69,7 @@ function hookupEventHandlers() {
 }
 
 function observeIframeInputTags() {
-  $('iframe').on('load', event => {
+  $('iframe').on('load', (event) => {
     let iframe = event.target;
     $(iframe)
       .contents()
@@ -65,7 +77,7 @@ function observeIframeInputTags() {
       .each((_, item) => {
         //console.log(item);
 
-        $(item).on(`input.${pluginNamespace}`, function(event) {
+        $(item).on(`input.${pluginNamespace}`, function (event) {
           capitaliseText(event.target);
         });
       });
@@ -73,7 +85,7 @@ function observeIframeInputTags() {
 }
 
 function observeInputTags() {
-  $(':text,textarea').on(`input.${pluginNamespace}`, function(event) {
+  $(':text,textarea').on(`input.${pluginNamespace}`, function (event) {
     capitaliseText(event.target);
   });
 }
@@ -82,8 +94,10 @@ function processResponse(item) {
   sitesToExclude = item.sites_to_ignore;
   utils.setShouldCapitaliseI(item.should_capitalise_i);
   utils.setShouldCapitaliseNames(item.should_capitalise_names);
+  utils.setShouldCapitaliseAbbreviations(item.should_capitalise_abbreviations);
   utils.setConstantsKeyVal(item.constants_key_val);
   utils.setNamesKeyVal(item.names_key_val);
+  utils.setAbbreviationsKeyVal(item.abbreviations_key_val);
 
   if (item && sitesToExclude) {
     //https://stackoverflow.com/questions/406192/get-current-url-with-jquery
@@ -92,7 +106,7 @@ function processResponse(item) {
     try {
       var shouldEnableCapitalisingOnCurrentSite = true;
 
-      $.each(sitesToExclude, function(_i, siteToExclude) {
+      $.each(sitesToExclude, function (_i, siteToExclude) {
         if (currentUrlDomain.includes(siteToExclude)) {
           shouldEnableCapitalisingOnCurrentSite = false;
         }
@@ -120,8 +134,8 @@ function observeHtmlBody() {
   var tags = ['p', 'span'];
   var inputTags = ['input[type=\'text\']', 'textarea'];
 
-  var observer = new MutationObserver(function(mutations) {
-    $.each(mutations, function(_i, mutation) {
+  var observer = new MutationObserver(function (mutations) {
+    $.each(mutations, function (_i, mutation) {
       try {
         if (mutation.type === 'childList') {
           // add support for div block in gmail and outlook
@@ -132,30 +146,30 @@ function observeHtmlBody() {
 
           var addedNodes = mutation.addedNodes;
           if (addedNodes && addedNodes.length > 0) {
-            addedNodes.forEach(node => {
+            addedNodes.forEach((node) => {
               if (utils.isFirstTextOfEditableTextNode(node)) {
                 capitaliseText(node.parentNode);
-                addedNodes = addedNodes.filter(addedNode => {
+                addedNodes = addedNodes.filter((addedNode) => {
                   addedNode != node;
                 });
               }
             });
 
-            $.each(tags, function(_i, tagName) {
+            $.each(tags, function (_i, tagName) {
               var filteredEls = utils.getFilteredElements(addedNodes, tagName);
 
-              filteredEls.each(function(_index, element) {
+              filteredEls.each(function (_index, element) {
                 if (utils.shouldCapitaliseContent(element)) {
                   capitaliseText(element);
                 }
               });
             });
 
-            $.each(inputTags, function(_i, tagName) {
+            $.each(inputTags, function (_i, tagName) {
               var filteredEls = utils.getFilteredElements(addedNodes, tagName);
 
-              filteredEls.each(function(_index, element) {
-                $(element).on(`input.${pluginNamespace}`, function(event) {
+              filteredEls.each(function (_index, element) {
+                $(element).on(`input.${pluginNamespace}`, function (event) {
                   capitaliseText(event.target);
                 });
               });

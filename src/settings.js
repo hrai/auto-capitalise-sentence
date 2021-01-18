@@ -4,6 +4,7 @@ import {
   sites_to_ignore,
   should_capitalise_i,
   should_capitalise_names,
+  should_capitalise_abbreviations,
 } from './plugin-constants';
 
 browser.storage.local.get(sites_to_ignore).then(updateSiteIgnoreList, onError);
@@ -79,6 +80,22 @@ browser.storage.local.get(should_capitalise_names).then((items) => {
   }
 });
 
+browser.storage.local.get(should_capitalise_abbreviations).then((items) => {
+  const shouldCapitaliseAbbreviations = items.should_capitalise_abbreviations;
+
+  if (
+    shouldCapitaliseAbbreviations === true ||
+    shouldCapitaliseAbbreviations === undefined
+  ) {
+    //value not set yet/ext just installed
+    $('#shouldCapitaliseAbbreviations').prop('checked', true);
+    set_should_capitalise_abbreviations_variable(true);
+  } else {
+    $('#shouldCapitaliseAbbreviations').prop('checked', false);
+    set_should_capitalise_abbreviations_variable(false);
+  }
+});
+
 $(document).on(`change.${pluginNamespace}`, '#shouldCapitaliseI', function (
   event
 ) {
@@ -88,6 +105,18 @@ $(document).on(`change.${pluginNamespace}`, '#shouldCapitaliseI', function (
     set_should_capitalise_i_variable(false);
   }
 });
+
+$(document).on(
+  `change.${pluginNamespace}`,
+  '#shouldCapitaliseAbbreviations',
+  function (event) {
+    if ($(event.target).prop('checked')) {
+      set_should_capitalise_abbreviations_variable(true);
+    } else {
+      set_should_capitalise_abbreviations_variable(false);
+    }
+  }
+);
 
 $(document).on(`change.${pluginNamespace}`, '#shouldCapitaliseNames', function (
   event
@@ -108,6 +137,12 @@ function set_should_capitalise_i_variable(value) {
 function set_should_capitalise_names_variable(value) {
   browser.storage.local.set({
     should_capitalise_names: value,
+  });
+}
+
+function set_should_capitalise_abbreviations_variable(value) {
+  browser.storage.local.set({
+    should_capitalise_abbreviations: value,
   });
 }
 
