@@ -38,6 +38,7 @@ const common_tech_words = [
   'HBase',
   'Instagram',
   'JavaScript',
+  'Jenkins',
   'MVC',
   'MariaDB',
   'Microsoft',
