@@ -27,6 +27,7 @@ const months = [
 const common_tech_words = [
   'API',
   'APIs',
+  'Artifactory',
   'CLI',
   'CSS',
   'CosmosDB',
