@@ -70,6 +70,8 @@ const common_tech_words = [
   'Scala',
   'Sega',
   'UI',
+  'URL',
+  'URLs',
   'Ubuntu',
   'VoIP',
   'eBay',
