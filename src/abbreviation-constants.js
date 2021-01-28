@@ -53,6 +53,7 @@ const common_abbreviations = [
   'OMG',
   'OTOH',
   'POV',
+  'PS',
   'RCA',
   'RDS',
   'ROTFL',
