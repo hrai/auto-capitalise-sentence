@@ -6,6 +6,7 @@ const common_abbreviations = [
   'ATM',
   'AWS',
   'BBB',
+  'BBQ',
   'BMW',
   'BP',
   'BRB',
