@@ -49,6 +49,7 @@ const common_tech_words = [
   'MySQL',
   'MySpace',
   'NuGet',
+  'NuGets',
   'Ocaml',
   'OpenOffice',
   'PHP',
