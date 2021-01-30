@@ -6,25 +6,43 @@
     </head>
     <body>
         <div class="container" id="settings">
-            <div class="form-group" style="margin-top:5%">
-                <textarea id="sites" rows="4" class="form-control" placeholder="Add sites to exclude" ></textarea>
-                <small class="form-text text-muted">Add each site in a separate row</small>
-                <span class="input-group-btn">
-                    <input type="button" value="Save" id="submitButton" class="btn btn-primary btn-block" disabled>
-                    <input type="button" value="Add current site to ignore list" id="ignoreSiteButton" class="btn btn-secondary btn-block">
-                </span>
-            </div>
-            <div class="form-group" style="margin-top:5%">
-                <input type="checkbox" id="shouldCapitaliseI" name="shouldCapitaliseI" checked>
-                <label for="shouldCapitaliseI">Should capitalise 'I'?</label><br>
 
-                <input type="checkbox" id="shouldCapitaliseAbbreviations" name="shouldCapitaliseAbbreviations" checked>
-                <label for="shouldCapitaliseAbbreviations">Should capitalise abbreviations?</label><br>
-                
-                <input type="checkbox" id="shouldCapitaliseNames" name="shouldCapitaliseNames" checked>
-                <label for="shouldCapitaliseNames">Should capitalise names?</label><br>
+            <div id="tabs">
+                <ul>
+                    <li><a href="#tabs-1">Nunc tincidunt</a></li>
+                    <li><a href="#tabs-2">Proin dolor</a></li>
+                    <li><a href="#tabs-3">Aenean lacinia</a></li>
+                </ul>
+                <div id="tabs-1">
+                    <div class="form-group" style="margin-top:5%">
+                        <textarea id="sites" rows="4" class="form-control" placeholder="Add sites to exclude" ></textarea>
+                        <small class="form-text text-muted">Add each site in a separate row</small>
+                        <span class="input-group-btn">
+                            <input type="button" value="Save" id="submitButton" class="btn btn-primary btn-block" disabled>
+                            <input type="button" value="Add current site to ignore list" id="ignoreSiteButton" class="btn btn-secondary btn-block">
+                        </span>
+                    </div>
+                </div>
+                <div id="tabs-2">
+                    <div class="form-group" style="margin-top:5%">
+                        <input type="checkbox" id="shouldCapitaliseI" name="shouldCapitaliseI" checked>
+                        <label for="shouldCapitaliseI">Should capitalise 'I'?</label><br>
 
+                        <input type="checkbox" id="shouldCapitaliseAbbreviations" name="shouldCapitaliseAbbreviations" checked>
+                        <label for="shouldCapitaliseAbbreviations">Should capitalise abbreviations?</label><br>
+
+                        <input type="checkbox" id="shouldCapitaliseNames" name="shouldCapitaliseNames" checked>
+                        <label for="shouldCapitaliseNames">Should capitalise names?</label><br>
+
+                    </div>
+                </div>
+                <div id="tabs-3">
+                    <p>Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti. Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio. Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.</p>
+                </div>
             </div>
+
+
+
         </div>
     </body>
     <script charset="utf-8" src="/dependencies/jquery.min.js"></script>

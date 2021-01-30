@@ -9,6 +9,10 @@ import {
 
 browser.storage.local.get(sites_to_ignore).then(updateSiteIgnoreList, onError);
 
+  $( function() {
+    $( '#tabs' ).tabs();
+  });
+
 function updateSiteIgnoreList(item) {
   var sitesToExclude = item.sites_to_ignore;
   if (sitesToExclude) {
