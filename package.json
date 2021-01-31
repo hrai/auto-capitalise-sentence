@@ -27,6 +27,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.3",
     "@babel/preset-env": "^7.12.1",
+    "bootstrap": "^4.6.0",
     "copy-webpack-plugin": "^6.3.2",
     "daily-version": "^2.0.0",
     "dot-json": "^1.2.1",
