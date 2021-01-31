@@ -11,23 +11,21 @@
 
 <body>
     <div class="container" id="settings">
-        <div class="bs-example">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
                     <a href="#excluded_sites" class="nav-link active" data-toggle="tab">Excluded Sites</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#checkboxes" class="nav-link" data-toggle="tab">Checkboxes</a>
+                    <a href="#excluded_words" class="nav-link" data-toggle="tab">Excluded words</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#excluded_words" class="nav-link" data-toggle="tab">Excluded words</a>
+                    <a href="#checkboxes" class="nav-link" data-toggle="tab">Checkboxes</a>
                 </li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane fade show active" id="excluded_sites">
-                    <div class="form-group" style="margin-top:5%">
-                        <textarea id="sites" rows="4" class="form-control"
-                            placeholder="Add sites to exclude"></textarea>
+                    <div class="form-group" >
+                        <textarea id="sites" rows="4" class="form-control" placeholder="Add sites to exclude"></textarea>
                         <small class="form-text text-muted">Add each site in a separate row</small>
                         <span class="input-group-btn">
                             <input type="button" value="Save" id="submitButton" class="btn btn-primary btn-block"
@@ -37,8 +35,19 @@
                         </span>
                     </div>
                 </div>
+                <div class="tab-pane fade" id="excluded_words">
+                    <h4 class="mt-2">Messages tab content</h4>
+                    <div class="form-group" >
+                        <textarea id="words" rows="4" class="form-control" placeholder="Add words to exclude"></textarea>
+                        <small class="form-text text-muted">Add each word in a separate row</small>
+                        <span class="input-group-btn">
+                            <input type="button" value="Save" id="submitButton" class="btn btn-primary btn-block"
+                                disabled>
+                        </span>
+                    </div>
+                </div>
                 <div class="tab-pane fade" id="checkboxes">
-                    <div class="form-group" style="margin-top:5%">
+                    <div class="form-group" >
                         <input type="checkbox" id="shouldCapitaliseI" name="shouldCapitaliseI" checked>
                         <label for="shouldCapitaliseI">Should capitalise 'I'?</label><br>
 
@@ -51,15 +60,8 @@
 
                     </div>
                 </div>
-                <div class="tab-pane fade" id="excluded_words">
-                    <h4 class="mt-2">Messages tab content</h4>
-                    <p>Donec vel placerat quam, ut euismod risus. Sed a mi suscipit, elementum sem a, hendrerit velit.
-                        Donec at erat magna. Sed dignissim orci nec eleifend egestas. Donec eget mi consequat massa
-                        vestibulum laoreet. Mauris et ultrices nulla, malesuada volutpat ante. Fusce ut orci lorem.
-                        Donec molestie libero in tempus imperdiet. Cum sociis natoque penatibus et magnis.</p>
-                </div>
+
             </div>
-        </div>
     </div>
 </body>
 
@@ -72,5 +74,6 @@
 
     #settings {
         width: 500px;
+        margin-top:3%;
     }
 </style>
