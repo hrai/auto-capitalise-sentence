@@ -18,6 +18,7 @@
       "matches": ["<all_urls>"],
       "js": [
         "dependencies/jquery.min.js",
+        "dependencies/jquery-ui.min.js",
         "lib/main.bundle.js",
         "lib/settings.bundle.js"
       ]

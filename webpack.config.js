@@ -23,6 +23,10 @@ module.exports = {
           from: './node_modules/jquery/dist/jquery.min.js',
           to: path.resolve(__dirname, 'distribution/dependencies'),
           force: true,
+        },{
+          from: './node_modules/jquery-ui-dist/jquery-ui.min.js',
+          to: path.resolve(__dirname, 'distribution/dependencies'),
+          force: true,
         },
       ],
     }),

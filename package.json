@@ -38,6 +38,7 @@
     "jest": "^26.5.3",
     "jquery": "^3.5.1",
     "jquery-ui": "^1.12.1",
+    "jquery-ui-dist": "^1.12.1",
     "lint-staged": "^10.4.0",
     "nodemon": "^2.0.7",
     "run-script-os": "^1.1.3",
