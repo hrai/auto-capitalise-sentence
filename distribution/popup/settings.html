@@ -1,34 +1,49 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <link rel="stylesheet" href="/dependencies/bootstrap.min.css" type="text/css" charset="utf-8">
-    </head>
-    <body>
-        <div class="container" id="settings">
 
-            <div id="tabs">
-                <ul class="list-inlines">
-                    <li><a href="#tabs-1">Nunc tincidunt</a></li>
-                    <li><a href="#tabs-2">Proin dolor</a></li>
-                    <li><a href="#tabs-3">Aenean lacinia</a></li>
-                </ul>
-                <div id="tabs-1">
+<head>
+    <meta charset="utf-8">
+    <script charset="utf-8" src="/dependencies/jquery.min.js"></script>
+    <script charset="utf-8" src="/dependencies/bootstrap.min.js"></script>
+    <script charset="utf-8" src="/lib/settings.bundle.js"></script>
+    <link rel="stylesheet" href="/dependencies/bootstrap.min.css" type="text/css" charset="utf-8">
+</head>
+
+<body>
+    <div class="container" id="settings">
+        <div class="bs-example">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a href="#excluded_sites" class="nav-link active" data-toggle="tab">Excluded Sites</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#checkboxes" class="nav-link" data-toggle="tab">Checkboxes</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#excluded_words" class="nav-link" data-toggle="tab">Excluded words</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="excluded_sites">
                     <div class="form-group" style="margin-top:5%">
-                        <textarea id="sites" rows="4" class="form-control" placeholder="Add sites to exclude" ></textarea>
+                        <textarea id="sites" rows="4" class="form-control"
+                            placeholder="Add sites to exclude"></textarea>
                         <small class="form-text text-muted">Add each site in a separate row</small>
                         <span class="input-group-btn">
-                            <input type="button" value="Save" id="submitButton" class="btn btn-primary btn-block" disabled>
-                            <input type="button" value="Add current site to ignore list" id="ignoreSiteButton" class="btn btn-secondary btn-block">
+                            <input type="button" value="Save" id="submitButton" class="btn btn-primary btn-block"
+                                disabled>
+                            <input type="button" value="Add current site to ignore list" id="ignoreSiteButton"
+                                class="btn btn-secondary btn-block">
                         </span>
                     </div>
                 </div>
-                <div id="tabs-2">
+                <div class="tab-pane fade" id="checkboxes">
                     <div class="form-group" style="margin-top:5%">
                         <input type="checkbox" id="shouldCapitaliseI" name="shouldCapitaliseI" checked>
                         <label for="shouldCapitaliseI">Should capitalise 'I'?</label><br>
 
-                        <input type="checkbox" id="shouldCapitaliseAbbreviations" name="shouldCapitaliseAbbreviations" checked>
+                        <input type="checkbox" id="shouldCapitaliseAbbreviations" name="shouldCapitaliseAbbreviations"
+                            checked>
                         <label for="shouldCapitaliseAbbreviations">Should capitalise abbreviations?</label><br>
 
                         <input type="checkbox" id="shouldCapitaliseNames" name="shouldCapitaliseNames" checked>
@@ -36,26 +51,26 @@
 
                     </div>
                 </div>
-                <div id="tabs-3">
-                    <p>Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti. Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio. Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.</p>
+                <div class="tab-pane fade" id="excluded_words">
+                    <h4 class="mt-2">Messages tab content</h4>
+                    <p>Donec vel placerat quam, ut euismod risus. Sed a mi suscipit, elementum sem a, hendrerit velit.
+                        Donec at erat magna. Sed dignissim orci nec eleifend egestas. Donec eget mi consequat massa
+                        vestibulum laoreet. Mauris et ultrices nulla, malesuada volutpat ante. Fusce ut orci lorem.
+                        Donec molestie libero in tempus imperdiet. Cum sociis natoque penatibus et magnis.</p>
                 </div>
             </div>
-
-
-
         </div>
-    </body>
-    <script charset="utf-8" src="/dependencies/jquery.min.js"></script>
-    <script charset="utf-8" src="/dependencies/jquery-ui.min.js"></script>
-    <script charset="utf-8" src="/lib/settings.bundle.js"></script>
+    </div>
+</body>
+
 </html>
 
-<style type="text/css" >
-#submitButton {
-    margin-top: 3px;
-}
+<style type="text/css">
+    #submitButton {
+        margin-top: 3px;
+    }
 
-#settings{
-    width: 400px;
-}
+    #settings {
+        width: 500px;
+    }
 </style>
