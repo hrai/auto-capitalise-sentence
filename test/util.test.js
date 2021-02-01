@@ -393,4 +393,17 @@ describe('utilities test', function() {
     expect(matchingAndCorrectWords(str)[0]).toBe('');
     expect(matchingAndCorrectWords(str)[1]).toBe('');
   });
+
+  test('getCaseInsensitiveMatchingAndCorrectedWords_LocalAbbreviations', () => {
+    let str = 'I\'m the content of html \'syd\'';
+    let matchingAndCorrectWords = text =>
+      utils.getCaseInsensitiveMatchingAndCorrectedWords(text, constants_key_val);
+
+    expect(matchingAndCorrectWords(str)[0]).toBe('syd');
+    expect(matchingAndCorrectWords(str)[1]).toBe('Syd');
+
+    str = 'I\'m the content of html SYD!';
+    expect(matchingAndCorrectWords(str)[0]).toBe('SYD');
+    expect(matchingAndCorrectWords(str)[1]).toBe('Syd');
+  });
 });
