@@ -4,6 +4,7 @@ export let should_capitalise_abbreviations = false;
 export let constants_key_val = {};
 export let names_key_val = {};
 export let abbreviations_key_val = {};
+let words_to_exclude = [];
 
 export function shouldCapitaliseForI(text) {
   const regex = /\s+i(\s+|')$/;
@@ -242,9 +243,15 @@ export function capitaliseText(
   if (should_capitalise_names) {
     updateConstant(text, element, tagName, names_key_val, !case_sensitive);
   }
-  
+
   if (should_capitalise_abbreviations) {
-    updateConstant(text, element, tagName, abbreviations_key_val, !case_sensitive);
+    updateConstant(
+      text,
+      element,
+      tagName,
+      abbreviations_key_val,
+      !case_sensitive
+    );
   }
 }
 
@@ -255,6 +262,8 @@ function updateConstant(text, element, tagName, key_val, case_sensitive) {
       : getCaseInsensitiveMatchingAndCorrectedWords(text, key_val);
 
   if (matchedWord !== '') {
+    if (words_to_exclude.includes(matchedWord)) return;
+
     if (matchedWord !== correctedWord) {
       let updatedStr = text.replace(matchedWord, correctedWord);
       setText(element, tagName, updatedStr, false);
@@ -306,4 +315,10 @@ export function isEditableElement(element, tagName) {
     tagName.toUpperCase() === 'INPUT' ||
     tagName.toUpperCase() === 'TEXTAREA'
   );
+}
+
+export function setWordsToExclude(value) {
+  if (value) {
+    words_to_exclude = value;
+  }
 }
