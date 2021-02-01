@@ -1,4 +1,4 @@
-export let names = [
+let person_names = [
   'Aaliyah',
   'Abbott',
   'Abby',
@@ -3669,3 +3669,30 @@ export let names = [
   'Zorro',
   'Zosma',
 ];
+
+let company_names = [
+  'Wikileaks',
+  'Sega',
+  'Microsoft',
+  'Motorola',
+  'Mozilla',
+  'MySpace',
+  'Ticketmaster',
+  'Unilever',
+  'Viacom',
+  'Wikipedia',
+  'YouTube',
+  'eBay',
+  'Panasonic',
+  'PayPal',
+  'Qualcomm',
+  'Newsweek',
+  'Netflix',
+  'OpenOffice',
+  'Dropbox',
+  'GitHub',
+  'Honeywell',
+  'Google',
+];
+
+export let names = person_names.concat(company_names);
