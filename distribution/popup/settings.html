@@ -26,7 +26,7 @@
                 <div class="tab-pane fade show active" id="excluded_sites">
                     <div class="form-group" >
                         <textarea id="sites" rows="4" class="form-control" placeholder="Add sites to exclude"></textarea>
-                        <small class="form-text text-muted">Add each site in a separate row</small>
+                        <small class="form-text text-muted">Note: Add each site in a separate row</small>
                         <span class="input-group-btn">
                             <input type="button" value="Save" id="submitButton" class="btn btn-primary btn-block"
                                 disabled>
@@ -39,9 +39,9 @@
                     <!-- <h4 class="mt-2">Messages tab content</h4> -->
                     <div class="form-group" >
                         <textarea id="words" rows="4" class="form-control" placeholder="Add words to exclude"></textarea>
-                        <small class="form-text text-muted">Add each word in a separate row</small>
+                        <small class="form-text text-muted">Note: Add each word in a separate row</small>
                         <span class="input-group-btn">
-                            <input type="button" value="Save" id="submitButton" class="btn btn-primary btn-block"
+                            <input type="button" value="Save" id="submitButtonExcludedWords" class="btn btn-primary btn-block"
                                 disabled>
                         </span>
                     </div>
@@ -68,16 +68,16 @@
 </html>
 
 <style type="text/css">
-    #submitButton {
-        margin-top: 3px;
+    .btn {
+        padding-top: 3px;
     }
 
     #settings {
         width: 500px;
-        margin-top:3%;
+        padding-top:3%;
     }
 
     .tab-content{
-        margin-top:3%;
+        padding-top:3%;
     }
 </style>
