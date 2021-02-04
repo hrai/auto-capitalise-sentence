@@ -81,15 +81,21 @@ export function getMatchingAndCorrectedWords(text, key_val, case_insensitive) {
   const lastWordRegex = /\b(\w+)\W$/;
 
   let match = lastWordRegex.exec(text);
+  const noMatch = ['', ''];
 
   if (match) {
     const matchedWord = match[1];
 
     if (matchedWord != null) {
-      let correctedWord =
-        case_insensitive === true
-          ? key_val[matchedWord.toLowerCase()]
-          : key_val[matchedWord];
+      if (words_to_exclude.includes(matchedWord)) {
+        return noMatch;
+      }
+
+      let correctedWord = getCorrectedWord(
+        case_insensitive,
+        matchedWord,
+        key_val
+      );
 
       if (correctedWord != null) {
         return [matchedWord, correctedWord];
@@ -97,7 +103,13 @@ export function getMatchingAndCorrectedWords(text, key_val, case_insensitive) {
     }
   }
 
-  return ['', ''];
+  return noMatch;
+}
+
+function getCorrectedWord(case_insensitive, matchedWord, key_val) {
+  return case_insensitive === true
+    ? key_val[matchedWord.toLowerCase()]
+    : key_val[matchedWord];
 }
 
 export function onError(error) {
@@ -262,8 +274,6 @@ function updateConstant(text, element, tagName, key_val, case_sensitive) {
       : getCaseInsensitiveMatchingAndCorrectedWords(text, key_val);
 
   if (matchedWord !== '') {
-    if (words_to_exclude.includes(matchedWord)) return;
-
     if (matchedWord !== correctedWord) {
       let updatedStr = text.replace(matchedWord, correctedWord);
       setText(element, tagName, updatedStr, false);
