@@ -73,16 +73,27 @@ export function getCaseInsensitiveMatchingAndCorrectedWords(
   text,
   keyValuePairs
 ) {
-  return getMatchingAndCorrectedWords(text, keyValuePairs, true);
+  return getMatchingAndCorrectedWords(
+    text,
+    keyValuePairs,
+    words_to_exclude,
+    true
+  );
 }
 
 export function getCaseSensitiveMatchingAndCorrectedWords(text, keyValuePairs) {
-  return getMatchingAndCorrectedWords(text, keyValuePairs, false);
+  return getMatchingAndCorrectedWords(
+    text,
+    keyValuePairs,
+    words_to_exclude,
+    false
+  );
 }
 
 export function getMatchingAndCorrectedWords(
   text,
   keyValuePairs,
+  words_to_exclude,
   case_insensitive
 ) {
   const lastWordRegex = /\b(\w+)\W$/;
