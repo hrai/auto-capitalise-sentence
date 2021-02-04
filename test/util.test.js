@@ -428,7 +428,7 @@ describe('utilities test', function () {
     expect(matchingAndCorrectWords(str)[1]).toBe('Syd');
   });
 
-  test('getCaseInsensitiveMatchingAndCorrectedWords_ExcludedWords', () => {
+  test('getMatchingAndCorrectedWords_ExcludedWords', () => {
     let str = 'I\'m the content of html january.';
     let wordsToExclude = ['january'];
     let caseInsensitive = true;
