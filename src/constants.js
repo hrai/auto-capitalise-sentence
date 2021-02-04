@@ -24,7 +24,7 @@ const months = [
   'December',
 ]
 
-const common_tech_words = [
+const commonTechWords = [
   'API',
   'APIs',
   'Artifactory',
@@ -92,7 +92,7 @@ const common_tech_words = [
   'iTunes',
 ]
 
-let words_with_apostrophe = {
+let wordsWithApostrophe = {
   arent: "aren't",
   doesnt: "doesn't",
   cant: "can't",
@@ -109,23 +109,22 @@ let words_with_apostrophe = {
   wouldnt: "wouldn't",
 }
 
-let common_local_abbreviations = ['Syd', 'Melb']
+let commonLocalAbbreviations = ['Syd', 'Melb']
 
-let constants = days.concat(
-  months,
-  common_tech_words,
-  common_local_abbreviations
-)
+let constants = days.concat(months, commonTechWords, commonLocalAbbreviations)
 
-let string_to_key_val = (obj, val) => {
+let stringToKeyValuePairs = (obj, val) => {
   obj[val.toLowerCase()] = val
   return obj
 }
 
-let constants_map = constants.reduce(string_to_key_val, {})
+let constantsMap = constants.reduce(stringToKeyValuePairs, {})
 
 //convert array to key-value pairs
-export let constants_key_val = { ...constants_map, ...words_with_apostrophe }
+export let constantsKeyValuePairs = { ...constantsMap, ...wordsWithApostrophe }
 
-export let names_key_val = names.reduce(string_to_key_val, {})
-export let abbreviations_key_val = abbreviations.reduce(string_to_key_val, {})
+export let namesKeyValuePairs = names.reduce(stringToKeyValuePairs, {})
+export let abbreviationsKeyValuePairs = abbreviations.reduce(
+  stringToKeyValuePairs,
+  {}
+)
