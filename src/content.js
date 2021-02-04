@@ -29,10 +29,10 @@ browser.storage.local
   .then(processResponse, utils.onError);
 
 /* Updating the value of this local storage variable in settings.js happens AFTER content.js.
- * The browser doesn't register the change and doesn't capitalise I by dfeault after installing the extension.
+ * The browser doesn't register the change and doesn't capitalise I by default after installing the extension.
  * This block will capture the event and update the value of 'should_capitalise_i'.
  */
-browser.storage.onChanged.addListener(function(
+browser.storage.onChanged.addListener(function (
   changes, // object
   areaName // string
 ) {
@@ -60,6 +60,14 @@ browser.storage.onChanged.addListener(function(
         utils.setShouldCapitaliseAbbreviations(newValue);
       }
     }
+
+    if (changes.words_to_exclude != null) {
+      const newValue = changes.words_to_exclude.newValue;
+
+      if (newValue != null) {
+        utils.setWordsToExclude(newValue);
+      }
+    }
   }
 });
 
@@ -71,7 +79,7 @@ function hookupEventHandlers() {
 }
 
 function observeIframeInputTags() {
-  $('iframe').on('load', event => {
+  $('iframe').on('load', (event) => {
     let iframe = event.target;
     $(iframe)
       .contents()
@@ -79,7 +87,7 @@ function observeIframeInputTags() {
       .each((_, item) => {
         //console.log(item);
 
-        $(item).on(`input.${pluginNamespace}`, function(event) {
+        $(item).on(`input.${pluginNamespace}`, function (event) {
           capitaliseText(event.target);
         });
       });
@@ -87,7 +95,7 @@ function observeIframeInputTags() {
 }
 
 function observeInputTags() {
-  $(':text,textarea').on(`input.${pluginNamespace}`, function(event) {
+  $(':text,textarea').on(`input.${pluginNamespace}`, function (event) {
     capitaliseText(event.target);
   });
 }
@@ -110,7 +118,7 @@ function processResponse(item) {
     try {
       var shouldEnableCapitalisingOnCurrentSite = true;
 
-      $.each(sitesToExclude, function(_i, siteToExclude) {
+      $.each(sitesToExclude, function (_i, siteToExclude) {
         if (currentUrlDomain.includes(siteToExclude)) {
           shouldEnableCapitalisingOnCurrentSite = false;
         }
@@ -138,8 +146,8 @@ function observeHtmlBody() {
   var tags = ['p', 'span'];
   var inputTags = ['input[type=\'text\']', 'textarea'];
 
-  var observer = new MutationObserver(function(mutations) {
-    $.each(mutations, function(_i, mutation) {
+  var observer = new MutationObserver(function (mutations) {
+    $.each(mutations, function (_i, mutation) {
       try {
         if (mutation.type === 'childList') {
           // add support for div block in gmail and outlook
@@ -150,30 +158,30 @@ function observeHtmlBody() {
 
           var addedNodes = mutation.addedNodes;
           if (addedNodes && addedNodes.length > 0) {
-            addedNodes.forEach(node => {
+            addedNodes.forEach((node) => {
               if (utils.isFirstTextOfEditableTextNode(node)) {
                 capitaliseText(node.parentNode);
-                addedNodes = addedNodes.filter(addedNode => {
+                addedNodes = addedNodes.filter((addedNode) => {
                   addedNode != node;
                 });
               }
             });
 
-            $.each(tags, function(_i, tagName) {
+            $.each(tags, function (_i, tagName) {
               var filteredEls = utils.getFilteredElements(addedNodes, tagName);
 
-              filteredEls.each(function(_index, element) {
+              filteredEls.each(function (_index, element) {
                 if (utils.shouldCapitaliseContent(element)) {
                   capitaliseText(element);
                 }
               });
             });
 
-            $.each(inputTags, function(_i, tagName) {
+            $.each(inputTags, function (_i, tagName) {
               var filteredEls = utils.getFilteredElements(addedNodes, tagName);
 
-              filteredEls.each(function(_index, element) {
-                $(element).on(`input.${pluginNamespace}`, function(event) {
+              filteredEls.each(function (_index, element) {
+                $(element).on(`input.${pluginNamespace}`, function (event) {
                   capitaliseText(event.target);
                 });
               });

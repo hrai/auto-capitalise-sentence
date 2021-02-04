@@ -300,9 +300,7 @@ export function isContentEditable(element) {
 }
 
 export function getFilteredElements(addedNodes, tagName) {
-  return $(addedNodes)
-    .find(tagName)
-    .addBack(tagName); // finds either added alone or as tree
+  return $(addedNodes).find(tagName).addBack(tagName); // finds either added alone or as tree
 }
 
 export function shouldCapitaliseContent(element) {

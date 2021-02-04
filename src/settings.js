@@ -34,8 +34,8 @@ function getUrlDomain(data) {
   return a.hostname;
 }
 
-$(document).on(`click.${pluginNamespace}`, '#ignoreSiteButton', function() {
-  browser.tabs.query({ currentWindow: true, active: true }).then(tabs => {
+$(document).on(`click.${pluginNamespace}`, '#ignoreSiteButton', function () {
+  browser.tabs.query({ currentWindow: true, active: true }).then((tabs) => {
     var hostname = getUrlDomain(tabs[0].url);
     var sites = getSites();
     sites.push(hostname);
@@ -50,7 +50,7 @@ $(document).on(`click.${pluginNamespace}`, '#ignoreSiteButton', function() {
   });
 });
 
-$(document).on(`click.${pluginNamespace}`, '#submitButton', function() {
+$(document).on(`click.${pluginNamespace}`, '#submitButton', function () {
   var sites = getSites();
 
   browser.storage.local.set({
@@ -64,7 +64,7 @@ $(document).on(`click.${pluginNamespace}`, '#submitButton', function() {
 $(document).on(
   `click.${pluginNamespace}`,
   '#submitButtonExcludedWords',
-  function() {
+  function () {
     var words = getExcludedWords();
 
     browser.storage.local.set({
@@ -77,7 +77,7 @@ $(document).on(
 );
 
 // setting the value of checkbox
-browser.storage.local.get(should_capitalise_i).then(items => {
+browser.storage.local.get(should_capitalise_i).then((items) => {
   const shouldCapitaliseI = items.should_capitalise_i;
 
   if (shouldCapitaliseI === true || shouldCapitaliseI === undefined) {
@@ -90,7 +90,7 @@ browser.storage.local.get(should_capitalise_i).then(items => {
   }
 });
 
-browser.storage.local.get(should_capitalise_names).then(items => {
+browser.storage.local.get(should_capitalise_names).then((items) => {
   const shouldCapitaliseNames = items.should_capitalise_names;
 
   if (shouldCapitaliseNames === true || shouldCapitaliseNames === undefined) {
@@ -103,7 +103,7 @@ browser.storage.local.get(should_capitalise_names).then(items => {
   }
 });
 
-browser.storage.local.get(should_capitalise_abbreviations).then(items => {
+browser.storage.local.get(should_capitalise_abbreviations).then((items) => {
   const shouldCapitaliseAbbreviations = items.should_capitalise_abbreviations;
 
   if (
@@ -119,7 +119,7 @@ browser.storage.local.get(should_capitalise_abbreviations).then(items => {
   }
 });
 
-$(document).on(`change.${pluginNamespace}`, '#shouldCapitaliseI', function(
+$(document).on(`change.${pluginNamespace}`, '#shouldCapitaliseI', function (
   event
 ) {
   if ($(event.target).prop('checked')) {
@@ -132,7 +132,7 @@ $(document).on(`change.${pluginNamespace}`, '#shouldCapitaliseI', function(
 $(document).on(
   `change.${pluginNamespace}`,
   '#shouldCapitaliseAbbreviations',
-  function(event) {
+  function (event) {
     if ($(event.target).prop('checked')) {
       set_should_capitalise_abbreviations_variable(true);
     } else {
@@ -141,7 +141,7 @@ $(document).on(
   }
 );
 
-$(document).on(`change.${pluginNamespace}`, '#shouldCapitaliseNames', function(
+$(document).on(`change.${pluginNamespace}`, '#shouldCapitaliseNames', function (
   event
 ) {
   if ($(event.target).prop('checked')) {
@@ -191,10 +191,10 @@ function getExcludedWords() {
   return [];
 }
 
-$('#sites').on(`input.${pluginNamespace}`, function() {
+$('#sites').on(`input.${pluginNamespace}`, function () {
   $('#submitButton').prop('disabled', false);
 });
 
-$('#excluded_words_textbox').on(`input.${pluginNamespace}`, function() {
+$('#excluded_words_textbox').on(`input.${pluginNamespace}`, function () {
   $('#submitButtonExcludedWords').prop('disabled', false);
 });
