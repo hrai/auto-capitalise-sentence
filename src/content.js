@@ -68,6 +68,8 @@ browser.storage.onChanged.addListener(function (
         utils.setWordsToExclude(newValue);
       }
     }
+
+    //browser.runtime.reload() - reload browser
   }
 });
 

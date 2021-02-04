@@ -105,7 +105,7 @@ export function getMatchingAndCorrectedWords(
     const matchedWord = match[1];
 
     if (matchedWord != null) {
-      if (words_to_exclude.includes(matchedWord)) {
+      if (words_to_exclude.includes(matchedWord.toLowerCase())) {
         return noMatch;
       }
 

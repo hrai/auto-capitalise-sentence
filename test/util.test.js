@@ -427,4 +427,25 @@ describe('utilities test', function () {
     expect(matchingAndCorrectWords(str)[0]).toBe('SYD');
     expect(matchingAndCorrectWords(str)[1]).toBe('Syd');
   });
+
+  test('getCaseInsensitiveMatchingAndCorrectedWords_ExcludedWords', () => {
+    let str = 'I\'m the content of html january.';
+    let wordsToExclude = ['january'];
+    let caseInsensitive = true;
+
+    let matchingAndCorrectWords = (text) =>
+      utils.getMatchingAndCorrectedWords(
+        text,
+        constantsKeyValuePairs,
+        wordsToExclude,
+        caseInsensitive
+      );
+
+    expect(matchingAndCorrectWords(str)[0]).toBe('');
+    expect(matchingAndCorrectWords(str)[1]).toBe('');
+
+    str = 'I\'M THE CONTENT OF HTML JANUARY!';
+    expect(matchingAndCorrectWords(str)[0]).toBe('');
+    expect(matchingAndCorrectWords(str)[1]).toBe('');
+  });
 });
