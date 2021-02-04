@@ -38,6 +38,7 @@ const common_tech_words = [
   'CompuServe',
   'CosmosDB',
   'DevOps',
+  'DI',
   'Drupal',
   'DynamoDB',
   'ECMAScript',

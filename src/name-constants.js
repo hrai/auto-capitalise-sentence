@@ -2758,6 +2758,7 @@ let person_names = [
   'Rae',
   'Rafael',
   'Raffles',
+  'Rai',
   'Ralph',
   'Ramada',
   'Ramanujan',
