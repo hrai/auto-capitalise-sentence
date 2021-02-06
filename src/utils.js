@@ -1,10 +1,10 @@
-export let should_capitalise_i = false;
-export let should_capitalise_names = false;
-export let should_capitalise_abbreviations = false;
-export let constants_key_val = {};
-export let names_key_val = {};
-export let abbreviations_key_val = {};
-let words_to_exclude = [];
+export let shouldCapitaliseI = false;
+export let shouldCapitaliseNames = false;
+export let shouldCapitaliseAbbreviations = false;
+export let constantsKeyVal = {};
+export let namesKeyVal = {};
+export let abbreviationsKeyVal = {};
+let wordsToExclude = [];
 
 export function shouldCapitaliseForI(text) {
   const regex = /\s+i(\s+|')$/;
@@ -15,37 +15,37 @@ export function shouldCapitaliseForI(text) {
 
 export function setShouldCapitaliseI(value) {
   if (value != null) {
-    should_capitalise_i = value;
+    shouldCapitaliseI = value;
   }
 }
 
 export function setShouldCapitaliseNames(value) {
   if (value != null) {
-    should_capitalise_names = value;
+    shouldCapitaliseNames = value;
   }
 }
 
 export function setShouldCapitaliseAbbreviations(value) {
   if (value != null) {
-    should_capitalise_abbreviations = value;
+    shouldCapitaliseAbbreviations = value;
   }
 }
 
 export function setConstantsKeyVal(value) {
   if (value != null) {
-    constants_key_val = value;
+    constantsKeyVal = value;
   }
 }
 
 export function setNamesKeyVal(value) {
   if (value != null) {
-    names_key_val = value;
+    namesKeyVal = value;
   }
 }
 
 export function setAbbreviationsKeyVal(value) {
   if (value != null) {
-    abbreviations_key_val = value;
+    abbreviationsKeyVal = value;
   }
 }
 
@@ -73,19 +73,14 @@ export function getCaseInsensitiveMatchingAndCorrectedWords(
   text,
   keyValuePairs
 ) {
-  return getMatchingAndCorrectedWords(
-    text,
-    keyValuePairs,
-    words_to_exclude,
-    true
-  );
+  return getMatchingAndCorrectedWords(text, keyValuePairs, wordsToExclude, true);
 }
 
 export function getCaseSensitiveMatchingAndCorrectedWords(text, keyValuePairs) {
   return getMatchingAndCorrectedWords(
     text,
     keyValuePairs,
-    words_to_exclude,
+    wordsToExclude,
     false
   );
 }
@@ -93,8 +88,8 @@ export function getCaseSensitiveMatchingAndCorrectedWords(text, keyValuePairs) {
 export function getMatchingAndCorrectedWords(
   text,
   keyValuePairs,
-  words_to_exclude,
-  case_insensitive
+  wordsToExclude,
+  caseInsensitive
 ) {
   const lastWordRegex = /\b(\w+)\W$/;
 
@@ -105,12 +100,12 @@ export function getMatchingAndCorrectedWords(
     const matchedWord = match[1];
 
     if (matchedWord != null) {
-      if (words_to_exclude.includes(matchedWord.toLowerCase())) {
+      if (wordsToExclude.includes(matchedWord.toLowerCase())) {
         return noMatch;
       }
 
       let correctedWord = getCorrectedWord(
-        case_insensitive,
+        caseInsensitive,
         matchedWord,
         keyValuePairs
       );
@@ -124,8 +119,8 @@ export function getMatchingAndCorrectedWords(
   return noMatch;
 }
 
-function getCorrectedWord(case_insensitive, matchedWord, keyValuePairs) {
-  return case_insensitive === true
+function getCorrectedWord(caseInsensitive, matchedWord, keyValuePairs) {
+  return caseInsensitive === true
     ? keyValuePairs[matchedWord.toLowerCase()]
     : keyValuePairs[matchedWord];
 }
@@ -260,7 +255,7 @@ export function capitaliseText(
     return;
   }
 
-  if (text.length >= 2 && shouldCapitaliseForI(text) && should_capitalise_i) {
+  if (text.length >= 2 && shouldCapitaliseForI(text) && shouldCapitaliseI) {
     const updatedStr = getCapitalisedContentForI(text);
 
     setText(element, tagName, updatedStr, shouldAppendBr);
@@ -268,20 +263,14 @@ export function capitaliseText(
   }
 
   const caseSensitive = true;
-  updateConstant(text, element, tagName, constants_key_val, caseSensitive);
+  updateConstant(text, element, tagName, constantsKeyVal, caseSensitive);
 
-  if (should_capitalise_names) {
-    updateConstant(text, element, tagName, names_key_val, !caseSensitive);
+  if (shouldCapitaliseNames) {
+    updateConstant(text, element, tagName, namesKeyVal, !caseSensitive);
   }
 
-  if (should_capitalise_abbreviations) {
-    updateConstant(
-      text,
-      element,
-      tagName,
-      abbreviations_key_val,
-      !caseSensitive
-    );
+  if (shouldCapitaliseAbbreviations) {
+    updateConstant(text, element, tagName, abbreviationsKeyVal, !caseSensitive);
   }
 }
 
@@ -328,7 +317,9 @@ export function isContentEditable(element) {
 }
 
 export function getFilteredElements(addedNodes, tagName) {
-  return $(addedNodes).find(tagName).addBack(tagName); // finds either added alone or as tree
+  return $(addedNodes)
+    .find(tagName)
+    .addBack(tagName); // finds either added alone or as tree
 }
 
 export function shouldCapitaliseContent(element) {
@@ -345,6 +336,6 @@ export function isEditableElement(element, tagName) {
 
 export function setWordsToExclude(value) {
   if (value) {
-    words_to_exclude = value;
+    wordsToExclude = value;
   }
 }

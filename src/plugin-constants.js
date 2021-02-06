@@ -1,10 +1,10 @@
 export const pluginNamespace = 'auto-capitalise-extension';
 
-export const sites_to_ignore = 'sites_to_ignore',
-  words_to_exclude = 'words_to_exclude',
-  should_capitalise_i = 'should_capitalise_i',
-  should_capitalise_names = 'should_capitalise_names',
-  should_capitalise_abbreviations = 'should_capitalise_abbreviations',
-  constants_key_val = 'constants_key_val',
-  names_key_val = 'names_key_val',
-  abbreviations_key_val = 'abbreviations_key_val';
+export const sitesToIgnore = 'sites_to_ignore',
+  wordsToExclude = 'words_to_exclude',
+  shouldCapitaliseI = 'should_capitalise_i',
+  shouldCapitaliseNames = 'should_capitalise_names',
+  shouldCapitaliseAbbreviations = 'should_capitalise_abbreviations',
+  constantsKeyVal = 'constants_key_val',
+  namesKeyVal = 'names_key_val',
+  abbreviationsKeyVal = 'abbreviations_key_val';

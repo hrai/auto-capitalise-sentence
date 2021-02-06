@@ -1,4 +1,4 @@
-let person_names = [
+let personNames = [
   'Aaliyah',
   'Abbott',
   'Abby',
@@ -3672,7 +3672,7 @@ let person_names = [
   'Zosma',
 ];
 
-let company_names = [
+let companyNames = [
   'Wikileaks',
   'Sega',
   'Microsoft',
@@ -3697,4 +3697,4 @@ let company_names = [
   'Google',
 ];
 
-export let names = person_names.concat(company_names);
+export let names = personNames.concat(companyNames);
