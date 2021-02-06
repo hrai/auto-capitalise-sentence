@@ -9,6 +9,7 @@ import {
   constants_key_val,
   names_key_val,
   abbreviations_key_val,
+  words_to_exclude,
 } from './plugin-constants';
 
 const errorMsg = 'breaking loop';
@@ -23,11 +24,12 @@ browser.storage.local
     constants_key_val,
     names_key_val,
     abbreviations_key_val,
+    words_to_exclude,
   ])
   .then(processResponse, utils.onError);
 
 /* Updating the value of this local storage variable in settings.js happens AFTER content.js.
- * The browser doesn't register the change and doesn't capitalise I by dfeault after installing the extension.
+ * The browser doesn't register the change and doesn't capitalise I by default after installing the extension.
  * This block will capture the event and update the value of 'should_capitalise_i'.
  */
 browser.storage.onChanged.addListener(function (
@@ -58,6 +60,16 @@ browser.storage.onChanged.addListener(function (
         utils.setShouldCapitaliseAbbreviations(newValue);
       }
     }
+
+    if (changes.words_to_exclude != null) {
+      const newValue = changes.words_to_exclude.newValue;
+
+      if (newValue != null) {
+        utils.setWordsToExclude(newValue);
+      }
+    }
+
+    //browser.runtime.reload() - reload browser
   }
 });
 
@@ -98,6 +110,8 @@ function processResponse(item) {
   utils.setConstantsKeyVal(item.constants_key_val);
   utils.setNamesKeyVal(item.names_key_val);
   utils.setAbbreviationsKeyVal(item.abbreviations_key_val);
+  console.log(item.words_to_exclude);
+  utils.setWordsToExclude(item.words_to_exclude);
 
   if (item && sitesToExclude) {
     //https://stackoverflow.com/questions/406192/get-current-url-with-jquery

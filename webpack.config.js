@@ -23,6 +23,16 @@ module.exports = {
           from: './node_modules/jquery/dist/jquery.min.js',
           to: path.resolve(__dirname, 'distribution/dependencies'),
           force: true,
+        },        
+        {
+          from: './node_modules/bootstrap/dist/js/bootstrap.min.js',
+          to: path.resolve(__dirname, 'distribution/dependencies'),
+          force: true,
+        },
+        {
+          from: './node_modules/bootstrap/dist/css/bootstrap.min.css',
+          to: path.resolve(__dirname, 'distribution/dependencies'),
+          force: true,
         },
       ],
     }),

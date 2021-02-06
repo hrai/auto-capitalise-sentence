@@ -18,9 +18,11 @@
       "matches": ["<all_urls>"],
       "js": [
         "dependencies/jquery.min.js",
+        "dependencies/bootstrap.min.js",
         "lib/main.bundle.js",
         "lib/settings.bundle.js"
-      ]
+      ],
+      "css": ["dependencies/bootstrap.min.css"]
     }
   ],
   "icons": {

@@ -1,42 +1,84 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <link rel="stylesheet" href="/dependencies/bootstrap.min.css" type="text/css" charset="utf-8">
-    </head>
-    <body>
-        <div class="container" id="settings">
-            <div class="form-group" style="margin-top:5%">
-                <textarea id="sites" rows="4" class="form-control" placeholder="Add sites to exclude" ></textarea>
-                <small class="form-text text-muted">Add each site in a separate row</small>
-                <span class="input-group-btn">
-                    <input type="button" value="Save" id="submitButton" class="btn btn-primary btn-block" disabled>
-                    <input type="button" value="Add current site to ignore list" id="ignoreSiteButton" class="btn btn-secondary btn-block">
-                </span>
-            </div>
-            <div class="form-group" style="margin-top:5%">
-                <input type="checkbox" id="shouldCapitaliseI" name="shouldCapitaliseI" checked>
-                <label for="shouldCapitaliseI">Should capitalise 'I'?</label><br>
 
-                <input type="checkbox" id="shouldCapitaliseAbbreviations" name="shouldCapitaliseAbbreviations" checked>
-                <label for="shouldCapitaliseAbbreviations">Should capitalise abbreviations?</label><br>
-                
-                <input type="checkbox" id="shouldCapitaliseNames" name="shouldCapitaliseNames" checked>
-                <label for="shouldCapitaliseNames">Should capitalise names?</label><br>
-
-            </div>
-        </div>
-    </body>
+<head>
+    <meta charset="utf-8">
     <script charset="utf-8" src="/dependencies/jquery.min.js"></script>
+    <script charset="utf-8" src="/dependencies/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/dependencies/bootstrap.min.css" type="text/css" charset="utf-8">
+</head>
+
+<body>
+    <div class="container" id="settings">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a href="#excluded_words" class="nav-link active" data-toggle="tab">Excluded words</a>
+            </li>
+            <li class="nav-item">
+                <a href="#excluded_sites" class="nav-link" data-toggle="tab">Excluded websites</a>
+            </li>
+            <li class="nav-item">
+                <a href="#checkboxes" class="nav-link" data-toggle="tab">Enable/disable features</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="excluded_words">
+                <div class="form-group">
+                    <p class="form-text">Enter words which you don't want to be capitalised.</p>
+                    <textarea id="excluded_words_textbox" rows="4" class="form-control"
+                        placeholder="Add words to exclude"></textarea>
+                    <small class="form-text text-muted">Note: Add each word in a separate row</small>
+                    <span class="input-group-btn">
+                        <input type="button" value="Save" id="submitButtonExcludedWords"
+                            class="btn btn-primary btn-block" disabled>
+                    </span>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="excluded_sites">
+                <div class="form-group">
+                    <p class="form-text">Enter websites where you want the capitalising to be disabled.</p>
+                    <textarea id="sites" rows="4" class="form-control" placeholder="Add sites to exclude"></textarea>
+                    <small class="form-text text-muted">Note: Add each site in a separate row</small>
+                    <span class="input-group-btn">
+                        <input type="button" value="Save" id="submitButton" class="btn btn-primary btn-block" disabled>
+                        <input type="button" value="Add current site to ignore list" id="ignoreSiteButton"
+                            class="btn btn-secondary btn-block">
+                    </span>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="checkboxes">
+                <div class="form-group">
+                    <input type="checkbox" id="shouldCapitaliseI" name="shouldCapitaliseI" checked>
+                    <label for="shouldCapitaliseI">Should capitalise 'I'?</label><br>
+
+                    <input type="checkbox" id="shouldCapitaliseAbbreviations" name="shouldCapitaliseAbbreviations"
+                        checked>
+                    <label for="shouldCapitaliseAbbreviations">Should capitalise abbreviations?</label><br>
+
+                    <input type="checkbox" id="shouldCapitaliseNames" name="shouldCapitaliseNames" checked>
+                    <label for="shouldCapitaliseNames">Should capitalise names?</label><br>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
     <script charset="utf-8" src="/lib/settings.bundle.js"></script>
+</body>
+
 </html>
 
-<style type="text/css" >
-#submitButton {
-    margin-top: 3px;
-}
+<style type="text/css">
+    .btn {
+        padding-top: 3px;
+    }
 
-#settings{
-    width: 400px;
-}
+    #settings {
+        width: 550px;
+        padding-top: 3%;
+    }
+
+    .tab-content {
+        padding-top: 3%;
+    }
 </style>

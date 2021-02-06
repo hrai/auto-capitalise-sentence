@@ -6,8 +6,8 @@
   "scripts": {
     "start": "run-script-os",
     "start:win32": "yarn build && web-ext run --firefox=\"c:/Program Files/Firefox Developer Edition/firefox.exe\"",
-    "start:darwin:linux": "yarn webpack && web-ext run --firefox=firefox-developer",
-    "start:chrome": "cd distribution && web-ext run -t chromium",
+    "start:darwin:linux": "yarn build && web-ext run --firefox=firefox-developer",
+    "start:chrome": "yarn build && cd distribution && web-ext run -t chromium",
     "build": "yarn webpack",
     "watch": "yarn webpack --watch",
     "web": "nodemon app.js",
@@ -27,6 +27,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.3",
     "@babel/preset-env": "^7.12.1",
+    "bootstrap": "^4.6.0",
     "copy-webpack-plugin": "^6.3.2",
     "daily-version": "^2.0.0",
     "dot-json": "^1.2.1",

@@ -11,11 +11,21 @@ Firefox/Microsoft Edge Chromium add-on to automatically capitalise words while t
 - Capitalise common [names](src/name-constants.js#L1)
 - Add apostrophe to common [English words](src/constants.js#L81)
 
-## Configuration
+## Configuration/Settings
 
-If you don't want the extension to auto-capitalise on a particular website, you can configure it in the settings window.
+There are 3 sections to configure the extension.
 
-![Settings](imgs/settings.png)
+- Excluded words: If you want to exclude words from being auto-capitalised, you can add the words in the textarea and save it.
+
+  ![excluded-words](imgs/excluded-words.png)
+
+- Excluded websites: If you don't want the words to be auto-capitalised, you can add the website's name in the textarea and save it.
+
+  ![excluded-websites](imgs/excluded-websites.png)
+
+- Enable/disable features: If you don't want any of the features provided by this extension, you can disable it here.
+
+  ![features](imgs/features.png)
 
 ## Add-on download links
 

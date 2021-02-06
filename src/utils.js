@@ -4,6 +4,7 @@ export let should_capitalise_abbreviations = false;
 export let constants_key_val = {};
 export let names_key_val = {};
 export let abbreviations_key_val = {};
+let words_to_exclude = [];
 
 export function shouldCapitaliseForI(text) {
   const regex = /\s+i(\s+|')$/;
@@ -68,27 +69,51 @@ export function shouldCapitalise(text) {
   return matches;
 }
 
-export function getCaseInsensitiveMatchingAndCorrectedWords(text, key_val) {
-  return getMatchingAndCorrectedWords(text, key_val, true);
+export function getCaseInsensitiveMatchingAndCorrectedWords(
+  text,
+  keyValuePairs
+) {
+  return getMatchingAndCorrectedWords(
+    text,
+    keyValuePairs,
+    words_to_exclude,
+    true
+  );
 }
 
-export function getCaseSensitiveMatchingAndCorrectedWords(text, key_val) {
-  return getMatchingAndCorrectedWords(text, key_val, false);
+export function getCaseSensitiveMatchingAndCorrectedWords(text, keyValuePairs) {
+  return getMatchingAndCorrectedWords(
+    text,
+    keyValuePairs,
+    words_to_exclude,
+    false
+  );
 }
 
-export function getMatchingAndCorrectedWords(text, key_val, case_insensitive) {
+export function getMatchingAndCorrectedWords(
+  text,
+  keyValuePairs,
+  words_to_exclude,
+  case_insensitive
+) {
   const lastWordRegex = /\b(\w+)\W$/;
 
   let match = lastWordRegex.exec(text);
+  const noMatch = ['', ''];
 
   if (match) {
     const matchedWord = match[1];
 
     if (matchedWord != null) {
-      let correctedWord =
-        case_insensitive === true
-          ? key_val[matchedWord.toLowerCase()]
-          : key_val[matchedWord];
+      if (words_to_exclude.includes(matchedWord.toLowerCase())) {
+        return noMatch;
+      }
+
+      let correctedWord = getCorrectedWord(
+        case_insensitive,
+        matchedWord,
+        keyValuePairs
+      );
 
       if (correctedWord != null) {
         return [matchedWord, correctedWord];
@@ -96,7 +121,13 @@ export function getMatchingAndCorrectedWords(text, key_val, case_insensitive) {
     }
   }
 
-  return ['', ''];
+  return noMatch;
+}
+
+function getCorrectedWord(case_insensitive, matchedWord, keyValuePairs) {
+  return case_insensitive === true
+    ? keyValuePairs[matchedWord.toLowerCase()]
+    : keyValuePairs[matchedWord];
 }
 
 export function onError(error) {
@@ -236,23 +267,29 @@ export function capitaliseText(
     return;
   }
 
-  const case_sensitive = true;
-  updateConstant(text, element, tagName, constants_key_val, case_sensitive);
+  const caseSensitive = true;
+  updateConstant(text, element, tagName, constants_key_val, caseSensitive);
 
   if (should_capitalise_names) {
-    updateConstant(text, element, tagName, names_key_val, !case_sensitive);
+    updateConstant(text, element, tagName, names_key_val, !caseSensitive);
   }
-  
+
   if (should_capitalise_abbreviations) {
-    updateConstant(text, element, tagName, abbreviations_key_val, !case_sensitive);
+    updateConstant(
+      text,
+      element,
+      tagName,
+      abbreviations_key_val,
+      !caseSensitive
+    );
   }
 }
 
-function updateConstant(text, element, tagName, key_val, case_sensitive) {
+function updateConstant(text, element, tagName, keyValuePairs, caseSensitive) {
   const [matchedWord, correctedWord] =
-    case_sensitive === true
-      ? getCaseSensitiveMatchingAndCorrectedWords(text, key_val)
-      : getCaseInsensitiveMatchingAndCorrectedWords(text, key_val);
+    caseSensitive === true
+      ? getCaseSensitiveMatchingAndCorrectedWords(text, keyValuePairs)
+      : getCaseInsensitiveMatchingAndCorrectedWords(text, keyValuePairs);
 
   if (matchedWord !== '') {
     if (matchedWord !== correctedWord) {
@@ -291,9 +328,7 @@ export function isContentEditable(element) {
 }
 
 export function getFilteredElements(addedNodes, tagName) {
-  return $(addedNodes)
-    .find(tagName)
-    .addBack(tagName); // finds either added alone or as tree
+  return $(addedNodes).find(tagName).addBack(tagName); // finds either added alone or as tree
 }
 
 export function shouldCapitaliseContent(element) {
@@ -306,4 +341,10 @@ export function isEditableElement(element, tagName) {
     tagName.toUpperCase() === 'INPUT' ||
     tagName.toUpperCase() === 'TEXTAREA'
   );
+}
+
+export function setWordsToExclude(value) {
+  if (value) {
+    words_to_exclude = value;
+  }
 }

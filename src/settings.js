@@ -2,17 +2,25 @@ import browser from 'webextension-polyfill';
 import {
   pluginNamespace,
   sites_to_ignore,
+  words_to_exclude,
   should_capitalise_i,
   should_capitalise_names,
   should_capitalise_abbreviations,
 } from './plugin-constants';
 
-browser.storage.local.get(sites_to_ignore).then(updateSiteIgnoreList, onError);
+browser.storage.local
+  .get([sites_to_ignore, words_to_exclude])
+  .then(updateIgnoreLists, onError);
 
-function updateSiteIgnoreList(item) {
+function updateIgnoreLists(item) {
   var sitesToExclude = item.sites_to_ignore;
   if (sitesToExclude) {
     $('#sites').val(sitesToExclude.join('\n'));
+  }
+
+  var wordsToExclude = item.words_to_exclude;
+  if (wordsToExclude) {
+    $('#excluded_words_textbox').val(wordsToExclude.join('\n'));
   }
 }
 
@@ -52,6 +60,21 @@ $(document).on(`click.${pluginNamespace}`, '#submitButton', function () {
   $(this).prop('disabled', true);
   $(this).val('Saved');
 });
+
+$(document).on(
+  `click.${pluginNamespace}`,
+  '#submitButtonExcludedWords',
+  function () {
+    var words = getExcludedWords();
+
+    browser.storage.local.set({
+      words_to_exclude: words,
+    });
+
+    $(this).prop('disabled', true);
+    $(this).val('Saved');
+  }
+);
 
 // setting the value of checkbox
 browser.storage.local.get(should_capitalise_i).then((items) => {
@@ -157,6 +180,21 @@ function getSites() {
   return [];
 }
 
+function getExcludedWords() {
+  var wordsBoxVal = $('#excluded_words_textbox').val();
+
+  if (wordsBoxVal) {
+    var words = wordsBoxVal.split('\n');
+    return words;
+  }
+
+  return [];
+}
+
 $('#sites').on(`input.${pluginNamespace}`, function () {
   $('#submitButton').prop('disabled', false);
+});
+
+$('#excluded_words_textbox').on(`input.${pluginNamespace}`, function () {
+  $('#submitButtonExcludedWords').prop('disabled', false);
 });
