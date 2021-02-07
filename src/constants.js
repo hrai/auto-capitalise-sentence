@@ -28,6 +28,7 @@ const commonTechWords = [
   'API',
   'APIs',
   'Artifactory',
+  'AWS',
   'Baidu',
   'BigQuery',
   'BitTorrent',
