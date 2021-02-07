@@ -48,6 +48,7 @@ const commonTechWords = [
   'JavaScript',
   'Jekyll',
   'Jenkins',
+  'Jira',
   'LibreOffice',
   'MVC',
   'MariaDB',
