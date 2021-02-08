@@ -120,7 +120,7 @@ function processResponse(item) {
     try {
       var shouldEnableCapitalisingOnCurrentSite = true;
 
-      $.each(sitesToExclude, function(I, siteToExclude) {
+      $.each(sitesToExclude, function(_i, siteToExclude) {
         if (currentUrlDomain.includes(siteToExclude)) {
           shouldEnableCapitalisingOnCurrentSite = false;
         }
@@ -149,7 +149,7 @@ function observeHtmlBody() {
   var inputTags = ['input[type=\'text\']', 'textarea'];
 
   var observer = new MutationObserver(function(mutations) {
-    $.each(mutations, function(I, mutation) {
+    $.each(mutations, function(_i, mutation) {
       try {
         if (mutation.type === 'childList') {
           // add support for div block in gmail and outlook
@@ -169,20 +169,20 @@ function observeHtmlBody() {
               }
             });
 
-            $.each(tags, function(I, tagName) {
+            $.each(tags, function(_i, tagName) {
               var filteredEls = utils.getFilteredElements(addedNodes, tagName);
 
-              filteredEls.each(function(Index, element) {
+              filteredEls.each(function(_index, element) {
                 if (utils.shouldCapitaliseContent(element)) {
                   capitaliseText(element);
                 }
               });
             });
 
-            $.each(inputTags, function(I, tagName) {
+            $.each(inputTags, function(_i, tagName) {
               var filteredEls = utils.getFilteredElements(addedNodes, tagName);
 
-              filteredEls.each(function(Index, element) {
+              filteredEls.each(function(_index, element) {
                 $(element).on(`input.${pluginNamespace}`, function(event) {
                   capitaliseText(event.target);
                 });
