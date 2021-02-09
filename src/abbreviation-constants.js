@@ -1,4 +1,4 @@
-const common_abbreviations = [
+const commonAbbreviations = [
   'AFR',
   'AMD',
   'AOL',
@@ -80,4 +80,4 @@ const common_abbreviations = [
   'WTH',
 ];
 
-export const abbreviations = common_abbreviations;
+export const abbreviations = commonAbbreviations;

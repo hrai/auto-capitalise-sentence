@@ -1,24 +1,24 @@
 import browser from 'webextension-polyfill';
 import {
   pluginNamespace,
-  sites_to_ignore,
-  words_to_exclude,
-  should_capitalise_i,
-  should_capitalise_names,
-  should_capitalise_abbreviations,
+  sitesToIgnore,
+  wordsToExclude,
+  shouldCapitaliseI,
+  shouldCapitaliseNames,
+  shouldCapitaliseAbbreviations,
 } from './plugin-constants';
 
 browser.storage.local
-  .get([sites_to_ignore, words_to_exclude])
+  .get([sitesToIgnore, wordsToExclude])
   .then(updateIgnoreLists, onError);
 
 function updateIgnoreLists(item) {
-  var sitesToExclude = item.sites_to_ignore;
+  var sitesToExclude = item.sitesToIgnore;
   if (sitesToExclude) {
     $('#sites').val(sitesToExclude.join('\n'));
   }
 
-  var wordsToExclude = item.words_to_exclude;
+  var wordsToExclude = item.wordsToExclude;
   if (wordsToExclude) {
     $('#excluded_words_textbox').val(wordsToExclude.join('\n'));
   }
@@ -34,14 +34,14 @@ function getUrlDomain(data) {
   return a.hostname;
 }
 
-$(document).on(`click.${pluginNamespace}`, '#ignoreSiteButton', function () {
-  browser.tabs.query({ currentWindow: true, active: true }).then((tabs) => {
+$(document).on(`click.${pluginNamespace}`, '#ignoreSiteButton', function() {
+  browser.tabs.query({ currentWindow: true, active: true }).then(tabs => {
     var hostname = getUrlDomain(tabs[0].url);
     var sites = getSites();
     sites.push(hostname);
 
     browser.storage.local.set({
-      sites_to_ignore: sites,
+      sitesToIgnore: sites,
     });
 
     $('#sites').val(sites.join('\n'));
@@ -50,11 +50,11 @@ $(document).on(`click.${pluginNamespace}`, '#ignoreSiteButton', function () {
   });
 });
 
-$(document).on(`click.${pluginNamespace}`, '#submitButton', function () {
+$(document).on(`click.${pluginNamespace}`, '#submitButton', function() {
   var sites = getSites();
 
   browser.storage.local.set({
-    sites_to_ignore: sites,
+    sitesToIgnore: sites,
   });
 
   $(this).prop('disabled', true);
@@ -64,11 +64,12 @@ $(document).on(`click.${pluginNamespace}`, '#submitButton', function () {
 $(document).on(
   `click.${pluginNamespace}`,
   '#submitButtonExcludedWords',
-  function () {
+  function() {
     var words = getExcludedWords();
 
+    console.log(words);
     browser.storage.local.set({
-      words_to_exclude: words,
+      wordsToExclude: words,
     });
 
     $(this).prop('disabled', true);
@@ -77,34 +78,34 @@ $(document).on(
 );
 
 // setting the value of checkbox
-browser.storage.local.get(should_capitalise_i).then((items) => {
-  const shouldCapitaliseI = items.should_capitalise_i;
+browser.storage.local.get(shouldCapitaliseI).then(items => {
+  const shouldCapitaliseI = items.shouldCapitaliseI;
 
   if (shouldCapitaliseI === true || shouldCapitaliseI === undefined) {
     //value not set yet/ext just installed
     $('#shouldCapitaliseI').prop('checked', true);
-    set_should_capitalise_i_variable(true);
+    setShouldCapitaliseIVariable(true);
   } else {
     $('#shouldCapitaliseI').prop('checked', false);
-    set_should_capitalise_i_variable(false);
+    setShouldCapitaliseIVariable(false);
   }
 });
 
-browser.storage.local.get(should_capitalise_names).then((items) => {
-  const shouldCapitaliseNames = items.should_capitalise_names;
+browser.storage.local.get(shouldCapitaliseNames).then(items => {
+  const shouldCapitaliseNames = items.shouldCapitaliseNames;
 
   if (shouldCapitaliseNames === true || shouldCapitaliseNames === undefined) {
     //value not set yet/ext just installed
     $('#shouldCapitaliseNames').prop('checked', true);
-    set_should_capitalise_names_variable(true);
+    setShouldCapitaliseNamesVariable(true);
   } else {
     $('#shouldCapitaliseNames').prop('checked', false);
-    set_should_capitalise_names_variable(false);
+    setShouldCapitaliseNamesVariable(false);
   }
 });
 
-browser.storage.local.get(should_capitalise_abbreviations).then((items) => {
-  const shouldCapitaliseAbbreviations = items.should_capitalise_abbreviations;
+browser.storage.local.get(shouldCapitaliseAbbreviations).then(items => {
+  const shouldCapitaliseAbbreviations = items.shouldCapitaliseAbbreviations;
 
   if (
     shouldCapitaliseAbbreviations === true ||
@@ -112,60 +113,60 @@ browser.storage.local.get(should_capitalise_abbreviations).then((items) => {
   ) {
     //value not set yet/ext just installed
     $('#shouldCapitaliseAbbreviations').prop('checked', true);
-    set_should_capitalise_abbreviations_variable(true);
+    setShouldCapitaliseAbbreviationsVariable(true);
   } else {
     $('#shouldCapitaliseAbbreviations').prop('checked', false);
-    set_should_capitalise_abbreviations_variable(false);
+    setShouldCapitaliseAbbreviationsVariable(false);
   }
 });
 
-$(document).on(`change.${pluginNamespace}`, '#shouldCapitaliseI', function (
+$(document).on(`change.${pluginNamespace}`, '#shouldCapitaliseI', function(
   event
 ) {
   if ($(event.target).prop('checked')) {
-    set_should_capitalise_i_variable(true);
+    setShouldCapitaliseIVariable(true);
   } else {
-    set_should_capitalise_i_variable(false);
+    setShouldCapitaliseIVariable(false);
   }
 });
 
 $(document).on(
   `change.${pluginNamespace}`,
   '#shouldCapitaliseAbbreviations',
-  function (event) {
+  function(event) {
     if ($(event.target).prop('checked')) {
-      set_should_capitalise_abbreviations_variable(true);
+      setShouldCapitaliseAbbreviationsVariable(true);
     } else {
-      set_should_capitalise_abbreviations_variable(false);
+      setShouldCapitaliseAbbreviationsVariable(false);
     }
   }
 );
 
-$(document).on(`change.${pluginNamespace}`, '#shouldCapitaliseNames', function (
+$(document).on(`change.${pluginNamespace}`, '#shouldCapitaliseNames', function(
   event
 ) {
   if ($(event.target).prop('checked')) {
-    set_should_capitalise_names_variable(true);
+    setShouldCapitaliseNamesVariable(true);
   } else {
-    set_should_capitalise_names_variable(false);
+    setShouldCapitaliseNamesVariable(false);
   }
 });
 
-function set_should_capitalise_i_variable(value) {
+function setShouldCapitaliseIVariable(value) {
   browser.storage.local.set({
-    should_capitalise_i: value,
+    shouldCapitaliseI: value,
   });
 }
 
-function set_should_capitalise_names_variable(value) {
+function setShouldCapitaliseNamesVariable(value) {
   browser.storage.local.set({
-    should_capitalise_names: value,
+    shouldCapitaliseNames: value,
   });
 }
 
-function set_should_capitalise_abbreviations_variable(value) {
+function setShouldCapitaliseAbbreviationsVariable(value) {
   browser.storage.local.set({
-    should_capitalise_abbreviations: value,
+    shouldCapitaliseAbbreviations: value,
   });
 }
 
@@ -191,10 +192,10 @@ function getExcludedWords() {
   return [];
 }
 
-$('#sites').on(`input.${pluginNamespace}`, function () {
+$('#sites').on(`input.${pluginNamespace}`, function() {
   $('#submitButton').prop('disabled', false);
 });
 
-$('#excluded_words_textbox').on(`input.${pluginNamespace}`, function () {
+$('#excluded_words_textbox').on(`input.${pluginNamespace}`, function() {
   $('#submitButtonExcludedWords').prop('disabled', false);
 });
