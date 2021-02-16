@@ -80,4 +80,6 @@ const commonAbbreviations = [
   'WTH',
 ];
 
-export const abbreviations = commonAbbreviations;
+const timeAbbreviations = ['GMT', 'UTC'];
+
+export const abbreviations = commonAbbreviations.concat(timeAbbreviations);

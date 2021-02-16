@@ -44,6 +44,7 @@ const commonTechWords = [
   'DynamoDB',
   'ECMAScript',
   'Emacs',
+  'ES',
   'HBase',
   'Instagram',
   'JavaScript',
