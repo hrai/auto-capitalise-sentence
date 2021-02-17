@@ -61,6 +61,7 @@ const commonAbbreviations = [
   'ROTFL',
   'RSVP',
   'SARS',
+  'SLR',
   'SMH',
   'TBA',
   'TBC',

@@ -77,6 +77,7 @@ const commonTechWords = [
   'Scala',
   'SharePoint',
   'TensorFlow',
+  'UAT',
   'UI',
   'UIs',
   'URL',
