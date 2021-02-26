@@ -25,6 +25,7 @@ const months = [
 ]
 
 const commonTechWords = [
+  'AI',
   'API',
   'APIs',
   'Artifactory',
@@ -54,6 +55,7 @@ const commonTechWords = [
   'LibreOffice',
   'MVC',
   'MariaDB',
+  'ML',
   'MongoDB',
   'MySQL',
   'Netscape',
