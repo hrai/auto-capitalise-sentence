@@ -31,6 +31,7 @@ const commonAbbreviations = [
   'HTML',
   'IBM',
   'ICYMI',
+  'ID',
   'IDK',
   'IKEA',
   'IMO',
