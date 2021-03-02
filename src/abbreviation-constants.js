@@ -63,6 +63,7 @@ const commonAbbreviations = [
   'RSVP',
   'SARS',
   'SLR',
+  'SEO',
   'SMH',
   'TBA',
   'TBC',
