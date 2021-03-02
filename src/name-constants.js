@@ -2015,6 +2015,7 @@ let personNames = [
   'Louie',
   'Louisa',
   'Louise',
+  'Loune',
   'Lovecraft',
   'Lowe',
   'Lowenbrau',
