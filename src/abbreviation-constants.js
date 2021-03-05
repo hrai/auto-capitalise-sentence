@@ -60,6 +60,7 @@ const commonAbbreviations = [
   'RCA',
   'RDS',
   'ROTFL',
+  'RSI',
   'RSVP',
   'SARS',
   'SLR',
