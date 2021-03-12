@@ -449,9 +449,7 @@ describe('utilities test', function() {
     expect(matchingAndCorrectWords(str)[1]).toBe('');
   });
 
-  test('getUpdatedString', () => {
-    let str = 'I\'m the content of html january.';
-
+  test('getUpdatedString_ChangesSentence', () => {
     expect(
       utils.getUpdatedString('these es indexes are as es ', 'es', 'ES')
     ).toBe('these es indexes are as ES ');
@@ -471,5 +469,18 @@ describe('utilities test', function() {
     expect(
       utils.getUpdatedString('these james and james!', 'james', 'James')
     ).toBe('these james and James!');
+  });
+
+  test('getUpdatedString_DoesNotChangeSentence', () => {
+    expect(utils.getUpdatedString('these james and ', 'james', 'James')).toBe(
+      'these james and '
+    );
+    expect(utils.getUpdatedString('these james and james!', '', '')).toBe(
+      'these james and james!'
+    );
+    expect(utils.getUpdatedString('', '', '')).toBe('');
+    expect(
+      utils.getUpdatedString('these james and james!', '', undefined)
+    ).toBe('these james and james!');
   });
 });

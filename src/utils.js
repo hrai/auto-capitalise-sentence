@@ -289,12 +289,16 @@ function updateConstant(text, element, tagName, keyValuePairs, caseSensitive) {
 }
 
 export function getUpdatedString(text, matchedWord, correctedWord) {
-  const splitAt = index => x => [x.slice(0, index), x.slice(index)];
-  const arr = splitAt(-1)(text);
+  if (text && matchedWord && correctedWord) {
+    const splitAt = index => x => [x.slice(0, index), x.slice(index)];
+    const arr = splitAt(-1)(text);
 
-  const updatedStr =
-    arr[0].replace(new RegExp(matchedWord + '$'), correctedWord) + arr[1];
-  return updatedStr;
+    const updatedStr =
+      arr[0].replace(new RegExp(matchedWord + '$'), correctedWord) + arr[1];
+    return updatedStr;
+  }
+
+  return text;
 }
 
 export function getCapitalisedContentForI(text) {
