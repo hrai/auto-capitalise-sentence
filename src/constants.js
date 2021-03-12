@@ -87,6 +87,7 @@ const commonTechWords = [
   'Ubuntu',
   'Unicode',
   'VoIP',
+  'VPN',
   'WiFi',
   'Wii',
   'WordPress',
