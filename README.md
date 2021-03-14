@@ -5,11 +5,11 @@ Firefox/Microsoft Edge Chromium add-on to automatically capitalise words while t
 ## Features
 
 - Capitalise the first letter of a sentence.
-- Capitalise `I`.
-- Capitalise constants such as [days](src/constants.js#L4), [months](src/constants.js#L14)
-- Capitalise common [abbreviations](src/abbreviation-constants.js#L1)
+- Capitalise the word `I`.
 - Capitalise common [names](src/name-constants.js#L1)
-- Add apostrophe to common [English words](src/constants.js#L99)
+- Capitalise common [abbreviations](src/abbreviation-constants.js#L1)
+- Capitalise constants such as [days](src/constants.js#L4), [months](src/constants.js#L14)
+- Add apostrophe to common [English words](src/constants.js#L27)
 
 ## Configuration/Settings
 
