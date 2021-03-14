@@ -24,6 +24,23 @@ const months = [
   'December',
 ]
 
+const wordsWithApostrophe = {
+  arent: "aren't",
+  doesnt: "doesn't",
+  cant: "can't",
+  wont: "won't",
+  dont: "don't",
+  shes: "she's",
+  hes: "he's",
+  theres: "there's",
+  theyre: "they're",
+  youve: "you've",
+  youre: "you're",
+  couldnt: "couldn't",
+  shouldnt: "shouldn't",
+  wouldnt: "wouldn't",
+}
+
 const commonTechWords = [
   'AI',
   'API',
@@ -98,23 +115,6 @@ const commonTechWords = [
   'iPod',
   'iTunes',
 ]
-
-let wordsWithApostrophe = {
-  arent: "aren't",
-  doesnt: "doesn't",
-  cant: "can't",
-  wont: "won't",
-  dont: "don't",
-  shes: "she's",
-  hes: "he's",
-  theres: "there's",
-  theyre: "they're",
-  youve: "you've",
-  youre: "you're",
-  couldnt: "couldn't",
-  shouldnt: "shouldn't",
-  wouldnt: "wouldn't",
-}
 
 let commonLocalAbbreviations = ['Syd', 'Melb']
 
