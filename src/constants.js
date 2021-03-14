@@ -127,8 +127,23 @@ let stringToKeyValuePairs = (obj, val) => {
 
 let constantsMap = constants.reduce(stringToKeyValuePairs, {})
 
+let toTitleCase = (str) => {
+  return str.replace(/\w\S*/g, (txt) => {
+    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+  })
+}
+
+let wordsWithApostropheTitleCase = {}
+for (const [key, value] of Object.entries(wordsWithApostrophe)) {
+  wordsWithApostropheTitleCase[toTitleCase(key)] = toTitleCase(value)
+}
+
 //convert array to key-value pairs
-export let constantsKeyValuePairs = { ...constantsMap, ...wordsWithApostrophe }
+export let constantsKeyValuePairs = {
+  ...constantsMap,
+  ...wordsWithApostrophe,
+  ...wordsWithApostropheTitleCase,
+}
 
 export let namesKeyValuePairs = names.reduce(stringToKeyValuePairs, {})
 export let abbreviationsKeyValuePairs = abbreviations.reduce(

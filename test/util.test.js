@@ -6,7 +6,7 @@ import {
 } from '../src/constants.js';
 const $ = require('jquery');
 
-describe('utilities test', function() {
+describe('utilities test', function () {
   test('getCapitalisedContent', () => {
     expect(utils.getCapitalisedContent('blah')).toBe('blaH');
     expect(utils.getCapitalisedContent('i')).toBe('I');
@@ -250,7 +250,7 @@ describe('utilities test', function() {
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_Days', () => {
     let str = 'I\'m the content of html Monday.';
-    let matchingAndCorrectWords = text =>
+    let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         constantsKeyValuePairs
@@ -274,7 +274,7 @@ describe('utilities test', function() {
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_Months', () => {
     let str = 'I\'m the content of html january.';
-    let matchingAndCorrectWords = text =>
+    let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         constantsKeyValuePairs
@@ -294,7 +294,7 @@ describe('utilities test', function() {
 
   test('getCaseInsensitiveMatchingAndCorrectedWords', () => {
     let str = 'I\'m the content of html James.';
-    let matchingAndCorrectWords = text =>
+    let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         namesKeyValuePairs
@@ -318,7 +318,7 @@ describe('utilities test', function() {
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_OtherPunctuation', () => {
     let str = 'I\'m the content of html \'James\'';
-    let matchingAndCorrectWords = text =>
+    let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         namesKeyValuePairs
@@ -342,7 +342,7 @@ describe('utilities test', function() {
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_CompanyNames', () => {
     let str = 'I\'m the content of html \'GitHub\'';
-    let matchingAndCorrectWords = text =>
+    let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         namesKeyValuePairs
@@ -366,7 +366,7 @@ describe('utilities test', function() {
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_Abbreviations', () => {
     let str = 'I\'m the content of html.';
-    let matchingAndCorrectWords = text =>
+    let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         abbreviationsKeyValuePairs
@@ -390,7 +390,7 @@ describe('utilities test', function() {
 
   test('getCaseSensitiveMatchingAndCorrectedWords_ApostropheWords', () => {
     let str = 'I cant.';
-    let matchingAndCorrectWords = text =>
+    let matchingAndCorrectWords = (text) =>
       utils.getCaseSensitiveMatchingAndCorrectedWords(
         text,
         constantsKeyValuePairs
@@ -406,15 +406,27 @@ describe('utilities test', function() {
     str = 'I wont ';
     expect(matchingAndCorrectWords(str)[0]).toBe('wont');
     expect(matchingAndCorrectWords(str)[1]).toBe('won\'t');
+  });
+
+  test('getCaseSensitiveMatchingAndCorrectedWords_ApostropheWords_TitleCase', () => {
+    let str = 'Doesnt.';
+    let matchingAndCorrectWords = (text) =>
+      utils.getCaseSensitiveMatchingAndCorrectedWords(
+        text,
+        constantsKeyValuePairs
+      );
+
+    expect(matchingAndCorrectWords(str)[0]).toBe('Doesnt');
+    expect(matchingAndCorrectWords(str)[1]).toBe('Doesn\'t');
 
     str = 'I Wont.';
-    expect(matchingAndCorrectWords(str)[0]).toBe('');
-    expect(matchingAndCorrectWords(str)[1]).toBe('');
+    expect(matchingAndCorrectWords(str)[0]).toBe('Wont');
+    expect(matchingAndCorrectWords(str)[1]).toBe('Won\'t');
   });
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_LocalAbbreviations', () => {
     let str = 'I\'m the content of html \'syd\'';
-    let matchingAndCorrectWords = text =>
+    let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         constantsKeyValuePairs
@@ -433,7 +445,7 @@ describe('utilities test', function() {
     let wordsToExclude = ['january'];
     let caseInsensitive = true;
 
-    let matchingAndCorrectWords = text =>
+    let matchingAndCorrectWords = (text) =>
       utils.getMatchingAndCorrectedWords(
         text,
         constantsKeyValuePairs,
