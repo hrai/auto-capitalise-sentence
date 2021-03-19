@@ -8,6 +8,15 @@
 
 <body>
     <div class="container" id="settings">
+        <div id="header">
+            <div id="box-img">
+            <img src="../icons/auto-capitalise-sentence.png" id="logo"></img>
+            </div>
+            <div id="box-title">
+            <h3>Auto-Capitalise Sentence</h3>
+            </div>
+        </div>
+        <div>
         <ul class="nav nav-tabs">
             <li class="nav-item">
                 <a href="#excluded_sites" class="nav-link active" data-toggle="tab">Excluded websites</a>
@@ -24,11 +33,11 @@
                 <div class="form-group">
                     <p class="form-text">Enter websites where you want the capitalising to be disabled.</p>
                     <textarea id="sites" rows="4" class="form-control" placeholder="Add sites to exclude"></textarea>
-                    <small class="form-text text-muted">Note: Add each site in a separate row</small>
+                    <small class="form-text text-muted">Note: Add each site in a separate row and click 'Save' button.</small>
                     <span class="input-group-btn">
                         <input type="button" value="Save" id="submitButton" class="btn btn-primary btn-block" disabled>
                         <input type="button" value="Add current site to ignore list" id="ignoreSiteButton"
-                            class="btn btn-secondary btn-block">
+                            class="btn btn-primary btn-block">
                     </span>
                 </div>
             </div>
@@ -37,7 +46,7 @@
                     <p class="form-text">Enter words which you don't want to be capitalised.</p>
                     <textarea id="excluded_words_textbox" rows="4" class="form-control"
                         placeholder="Add words to exclude"></textarea>
-                    <small class="form-text text-muted">Note: Add each word in a separate row</small>
+                    <small class="form-text text-muted">Note: Add each word in a separate row and click 'Save' button.</small>
                     <span class="input-group-btn">
                         <input type="button" value="Save" id="submitButtonExcludedWords"
                             class="btn btn-primary btn-block" disabled>
@@ -58,7 +67,7 @@
 
                 </div>
             </div>
-
+        </div>
         </div>
     </div>
     <script charset="utf-8" src="/dependencies/jquery.min.js"></script>
@@ -74,11 +83,48 @@
     }
 
     #settings {
-        width: 550px;
+        width: 560px;
         padding-top: 3%;
     }
 
     .tab-content {
         padding-top: 3%;
     }
+
+    #logo {
+        height:80px;
+        width:80px;
+    }
+
+    #header{
+        display:flex;
+        flex-direction:row;
+    }
+
+    #box-img{
+        width:20%;
+        padding: 5px;
+    }
+
+    #box-title{
+        width:80%;
+        padding: 5px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+    }
+
+    #box-title > h3 {
+        color: royalblue;
+    }
+
+    .nav-link.active
+        {
+        font-weight:bold;
+    }
+
+    .nav-item > a {
+        color: #167316green;
+    }
+
 </style>
