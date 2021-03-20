@@ -37,4 +37,8 @@ There are 3 sections to configure the extension.
 ### Sponsor
 
 - [Donate/Sponsor](https://github.com/sponsors/hrai) the project
+
+### Raise issues
+
 - Please feel free to raise issues [here](https://github.com/hrai/auto-capitalise-extension/issues)
+- PRs are welcome! :)
