@@ -32,6 +32,9 @@ There are 3 sections to configure the extension.
 - [Firefox](https://addons.mozilla.org/en-US/firefox/addon/auto-capitalise-sentence/)
 - [Microsoft Edge](https://microsoftedge.microsoft.com/addons/detail/auto-capitalise-sentence/ifebcbphlfoifeajpbecncpgjflpbann)
 
-## Do you have issues?
+## How to contribute?
 
-Please feel free to raise issues [here](https://github.com/hrai/auto-capitalise-extension/issues)
+### Sponsor
+
+- [Donate/Sponsor](https://github.com/sponsors/hrai) the project
+- Please feel free to raise issues [here](https://github.com/hrai/auto-capitalise-extension/issues)
