@@ -16,7 +16,7 @@
                     <h3>Auto-Capitalise Sentence</h3>
                 </div>
             </div>
-            <div>
+            <div id="body">
                 <ul class="nav nav-tabs">
                     <li class="nav-item">
                         <a href="#excluded_sites" class="nav-link active" data-toggle="tab">Excluded websites</a>
@@ -69,6 +69,14 @@
                     </div>
                 </div>
             </div>
+            <hr>
+            <div id="footer">
+                    <a href="https://github.com/sponsors/hrai" target="_blank" class="btn btn-info btn-sm" role="button">Donate</a>
+                    <a href="https://github.com/hrai/auto-capitalise-sentence" target="_blank" class="btn btn-info btn-sm" role="button">GitHub</a>
+                    <a href="https://github.com/hrai/auto-capitalise-sentence/issues/new" target="_blank" class="btn btn-info btn-sm" role="button">Raise issues</a>
+            </div>
+
+
         </div>
         <script charset="utf-8" src="/dependencies/jquery.min.js"></script>
         <script charset="utf-8" src="/dependencies/bootstrap.min.js"></script>
@@ -90,13 +98,16 @@
         padding-top: 3%;
     }
 
+    hr{
+    }
+
     /* Header style */
     #logo {
         height:80px;
         width:80px;
     }
 
-    #header{
+    #header, #footer{
         display:flex;
         flex-direction:row;
     }
@@ -136,4 +147,10 @@
         color: #167316;
     }
 
+    /* footer style */
+    #footer a {
+        border-radius: unset;
+        width: 31%;
+        margin: 5px;
+    }
 </style>
