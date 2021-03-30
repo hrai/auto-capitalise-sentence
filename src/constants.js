@@ -39,6 +39,7 @@ const wordsWithApostrophe = {
   couldnt: "couldn't",
   shouldnt: "shouldn't",
   wouldnt: "wouldn't",
+  hasnt: "hasn't",
 }
 
 const commonTechWords = [
