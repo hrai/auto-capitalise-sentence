@@ -136,7 +136,6 @@ const timeAbbreviations = [
   'DDUT',
   'DFT',
   'EASST',
-  'EAST',
   'ECT',
   'EDT',
   'EEST',
