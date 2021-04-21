@@ -6,12 +6,12 @@ import {
   shouldCapitaliseI,
   shouldCapitaliseNames,
   shouldCapitaliseAbbreviations,
+  shouldCapitaliseLocations,
   constantsKeyVal,
   namesKeyVal,
   abbreviationsKeyVal,
   locationsKeyVal,
   wordsToExclude,
-  shouldCapitaliseLocations,
 } from './plugin-constants';
 
 const errorMsg = 'breaking loop';
@@ -23,6 +23,7 @@ browser.storage.local
     shouldCapitaliseI,
     shouldCapitaliseNames,
     shouldCapitaliseAbbreviations,
+    shouldCapitaliseLocations,
     constantsKeyVal,
     namesKeyVal,
     abbreviationsKeyVal,
@@ -38,7 +39,7 @@ browser.storage.local
 //   [shouldCapitaliseLocations]: utils.setShouldCapitaliseLocations,
 // };
 
-let toggleOptionsValue = (variableName) => {
+let toggleOptionsValue = (changes, variableName) => {
   if (changes[variableName] != null) {
     const newValue = changes[variableName].newValue;
 
@@ -58,10 +59,10 @@ browser.storage.onChanged.addListener(function (
   areaName // string
 ) {
   if (areaName === 'local') {
-    toggleOptionsValue(shouldCapitaliseI);
-    toggleOptionsValue(shouldCapitaliseNames);
-    toggleOptionsValue(shouldCapitaliseAbbreviations);
-    toggleOptionsValue(shouldCapitaliseLocations);
+    toggleOptionsValue(changes, shouldCapitaliseI);
+    toggleOptionsValue(changes, shouldCapitaliseNames);
+    toggleOptionsValue(changes, shouldCapitaliseAbbreviations);
+    toggleOptionsValue(changes, shouldCapitaliseLocations);
 
     if (changes.wordsToExclude != null) {
       const newValue = changes.wordsToExclude.newValue;
