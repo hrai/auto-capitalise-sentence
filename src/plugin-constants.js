@@ -7,4 +7,5 @@ export const sitesToIgnore = 'sitesToIgnore',
   shouldCapitaliseAbbreviations = 'shouldCapitaliseAbbreviations',
   constantsKeyVal = 'constantsKeyVal',
   namesKeyVal = 'namesKeyVal',
-  abbreviationsKeyVal = 'abbreviationsKeyVal';
+  abbreviationsKeyVal = 'abbreviationsKeyVal',
+  locationsKeyVal = 'locationsKeyVal';

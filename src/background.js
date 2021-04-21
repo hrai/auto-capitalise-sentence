@@ -2,6 +2,7 @@ import {
   constantsKeyValuePairs,
   namesKeyValuePairs,
   abbreviationsKeyValuePairs,
+  locationsKeyValuePairs,
 } from './constants';
 import {
   constantsKeyVal,
@@ -14,4 +15,5 @@ browser.storage.local.set({
   constantsKeyVal: constantsKeyValuePairs,
   namesKeyVal: namesKeyValuePairs,
   abbreviationsKeyVal: abbreviationsKeyValuePairs,
+  locationsKeyVal: locationsKeyValuePairs,
 });

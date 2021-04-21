@@ -1,9 +1,11 @@
 export let shouldCapitaliseI = false;
 export let shouldCapitaliseNames = false;
 export let shouldCapitaliseAbbreviations = false;
+export let shouldCapitaliseLocations = false;
 export let constantsKeyVal = {};
 export let namesKeyVal = {};
 export let abbreviationsKeyVal = {};
+export let locationsKeyVal = {};
 let wordsToExclude = [];
 
 export function shouldCapitaliseForI(text) {
@@ -31,6 +33,12 @@ export function setShouldCapitaliseAbbreviations(value) {
   }
 }
 
+export function setShouldCapitaliseLocations(value) {
+  if (value != null) {
+    shouldCapitaliseLocations = value;
+  }
+}
+
 export function setConstantsKeyVal(value) {
   if (value != null) {
     constantsKeyVal = value;
@@ -46,6 +54,12 @@ export function setNamesKeyVal(value) {
 export function setAbbreviationsKeyVal(value) {
   if (value != null) {
     abbreviationsKeyVal = value;
+  }
+}
+
+export function setLocationsKeyVal(value) {
+  if (value != null) {
+    locationsKeyVal = value;
   }
 }
 
@@ -272,6 +286,10 @@ export function capitaliseText(
   if (shouldCapitaliseAbbreviations) {
     updateConstant(text, element, tagName, abbreviationsKeyVal, !caseSensitive);
   }
+
+  if (shouldCapitaliseLocations) {
+    updateConstant(text, element, tagName, locationsKeyVal, !caseSensitive);
+  }
 }
 
 function updateConstant(text, element, tagName, keyValuePairs, caseSensitive) {
@@ -290,7 +308,7 @@ function updateConstant(text, element, tagName, keyValuePairs, caseSensitive) {
 
 export function getUpdatedString(text, matchedWord, correctedWord) {
   if (text && matchedWord && correctedWord) {
-    const splitAt = index => x => [x.slice(0, index), x.slice(index)];
+    const splitAt = (index) => (x) => [x.slice(0, index), x.slice(index)];
     const arr = splitAt(-1)(text);
 
     const updatedStr =
@@ -330,9 +348,7 @@ export function isContentEditable(element) {
 }
 
 export function getFilteredElements(addedNodes, tagName) {
-  return $(addedNodes)
-    .find(tagName)
-    .addBack(tagName); // finds either added alone or as tree
+  return $(addedNodes).find(tagName).addBack(tagName); // finds either added alone or as tree
 }
 
 export function shouldCapitaliseContent(element) {
