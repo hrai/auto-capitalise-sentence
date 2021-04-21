@@ -11,6 +11,7 @@ import {
   abbreviationsKeyVal,
   locationsKeyVal,
   wordsToExclude,
+  shouldCapitaliseLocations,
 } from './plugin-constants';
 
 const errorMsg = 'breaking loop';
@@ -30,6 +31,24 @@ browser.storage.local
   ])
   .then(processResponse, utils.onError);
 
+const setterDict = {
+  [shouldCapitaliseI]: utils.setShouldCapitaliseI,
+  [shouldCapitaliseNames]: utils.setShouldCapitaliseNames,
+  [shouldCapitaliseAbbreviations]: utils.setShouldCapitaliseAbbreviations,
+  [shouldCapitaliseLocations]: utils.setShouldCapitaliseLocations,
+  [wordsToExclude]: utils.setWordsToExclude,
+};
+
+let toggleOptionsValue = (variableName) => {
+  if (changes[variableName] != null) {
+    const newValue = changes[variableName].newValue;
+
+    if (newValue != null) {
+      setterDict[shouldCapitaliseI](newValue);
+    }
+  }
+};
+
 /* Updating the value of this local storage variable in settings.js happens AFTER content.js.
  * The browser doesn't register the change and doesn't capitalise I by default after installing the extension.
  * This block will capture the event and update the value of 'shouldCapitaliseI'.
@@ -39,45 +58,11 @@ browser.storage.onChanged.addListener(function (
   areaName // string
 ) {
   if (areaName === 'local') {
-    if (changes.shouldCapitaliseI != null) {
-      const newValue = changes.shouldCapitaliseI.newValue;
-
-      if (newValue != null) {
-        utils.setShouldCapitaliseI(newValue);
-      }
-    }
-
-    if (changes.shouldCapitaliseNames != null) {
-      const newValue = changes.shouldCapitaliseNames.newValue;
-
-      if (newValue != null) {
-        utils.setShouldCapitaliseNames(newValue);
-      }
-    }
-
-    if (changes.shouldCapitaliseAbbreviations != null) {
-      const newValue = changes.shouldCapitaliseAbbreviations.newValue;
-
-      if (newValue != null) {
-        utils.setShouldCapitaliseAbbreviations(newValue);
-      }
-    }
-
-    if (changes.shouldCapitaliseLocations != null) {
-      const newValue = changes.shouldCapitaliseLocations.newValue;
-
-      if (newValue != null) {
-        utils.setShouldCapitaliseLocations(newValue);
-      }
-    }
-
-    if (changes.wordsToExclude != null) {
-      const newValue = changes.wordsToExclude.newValue;
-
-      if (newValue != null) {
-        utils.setWordsToExclude(newValue);
-      }
-    }
+    toggleOptionsValue(shouldCapitaliseI);
+    toggleOptionsValue(shouldCapitaliseNames);
+    toggleOptionsValue(shouldCapitaliseAbbreviations);
+    toggleOptionsValue(shouldCapitaliseLocations);
+    toggleOptionsValue(wordsToExclude);
 
     //browser.runtime.reload() - reload browser
   }
@@ -97,8 +82,6 @@ function observeIframeInputTags() {
       .contents()
       .find(':text,textarea')
       .each((_, item) => {
-        //console.log(item);
-
         $(item).on(`input.${pluginNamespace}`, function (event) {
           capitaliseText(event.target);
         });
