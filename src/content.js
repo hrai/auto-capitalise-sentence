@@ -63,6 +63,14 @@ browser.storage.onChanged.addListener(function (
       }
     }
 
+    if (changes.shouldCapitaliseLocations != null) {
+      const newValue = changes.shouldCapitaliseLocations.newValue;
+
+      if (newValue != null) {
+        utils.setShouldCapitaliseLocations(newValue);
+      }
+    }
+
     if (changes.wordsToExclude != null) {
       const newValue = changes.wordsToExclude.newValue;
 
@@ -109,6 +117,7 @@ function processResponse(item) {
   utils.setShouldCapitaliseI(item.shouldCapitaliseI);
   utils.setShouldCapitaliseNames(item.shouldCapitaliseNames);
   utils.setShouldCapitaliseAbbreviations(item.shouldCapitaliseAbbreviations);
+  utils.setShouldCapitaliseLocations(item.setShouldCapitaliseLocations);
   utils.setConstantsKeyVal(item.constantsKeyVal);
   utils.setNamesKeyVal(item.namesKeyVal);
   utils.setAbbreviationsKeyVal(item.abbreviationsKeyVal);

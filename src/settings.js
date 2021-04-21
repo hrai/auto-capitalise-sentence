@@ -130,10 +130,10 @@ browser.storage.local.get(shouldCapitaliseLocations).then((items) => {
   ) {
     //value not set yet/ext just installed
     $('#shouldCapitaliseLocations').prop('checked', true);
-    setShouldCapitaliseAbbreviationsVariable(true);
+    setShouldCapitaliseLocationsVariable(true);
   } else {
     $('#shouldCapitaliseLocations').prop('checked', false);
-    setShouldCapitaliseAbbreviationsVariable(false);
+    setShouldCapitaliseLocationsVariable(false);
   }
 });
 
