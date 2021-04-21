@@ -6,6 +6,7 @@ import {
   shouldCapitaliseI,
   shouldCapitaliseNames,
   shouldCapitaliseAbbreviations,
+  shouldCapitaliseLocations,
 } from './plugin-constants';
 
 browser.storage.local
@@ -34,8 +35,8 @@ function getUrlDomain(data) {
   return a.hostname;
 }
 
-$(document).on(`click.${pluginNamespace}`, '#ignoreSiteButton', function() {
-  browser.tabs.query({ currentWindow: true, active: true }).then(tabs => {
+$(document).on(`click.${pluginNamespace}`, '#ignoreSiteButton', function () {
+  browser.tabs.query({ currentWindow: true, active: true }).then((tabs) => {
     var hostname = getUrlDomain(tabs[0].url);
     var sites = getSites();
     sites.push(hostname);
@@ -50,7 +51,7 @@ $(document).on(`click.${pluginNamespace}`, '#ignoreSiteButton', function() {
   });
 });
 
-$(document).on(`click.${pluginNamespace}`, '#submitButton', function() {
+$(document).on(`click.${pluginNamespace}`, '#submitButton', function () {
   var sites = getSites();
 
   browser.storage.local.set({
@@ -64,7 +65,7 @@ $(document).on(`click.${pluginNamespace}`, '#submitButton', function() {
 $(document).on(
   `click.${pluginNamespace}`,
   '#submitButtonExcludedWords',
-  function() {
+  function () {
     var words = getExcludedWords();
 
     console.log(words);
@@ -78,7 +79,7 @@ $(document).on(
 );
 
 // setting the value of checkbox
-browser.storage.local.get(shouldCapitaliseI).then(items => {
+browser.storage.local.get(shouldCapitaliseI).then((items) => {
   const shouldCapitaliseI = items.shouldCapitaliseI;
 
   if (shouldCapitaliseI === true || shouldCapitaliseI === undefined) {
@@ -91,7 +92,7 @@ browser.storage.local.get(shouldCapitaliseI).then(items => {
   }
 });
 
-browser.storage.local.get(shouldCapitaliseNames).then(items => {
+browser.storage.local.get(shouldCapitaliseNames).then((items) => {
   const shouldCapitaliseNames = items.shouldCapitaliseNames;
 
   if (shouldCapitaliseNames === true || shouldCapitaliseNames === undefined) {
@@ -104,7 +105,7 @@ browser.storage.local.get(shouldCapitaliseNames).then(items => {
   }
 });
 
-browser.storage.local.get(shouldCapitaliseAbbreviations).then(items => {
+browser.storage.local.get(shouldCapitaliseAbbreviations).then((items) => {
   const shouldCapitaliseAbbreviations = items.shouldCapitaliseAbbreviations;
 
   if (
@@ -120,20 +121,38 @@ browser.storage.local.get(shouldCapitaliseAbbreviations).then(items => {
   }
 });
 
-$(document).on(`change.${pluginNamespace}`, '#shouldCapitaliseI', function(
-  event
-) {
-  if ($(event.target).prop('checked')) {
-    setShouldCapitaliseIVariable(true);
+browser.storage.local.get(shouldCapitaliseLocations).then((items) => {
+  const shouldCapitaliseLocations = items.shouldCapitaliseLocations;
+
+  if (
+    shouldCapitaliseLocations === true ||
+    shouldCapitaliseLocations === undefined
+  ) {
+    //value not set yet/ext just installed
+    $('#shouldCapitaliseLocations').prop('checked', true);
+    setShouldCapitaliseAbbreviationsVariable(true);
   } else {
-    setShouldCapitaliseIVariable(false);
+    $('#shouldCapitaliseLocations').prop('checked', false);
+    setShouldCapitaliseAbbreviationsVariable(false);
   }
 });
 
 $(document).on(
   `change.${pluginNamespace}`,
+  '#shouldCapitaliseI',
+  function (event) {
+    if ($(event.target).prop('checked')) {
+      setShouldCapitaliseIVariable(true);
+    } else {
+      setShouldCapitaliseIVariable(false);
+    }
+  }
+);
+
+$(document).on(
+  `change.${pluginNamespace}`,
   '#shouldCapitaliseAbbreviations',
-  function(event) {
+  function (event) {
     if ($(event.target).prop('checked')) {
       setShouldCapitaliseAbbreviationsVariable(true);
     } else {
@@ -142,15 +161,29 @@ $(document).on(
   }
 );
 
-$(document).on(`change.${pluginNamespace}`, '#shouldCapitaliseNames', function(
-  event
-) {
-  if ($(event.target).prop('checked')) {
-    setShouldCapitaliseNamesVariable(true);
-  } else {
-    setShouldCapitaliseNamesVariable(false);
+$(document).on(
+  `change.${pluginNamespace}`,
+  '#shouldCapitaliseLocations',
+  function (event) {
+    if ($(event.target).prop('checked')) {
+      setShouldCapitaliseLocationsVariable(true);
+    } else {
+      setShouldCapitaliseLocationsVariable(false);
+    }
   }
-});
+);
+
+$(document).on(
+  `change.${pluginNamespace}`,
+  '#shouldCapitaliseNames',
+  function (event) {
+    if ($(event.target).prop('checked')) {
+      setShouldCapitaliseNamesVariable(true);
+    } else {
+      setShouldCapitaliseNamesVariable(false);
+    }
+  }
+);
 
 function setShouldCapitaliseIVariable(value) {
   browser.storage.local.set({
@@ -167,6 +200,12 @@ function setShouldCapitaliseNamesVariable(value) {
 function setShouldCapitaliseAbbreviationsVariable(value) {
   browser.storage.local.set({
     shouldCapitaliseAbbreviations: value,
+  });
+}
+
+function setShouldCapitaliseLocationsVariable(value) {
+  browser.storage.local.set({
+    shouldCapitaliseLocations: value,
   });
 }
 
@@ -192,10 +231,10 @@ function getExcludedWords() {
   return [];
 }
 
-$('#sites').on(`input.${pluginNamespace}`, function() {
+$('#sites').on(`input.${pluginNamespace}`, function () {
   $('#submitButton').prop('disabled', false);
 });
 
-$('#excluded_words_textbox').on(`input.${pluginNamespace}`, function() {
+$('#excluded_words_textbox').on(`input.${pluginNamespace}`, function () {
   $('#submitButtonExcludedWords').prop('disabled', false);
 });
