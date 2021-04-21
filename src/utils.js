@@ -1,12 +1,22 @@
-export let shouldCapitaliseI = false;
-export let shouldCapitaliseNames = false;
-export let shouldCapitaliseAbbreviations = false;
-export let shouldCapitaliseLocations = false;
+import {
+  shouldCapitaliseI,
+  shouldCapitaliseNames,
+  shouldCapitaliseAbbreviations,
+  shouldCapitaliseLocations,
+} from './plugin-constants';
+
 export let constantsKeyVal = {};
 export let namesKeyVal = {};
 export let abbreviationsKeyVal = {};
 export let locationsKeyVal = {};
+
 let wordsToExclude = [];
+const options = {
+  [shouldCapitaliseI]: false,
+  [shouldCapitaliseNames]: false,
+  [shouldCapitaliseAbbreviations]: false,
+  [shouldCapitaliseLocations]: false,
+};
 
 export function shouldCapitaliseForI(text) {
   const regex = /\s+i(\s+|')$/;
@@ -15,27 +25,9 @@ export function shouldCapitaliseForI(text) {
   return matches;
 }
 
-export function setShouldCapitaliseI(value) {
+export function setShouldCapitaliseOption(optionName, value) {
   if (value != null) {
-    shouldCapitaliseI = value;
-  }
-}
-
-export function setShouldCapitaliseNames(value) {
-  if (value != null) {
-    shouldCapitaliseNames = value;
-  }
-}
-
-export function setShouldCapitaliseAbbreviations(value) {
-  if (value != null) {
-    shouldCapitaliseAbbreviations = value;
-  }
-}
-
-export function setShouldCapitaliseLocations(value) {
-  if (value != null) {
-    shouldCapitaliseLocations = value;
+    options[optionName] = value;
   }
 }
 
@@ -269,7 +261,11 @@ export function capitaliseText(
     return;
   }
 
-  if (text.length >= 2 && shouldCapitaliseForI(text) && shouldCapitaliseI) {
+  if (
+    text.length >= 2 &&
+    shouldCapitaliseForI(text) &&
+    options[shouldCapitaliseI]
+  ) {
     const updatedStr = getCapitalisedContentForI(text);
 
     setText(element, tagName, updatedStr, shouldAppendBr);
@@ -279,15 +275,15 @@ export function capitaliseText(
   const caseSensitive = true;
   updateConstant(text, element, tagName, constantsKeyVal, caseSensitive);
 
-  if (shouldCapitaliseNames) {
+  if (options[shouldCapitaliseNames]) {
     updateConstant(text, element, tagName, namesKeyVal, !caseSensitive);
   }
 
-  if (shouldCapitaliseAbbreviations) {
+  if (options[shouldCapitaliseAbbreviations]) {
     updateConstant(text, element, tagName, abbreviationsKeyVal, !caseSensitive);
   }
 
-  if (shouldCapitaliseLocations) {
+  if (options[shouldCapitaliseLocations]) {
     updateConstant(text, element, tagName, locationsKeyVal, !caseSensitive);
   }
 }

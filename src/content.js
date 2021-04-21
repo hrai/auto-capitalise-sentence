@@ -31,20 +31,20 @@ browser.storage.local
   ])
   .then(processResponse, utils.onError);
 
-const setterDict = {
-  [shouldCapitaliseI]: utils.setShouldCapitaliseI,
-  [shouldCapitaliseNames]: utils.setShouldCapitaliseNames,
-  [shouldCapitaliseAbbreviations]: utils.setShouldCapitaliseAbbreviations,
-  [shouldCapitaliseLocations]: utils.setShouldCapitaliseLocations,
-  [wordsToExclude]: utils.setWordsToExclude,
-};
+// const setterDict = {
+//   [shouldCapitaliseI]: utils.setShouldCapitaliseI,
+//   [shouldCapitaliseNames]: utils.setShouldCapitaliseNames,
+//   [shouldCapitaliseAbbreviations]: utils.setShouldCapitaliseAbbreviations,
+//   [shouldCapitaliseLocations]: utils.setShouldCapitaliseLocations,
+// };
 
 let toggleOptionsValue = (variableName) => {
   if (changes[variableName] != null) {
     const newValue = changes[variableName].newValue;
 
     if (newValue != null) {
-      setterDict[shouldCapitaliseI](newValue);
+      utils.setShouldCapitaliseOption(variableName, newValue);
+      // setterDict[variableName](newValue);
     }
   }
 };
@@ -62,8 +62,14 @@ browser.storage.onChanged.addListener(function (
     toggleOptionsValue(shouldCapitaliseNames);
     toggleOptionsValue(shouldCapitaliseAbbreviations);
     toggleOptionsValue(shouldCapitaliseLocations);
-    toggleOptionsValue(wordsToExclude);
 
+    if (changes.wordsToExclude != null) {
+      const newValue = changes.wordsToExclude.newValue;
+
+      if (newValue != null) {
+        utils.setWordsToExclude(newValue);
+      }
+    }
     //browser.runtime.reload() - reload browser
   }
 });
@@ -97,10 +103,21 @@ function observeInputTags() {
 
 function processResponse(item) {
   sitesToExclude = item.sitesToIgnore;
-  utils.setShouldCapitaliseI(item.shouldCapitaliseI);
-  utils.setShouldCapitaliseNames(item.shouldCapitaliseNames);
-  utils.setShouldCapitaliseAbbreviations(item.shouldCapitaliseAbbreviations);
-  utils.setShouldCapitaliseLocations(item.setShouldCapitaliseLocations);
+
+  utils.setShouldCapitaliseOption(shouldCapitaliseI, item.shouldCapitaliseI);
+  utils.setShouldCapitaliseOption(
+    shouldCapitaliseNames,
+    item.shouldCapitaliseNames
+  );
+  utils.setShouldCapitaliseOption(
+    shouldCapitaliseAbbreviations,
+    item.shouldCapitaliseAbbreviations
+  );
+  utils.setShouldCapitaliseOption(
+    shouldCapitaliseLocations,
+    item.shouldCapitaliseLocations
+  );
+
   utils.setConstantsKeyVal(item.constantsKeyVal);
   utils.setNamesKeyVal(item.namesKeyVal);
   utils.setAbbreviationsKeyVal(item.abbreviationsKeyVal);
