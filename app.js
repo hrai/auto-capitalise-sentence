@@ -9,7 +9,7 @@ const router = express.Router();
 var RateLimit = require('express-rate-limit');
 var limiter = new RateLimit({
   windowMs: 1*60*1000, // 1 minute
-  max: 5
+  max: 50
 });
 
 // apply rate limiter to all requests
@@ -17,6 +17,7 @@ app.use(limiter);
 
 //add the router
 app.use('/', router);
+app.use('/distribution', express.static(__dirname+'/distribution'));
 
 router.get('/', function(req, res) {
   //__dirname : It will resolve to your project folder.
