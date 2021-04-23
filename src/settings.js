@@ -9,6 +9,15 @@ import {
   shouldCapitaliseLocations,
 } from './plugin-constants';
 
+// const variableDict = {
+//   shouldCapitaliseI: shouldCapitaliseI,
+//   shouldCapitaliseNames: shouldCapitaliseNames,
+//   shouldCapitaliseAbbreviations: shouldCapitaliseAbbreviations,
+//   shouldCapitaliseLocations: shouldCapitaliseLocations,
+// };
+
+// $(document).ready({
+
 browser.storage.local
   .get([sitesToIgnore, wordsToExclude])
   .then(updateIgnoreLists, onError);
@@ -78,6 +87,27 @@ $(document).on(
   }
 );
 
+loadFlagValuesFromBrowserStorage(shouldCapitaliseI);
+loadFlagValuesFromBrowserStorage(shouldCapitaliseNames);
+loadFlagValuesFromBrowserStorage(shouldCapitaliseAbbreviations);
+loadFlagValuesFromBrowserStorage(shouldCapitaliseLocations);
+
+function loadFlagValuesFromBrowserStorage(flagName) {
+  browser.storage.local.get(flagName).then((items) => {
+    const flagValue = items[flagName];
+
+    if (flagValue === true || flagValue === undefined) {
+      //value not set yet/ext just installed
+      $(`#${flagName}`).prop('checked', true);
+      setShouldCapitaliseVariable(flagName, true);
+    } else {
+      $(`#${flagName}`).prop('checked', false);
+      setShouldCapitaliseVariable(flagName, false);
+    }
+  });
+}
+
+/*
 // setting the value of checkbox
 browser.storage.local.get(shouldCapitaliseI).then((items) => {
   const shouldCapitaliseI = items.shouldCapitaliseI;
@@ -85,10 +115,10 @@ browser.storage.local.get(shouldCapitaliseI).then((items) => {
   if (shouldCapitaliseI === true || shouldCapitaliseI === undefined) {
     //value not set yet/ext just installed
     $('#shouldCapitaliseI').prop('checked', true);
-    setShouldCapitaliseIVariable(true);
+    setShouldCapitaliseVariable(shouldCapitaliseI,true);
   } else {
     $('#shouldCapitaliseI').prop('checked', false);
-    setShouldCapitaliseIVariable(false);
+    setShouldCapitaliseVariable(shouldCapitaliseI,false);
   }
 });
 
@@ -98,10 +128,10 @@ browser.storage.local.get(shouldCapitaliseNames).then((items) => {
   if (shouldCapitaliseNames === true || shouldCapitaliseNames === undefined) {
     //value not set yet/ext just installed
     $('#shouldCapitaliseNames').prop('checked', true);
-    setShouldCapitaliseNamesVariable(true);
+      setShouldCapitaliseVariable(shouldCapitaliseNames, true);
   } else {
     $('#shouldCapitaliseNames').prop('checked', false);
-    setShouldCapitaliseNamesVariable(false);
+      setShouldCapitaliseVariable(shouldCapitaliseNames, false);
   }
 });
 
@@ -114,10 +144,10 @@ browser.storage.local.get(shouldCapitaliseAbbreviations).then((items) => {
   ) {
     //value not set yet/ext just installed
     $('#shouldCapitaliseAbbreviations').prop('checked', true);
-    setShouldCapitaliseAbbreviationsVariable(true);
+      setShouldCapitaliseVariable(shouldCapitaliseAbbreviations, true);
   } else {
     $('#shouldCapitaliseAbbreviations').prop('checked', false);
-    setShouldCapitaliseAbbreviationsVariable(false);
+      setShouldCapitaliseVariable(shouldCapitaliseAbbreviations, false);
   }
 });
 
@@ -130,21 +160,38 @@ browser.storage.local.get(shouldCapitaliseLocations).then((items) => {
   ) {
     //value not set yet/ext just installed
     $('#shouldCapitaliseLocations').prop('checked', true);
-    setShouldCapitaliseLocationsVariable(true);
+      setShouldCapitaliseVariable(shouldCapitaliseLocations, true);
   } else {
     $('#shouldCapitaliseLocations').prop('checked', false);
-    setShouldCapitaliseLocationsVariable(false);
+      setShouldCapitaliseVariable(shouldCapitaliseLocations, false);
   }
 });
+*/
 
+setupCheckboxChangeEventHandlers(shouldCapitaliseI);
+setupCheckboxChangeEventHandlers(shouldCapitaliseNames);
+setupCheckboxChangeEventHandlers(shouldCapitaliseAbbreviations);
+setupCheckboxChangeEventHandlers(shouldCapitaliseLocations);
+
+function setupCheckboxChangeEventHandlers(flagName) {
+  $(document).on(`change.${pluginNamespace}`, `#${flagName}`, function (event) {
+    if ($(event.target).prop('checked')) {
+      setShouldCapitaliseVariable(flagName, true);
+    } else {
+      setShouldCapitaliseVariable(flagName, false);
+    }
+  });
+}
+
+/*
 $(document).on(
   `change.${pluginNamespace}`,
   '#shouldCapitaliseI',
   function (event) {
     if ($(event.target).prop('checked')) {
-      setShouldCapitaliseIVariable(true);
+      setShouldCapitaliseVariable(shouldCapitaliseI, true);
     } else {
-      setShouldCapitaliseIVariable(false);
+      setShouldCapitaliseVariable(shouldCapitaliseI, false);
     }
   }
 );
@@ -152,18 +199,6 @@ $(document).on(
 $(document).on(
   `change.${pluginNamespace}`,
   '#shouldCapitaliseAbbreviations',
-  function (event) {
-    if ($(event.target).prop('checked')) {
-      setShouldCapitaliseAbbreviationsVariable(true);
-    } else {
-      setShouldCapitaliseAbbreviationsVariable(false);
-    }
-  }
-);
-
-$(document).on(
-  `change.${pluginNamespace}`,
-  '#shouldCapitaliseLocations',
   function (event) {
     if ($(event.target).prop('checked')) {
       setShouldCapitaliseLocationsVariable(true);
@@ -178,28 +213,42 @@ $(document).on(
   '#shouldCapitaliseNames',
   function (event) {
     if ($(event.target).prop('checked')) {
-      setShouldCapitaliseNamesVariable(true);
+      setShouldCapitaliseVariable(shouldCapitaliseAbbreviations, true);
     } else {
-      setShouldCapitaliseNamesVariable(false);
+      setShouldCapitaliseVariable(shouldCapitaliseAbbreviations, false);
     }
   }
 );
 
-function setShouldCapitaliseIVariable(value) {
-  browser.storage.local.set({
-    shouldCapitaliseI: value,
-  });
-}
+$(document).on(
+  `change.${pluginNamespace}`,
+  '#shouldCapitaliseLocations',
+  function (event) {
+    if ($(event.target).prop('checked')) {
+      setShouldCapitaliseVariable(shouldCapitaliseLocations, true);
+    } else {
+      setShouldCapitaliseVariable(shouldCapitaliseLocations, false);
+    }
+  }
+);
 
-function setShouldCapitaliseNamesVariable(value) {
-  browser.storage.local.set({
-    shouldCapitaliseNames: value,
-  });
-}
+$(document).on(
+  `change.${pluginNamespace}`,
+  '#shouldCapitaliseNames',
+  function (event) {
+    if ($(event.target).prop('checked')) {
+      setShouldCapitaliseVariable(shouldCapitaliseNames, true);
+    } else {
+      setShouldCapitaliseVariable(shouldCapitaliseNames, false);
+    }
+  }
+);
 
-function setShouldCapitaliseAbbreviationsVariable(value) {
+*/
+
+function setShouldCapitaliseVariable(variableName, value) {
   browser.storage.local.set({
-    shouldCapitaliseAbbreviations: value,
+    variableName: value,
   });
 }
 
@@ -238,3 +287,5 @@ $('#sites').on(`input.${pluginNamespace}`, function () {
 $('#excluded_words_textbox').on(`input.${pluginNamespace}`, function () {
   $('#submitButtonExcludedWords').prop('disabled', false);
 });
+
+// });
