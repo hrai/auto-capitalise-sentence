@@ -1,6 +1,6 @@
 distribution/lib
 node_modules/
-
+distribution/dependencies/
 
 publish.zip
 tags
