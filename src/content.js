@@ -42,14 +42,6 @@ let toggleOptionsValue = (changes, variableName) => {
   }
 };
 
-
-    if (newValue != null) {
-      utils.setShouldCapitaliseOption(variableName, newValue);
-      // setterDict[variableName](newValue);
-    }
-  }
-};
-
 /* Updating the value of this local storage variable in settings.js happens AFTER content.js.
  * The browser doesn't register the change and doesn't capitalise I by default after installing the extension.
  * This block will capture the event and update the value of 'shouldCapitaliseI'.
