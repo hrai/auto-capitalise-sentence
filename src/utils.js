@@ -3,20 +3,118 @@ import {
   shouldCapitaliseNames,
   shouldCapitaliseAbbreviations,
   shouldCapitaliseLocations,
+  constantsKeyVal,
+  namesKeyVal,
+  abbreviationsKeyVal,
+  locationsKeyVal,
 } from './plugin-constants';
 
-export let constantsKeyVal = {};
-export let namesKeyVal = {};
-export let abbreviationsKeyVal = {};
-export let locationsKeyVal = {};
-
 let wordsToExclude = [];
-const options = {
+let options = {
   [shouldCapitaliseI]: false,
   [shouldCapitaliseNames]: false,
   [shouldCapitaliseAbbreviations]: false,
   [shouldCapitaliseLocations]: false,
 };
+let keyValueDictionary = {
+  [constantsKeyVal]: {},
+  [namesKeyVal]: {},
+  [abbreviationsKeyVal]: {},
+  [locationsKeyVal]: {},
+};
+
+export function capitaliseText(
+  element,
+  shouldCapitalise,
+  shouldCapitaliseForI,
+  getText,
+  setText
+) {
+  if (!element) return;
+
+  let tagName = element.tagName;
+
+  if (!isEditableElement(element, tagName)) return;
+
+  let text = getText(element, tagName);
+
+  if (text == null) return;
+
+  const lastChar = text.trim().slice(-1);
+  const isLastCharAnAlphabet = lastChar.match(/[a-z]/i);
+
+  if (text.length == 1 && !isLastCharAnAlphabet) {
+    return;
+  }
+
+  //support for jira's comment section's p tags
+  if (isLastCharAnAlphabet && lastChar.toUpperCase() === lastChar) {
+    return;
+  }
+
+  let shouldAppendBr = false;
+  if (text.length >= 4 && text.slice(-4) === '<br>') {
+    text = text.slice(0, -4);
+    shouldAppendBr = true;
+  }
+
+  if (shouldCapitalise(text)) {
+    const updatedStr = getCapitalisedContent(text);
+
+    setText(element, tagName, updatedStr, shouldAppendBr);
+    return;
+  }
+
+  if (
+    text.length >= 2 &&
+    shouldCapitaliseForI(text) &&
+    options[shouldCapitaliseI]
+  ) {
+    const updatedStr = getCapitalisedContentForI(text);
+
+    setText(element, tagName, updatedStr, shouldAppendBr);
+    return;
+  }
+
+  const caseSensitive = true;
+  updateConstant(
+    text,
+    element,
+    tagName,
+    keyValueDictionary[constantsKeyVal],
+    caseSensitive
+  );
+
+  if (options[shouldCapitaliseNames]) {
+    updateConstant(
+      text,
+      element,
+      tagName,
+      keyValueDictionary[namesKeyVal],
+      !caseSensitive
+    );
+  }
+
+  if (options[shouldCapitaliseAbbreviations]) {
+    updateConstant(
+      text,
+      element,
+      tagName,
+      keyValueDictionary[abbreviationsKeyVal],
+      !caseSensitive
+    );
+  }
+
+  if (options[shouldCapitaliseLocations]) {
+    updateConstant(
+      text,
+      element,
+      tagName,
+      keyValueDictionary[locationsKeyVal],
+      !caseSensitive
+    );
+  }
+}
 
 export function shouldCapitaliseForI(text) {
   const regex = /\s+i(\s+|')$/;
@@ -33,27 +131,9 @@ export function setShouldCapitaliseOption(optionName, value) {
   }
 }
 
-export function setConstantsKeyVal(value) {
+export function setKeyValue(keyValueName, value) {
   if (value != null) {
-    constantsKeyVal = value;
-  }
-}
-
-export function setNamesKeyVal(value) {
-  if (value != null) {
-    namesKeyVal = value;
-  }
-}
-
-export function setAbbreviationsKeyVal(value) {
-  if (value != null) {
-    abbreviationsKeyVal = value;
-  }
-}
-
-export function setLocationsKeyVal(value) {
-  if (value != null) {
-    locationsKeyVal = value;
+    keyValueDictionary[keyValueName] = value;
   }
 }
 
@@ -69,8 +149,6 @@ export function shouldCapitalise(text) {
   matches = sentenceRegex.test(text);
 
   if (!matches) {
-    // console.log(text);
-    // console.log(text.length);
     return text.length == 1;
   }
 
@@ -218,77 +296,6 @@ export function setEndOfContenteditable(contentEditableElement) {
     range.moveToElementText(contentEditableElement); //Select the entire contents of the element with the range
     range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
     range.select(); //Select the range (make it the visible selection
-  }
-}
-
-export function capitaliseText(
-  element,
-  shouldCapitalise,
-  shouldCapitaliseForI,
-  getText,
-  setText
-) {
-  if (!element) return;
-
-  let tagName = element.tagName;
-
-  if (!isEditableElement(element, tagName)) return;
-
-  let text = getText(element, tagName);
-
-  if (text == null) return;
-
-  const lastChar = text.trim().slice(-1);
-  const isLastCharAnAlphabet = lastChar.match(/[a-z]/i);
-
-  if (text.length == 1 && !isLastCharAnAlphabet) {
-    return;
-  }
-
-  //support for jira's comment section's p tags
-  if (isLastCharAnAlphabet && lastChar.toUpperCase() === lastChar) {
-    return;
-  }
-
-  let shouldAppendBr = false;
-  if (text.length >= 4 && text.slice(-4) === '<br>') {
-    text = text.slice(0, -4);
-    shouldAppendBr = true;
-  }
-
-  if (shouldCapitalise(text)) {
-    const updatedStr = getCapitalisedContent(text);
-
-    setText(element, tagName, updatedStr, shouldAppendBr);
-    return;
-  }
-
-  console.log(options);
-
-  if (
-    text.length >= 2 &&
-    shouldCapitaliseForI(text) &&
-    options[shouldCapitaliseI]
-  ) {
-    const updatedStr = getCapitalisedContentForI(text);
-
-    setText(element, tagName, updatedStr, shouldAppendBr);
-    return;
-  }
-
-  const caseSensitive = true;
-  updateConstant(text, element, tagName, constantsKeyVal, caseSensitive);
-
-  if (options[shouldCapitaliseNames]) {
-    updateConstant(text, element, tagName, namesKeyVal, !caseSensitive);
-  }
-
-  if (options[shouldCapitaliseAbbreviations]) {
-    updateConstant(text, element, tagName, abbreviationsKeyVal, !caseSensitive);
-  }
-
-  if (options[shouldCapitaliseLocations]) {
-    updateConstant(text, element, tagName, locationsKeyVal, !caseSensitive);
   }
 }
 
