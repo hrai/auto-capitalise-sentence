@@ -105,7 +105,6 @@ setupCheckboxChangeEventHandlers(shouldCapitaliseLocations);
 
 function setupCheckboxChangeEventHandlers(flagName) {
   $(document).on('change', `#${flagName}`, function (event) {
-    console.log(event);
     if ($(event.target).prop('checked')) {
       setShouldCapitaliseVariable(flagName, true);
     } else {

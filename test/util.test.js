@@ -3,6 +3,7 @@ import {
   constantsKeyValuePairs,
   namesKeyValuePairs,
   abbreviationsKeyValuePairs,
+  locationsKeyValuePairs,
 } from '../src/constants.js';
 const $ = require('jquery');
 
@@ -384,6 +385,30 @@ describe('utilities test', function () {
     expect(matchingAndCorrectWords(str)[1]).toBe('HTML');
 
     str = 'I\'m the content of ';
+    expect(matchingAndCorrectWords(str)[0]).toBe('');
+    expect(matchingAndCorrectWords(str)[1]).toBe('');
+  });
+
+  test('getCaseInsensitiveMatchingAndCorrectedWords_Locations', () => {
+    let str = 'I was built in australia.';
+    let matchingAndCorrectWords = (text) =>
+      utils.getCaseInsensitiveMatchingAndCorrectedWords(
+        text,
+        locationsKeyValuePairs
+      );
+
+    expect(matchingAndCorrectWords(str)[0]).toBe('australia');
+    expect(matchingAndCorrectWords(str)[1]).toBe('Australia');
+
+    str = 'I was built in australia!';
+    expect(matchingAndCorrectWords(str)[0]).toBe('australia');
+    expect(matchingAndCorrectWords(str)[1]).toBe('Australia');
+
+    str = 'I WAS BUILT IN AUSTRALIA.';
+    expect(matchingAndCorrectWords(str)[0]).toBe('AUSTRALIA');
+    expect(matchingAndCorrectWords(str)[1]).toBe('Australia');
+
+    str = 'I was built in ';
     expect(matchingAndCorrectWords(str)[0]).toBe('');
     expect(matchingAndCorrectWords(str)[1]).toBe('');
   });
