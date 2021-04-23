@@ -32,20 +32,12 @@ browser.storage.local
   ])
   .then(processResponse, utils.onError);
 
-// const setterDict = {
-//   [shouldCapitaliseI]: utils.setShouldCapitaliseI,
-//   [shouldCapitaliseNames]: utils.setShouldCapitaliseNames,
-//   [shouldCapitaliseAbbreviations]: utils.setShouldCapitaliseAbbreviations,
-//   [shouldCapitaliseLocations]: utils.setShouldCapitaliseLocations,
-// };
-
 let toggleOptionsValue = (changes, variableName) => {
   if (changes[variableName] != null) {
     const newValue = changes[variableName].newValue;
 
     if (newValue != null) {
       utils.setShouldCapitaliseOption(variableName, newValue);
-      // setterDict[variableName](newValue);
     }
   }
 };
