@@ -124,8 +124,6 @@ export function shouldCapitaliseForI(text) {
 }
 
 export function setShouldCapitaliseOption(optionName, value) {
-  //console.log(optionName);
-  //console.log(value);
   if (value != null) {
     options[optionName] = value;
   }

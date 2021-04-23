@@ -119,10 +119,10 @@ function processResponse(item) {
     item.shouldCapitaliseLocations
   );
 
-  utils.setConstantsKeyVal(item.constantsKeyVal);
-  utils.setNamesKeyVal(item.namesKeyVal);
-  utils.setAbbreviationsKeyVal(item.abbreviationsKeyVal);
-  utils.setLocationsKeyVal(item.locationsKeyVal);
+  utils.setKeyValue(constantsKeyVal, item.constantsKeyVal);
+  utils.setKeyValue(namesKeyVal, item.namesKeyVal);
+  utils.setKeyValue(abbreviationsKeyVal, item.abbreviationsKeyVal);
+  utils.setKeyValue(locationsKeyVal, item.locationsKeyVal);
   utils.setWordsToExclude(item.wordsToExclude);
 
   if (item && sitesToExclude) {
