@@ -68,7 +68,6 @@ $(document).on(
   function () {
     var words = getExcludedWords();
 
-    console.log(words);
     browser.storage.local.set({
       wordsToExclude: words,
     });
