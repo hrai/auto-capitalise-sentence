@@ -10,7 +10,7 @@ import {
 } from './plugin-constants';
 
 let wordsToExclude = [];
-let options = {
+export let optionsDictionary = {
   [shouldCapitaliseI]: false,
   [shouldCapitaliseNames]: false,
   [shouldCapitaliseAbbreviations]: false,
@@ -68,7 +68,7 @@ export function capitaliseText(
   if (
     text.length >= 2 &&
     shouldCapitaliseForI(text) &&
-    options[shouldCapitaliseI]
+    optionsDictionary[shouldCapitaliseI]
   ) {
     const updatedStr = getCapitalisedContentForI(text);
 
@@ -85,7 +85,7 @@ export function capitaliseText(
     caseSensitive
   );
 
-  if (options[shouldCapitaliseNames]) {
+  if (optionsDictionary[shouldCapitaliseNames]) {
     updateConstant(
       text,
       element,
@@ -95,7 +95,7 @@ export function capitaliseText(
     );
   }
 
-  if (options[shouldCapitaliseAbbreviations]) {
+  if (optionsDictionary[shouldCapitaliseAbbreviations]) {
     updateConstant(
       text,
       element,
@@ -105,7 +105,7 @@ export function capitaliseText(
     );
   }
 
-  if (options[shouldCapitaliseLocations]) {
+  if (optionsDictionary[shouldCapitaliseLocations]) {
     updateConstant(
       text,
       element,
@@ -125,7 +125,7 @@ export function shouldCapitaliseForI(text) {
 
 export function setShouldCapitaliseOption(optionName, value) {
   if (value != null) {
-    options[optionName] = value;
+    optionsDictionary[optionName] = value;
   }
 }
 
@@ -371,5 +371,15 @@ export function isEditableElement(element, tagName) {
 export function setWordsToExclude(value) {
   if (value) {
     wordsToExclude = value;
+  }
+}
+
+export function toggleOptionsValue(changes, variableName) {
+  if (changes[variableName] != null) {
+    const newValue = changes[variableName].newValue;
+
+    if (newValue != null) {
+      setShouldCapitaliseOption(variableName, newValue);
+    }
   }
 }

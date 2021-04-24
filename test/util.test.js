@@ -5,6 +5,13 @@ import {
   abbreviationsKeyValuePairs,
   locationsKeyValuePairs,
 } from '../src/constants.js';
+import {
+  shouldCapitaliseI,
+  shouldCapitaliseNames,
+  shouldCapitaliseAbbreviations,
+  shouldCapitaliseLocations,
+} from '../src/plugin-constants.js';
+
 const $ = require('jquery');
 
 describe('utilities test', function () {
@@ -519,5 +526,33 @@ describe('utilities test', function () {
     expect(
       utils.getUpdatedString('these james and james!', '', undefined)
     ).toBe('these james and james!');
+  });
+
+  test('setShouldCapitaliseOption_SetsTheValueToTrue', () => {
+    utils.setShouldCapitaliseOption(shouldCapitaliseI, true);
+    expect(utils.optionsDictionary[shouldCapitaliseI]).toBe(true);
+
+    utils.setShouldCapitaliseOption(shouldCapitaliseNames, true);
+    expect(utils.optionsDictionary[shouldCapitaliseNames]).toBe(true);
+
+    utils.setShouldCapitaliseOption(shouldCapitaliseAbbreviations, true);
+    expect(utils.optionsDictionary[shouldCapitaliseAbbreviations]).toBe(true);
+
+    utils.setShouldCapitaliseOption(shouldCapitaliseLocations, true);
+    expect(utils.optionsDictionary[shouldCapitaliseLocations]).toBe(true);
+  });
+
+  test('setShouldCapitaliseOption_SetsTheValueToTrue', () => {
+    utils.setShouldCapitaliseOption(shouldCapitaliseI, false);
+    expect(utils.optionsDictionary[shouldCapitaliseI]).toBe(false);
+
+    utils.setShouldCapitaliseOption(shouldCapitaliseNames, false);
+    expect(utils.optionsDictionary[shouldCapitaliseNames]).toBe(false);
+
+    utils.setShouldCapitaliseOption(shouldCapitaliseAbbreviations, false);
+    expect(utils.optionsDictionary[shouldCapitaliseAbbreviations]).toBe(false);
+
+    utils.setShouldCapitaliseOption(shouldCapitaliseLocations, false);
+    expect(utils.optionsDictionary[shouldCapitaliseLocations]).toBe(false);
   });
 });
