@@ -224,7 +224,6 @@ const capitals = [
   'Porto',
   'Novo',
   'Thimphu',
-  'La',
   'Paz',
   'Sucre',
   'Sarajevo',
