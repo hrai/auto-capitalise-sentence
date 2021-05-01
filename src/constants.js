@@ -65,6 +65,7 @@ const commonTechWords = [
   'CosmosDB',
   'DevOps',
   'DI',
+  'DNS',
   'Drupal',
   'DynamoDB',
   'ECMAScript',
