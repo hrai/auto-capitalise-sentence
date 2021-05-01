@@ -3,7 +3,15 @@ import {
   constantsKeyValuePairs,
   namesKeyValuePairs,
   abbreviationsKeyValuePairs,
+  locationsKeyValuePairs,
 } from '../src/constants.js';
+import {
+  shouldCapitaliseI,
+  shouldCapitaliseNames,
+  shouldCapitaliseAbbreviations,
+  shouldCapitaliseLocations,
+} from '../src/plugin-constants.js';
+
 const $ = require('jquery');
 
 describe('utilities test', function () {
@@ -388,6 +396,30 @@ describe('utilities test', function () {
     expect(matchingAndCorrectWords(str)[1]).toBe('');
   });
 
+  test('getCaseInsensitiveMatchingAndCorrectedWords_Locations', () => {
+    let str = 'I was built in australia.';
+    let matchingAndCorrectWords = (text) =>
+      utils.getCaseInsensitiveMatchingAndCorrectedWords(
+        text,
+        locationsKeyValuePairs
+      );
+
+    expect(matchingAndCorrectWords(str)[0]).toBe('australia');
+    expect(matchingAndCorrectWords(str)[1]).toBe('Australia');
+
+    str = 'I was built in australia!';
+    expect(matchingAndCorrectWords(str)[0]).toBe('australia');
+    expect(matchingAndCorrectWords(str)[1]).toBe('Australia');
+
+    str = 'I WAS BUILT IN AUSTRALIA.';
+    expect(matchingAndCorrectWords(str)[0]).toBe('AUSTRALIA');
+    expect(matchingAndCorrectWords(str)[1]).toBe('Australia');
+
+    str = 'I was built in ';
+    expect(matchingAndCorrectWords(str)[0]).toBe('');
+    expect(matchingAndCorrectWords(str)[1]).toBe('');
+  });
+
   test('getCaseSensitiveMatchingAndCorrectedWords_ApostropheWords', () => {
     let str = 'I cant.';
     let matchingAndCorrectWords = (text) =>
@@ -494,5 +526,33 @@ describe('utilities test', function () {
     expect(
       utils.getUpdatedString('these james and james!', '', undefined)
     ).toBe('these james and james!');
+  });
+
+  test('setShouldCapitaliseOption_SetsTheValueToTrue', () => {
+    utils.setShouldCapitaliseOption(shouldCapitaliseI, true);
+    expect(utils.optionsDictionary[shouldCapitaliseI]).toBe(true);
+
+    utils.setShouldCapitaliseOption(shouldCapitaliseNames, true);
+    expect(utils.optionsDictionary[shouldCapitaliseNames]).toBe(true);
+
+    utils.setShouldCapitaliseOption(shouldCapitaliseAbbreviations, true);
+    expect(utils.optionsDictionary[shouldCapitaliseAbbreviations]).toBe(true);
+
+    utils.setShouldCapitaliseOption(shouldCapitaliseLocations, true);
+    expect(utils.optionsDictionary[shouldCapitaliseLocations]).toBe(true);
+  });
+
+  test('setShouldCapitaliseOption_SetsTheValueToTrue', () => {
+    utils.setShouldCapitaliseOption(shouldCapitaliseI, false);
+    expect(utils.optionsDictionary[shouldCapitaliseI]).toBe(false);
+
+    utils.setShouldCapitaliseOption(shouldCapitaliseNames, false);
+    expect(utils.optionsDictionary[shouldCapitaliseNames]).toBe(false);
+
+    utils.setShouldCapitaliseOption(shouldCapitaliseAbbreviations, false);
+    expect(utils.optionsDictionary[shouldCapitaliseAbbreviations]).toBe(false);
+
+    utils.setShouldCapitaliseOption(shouldCapitaliseLocations, false);
+    expect(utils.optionsDictionary[shouldCapitaliseLocations]).toBe(false);
   });
 });

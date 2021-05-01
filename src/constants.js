@@ -1,5 +1,6 @@
 import { names } from './name-constants'
 import { abbreviations } from './abbreviation-constants'
+import { locations } from './location-constants'
 
 const days = [
   'Monday',
@@ -158,3 +159,4 @@ export let abbreviationsKeyValuePairs = abbreviations.reduce(
   stringToKeyValuePairs,
   {}
 )
+export let locationsKeyValuePairs = locations.reduce(stringToKeyValuePairs, {})

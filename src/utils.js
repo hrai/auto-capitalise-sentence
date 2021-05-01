@@ -1,10 +1,120 @@
-export let shouldCapitaliseI = false;
-export let shouldCapitaliseNames = false;
-export let shouldCapitaliseAbbreviations = false;
-export let constantsKeyVal = {};
-export let namesKeyVal = {};
-export let abbreviationsKeyVal = {};
+import {
+  shouldCapitaliseI,
+  shouldCapitaliseNames,
+  shouldCapitaliseAbbreviations,
+  shouldCapitaliseLocations,
+  constantsKeyVal,
+  namesKeyVal,
+  abbreviationsKeyVal,
+  locationsKeyVal,
+} from './plugin-constants';
+
 let wordsToExclude = [];
+export let optionsDictionary = {
+  [shouldCapitaliseI]: false,
+  [shouldCapitaliseNames]: false,
+  [shouldCapitaliseAbbreviations]: false,
+  [shouldCapitaliseLocations]: false,
+};
+let keyValueDictionary = {
+  [constantsKeyVal]: {},
+  [namesKeyVal]: {},
+  [abbreviationsKeyVal]: {},
+  [locationsKeyVal]: {},
+};
+
+export function capitaliseText(
+  element,
+  shouldCapitalise,
+  shouldCapitaliseForI,
+  getText,
+  setText
+) {
+  if (!element) return;
+
+  let tagName = element.tagName;
+
+  if (!isEditableElement(element, tagName)) return;
+
+  let text = getText(element, tagName);
+
+  if (text == null) return;
+
+  const lastChar = text.trim().slice(-1);
+  const isLastCharAnAlphabet = lastChar.match(/[a-z]/i);
+
+  if (text.length == 1 && !isLastCharAnAlphabet) {
+    return;
+  }
+
+  //support for jira's comment section's p tags
+  if (isLastCharAnAlphabet && lastChar.toUpperCase() === lastChar) {
+    return;
+  }
+
+  let shouldAppendBr = false;
+  if (text.length >= 4 && text.slice(-4) === '<br>') {
+    text = text.slice(0, -4);
+    shouldAppendBr = true;
+  }
+
+  if (shouldCapitalise(text)) {
+    const updatedStr = getCapitalisedContent(text);
+
+    setText(element, tagName, updatedStr, shouldAppendBr);
+    return;
+  }
+
+  if (
+    text.length >= 2 &&
+    shouldCapitaliseForI(text) &&
+    optionsDictionary[shouldCapitaliseI]
+  ) {
+    const updatedStr = getCapitalisedContentForI(text);
+
+    setText(element, tagName, updatedStr, shouldAppendBr);
+    return;
+  }
+
+  const caseSensitive = true;
+  updateConstant(
+    text,
+    element,
+    tagName,
+    keyValueDictionary[constantsKeyVal],
+    caseSensitive
+  );
+
+  if (optionsDictionary[shouldCapitaliseNames]) {
+    updateConstant(
+      text,
+      element,
+      tagName,
+      keyValueDictionary[namesKeyVal],
+      !caseSensitive
+    );
+  }
+
+  if (optionsDictionary[shouldCapitaliseAbbreviations]) {
+    updateConstant(
+      text,
+      element,
+      tagName,
+      keyValueDictionary[abbreviationsKeyVal],
+      !caseSensitive
+    );
+  }
+
+  if (optionsDictionary[shouldCapitaliseLocations]) {
+    updateConstant(
+      text,
+      element,
+      tagName,
+      keyValueDictionary[locationsKeyVal],
+      !caseSensitive
+    );
+  }
+}
 
 export function shouldCapitaliseForI(text) {
   const regex = /\s+i(\s+|')$/;
@@ -13,39 +123,15 @@ export function shouldCapitaliseForI(text) {
   return matches;
 }
 
-export function setShouldCapitaliseI(value) {
+export function setShouldCapitaliseOption(optionName, value) {
   if (value != null) {
-    shouldCapitaliseI = value;
+    optionsDictionary[optionName] = value;
   }
 }
 
-export function setShouldCapitaliseNames(value) {
+export function setKeyValue(keyValueName, value) {
   if (value != null) {
-    shouldCapitaliseNames = value;
-  }
-}
-
-export function setShouldCapitaliseAbbreviations(value) {
-  if (value != null) {
-    shouldCapitaliseAbbreviations = value;
-  }
-}
-
-export function setConstantsKeyVal(value) {
-  if (value != null) {
-    constantsKeyVal = value;
-  }
-}
-
-export function setNamesKeyVal(value) {
-  if (value != null) {
-    namesKeyVal = value;
-  }
-}
-
-export function setAbbreviationsKeyVal(value) {
-  if (value != null) {
-    abbreviationsKeyVal = value;
+    keyValueDictionary[keyValueName] = value;
   }
 }
 
@@ -61,8 +147,6 @@ export function shouldCapitalise(text) {
   matches = sentenceRegex.test(text);
 
   if (!matches) {
-    // console.log(text);
-    // console.log(text.length);
     return text.length == 1;
   }
 
@@ -213,67 +297,6 @@ export function setEndOfContenteditable(contentEditableElement) {
   }
 }
 
-export function capitaliseText(
-  element,
-  shouldCapitalise,
-  shouldCapitaliseForI,
-  getText,
-  setText
-) {
-  if (!element) return;
-
-  let tagName = element.tagName;
-
-  if (!isEditableElement(element, tagName)) return;
-
-  let text = getText(element, tagName);
-
-  if (text == null) return;
-
-  const lastChar = text.trim().slice(-1);
-  const isLastCharAnAlphabet = lastChar.match(/[a-z]/i);
-
-  if (text.length == 1 && !isLastCharAnAlphabet) {
-    return;
-  }
-
-  //support for jira's comment section's p tags
-  if (isLastCharAnAlphabet && lastChar.toUpperCase() === lastChar) {
-    return;
-  }
-
-  let shouldAppendBr = false;
-  if (text.length >= 4 && text.slice(-4) === '<br>') {
-    text = text.slice(0, -4);
-    shouldAppendBr = true;
-  }
-
-  if (shouldCapitalise(text)) {
-    const updatedStr = getCapitalisedContent(text);
-
-    setText(element, tagName, updatedStr, shouldAppendBr);
-    return;
-  }
-
-  if (text.length >= 2 && shouldCapitaliseForI(text) && shouldCapitaliseI) {
-    const updatedStr = getCapitalisedContentForI(text);
-
-    setText(element, tagName, updatedStr, shouldAppendBr);
-    return;
-  }
-
-  const caseSensitive = true;
-  updateConstant(text, element, tagName, constantsKeyVal, caseSensitive);
-
-  if (shouldCapitaliseNames) {
-    updateConstant(text, element, tagName, namesKeyVal, !caseSensitive);
-  }
-
-  if (shouldCapitaliseAbbreviations) {
-    updateConstant(text, element, tagName, abbreviationsKeyVal, !caseSensitive);
-  }
-}
-
 function updateConstant(text, element, tagName, keyValuePairs, caseSensitive) {
   const [matchedWord, correctedWord] =
     caseSensitive === true
@@ -290,7 +313,7 @@ function updateConstant(text, element, tagName, keyValuePairs, caseSensitive) {
 
 export function getUpdatedString(text, matchedWord, correctedWord) {
   if (text && matchedWord && correctedWord) {
-    const splitAt = index => x => [x.slice(0, index), x.slice(index)];
+    const splitAt = (index) => (x) => [x.slice(0, index), x.slice(index)];
     const arr = splitAt(-1)(text);
 
     const updatedStr =
@@ -330,9 +353,7 @@ export function isContentEditable(element) {
 }
 
 export function getFilteredElements(addedNodes, tagName) {
-  return $(addedNodes)
-    .find(tagName)
-    .addBack(tagName); // finds either added alone or as tree
+  return $(addedNodes).find(tagName).addBack(tagName); // finds either added alone or as tree
 }
 
 export function shouldCapitaliseContent(element) {
@@ -350,5 +371,15 @@ export function isEditableElement(element, tagName) {
 export function setWordsToExclude(value) {
   if (value) {
     wordsToExclude = value;
+  }
+}
+
+export function toggleOptionsValue(changes, variableName) {
+  if (changes[variableName] != null) {
+    const newValue = changes[variableName].newValue;
+
+    if (newValue != null) {
+      setShouldCapitaliseOption(variableName, newValue);
+    }
   }
 }

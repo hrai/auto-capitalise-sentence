@@ -80,6 +80,7 @@ const commonAbbreviations = [
   'UPS',
   'USB',
   'WFH',
+  'WIP',
   'WSL',
   'WTF',
   'WTH',
