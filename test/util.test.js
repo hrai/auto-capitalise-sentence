@@ -19,13 +19,18 @@ describe('utilities test', function () {
     expect(utils.getCapitalisedContent('blah')).toBe('blaH');
     expect(utils.getCapitalisedContent('i')).toBe('I');
     expect(utils.getCapitalisedContent('i\'m')).toBe('i\'M');
-    expect(utils.getCapitalisedContent('i\'')).toBe('I\'');
     expect(utils.getCapitalisedContent('i. m')).toBe('i. M');
     expect(utils.getCapitalisedContent('i? m')).toBe('i? M');
     expect(utils.getCapitalisedContent('')).toBe('');
     expect(() => {
       utils.getCapitalisedContent();
     }).toThrow();
+  });
+
+  test('getCapitalisedContentForI', () => {
+    expect(utils.getCapitalisedContentForI('i ')).toBe('I ');
+    expect(utils.getCapitalisedContentForI('i\'')).toBe('I\'');
+    expect(utils.getCapitalisedContentForI('Hi this is i ')).toBe('Hi this is I ');
   });
 
   test('shouldCapitaliseForI', () => {

@@ -2,7 +2,7 @@
   "name": "auto-capitalise-extension",
   "title": "Auto Capitalise Extension",
   "version": "2.0.0",
-  "description": "Firefox add-on to automatically capitalise the first letter of a sentence while typing.",
+  "description": "Browser add-on to automatically capitalise the first letter of a sentence while typing.",
   "scripts": {
     "start": "run-script-os",
     "start:win32": "yarn build-dev && web-ext run --firefox=\"c:/Program Files/Firefox Developer Edition/firefox.exe\" --start-url localhost:3000",
