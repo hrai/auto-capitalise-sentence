@@ -161,7 +161,7 @@ describe('utilities test', function () {
   });
 
   describe('replaceLastOccurrenceInString', () => {
-    test('replaceLastOccurrenceInString', () => {
+    test('replaceLastOccurrenceInString_ReplacesText', () => {
       expect(
         utils.replaceLastOccurrenceInString('test&nbsp;&nbsp;', '&nbsp;', 'me')
       ).toBe('test&nbsp;me');
@@ -175,6 +175,15 @@ describe('utilities test', function () {
       expect(
         utils.replaceLastOccurrenceInString('test this this', 'this', 'and')
       ).toBe('test this and');
+    });
+
+    test('replaceLastOccurrenceInString_DoesNotReplaceText', () => {
+      expect(
+        utils.replaceLastOccurrenceInString('test me', 'bro', 'this')
+      ).toBe('test me');
+      expect(
+        utils.replaceLastOccurrenceInString('test me ', 'me', 'this')
+      ).toBe('test me ');
     });
   });
 
