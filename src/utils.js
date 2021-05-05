@@ -117,6 +117,8 @@ export function capitaliseText(
 }
 
 export function shouldCapitaliseForI(text) {
+  debugger;
+
   const regex = /\s+i(\s+|')$/;
   const matches = regex.test(text);
 
