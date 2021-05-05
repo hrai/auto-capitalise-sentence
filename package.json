@@ -5,9 +5,9 @@
   "description": "Firefox add-on to automatically capitalise the first letter of a sentence while typing.",
   "scripts": {
     "start": "run-script-os",
-    "start:win32": "yarn build && web-ext run --firefox=\"c:/Program Files/Firefox Developer Edition/firefox.exe\" --start-url localhost:3000",
-    "start:darwin:linux": "yarn build && web-ext run --firefox=firefox-developer --start-url localhost:3000",
-    "start:chrome": "yarn build && cd distribution && web-ext run -t chromium --start-url localhost:3000",
+    "start:win32": "yarn build-dev && web-ext run --firefox=\"c:/Program Files/Firefox Developer Edition/firefox.exe\" --start-url localhost:3000",
+    "start:darwin:linux": "yarn build-dev && web-ext run --firefox=firefox-developer --start-url localhost:3000",
+    "start:chrome": "yarn build-dev && cd distribution && web-ext run -t chromium --start-url localhost:3000",
     "build": "yarn webpack",
     "build-dev": "yarn webpack --mode=development",
     "watch": "yarn build --watch",
