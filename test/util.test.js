@@ -30,7 +30,9 @@ describe('utilities test', function () {
   test('getCapitalisedContentForI', () => {
     expect(utils.getCapitalisedContentForI('i ')).toBe('I ');
     expect(utils.getCapitalisedContentForI('i\'')).toBe('I\'');
-    expect(utils.getCapitalisedContentForI('Hi this is i ')).toBe('Hi this is I ');
+    expect(utils.getCapitalisedContentForI('Hi this is i ')).toBe(
+      'Hi this is I '
+    );
   });
 
   test('shouldCapitaliseForI', () => {
@@ -104,7 +106,7 @@ describe('utilities test', function () {
       '<div>' +
       '  <input type="text" id="username" value="Bingo" />' +
       '  <textarea id="about-me" rows="8" cols="40"></textarea> ' +
-      '  <span id="address">Please enter your address </span> ' +
+      '  <span id="address">Please enter your address&nbsp;</span> ' +
       '  <button id="button" />' +
       '</div>';
   }
@@ -141,10 +143,51 @@ describe('utilities test', function () {
         'Please enter your address '
       );
       expect(utils.getText(element[0], 'input')).toBe('');
-      expect(utils.getText(element[0], '')).toBe('Please enter your address ');
+      expect(utils.getText(element[0], '')).toBe(
+        'Please enter your address&nbsp;'
+      );
       expect(() => {
         utils.getText(element);
       }).toThrow();
+    });
+  });
+
+  describe('getNbspCount', () => {
+    test('getNbspCount', () => {
+      expect(utils.getNbspCount('test&nbsp;')).toBe(1);
+      expect(utils.getNbspCount('test&nbsp;&nbsp;')).toBe(2);
+      expect(utils.getNbspCount('test')).toBe(0);
+    });
+  });
+
+  describe('replaceLastOccurrenceInString', () => {
+    test('replaceLastOccurrenceInString', () => {
+      expect(
+        utils.replaceLastOccurrenceInString('test&nbsp;&nbsp;', '&nbsp;', 'me')
+      ).toBe('test&nbsp;me');
+      expect(
+        utils.replaceLastOccurrenceInString(
+          'test&nbsp;&nbsp;&nbsp;',
+          '&nbsp;',
+          'me'
+        )
+      ).toBe('test&nbsp;&nbsp;me');
+      expect(
+        utils.replaceLastOccurrenceInString('test this this', 'this', 'and')
+      ).toBe('test this and');
+    });
+  });
+
+  describe('getTextForSpanTag', () => {
+    test('getTextForSpanTag_ReplacesTagForSingleOccurrence', () => {
+      expect(utils.getTextForSpanTag('test&nbsp;')).toBe('test ');
+    });
+
+    test('getTextForSpanTag_DoesNotReplaceTagForMultipleOccurrences', () => {
+      expect(utils.getTextForSpanTag('test&nbsp;&nbsp;')).toBe(
+        'test&nbsp;&nbsp;'
+      );
+      expect(utils.getTextForSpanTag('test')).toBe('test');
     });
   });
 

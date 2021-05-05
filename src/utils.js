@@ -22,6 +22,7 @@ let keyValueDictionary = {
   [abbreviationsKeyVal]: {},
   [locationsKeyVal]: {},
 };
+const nbsp = '&nbsp;';
 
 export function capitaliseText(
   element,
@@ -117,8 +118,6 @@ export function capitaliseText(
 }
 
 export function shouldCapitaliseForI(text) {
-  debugger;
-
   const regex = /\s+i(\s+|')$/;
   const matches = regex.test(text);
 
@@ -223,7 +222,28 @@ export function getText(htmlControl, tagName) {
     return htmlControl.value ? htmlControl.value : '';
   }
 
+  if (htmlControl.innerHTML && tagName.toUpperCase() === 'SPAN') {
+    return getTextForSpanTag(htmlControl.innerHTML);
+  }
+
   return htmlControl.innerHTML ? htmlControl.innerHTML : '';
+}
+
+export function getTextForSpanTag(text) {
+  if (text && getNbspCount(text) === 1) {
+    let result= replaceLastOccurrenceInString(text, nbsp, ' ');
+    return result;
+  }
+
+  return text;
+}
+
+export function replaceLastOccurrenceInString(originalText,textToMatch, replacement) {
+  return originalText.replace(new RegExp(textToMatch + '$'), replacement);
+}
+
+export function getNbspCount(text) {
+  return (text.match(new RegExp(nbsp, 'g')) || []).length;
 }
 
 export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
@@ -233,6 +253,10 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
   ) {
     htmlControl.value = updatedStr;
     return;
+  }
+
+  if (tagName.toUpperCase() === 'SPAN') {
+    updatedStr = replaceLastOccurrenceInString(updatedStr, ' ', nbsp);
   }
 
   if (shouldAppendBr) {
