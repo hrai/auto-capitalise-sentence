@@ -255,7 +255,7 @@ describe('utilities test', function () {
       element = $('#address');
       utils.setText(element[0], 'span', '', false);
       expect(element.html()).toBe('');
-      
+
       expect(() => {
         resetHtml();
         element = $('#address');
@@ -300,6 +300,11 @@ describe('utilities test', function () {
       element = $('#address');
       utils.setText(element[0], 'p', updatedStr, false);
       expect(element.html()).toBe('This is my life.');
+
+      resetHtml();
+      element = $('#address');
+      utils.setText(element[0], 'p', 'test space ', false);
+      expect(element.html()).toBe('test space ');
 
       resetHtml();
       element = $('#address');
