@@ -40,7 +40,6 @@ describe('utilities test', function () {
     expect(utils.shouldCapitaliseForI(' i ')).toBe(true);
     expect(utils.shouldCapitaliseForI('Hi this is i ')).toBe(true);
     expect(utils.shouldCapitaliseForI(' i\'')).toBe(true);
-    // expect(utils.shouldCapitaliseForI('i\'')).toBe(true);
     expect(utils.shouldCapitaliseForI('    i\'')).toBe(true);
     expect(utils.shouldCapitaliseForI('    i ')).toBe(true);
     expect(utils.shouldCapitalise('       k')).toBe(false);
