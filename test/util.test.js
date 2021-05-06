@@ -237,6 +237,32 @@ describe('utilities test', function () {
       }).toThrow();
     });
 
+    test('setText_SpanTagWithNbsp', () => {
+      const updatedStr = 'testing this ';
+
+      resetHtml();
+      let element = $('#address');
+
+      utils.setText(element[0], 'span', updatedStr, false);
+      expect(element.html()).toBe('testing this&nbsp;');
+
+      resetHtml();
+      element = $('#address');
+      utils.setText(element[0], 'p', '', false);
+      expect(element.html()).toBe('');
+
+      resetHtml();
+      element = $('#address');
+      utils.setText(element[0], 'span', '', false);
+      expect(element.html()).toBe('');
+      
+      expect(() => {
+        resetHtml();
+        element = $('#address');
+        utils.setText(element[0]);
+      }).toThrow();
+    });
+
     test('setText_TextareaTag', () => {
       const updatedStr = 'This is my life.';
 
