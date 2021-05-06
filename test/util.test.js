@@ -27,6 +27,14 @@ describe('utilities test', function () {
     }).toThrow();
   });
 
+  test('getCapitalisedContentForI', () => {
+    expect(utils.getCapitalisedContentForI('i ')).toBe('I ');
+    expect(utils.getCapitalisedContentForI('i\'')).toBe('I\'');
+    expect(utils.getCapitalisedContentForI('Hi this is i ')).toBe(
+      'Hi this is I '
+    );
+  });
+
   test('shouldCapitaliseForI', () => {
     expect(utils.shouldCapitaliseForI('war i ')).toBe(true);
     expect(utils.shouldCapitaliseForI(' i ')).toBe(true);
@@ -97,7 +105,7 @@ describe('utilities test', function () {
       '<div>' +
       '  <input type="text" id="username" value="Bingo" />' +
       '  <textarea id="about-me" rows="8" cols="40"></textarea> ' +
-      '  <span id="address">Please enter your address.</span> ' +
+      '  <span id="address">Please enter your address&nbsp;</span> ' +
       '  <button id="button" />' +
       '</div>';
   }
@@ -131,13 +139,63 @@ describe('utilities test', function () {
       setInnerHtml();
       const element = $('#address');
       expect(utils.getText(element[0], 'span')).toBe(
-        'Please enter your address.'
+        'Please enter your address '
       );
       expect(utils.getText(element[0], 'input')).toBe('');
-      expect(utils.getText(element[0], '')).toBe('Please enter your address.');
+      expect(utils.getText(element[0], '')).toBe(
+        'Please enter your address&nbsp;'
+      );
       expect(() => {
         utils.getText(element);
       }).toThrow();
+    });
+  });
+
+  describe('getNbspCount', () => {
+    test('getNbspCount', () => {
+      expect(utils.getNbspCount('test&nbsp;')).toBe(1);
+      expect(utils.getNbspCount('test&nbsp;&nbsp;')).toBe(2);
+      expect(utils.getNbspCount('test')).toBe(0);
+    });
+  });
+
+  describe('replaceLastOccurrenceInString', () => {
+    test('replaceLastOccurrenceInString_ReplacesText', () => {
+      expect(
+        utils.replaceLastOccurrenceInString('test&nbsp;&nbsp;', '&nbsp;', 'me')
+      ).toBe('test&nbsp;me');
+      expect(
+        utils.replaceLastOccurrenceInString(
+          'test&nbsp;&nbsp;&nbsp;',
+          '&nbsp;',
+          'me'
+        )
+      ).toBe('test&nbsp;&nbsp;me');
+      expect(
+        utils.replaceLastOccurrenceInString('test this this', 'this', 'and')
+      ).toBe('test this and');
+    });
+
+    test('replaceLastOccurrenceInString_DoesNotReplaceText', () => {
+      expect(
+        utils.replaceLastOccurrenceInString('test me', 'bro', 'this')
+      ).toBe('test me');
+      expect(
+        utils.replaceLastOccurrenceInString('test me ', 'me', 'this')
+      ).toBe('test me ');
+    });
+  });
+
+  describe('getTextForSpanTag', () => {
+    test('getTextForSpanTag_ReplacesTagForSingleOccurrence', () => {
+      expect(utils.getTextForSpanTag('test&nbsp;')).toBe('test ');
+    });
+
+    test('getTextForSpanTag_DoesNotReplaceTagForMultipleOccurrences', () => {
+      expect(utils.getTextForSpanTag('test&nbsp;&nbsp;')).toBe(
+        'test&nbsp;&nbsp;'
+      );
+      expect(utils.getTextForSpanTag('test')).toBe('test');
     });
   });
 
@@ -174,6 +232,32 @@ describe('utilities test', function () {
       expect(() => {
         resetHtml();
         element = $('#username');
+        utils.setText(element[0]);
+      }).toThrow();
+    });
+
+    test('setText_SpanTagWithNbsp', () => {
+      const updatedStr = 'testing this ';
+
+      resetHtml();
+      let element = $('#address');
+
+      utils.setText(element[0], 'span', updatedStr, false);
+      expect(element.html()).toBe('testing this&nbsp;');
+
+      resetHtml();
+      element = $('#address');
+      utils.setText(element[0], 'p', '', false);
+      expect(element.html()).toBe('');
+
+      resetHtml();
+      element = $('#address');
+      utils.setText(element[0], 'span', '', false);
+      expect(element.html()).toBe('');
+
+      expect(() => {
+        resetHtml();
+        element = $('#address');
         utils.setText(element[0]);
       }).toThrow();
     });
@@ -215,6 +299,11 @@ describe('utilities test', function () {
       element = $('#address');
       utils.setText(element[0], 'p', updatedStr, false);
       expect(element.html()).toBe('This is my life.');
+
+      resetHtml();
+      element = $('#address');
+      utils.setText(element[0], 'p', 'test space ', false);
+      expect(element.html()).toBe('test space ');
 
       resetHtml();
       element = $('#address');
