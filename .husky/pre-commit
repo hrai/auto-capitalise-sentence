@@ -4,13 +4,13 @@
 npx lint-staged
 
 # convert file type
-git diff --cached --name-status | while read st file; do
-  # skip deleted files
-  if [ "$st" == 'D' ]; then continue; fi
+# git diff --cached --name-status | while read st file; do
+#   # skip deleted files
+#   if [ "$st" == 'D' ]; then continue; fi
 
-  # do a check only on the sh files
-  if [[ "$file" == "(.sh)$" ]]; then
-    sed -i 's/.$//' $file
-    echo "Converted linebreaks from dos to *nix type: $file"
-  fi
-done
+#   # do a check only on the sh files
+#   if [[ "$file" == "(.sh)$" ]]; then
+#     sed -i 's/.$//' $file
+#     echo "Converted linebreaks from dos to *nix type: $file"
+#   fi
+# done
