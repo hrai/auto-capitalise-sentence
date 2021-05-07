@@ -59,8 +59,7 @@
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix",
       "git add"
-    ],
-    "*.js": "eslint --cache --fix"
+    ]
   },
   "license": "MIT",
   "bugs": {
