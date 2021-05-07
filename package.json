@@ -18,7 +18,8 @@
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
     "update-version": "yarn dot-json distribution/manifest.json version $VER",
-    "release:firefox": "cd distribution && yarn web-ext-submit"
+    "release:firefox": "cd distribution && yarn web-ext-submit",
+    "prepare": "husky install"
   },
   "prettier": {
     "trailingComma": "es5",
@@ -54,16 +55,12 @@
     "type": "git",
     "url": "https://github.com/hrai/auto-capitalise"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix",
       "git add"
-    ]
+    ],
+    "*.js": "eslint --cache --fix"
   },
   "license": "MIT",
   "bugs": {

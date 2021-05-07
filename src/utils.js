@@ -231,14 +231,18 @@ export function getText(htmlControl, tagName) {
 
 export function getTextForSpanTag(text) {
   if (text && getNbspCount(text) === 1) {
-    let result= replaceLastOccurrenceInString(text, nbsp, ' ');
+    let result = replaceLastOccurrenceInString(text, nbsp, ' ');
     return result;
   }
 
   return text;
 }
 
-export function replaceLastOccurrenceInString(originalText,textToMatch, replacement) {
+export function replaceLastOccurrenceInString(
+  originalText,
+  textToMatch,
+  replacement
+) {
   return originalText.replace(new RegExp(textToMatch + '$'), replacement);
 }
 
@@ -409,3 +413,5 @@ export function toggleOptionsValue(changes, variableName) {
     }
   }
 }
+
+//
