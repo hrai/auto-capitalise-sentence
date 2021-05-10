@@ -413,5 +413,3 @@ export function toggleOptionsValue(changes, variableName) {
     }
   }
 }
-
-//
