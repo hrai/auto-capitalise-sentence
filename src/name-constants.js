@@ -3108,6 +3108,7 @@ let personNames = [
   'Shostakovitch',
   'Shova',
   'Shrek',
+  'Shruti',
   'Shula',
   'Shylockian',
   'Sid',
