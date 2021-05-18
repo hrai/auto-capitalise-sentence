@@ -17,44 +17,41 @@
                 </div>
             </div>
             <div id="body">
-                <ul class="nav nav-tabs">
-                    <li class="nav-item">
-                        <a href="#excluded_sites" class="nav-link active" data-toggle="tab">Excluded websites</a>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="excluded-sites-tab" data-bs-toggle="tab" data-bs-target="#excluded_sites" type="button" role="tab" aria-controls="excluded-sites" aria-selected="true">Excluded websites</button>
                     </li>
-                    <li class="nav-item">
-                        <a href="#excluded_words" class="nav-link" data-toggle="tab">Excluded words</a>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="excluded-words-tab" data-bs-toggle="tab" data-bs-target="#excluded_words" type="button" role="tab" aria-controls="excluded-words" aria-selected="false">Excluded words</button>
                     </li>
-                    <li class="nav-item">
-                        <a href="#checkboxes" class="nav-link" data-toggle="tab">Enable/disable features</a>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="checkboxes-tab" data-bs-toggle="tab" data-bs-target="#checkboxes" type="button" role="tab" aria-controls="checkboxes" aria-selected="false">Enable/disable features</button>
                     </li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane fade show active" id="excluded_sites">
-                        <div class="form-group">
-                            <p class="form-text">Enter websites where you want the capitalising to be disabled.</p>
+                    <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="excluded-sites-tab" id="excluded_sites">
+                        <div class="mb-2">
+                            <small>Enter websites where you want the capitalising to be disabled.</small>
                             <textarea id="sites" rows="4" class="form-control" placeholder="Add sites to exclude"></textarea>
-                            <small class="form-text text-muted">Note: Add each site in a separate row and click 'Save' button.</small>
-                            <span class="input-group-btn">
+                            <small class="text-muted">Note: Add each site in a separate row and click 'Save' button.</small>
+                        </div>
+                        <div class="d-grid gap-2">
                                 <input type="button" value="Save" id="submitButton" class="btn btn-primary btn-block" disabled>
-                                <input type="button" value="Add current site to ignore list" id="ignoreSiteButton"
-                                                                                             class="btn btn-primary btn-block">
-                            </span>
+                                <input type="button" value="Add current site to ignore list" id="ignoreSiteButton" class="btn btn-primary btn-block">
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="excluded_words">
-                        <div class="form-group">
-                            <p class="form-text">Enter words which you don't want to be capitalised.</p>
-                            <textarea id="excluded_words_textbox" rows="4" class="form-control"
-                                                                           placeholder="Add words to exclude"></textarea>
-                            <small class="form-text text-muted">Note: Add each word in a separate row and click 'Save' button.</small>
-                            <span class="input-group-btn">
-                                <input type="button" value="Save" id="submitButtonExcludedWords"
-                                                                  class="btn btn-primary btn-block" disabled>
-                            </span>
+                    <div class="tab-pane fade" role="tabpanel" aria-labelledby="excluded-words-tab" id="excluded_words">
+                        <div class="mb-2">
+                            <small>Enter words which you don't want to be capitalised.</small>
+                            <textarea id="excluded_words_textbox" rows="4" class="form-control" placeholder="Add words to exclude"></textarea>
+                            <small class="text-muted">Note: Add each word in a separate row and click 'Save' button.</small>
+                        </div>
+                        <div class="d-grid gap-2">
+                                <input type="button" value="Save" id="submitButtonExcludedWords" class="btn btn-primary btn-block" disabled>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="checkboxes">
-                        <div class="form-group">
+                    <div class="tab-pane fade" role="tabpanel" aria-labelledby="checkboxes-tab" id="checkboxes">
+                        <div class="mb-2">
                             <input type="checkbox" id="shouldCapitaliseI" name="shouldCapitaliseI" checked>
                             <label for="shouldCapitaliseI">Should capitalise 'I'?</label><br>
 
@@ -102,7 +99,7 @@
     }
 
     hr{
-        margin: 0;
+        margin: 5px;
     }
 
     /* Header style */
