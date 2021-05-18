@@ -1,6 +1,6 @@
-import { names } from './name-constants'
-import { abbreviations } from './abbreviation-constants'
-import { locations } from './location-constants'
+import { names } from './name-constants';
+import { abbreviations } from './abbreviation-constants';
+import { locations } from './location-constants';
 
 const days = [
   'Monday',
@@ -10,7 +10,7 @@ const days = [
   'Friday',
   'Saturday',
   'Sunday',
-]
+];
 
 const months = [
   'January',
@@ -23,31 +23,31 @@ const months = [
   'October',
   'November',
   'December',
-]
+];
 
 const wordsWithApostrophe = {
-  arent: "aren't",
-  cant: "can't",
-  couldnt: "couldn't",
-  couldve: "could've",
-  doesnt: "doesn't",
-  dont: "don't",
-  hasnt: "hasn't",
-  havent: "haven't",
-  hes: "he's",
-  isnt: "isn't",
-  shes: "she's",
-  shouldnt: "shouldn't",
-  shouldve: "should've",
-  theres: "there's",
-  theyre: "they're",
-  theyve: "they've",
-  wont: "won't",
-  wouldnt: "wouldn't",
-  wouldve: "would've",
-  youre: "you're",
-  youve: "you've",
-}
+  arent: 'aren\'t',
+  cant: 'can\'t',
+  couldnt: 'couldn\'t',
+  couldve: 'could\'ve',
+  doesnt: 'doesn\'t',
+  dont: 'don\'t',
+  hasnt: 'hasn\'t',
+  havent: 'haven\'t',
+  hes: 'he\'s',
+  isnt: 'isn\'t',
+  shes: 'she\'s',
+  shouldnt: 'shouldn\'t',
+  shouldve: 'should\'ve',
+  theres: 'there\'s',
+  theyre: 'they\'re',
+  theyve: 'they\'ve',
+  wont: 'won\'t',
+  wouldnt: 'wouldn\'t',
+  wouldve: 'would\'ve',
+  youre: 'you\'re',
+  youve: 'you\'ve',
+};
 
 const commonTechWords = [
   'AI',
@@ -88,6 +88,7 @@ const commonTechWords = [
   'NuGet',
   'NuGets',
   'Ocaml',
+  'PagerDuty',
   'PHP',
   'PR',
   'PRs',
@@ -123,28 +124,28 @@ const commonTechWords = [
   'iPhone',
   'iPod',
   'iTunes',
-]
+];
 
-let commonLocalAbbreviations = ['Syd', 'Melb']
+let commonLocalAbbreviations = ['Syd', 'Melb'];
 
-let constants = days.concat(months, commonTechWords, commonLocalAbbreviations)
+let constants = days.concat(months, commonTechWords, commonLocalAbbreviations);
 
 let stringToKeyValuePairs = (obj, val) => {
-  obj[val.toLowerCase()] = val
-  return obj
-}
+  obj[val.toLowerCase()] = val;
+  return obj;
+};
 
-let constantsMap = constants.reduce(stringToKeyValuePairs, {})
+let constantsMap = constants.reduce(stringToKeyValuePairs, {});
 
 let toTitleCase = (str) => {
   return str.replace(/\w\S*/g, (txt) => {
-    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
-  })
-}
+    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+  });
+};
 
-let wordsWithApostropheTitleCase = {}
+let wordsWithApostropheTitleCase = {};
 for (const [key, value] of Object.entries(wordsWithApostrophe)) {
-  wordsWithApostropheTitleCase[toTitleCase(key)] = toTitleCase(value)
+  wordsWithApostropheTitleCase[toTitleCase(key)] = toTitleCase(value);
 }
 
 //convert array to key-value pairs
@@ -152,11 +153,11 @@ export let constantsKeyValuePairs = {
   ...constantsMap,
   ...wordsWithApostrophe,
   ...wordsWithApostropheTitleCase,
-}
+};
 
-export let namesKeyValuePairs = names.reduce(stringToKeyValuePairs, {})
+export let namesKeyValuePairs = names.reduce(stringToKeyValuePairs, {});
 export let abbreviationsKeyValuePairs = abbreviations.reduce(
   stringToKeyValuePairs,
   {}
-)
-export let locationsKeyValuePairs = locations.reduce(stringToKeyValuePairs, {})
+);
+export let locationsKeyValuePairs = locations.reduce(stringToKeyValuePairs, {});
