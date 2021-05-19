@@ -3422,6 +3422,7 @@ let personNames = [
   'Turing',
   'Tuscaloosa',
   'Tuscon',
+  'Tushar',
   'Tuskegee',
   'Tussaud',
   'Tut',
