@@ -59,6 +59,7 @@ const commonTechWords = [
   'BigQuery',
   'BitTorrent',
   'Bluetooth',
+  'CDK',
   'CLI',
   'CSS',
   'Compaq',
