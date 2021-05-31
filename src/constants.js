@@ -114,6 +114,7 @@ const commonTechWords = [
   'Ubuntu',
   'Unicode',
   'VoIP',
+  'VPC',
   'VPN',
   'WiFi',
   'Wii',
