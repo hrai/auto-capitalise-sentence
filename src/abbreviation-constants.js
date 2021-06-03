@@ -230,7 +230,6 @@ const timeAbbreviations = [
   'SST',
   'SYOT',
   'TAHT',
-  'THA',
   'TFT',
   'TJT',
   'TKT',
