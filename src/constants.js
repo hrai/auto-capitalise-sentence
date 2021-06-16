@@ -42,6 +42,7 @@ const wordsWithApostrophe = {
   shes: 'she\'s',
   shouldnt: 'shouldn\'t',
   shouldve: 'should\'ve',
+  thats: 'that\'s',
   theres: 'there\'s',
   theyre: 'they\'re',
   theyve: 'they\'ve',
