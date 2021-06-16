@@ -176,7 +176,7 @@ export function getMatchingAndCorrectedWords(
   wordsToExclude,
   caseInsensitive
 ) {
-  const lastWordRegex = /\b(\w+)\W$/;
+  const lastWordRegex = /\b(\w+)([^\w-])$/;
 
   let match = lastWordRegex.exec(text);
   const noMatch = ['', ''];
