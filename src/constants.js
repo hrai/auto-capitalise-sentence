@@ -54,6 +54,7 @@ const wordsWithApostrophe = {
 
 const commonTechWords = [
   'AI',
+  'Akamai',
   'API',
   'APIs',
   'Artifactory',
@@ -112,6 +113,7 @@ const commonTechWords = [
   'Scala',
   'SharePoint',
   'TensorFlow',
+  'UA',
   'UAT',
   'UI',
   'UIs',
