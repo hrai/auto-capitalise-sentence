@@ -361,8 +361,8 @@ describe('utilities test', function () {
     expect(matchingAndCorrectWords(str)[1]).toBe('Monday');
 
     str = 'I\'m the content of html monday-';
-    expect(matchingAndCorrectWords(str)[0]).toBe('monday');
-    expect(matchingAndCorrectWords(str)[1]).toBe('Monday');
+    expect(matchingAndCorrectWords(str)[0]).toBe('');
+    expect(matchingAndCorrectWords(str)[1]).toBe('');
 
     str = 'I\'M THE CONTENT OF HTML MONDAY!';
     expect(matchingAndCorrectWords(str)[0]).toBe('MONDAY');
