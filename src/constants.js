@@ -45,6 +45,7 @@ const wordsWithApostrophe = {
   thats: 'that\'s',
   theres: 'there\'s',
   theyd: 'they\'d',
+  theyll: 'they\'ll',
   theyre: 'they\'re',
   theyve: 'they\'ve',
   wont: 'won\'t',
