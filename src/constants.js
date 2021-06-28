@@ -44,13 +44,17 @@ const wordsWithApostrophe = {
   shouldve: 'should\'ve',
   thats: 'that\'s',
   theres: 'there\'s',
+  theyd: 'they\'d',
+  theyll: 'they\'ll',
   theyre: 'they\'re',
   theyve: 'they\'ve',
   wont: 'won\'t',
   wouldnt: 'wouldn\'t',
   wouldve: 'would\'ve',
+  youd: 'you\'d',
   youre: 'you\'re',
   youve: 'you\'ve',
+  youll: 'you\'ll',
 };
 
 const commonTechWords = [
@@ -79,6 +83,7 @@ const commonTechWords = [
   'DynamoDB',
   'ECMAScript',
   'Emacs',
+  'EMP',
   'ES',
   'HBase',
   'Instagram',
@@ -108,6 +113,7 @@ const commonTechWords = [
   'Redis',
   'Redshift',
   'S3',
+  'SME',
   'SQLite',
   'SUSE',
   'SVN',
