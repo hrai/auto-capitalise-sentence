@@ -64,6 +64,7 @@ const commonAbbreviations = [
   'SARS',
   'SLR',
   'SEO',
+  'SME',
   'SMH',
   'TBA',
   'TBC',

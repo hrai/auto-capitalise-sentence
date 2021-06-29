@@ -113,7 +113,6 @@ const commonTechWords = [
   'Redis',
   'Redshift',
   'S3',
-  'SME',
   'SQLite',
   'SUSE',
   'SVN',
