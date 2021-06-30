@@ -39,6 +39,7 @@ const wordsWithApostrophe = {
   hed: 'he\'d',
   hes: 'he\'s',
   isnt: 'isn\'t',
+  neednt: 'needn\'t',
   shes: 'she\'s',
   shouldnt: 'shouldn\'t',
   shouldve: 'should\'ve',
