@@ -167,6 +167,8 @@ let personNames = [
   'Angela',
   'Angeles',
   'Angelia',
+  'Angelica',
+  'Angelika',
   'Angelina',
   'Angeline',
   'Angelique',
