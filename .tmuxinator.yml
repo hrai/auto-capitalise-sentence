@@ -1,7 +1,7 @@
 # /home/funkenn/.config/tmuxinator/AutoCapitaliseSentence.yml
 
 name: AutoCapitaliseSentence
-root: /mnt/1tb/auto-capitalise-sentence
+root: /mnt/d/auto-capitalise-sentence
 
 # Optional tmux socket
 # socket_name: foo
