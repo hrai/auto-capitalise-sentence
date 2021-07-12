@@ -57,6 +57,7 @@ const wordsWithApostrophe = {
   wont: 'won\'t',
   wouldnt: 'wouldn\'t',
   wouldve: 'would\'ve',
+  yall: 'y\'all',
   youd: 'you\'d',
   youre: 'you\'re',
   youve: 'you\'ve',
@@ -64,6 +65,7 @@ const wordsWithApostrophe = {
 };
 
 const commonTechWords = [
+  '.NET',
   'AI',
   'Akamai',
   'API',
