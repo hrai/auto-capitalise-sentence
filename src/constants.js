@@ -182,6 +182,7 @@ const commonTechAbbreviations = [
   'SLA',
   'SMS',
   'SOA',
+  'SQL',
   'SSE',
   'SSH',
   'SSL',
