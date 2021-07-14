@@ -55,6 +55,7 @@ const commonAbbreviations = [
   'NW',
   'OMG',
   'OTOH',
+  'POI',
   'POV',
   'PS',
   'RCA',
