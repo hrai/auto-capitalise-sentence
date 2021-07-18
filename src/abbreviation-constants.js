@@ -15,6 +15,7 @@ const commonAbbreviations = [
   'BSD',
   'BTW',
   'CRE',
+  'CMS',
   'DIY',
   'FAQ',
   'FDR',
