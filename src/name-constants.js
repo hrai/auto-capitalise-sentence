@@ -1102,10 +1102,8 @@ let personNames = [
   'Ewing',
   'Excedrin',
   'Exocet',
-  'Exxon',
   'Eyck',
   'Eysenck',
-  'Facebook',
   'Faeroe',
   'Fahd',
   'Faisal',
@@ -3693,13 +3691,16 @@ let companyNames = [
   'Panasonic',
   'PayPal',
   'Qualcomm',
+  'Facebook',
   'Newsweek',
   'Netflix',
   'OpenOffice',
   'Dropbox',
   'GitHub',
+  'GitLab',
   'Honeywell',
   'Google',
+  'Exxon',
 ];
 
 export let names = personNames.concat(companyNames);
