@@ -407,4 +407,6 @@ const capitals = [
   'Harare',
 ];
 
-export let locations = countries.concat(capitals);
+const cities = ['Sydney', 'Melbourne', 'Adelaide', 'Brisbane', 'Perth', 'Darwin', 'Hobart']
+
+export let locations = countries.concat(capitals, cities);
