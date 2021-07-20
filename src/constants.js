@@ -91,6 +91,7 @@ const commonTechWords = [
   'MongoDB',
   'MySQL',
   'Netscape',
+  'Nielsen',
   'NuGet',
   'NuGets',
   'Ocaml',
@@ -121,11 +122,7 @@ const commonTechWords = [
 
 let commonLocalAbbreviations = ['Syd', 'Melb'];
 
-let constants = days.concat(
-  months,
-  commonTechWords,
-  commonLocalAbbreviations,
-);
+let constants = days.concat(months, commonTechWords, commonLocalAbbreviations);
 
 let stringToKeyValuePairs = (obj, val) => {
   obj[val.toLowerCase()] = val;
