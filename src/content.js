@@ -146,10 +146,12 @@ function processResponse(item) {
 function observeHtmlBody() {
   var target = document.querySelector('body');
 
-  var tags = ['p', 'span'];
+  var contentEditableTags = ['p', 'span'];
   var inputTags = ['input[type=\'text\']', 'textarea'];
 
   var observer = new MutationObserver(function (mutations) {
+    let characterDataMutations=[];
+
     $.each(mutations, function (_i, mutation) {
       try {
         if (mutation.type === 'childList') {
@@ -170,7 +172,7 @@ function observeHtmlBody() {
               }
             });
 
-            $.each(tags, function (_i, tagName) {
+            $.each(contentEditableTags, function (_i, tagName) {
               var filteredEls = utils.getFilteredElements(addedNodes, tagName);
 
               filteredEls.each(function (_index, element) {
@@ -191,7 +193,7 @@ function observeHtmlBody() {
             });
           }
         } else if (mutation.type === 'characterData') {
-          capitaliseText(mutation.target.parentNode);
+          characterDataMutations.push(mutation.target.parentNode);
         }
       } catch (err) {
         if (err.message !== errorMsg) {
@@ -199,6 +201,9 @@ function observeHtmlBody() {
         }
       }
     });
+
+    characterDataMutations = unique(characterDataMutations);
+    characterDataMutations.forEach((element)=>capitaliseText(element));
   });
 
   var config = {
@@ -208,6 +213,14 @@ function observeHtmlBody() {
   };
 
   observer.observe(target, config);
+}
+
+function unique(list) {
+  var result = [];
+  $.each(list, function(i, e) {
+    if ($.inArray(e, result) == -1) result.push(e);
+  });
+  return result;
 }
 
 function capitaliseText(element) {
