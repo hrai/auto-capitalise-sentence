@@ -23,6 +23,7 @@ let keyValueDictionary = {
   [locationsKeyVal]: {},
 };
 const nbsp = '&nbsp;';
+const contentEditableTags=['SPAN','DIV','P'];
 
 export function capitaliseText(
   element,
@@ -114,6 +115,20 @@ export function capitaliseText(
       keyValueDictionary[locationsKeyVal],
       !caseSensitive
     );
+  }
+}
+
+function updateConstant(text, element, tagName, keyValuePairs, caseSensitive) {
+  const [matchedWord, correctedWord] =
+    caseSensitive === true
+      ? getCaseSensitiveMatchingAndCorrectedWords(text, keyValuePairs)
+      : getCaseInsensitiveMatchingAndCorrectedWords(text, keyValuePairs);
+
+  if (matchedWord !== '') {
+    if (matchedWord !== correctedWord) {
+      const updatedStr = getUpdatedString(text, matchedWord, correctedWord);
+      setText(element, tagName, updatedStr, false);
+    }
   }
 }
 
@@ -222,7 +237,7 @@ export function getText(htmlControl, tagName) {
     return htmlControl.value ? htmlControl.value : '';
   }
 
-  if (htmlControl.innerHTML && tagName.toUpperCase() === 'SPAN') {
+  if (htmlControl.innerHTML && contentEditableTags.includes(tagName.toUpperCase())){
     return getTextForSpanTag(htmlControl.innerHTML);
   }
 
@@ -259,7 +274,7 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
     return;
   }
 
-  if (tagName.toUpperCase() === 'SPAN') {
+  if (contentEditableTags.includes( tagName.toUpperCase()) ) {
     updatedStr = replaceLastOccurrenceInString(updatedStr, ' ', nbsp);
   }
 
@@ -324,20 +339,6 @@ export function setEndOfContenteditable(contentEditableElement) {
     range.moveToElementText(contentEditableElement); //Select the entire contents of the element with the range
     range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
     range.select(); //Select the range (make it the visible selection
-  }
-}
-
-function updateConstant(text, element, tagName, keyValuePairs, caseSensitive) {
-  const [matchedWord, correctedWord] =
-    caseSensitive === true
-      ? getCaseSensitiveMatchingAndCorrectedWords(text, keyValuePairs)
-      : getCaseInsensitiveMatchingAndCorrectedWords(text, keyValuePairs);
-
-  if (matchedWord !== '') {
-    if (matchedWord !== correctedWord) {
-      const updatedStr = getUpdatedString(text, matchedWord, correctedWord);
-      setText(element, tagName, updatedStr, false);
-    }
   }
 }
 
