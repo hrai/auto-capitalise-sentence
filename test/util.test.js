@@ -303,7 +303,7 @@ describe('utilities test', function () {
       resetHtml();
       element = $('#address');
       utils.setText(element[0], 'p', 'test space ', false);
-      expect(element.html()).toBe('test space ');
+      expect(element.html()).toBe('test space&nbsp;');
 
       resetHtml();
       element = $('#address');
