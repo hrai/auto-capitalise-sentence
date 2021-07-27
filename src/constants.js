@@ -87,6 +87,8 @@ const commonTechWords = [
   'Jenkins',
   'Jira',
   'LibreOffice',
+  'Mac',
+  'Macintosh',
   'MariaDB',
   'MongoDB',
   'MySQL',
