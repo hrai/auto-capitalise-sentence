@@ -75,6 +75,7 @@ const commonTechWords = [
   'Compaq',
   'CompuServe',
   'CosmosDB',
+  'Detectify',
   'DevOps',
   'Drupal',
   'DynamoDB',
