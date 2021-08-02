@@ -25,6 +25,7 @@ const commonAbbreviations = [
   'FYI',
   'GE',
   'GNU',
+  'GP',
   'GTE',
   'GTG',
   'HBO',
@@ -388,6 +389,9 @@ let awsAcronyms = [
   'VPG',
 ];
 
-export const abbreviations = commonAbbreviations.concat(timeAbbreviations,
+export const abbreviations = commonAbbreviations.concat(
+  timeAbbreviations,
   commonTechAbbreviations,
-  awsAcronyms);
+  awsAcronyms
+);
+
