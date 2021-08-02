@@ -146,6 +146,8 @@ const commonTechAbbreviations = [
   'PRs',
   'PV',
   'PaaS',
+  'QA',
+  'QAs',
   'RRS',
   'SAML',
   'SDK',
@@ -394,4 +396,3 @@ export const abbreviations = commonAbbreviations.concat(
   commonTechAbbreviations,
   awsAcronyms
 );
-
