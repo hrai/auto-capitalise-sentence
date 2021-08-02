@@ -50,6 +50,7 @@ const wordsWithApostrophe = {
   theyll: 'they\'ll',
   theyre: 'they\'re',
   theyve: 'they\'ve',
+  wasnt: 'wasn\'t',
   werent: 'weren\'t',
   wheres: 'where\'s',
   whered: 'where\'d',
