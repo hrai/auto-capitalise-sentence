@@ -88,6 +88,7 @@ const commonTechWords = [
   'Jekyll',
   'Jenkins',
   'Jira',
+  'Kibana',
   'LibreOffice',
   'LinkedIn',
   'Mac',
