@@ -107,6 +107,7 @@ const commonTechWords = [
   'PowerPC',
   'PowerPoint',
   'PyTorch',
+  'Raygun',
   'README',
   'Redis',
   'Redshift',
