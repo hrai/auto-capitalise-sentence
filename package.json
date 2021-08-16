@@ -21,7 +21,7 @@
     "lint-fix": "eslint --fix .",
     "update-version": "yarn dot-json distribution/manifest.json version $VER",
     "release:firefox": "cd distribution && yarn web-ext-submit",
-    "prepare": "husky install"
+    "prepare": "yarn husky install"
   },
   "prettier": {
     "trailingComma": "es5",
