@@ -19,6 +19,7 @@ const commonAbbreviations = [
   'CRE',
   'CMS',
   'DIY',
+  'ELT',
   'FAQ',
   'FDR',
   'FNMA',
