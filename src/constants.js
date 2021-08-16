@@ -64,6 +64,7 @@ const wordsWithApostrophe = {
   youre: 'you\'re',
   youve: 'you\'ve',
   youll: 'you\'ll',
+
 };
 
 const commonTechWords = [
