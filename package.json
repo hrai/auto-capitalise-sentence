@@ -21,7 +21,7 @@
     "lint-fix": "eslint --fix .",
     "update-version": "yarn dot-json distribution/manifest.json version $VER",
     "release:firefox": "cd distribution && yarn web-ext-submit",
-    "prepare": "husky install"
+    "prepare": "yarn husky install"
   },
   "prettier": {
     "trailingComma": "es5",
@@ -46,6 +46,7 @@
     "jquery": "^3.5.1",
     "lint-staged": "^11.0.0",
     "nodemon": "^2.0.8",
+    "prettier": "^2.3.2",
     "run-script-os": "^1.1.3",
     "sinon": "^11.1.1",
     "web-ext": "^6.2.0",
@@ -60,7 +61,8 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "eslint --fix"
+      "yarn eslint --fix",
+      "yarn prettier --write"
     ]
   },
   "license": "MIT",

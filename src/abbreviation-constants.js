@@ -1,4 +1,6 @@
 const commonAbbreviations = [
+  'AA',
+  'AAA',
   'AFR',
   'AFAIK',
   'AMD',
@@ -17,6 +19,7 @@ const commonAbbreviations = [
   'CRE',
   'CMS',
   'DIY',
+  'ELT',
   'FAQ',
   'FDR',
   'FNMA',
