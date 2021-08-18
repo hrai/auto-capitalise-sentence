@@ -20,6 +20,7 @@ const commonAbbreviations = [
   'CMS',
   'DIY',
   'ELT',
+  'ETA',
   'FAQ',
   'FDR',
   'FNMA',
@@ -37,6 +38,7 @@ const commonAbbreviations = [
   'IBM',
   'ICYMI',
   'ID',
+  'IDs',
   'IDK',
   'IKEA',
   'IMO',
@@ -89,7 +91,7 @@ const commonAbbreviations = [
   'WSL',
   'WTF',
   'WTH',
-];
+]
 
 const commonTechAbbreviations = [
   '.NET',
@@ -186,7 +188,7 @@ const commonTechAbbreviations = [
   'WAF',
   'WiFi',
   'iSCSI',
-];
+]
 
 const timeAbbreviations = [
   'ACDT',
@@ -361,7 +363,7 @@ const timeAbbreviations = [
   'WST',
   'YAKT',
   'YEKT',
-];
+]
 
 let awsAcronyms = [
   'ACL',
@@ -392,10 +394,10 @@ let awsAcronyms = [
   'SWF',
   'VPC',
   'VPG',
-];
+]
 
 export const abbreviations = commonAbbreviations.concat(
   timeAbbreviations,
   commonTechAbbreviations,
   awsAcronyms
-);
+)
