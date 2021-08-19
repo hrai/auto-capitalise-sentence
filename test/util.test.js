@@ -465,7 +465,7 @@ describe('utilities test', function () {
     expect(matchingAndCorrectWords(str)[1]).toBe('')
   })
 
-  test('getCaseInsensitiveMatchingAndCorrectedWords_Abbreviations', () => {
+  test('getCaseInsensitiveMatchingAndCorrectedWords_TechAbbreviations', () => {
     let str = "I'm the content of html."
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
@@ -485,6 +485,22 @@ describe('utilities test', function () {
     expect(matchingAndCorrectWords(str)[1]).toBe('HTML')
 
     str = "I'm the content of "
+    expect(matchingAndCorrectWords(str)[0]).toBe('')
+    expect(matchingAndCorrectWords(str)[1]).toBe('')
+  })
+
+  /* eg -
+   * test.html
+   * file.json
+   */
+  test('getCaseInsensitiveMatchingAndCorrectedWords_Abbreviations_DoesNotWorkOnWordsWithNonWordCharacterSeparator', () => {
+    let str = "I'm the content of file.json."
+    let matchingAndCorrectWords = (text) =>
+      utils.getCaseInsensitiveMatchingAndCorrectedWords(
+        text,
+        abbreviationsKeyValuePairs
+      )
+
     expect(matchingAndCorrectWords(str)[0]).toBe('')
     expect(matchingAndCorrectWords(str)[1]).toBe('')
   })
