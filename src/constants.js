@@ -110,6 +110,7 @@ const commonTechWords = [
   'PyTorch',
   'Raygun',
   'README',
+  'Reddit',
   'Redis',
   'Redshift',
   'SQLite',
