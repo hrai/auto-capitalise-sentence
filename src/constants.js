@@ -110,6 +110,7 @@ const commonTechWords = [
   'PyTorch',
   'Raygun',
   'README',
+  'Reddit',
   'Redis',
   'Redshift',
   'SQLite',
@@ -128,7 +129,7 @@ const commonTechWords = [
   'iTunes',
 ]
 
-let commonLocalAbbreviations = ['Syd', 'Melb']
+let commonLocalAbbreviations = ['Syd', 'Melb', 'AdID', 'AdIDs']
 
 let constants = days.concat(months, commonTechWords, commonLocalAbbreviations)
 
