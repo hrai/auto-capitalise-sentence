@@ -1883,6 +1883,7 @@ let personNames = [
   'Latonya',
   'Latoya',
   'Latrobe',
+  'Lau',
   'Laura',
   'Laurel',
   'Lauren',
