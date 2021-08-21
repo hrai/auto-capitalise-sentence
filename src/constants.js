@@ -33,6 +33,7 @@ const wordsWithApostrophe = {
   didnt: "didn't",
   doesnt: "doesn't",
   dont: "don't",
+  everyones: "everyone's",
   hadnt: "hadn't",
   hasnt: "hasn't",
   havent: "haven't",
