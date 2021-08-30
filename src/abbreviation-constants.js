@@ -60,6 +60,7 @@ const commonAbbreviations = [
   'NSA',
   'NVIDIA',
   'NW',
+  'OKR',
   'OMG',
   'OTOH',
   'POI',
@@ -91,7 +92,7 @@ const commonAbbreviations = [
   'WSL',
   'WTF',
   'WTH',
-]
+];
 
 const commonTechAbbreviations = [
   '.NET',
@@ -188,7 +189,7 @@ const commonTechAbbreviations = [
   'WAF',
   'WiFi',
   'iSCSI',
-]
+];
 
 const timeAbbreviations = [
   'ACDT',
@@ -363,7 +364,7 @@ const timeAbbreviations = [
   'WST',
   'YAKT',
   'YEKT',
-]
+];
 
 let awsAcronyms = [
   'ACL',
@@ -394,10 +395,10 @@ let awsAcronyms = [
   'SWF',
   'VPC',
   'VPG',
-]
+];
 
 export const abbreviations = commonAbbreviations.concat(
   timeAbbreviations,
   commonTechAbbreviations,
   awsAcronyms
-)
+);
