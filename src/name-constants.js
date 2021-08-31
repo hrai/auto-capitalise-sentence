@@ -308,6 +308,7 @@ let personNames = [
   'Bayeux',
   'Baylor',
   'Baywatch',
+  'Bea',
   'Beardmore',
   'Bearnaise',
   'Beasley',
