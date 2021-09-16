@@ -115,6 +115,7 @@ const commonTechAbbreviations = [
   'DNS',
   'DaaS',
   'DoS',
+  'E2E',
   'EHS',
   'EHW',
   'EMP',
