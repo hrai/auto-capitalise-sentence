@@ -1,104 +1,104 @@
-import * as utils from '../src/utils.js'
+import * as utils from '../src/utils.js';
 import {
   constantsKeyValuePairs,
   namesKeyValuePairs,
   abbreviationsKeyValuePairs,
   locationsKeyValuePairs,
-} from '../src/constants.js'
+} from '../src/constants.js';
 import {
   shouldCapitaliseI,
   shouldCapitaliseNames,
   shouldCapitaliseAbbreviations,
   shouldCapitaliseLocations,
-} from '../src/plugin-constants.js'
+} from '../src/plugin-constants.js';
 
-const $ = require('jquery')
+const $ = require('jquery');
 
 describe('utilities test', function () {
   test('getCapitalisedContent', () => {
-    expect(utils.getCapitalisedContent('blah')).toBe('blaH')
-    expect(utils.getCapitalisedContent('i')).toBe('I')
-    expect(utils.getCapitalisedContent("i'm")).toBe("i'M")
-    expect(utils.getCapitalisedContent('i. m')).toBe('i. M')
-    expect(utils.getCapitalisedContent('i? m')).toBe('i? M')
-    expect(utils.getCapitalisedContent('')).toBe('')
+    expect(utils.getCapitalisedContent('blah')).toBe('blaH');
+    expect(utils.getCapitalisedContent('i')).toBe('I');
+    expect(utils.getCapitalisedContent("i'm")).toBe("i'M");
+    expect(utils.getCapitalisedContent('i. m')).toBe('i. M');
+    expect(utils.getCapitalisedContent('i? m')).toBe('i? M');
+    expect(utils.getCapitalisedContent('')).toBe('');
     expect(() => {
-      utils.getCapitalisedContent()
-    }).toThrow()
-  })
+      utils.getCapitalisedContent();
+    }).toThrow();
+  });
 
   test('getCapitalisedContentForI', () => {
-    expect(utils.getCapitalisedContentForI('i ')).toBe('I ')
-    expect(utils.getCapitalisedContentForI("i'")).toBe("I'")
+    expect(utils.getCapitalisedContentForI('i ')).toBe('I ');
+    expect(utils.getCapitalisedContentForI("i'")).toBe("I'");
     expect(utils.getCapitalisedContentForI('Hi this is i ')).toBe(
       'Hi this is I '
-    )
-  })
+    );
+  });
 
   test('shouldCapitaliseForI', () => {
-    expect(utils.shouldCapitaliseForI('war i ')).toBe(true)
-    expect(utils.shouldCapitaliseForI(' i ')).toBe(true)
-    expect(utils.shouldCapitaliseForI('Hi this is i ')).toBe(true)
-    expect(utils.shouldCapitaliseForI(" i'")).toBe(true)
-    expect(utils.shouldCapitaliseForI("    i'")).toBe(true)
-    expect(utils.shouldCapitaliseForI('    i ')).toBe(true)
-    expect(utils.shouldCapitalise('       k')).toBe(false)
-    expect(utils.shouldCapitalise('.       k')).toBe(false)
-    expect(utils.shouldCapitalise('    k ')).toBe(false)
-    expect(utils.shouldCapitalise('    ')).toBe(false)
-    expect(utils.shouldCapitalise(' !   ')).toBe(false)
+    expect(utils.shouldCapitaliseForI('war i ')).toBe(true);
+    expect(utils.shouldCapitaliseForI(' i ')).toBe(true);
+    expect(utils.shouldCapitaliseForI('Hi this is i ')).toBe(true);
+    expect(utils.shouldCapitaliseForI(" i'")).toBe(true);
+    expect(utils.shouldCapitaliseForI("    i'")).toBe(true);
+    expect(utils.shouldCapitaliseForI('    i ')).toBe(true);
+    expect(utils.shouldCapitalise('       k')).toBe(false);
+    expect(utils.shouldCapitalise('.       k')).toBe(false);
+    expect(utils.shouldCapitalise('    k ')).toBe(false);
+    expect(utils.shouldCapitalise('    ')).toBe(false);
+    expect(utils.shouldCapitalise(' !   ')).toBe(false);
     const slackText =
-      '<ts-mention data-id="UKTQJ356U" data-label="@Hangjit Rai" spellcheck="false" class="c-member_slug c-member_slug--link ts_tip_texty c-member_slug--mention" dir="ltr">@Hangjit Rai</ts-mention> Monday '
-    expect(utils.shouldCapitalise(slackText)).toBe(false)
-    expect(utils.shouldCapitaliseForI(slackText)).toBe(false)
-  })
+      '<ts-mention data-id="UKTQJ356U" data-label="@Hangjit Rai" spellcheck="false" class="c-member_slug c-member_slug--link ts_tip_texty c-member_slug--mention" dir="ltr">@Hangjit Rai</ts-mention> Monday ';
+    expect(utils.shouldCapitalise(slackText)).toBe(false);
+    expect(utils.shouldCapitaliseForI(slackText)).toBe(false);
+  });
 
   describe('shouldCapitalise', () => {
     test('shouldCapitalise_singleLine', () => {
-      expect(utils.shouldCapitalise('war. k')).toBe(true)
-      expect(utils.shouldCapitalise('war? k')).toBe(true)
-      expect(utils.shouldCapitalise('war! k')).toBe(true)
-      expect(utils.shouldCapitalise('war.    k')).toBe(true)
-      expect(utils.shouldCapitalise('war!    k')).toBe(true)
-      expect(utils.shouldCapitalise('war?    k')).toBe(true)
-      expect(utils.shouldCapitalise('k')).toBe(true)
+      expect(utils.shouldCapitalise('war. k')).toBe(true);
+      expect(utils.shouldCapitalise('war? k')).toBe(true);
+      expect(utils.shouldCapitalise('war! k')).toBe(true);
+      expect(utils.shouldCapitalise('war.    k')).toBe(true);
+      expect(utils.shouldCapitalise('war!    k')).toBe(true);
+      expect(utils.shouldCapitalise('war?    k')).toBe(true);
+      expect(utils.shouldCapitalise('k')).toBe(true);
 
-      expect(utils.shouldCapitalise('war? k')).toBe(true)
-      expect(utils.shouldCapitalise('war?    k')).toBe(true)
+      expect(utils.shouldCapitalise('war? k')).toBe(true);
+      expect(utils.shouldCapitalise('war?    k')).toBe(true);
 
-      expect(utils.shouldCapitalise('       k')).toBe(false)
-      expect(utils.shouldCapitalise('.       k')).toBe(false)
-      expect(utils.shouldCapitalise('?       k')).toBe(false)
-      expect(utils.shouldCapitalise('    k ')).toBe(false)
-      expect(utils.shouldCapitalise('    k ')).toBe(false)
-      expect(utils.shouldCapitalise('    ')).toBe(false)
+      expect(utils.shouldCapitalise('       k')).toBe(false);
+      expect(utils.shouldCapitalise('.       k')).toBe(false);
+      expect(utils.shouldCapitalise('?       k')).toBe(false);
+      expect(utils.shouldCapitalise('    k ')).toBe(false);
+      expect(utils.shouldCapitalise('    k ')).toBe(false);
+      expect(utils.shouldCapitalise('    ')).toBe(false);
 
-      expect(utils.shouldCapitalise('?')).toBe(true)
-      expect(utils.shouldCapitalise('!')).toBe(true)
-      expect(utils.shouldCapitalise('.')).toBe(true)
-      expect(utils.shouldCapitalise('')).toBe(false)
+      expect(utils.shouldCapitalise('?')).toBe(true);
+      expect(utils.shouldCapitalise('!')).toBe(true);
+      expect(utils.shouldCapitalise('.')).toBe(true);
+      expect(utils.shouldCapitalise('')).toBe(false);
       expect(() => {
-        utils.shouldCapitalise()
-      }).toThrow()
-    })
+        utils.shouldCapitalise();
+      }).toThrow();
+    });
 
     test('shouldCapitalise_multiLine', () => {
-      expect(utils.shouldCapitalise('war.\n k')).toBe(true)
-      expect(utils.shouldCapitalise('war. \n\n   k')).toBe(true)
+      expect(utils.shouldCapitalise('war.\n k')).toBe(true);
+      expect(utils.shouldCapitalise('war. \n\n   k')).toBe(true);
       expect(utils.shouldCapitalise('war. lasting \n peace \n\n   k')).toBe(
         true
-      )
-      expect(utils.shouldCapitalise('war? \n\n   k')).toBe(true)
-      expect(utils.shouldCapitalise('war? \n\n   k')).toBe(true)
+      );
+      expect(utils.shouldCapitalise('war? \n\n   k')).toBe(true);
+      expect(utils.shouldCapitalise('war? \n\n   k')).toBe(true);
       expect(utils.shouldCapitalise('war? lasting \n peace \n\n   k')).toBe(
         true
-      )
-    })
+      );
+    });
 
     test('shouldCapitalise_singleChar', () => {
-      expect(utils.shouldCapitalise('w')).toBe(true)
-    })
-  })
+      expect(utils.shouldCapitalise('w')).toBe(true);
+    });
+  });
 
   function setInnerHtml() {
     document.body.innerHTML =
@@ -107,97 +107,97 @@ describe('utilities test', function () {
       '  <textarea id="about-me" rows="8" cols="40"></textarea> ' +
       '  <span id="address">Please enter your address&nbsp;</span> ' +
       '  <button id="button" />' +
-      '</div>'
+      '</div>';
   }
 
   describe('getText', () => {
     test('getText_InputTag', () => {
-      setInnerHtml()
-      const element = $('#username')
-      expect(utils.getText(element[0], 'input')).toBe('Bingo')
-      expect(utils.getText(element[0], 'span')).toBe('')
-      expect(utils.getText(element[0], '')).toBe('')
+      setInnerHtml();
+      const element = $('#username');
+      expect(utils.getText(element[0], 'input')).toBe('Bingo');
+      expect(utils.getText(element[0], 'span')).toBe('');
+      expect(utils.getText(element[0], '')).toBe('');
       expect(() => {
-        utils.getText(element)
-      }).toThrow()
-    })
+        utils.getText(element);
+      }).toThrow();
+    });
 
     test('getText_TextareaTag', () => {
-      setInnerHtml()
-      const element = $('#about-me')
-      element.val('This is my life.')
+      setInnerHtml();
+      const element = $('#about-me');
+      element.val('This is my life.');
 
-      expect(utils.getText(element[0], 'textarea')).toBe('This is my life.')
-      expect(utils.getText(element[0], 'span')).toBe('')
-      expect(utils.getText(element[0], '')).toBe('')
+      expect(utils.getText(element[0], 'textarea')).toBe('This is my life.');
+      expect(utils.getText(element[0], 'span')).toBe('');
+      expect(utils.getText(element[0], '')).toBe('');
       expect(() => {
-        utils.getText(element)
-      }).toThrow()
-    })
+        utils.getText(element);
+      }).toThrow();
+    });
 
     test('getText_HtmlContent', () => {
-      setInnerHtml()
-      const element = $('#address')
+      setInnerHtml();
+      const element = $('#address');
       expect(utils.getText(element[0], 'span')).toBe(
         'Please enter your address '
-      )
-      expect(utils.getText(element[0], 'input')).toBe('')
+      );
+      expect(utils.getText(element[0], 'input')).toBe('');
       expect(utils.getText(element[0], '')).toBe(
         'Please enter your address&nbsp;'
-      )
+      );
       expect(() => {
-        utils.getText(element)
-      }).toThrow()
-    })
-  })
+        utils.getText(element);
+      }).toThrow();
+    });
+  });
 
   describe('getNbspCount', () => {
     test('getNbspCount', () => {
-      expect(utils.getNbspCount('test&nbsp;')).toBe(1)
-      expect(utils.getNbspCount('test&nbsp;&nbsp;')).toBe(2)
-      expect(utils.getNbspCount('test')).toBe(0)
-    })
-  })
+      expect(utils.getNbspCount('test&nbsp;')).toBe(1);
+      expect(utils.getNbspCount('test&nbsp;&nbsp;')).toBe(2);
+      expect(utils.getNbspCount('test')).toBe(0);
+    });
+  });
 
   describe('replaceLastOccurrenceInString', () => {
     test('replaceLastOccurrenceInString_ReplacesText', () => {
       expect(
         utils.replaceLastOccurrenceInString('test&nbsp;&nbsp;', '&nbsp;', 'me')
-      ).toBe('test&nbsp;me')
+      ).toBe('test&nbsp;me');
       expect(
         utils.replaceLastOccurrenceInString(
           'test&nbsp;&nbsp;&nbsp;',
           '&nbsp;',
           'me'
         )
-      ).toBe('test&nbsp;&nbsp;me')
+      ).toBe('test&nbsp;&nbsp;me');
       expect(
         utils.replaceLastOccurrenceInString('test this this', 'this', 'and')
-      ).toBe('test this and')
-    })
+      ).toBe('test this and');
+    });
 
     test('replaceLastOccurrenceInString_DoesNotReplaceText', () => {
       expect(
         utils.replaceLastOccurrenceInString('test me', 'bro', 'this')
-      ).toBe('test me')
+      ).toBe('test me');
       expect(
         utils.replaceLastOccurrenceInString('test me ', 'me', 'this')
-      ).toBe('test me ')
-    })
-  })
+      ).toBe('test me ');
+    });
+  });
 
   describe('getTextForSpanTag', () => {
     test('getTextForSpanTag_ReplacesTagForSingleOccurrence', () => {
-      expect(utils.getTextForSpanTag('test&nbsp;')).toBe('test ')
-    })
+      expect(utils.getTextForSpanTag('test&nbsp;')).toBe('test ');
+    });
 
     test('getTextForSpanTag_DoesNotReplaceTagForMultipleOccurrences', () => {
       expect(utils.getTextForSpanTag('test&nbsp;&nbsp;')).toBe(
         'test&nbsp;&nbsp;'
-      )
-      expect(utils.getTextForSpanTag('test')).toBe('test')
-    })
-  })
+      );
+      expect(utils.getTextForSpanTag('test')).toBe('test');
+    });
+  });
 
   describe('setText', () => {
     function resetHtml() {
@@ -207,400 +207,400 @@ describe('utilities test', function () {
         '  <textarea id="about-me" rows="8" cols="40"></textarea> ' +
         '  <span id="address">Please enter your address.</span> ' +
         '  <button id="button" />' +
-        '</div>'
+        '</div>';
     }
 
     test('setText_InputTag', () => {
-      const updatedStr = 'testing this'
+      const updatedStr = 'testing this';
 
-      resetHtml()
-      let element = $('#username')
+      resetHtml();
+      let element = $('#username');
 
-      utils.setText(element[0], 'input', updatedStr, false)
-      expect(element.val()).toBe('testing this')
+      utils.setText(element[0], 'input', updatedStr, false);
+      expect(element.val()).toBe('testing this');
 
-      resetHtml()
-      element = $('#username')
-      utils.setText(element[0], 'span', updatedStr, false)
-      expect(element.val()).toBe('Bingo')
+      resetHtml();
+      element = $('#username');
+      utils.setText(element[0], 'span', updatedStr, false);
+      expect(element.val()).toBe('Bingo');
 
-      resetHtml()
-      element = $('#username')
-      utils.setText(element[0], 'p', '', false)
-      expect(element.val()).toBe('Bingo')
+      resetHtml();
+      element = $('#username');
+      utils.setText(element[0], 'p', '', false);
+      expect(element.val()).toBe('Bingo');
 
       expect(() => {
-        resetHtml()
-        element = $('#username')
-        utils.setText(element[0])
-      }).toThrow()
-    })
+        resetHtml();
+        element = $('#username');
+        utils.setText(element[0]);
+      }).toThrow();
+    });
 
     test('setText_SpanTagWithNbsp', () => {
-      const updatedStr = 'testing this '
+      const updatedStr = 'testing this ';
 
-      resetHtml()
-      let element = $('#address')
+      resetHtml();
+      let element = $('#address');
 
-      utils.setText(element[0], 'span', updatedStr, false)
-      expect(element.html()).toBe('testing this&nbsp;')
+      utils.setText(element[0], 'span', updatedStr, false);
+      expect(element.html()).toBe('testing this&nbsp;');
 
-      resetHtml()
-      element = $('#address')
-      utils.setText(element[0], 'p', '', false)
-      expect(element.html()).toBe('')
+      resetHtml();
+      element = $('#address');
+      utils.setText(element[0], 'p', '', false);
+      expect(element.html()).toBe('');
 
-      resetHtml()
-      element = $('#address')
-      utils.setText(element[0], 'span', '', false)
-      expect(element.html()).toBe('')
+      resetHtml();
+      element = $('#address');
+      utils.setText(element[0], 'span', '', false);
+      expect(element.html()).toBe('');
 
       expect(() => {
-        resetHtml()
-        element = $('#address')
-        utils.setText(element[0])
-      }).toThrow()
-    })
+        resetHtml();
+        element = $('#address');
+        utils.setText(element[0]);
+      }).toThrow();
+    });
 
     test('setText_TextareaTag', () => {
-      const updatedStr = 'This is my life.'
+      const updatedStr = 'This is my life.';
 
-      resetHtml()
-      let element = $('#about-me')
-      utils.setText(element[0], 'textarea', updatedStr, false)
-      expect(element.val()).toBe('This is my life.')
+      resetHtml();
+      let element = $('#about-me');
+      utils.setText(element[0], 'textarea', updatedStr, false);
+      expect(element.val()).toBe('This is my life.');
 
-      resetHtml()
-      element = $('#about-me')
-      utils.setText(element[0], 'span', updatedStr, false)
-      expect(element.val()).toBe('This is my life.')
+      resetHtml();
+      element = $('#about-me');
+      utils.setText(element[0], 'span', updatedStr, false);
+      expect(element.val()).toBe('This is my life.');
 
-      resetHtml()
-      element = $('#about-me')
-      utils.setText(element[0], 'textarea', '', false)
-      expect(element.val()).toBe('')
+      resetHtml();
+      element = $('#about-me');
+      utils.setText(element[0], 'textarea', '', false);
+      expect(element.val()).toBe('');
 
       expect(() => {
-        resetHtml()
-        element = $('#about-me')
-        utils.setText(element[0])
-      }).toThrow()
-    })
+        resetHtml();
+        element = $('#about-me');
+        utils.setText(element[0]);
+      }).toThrow();
+    });
 
     test('setText_HtmlContent_WithoutBrTags', () => {
-      const updatedStr = 'This is my life.'
+      const updatedStr = 'This is my life.';
 
-      resetHtml()
-      let element = $('#address')
-      utils.setText(element[0], 'span', updatedStr, false)
-      expect(element.html()).toBe('This is my life.')
+      resetHtml();
+      let element = $('#address');
+      utils.setText(element[0], 'span', updatedStr, false);
+      expect(element.html()).toBe('This is my life.');
 
-      resetHtml()
-      element = $('#address')
-      utils.setText(element[0], 'p', updatedStr, false)
-      expect(element.html()).toBe('This is my life.')
+      resetHtml();
+      element = $('#address');
+      utils.setText(element[0], 'p', updatedStr, false);
+      expect(element.html()).toBe('This is my life.');
 
-      resetHtml()
-      element = $('#address')
-      utils.setText(element[0], 'p', 'test space ', false)
-      expect(element.html()).toBe('test space&nbsp;')
+      resetHtml();
+      element = $('#address');
+      utils.setText(element[0], 'p', 'test space ', false);
+      expect(element.html()).toBe('test space&nbsp;');
 
-      resetHtml()
-      element = $('#address')
-      utils.setText(element[0], 'span', '', false)
-      expect(element.html()).toBe('')
+      resetHtml();
+      element = $('#address');
+      utils.setText(element[0], 'span', '', false);
+      expect(element.html()).toBe('');
 
       expect(() => {
-        resetHtml()
-        element = $('#address')
-        utils.setText(element[0])
-      }).toThrow()
-    })
+        resetHtml();
+        element = $('#address');
+        utils.setText(element[0]);
+      }).toThrow();
+    });
 
     test('setText_HtmlContent_WithBrTags', () => {
-      let element = $('#address')
-      const updatedStr = 'This is my life.'
-      element.val(updatedStr)
+      let element = $('#address');
+      const updatedStr = 'This is my life.';
+      element.val(updatedStr);
 
-      resetHtml()
-      element = $('#address')
-      utils.setText(element[0], 'span', updatedStr, true)
-      expect(element.html()).toBe('This is my life.<br>')
+      resetHtml();
+      element = $('#address');
+      utils.setText(element[0], 'span', updatedStr, true);
+      expect(element.html()).toBe('This is my life.<br>');
 
-      resetHtml()
-      element = $('#address')
-      utils.setText(element[0], 'p', updatedStr, true)
-      expect(element.html()).toBe('This is my life.<br>')
+      resetHtml();
+      element = $('#address');
+      utils.setText(element[0], 'p', updatedStr, true);
+      expect(element.html()).toBe('This is my life.<br>');
 
-      resetHtml()
-      element = $('#address')
-      utils.setText(element[0], 'span', '', true)
-      expect(element.html()).toBe('<br>')
+      resetHtml();
+      element = $('#address');
+      utils.setText(element[0], 'span', '', true);
+      expect(element.html()).toBe('<br>');
 
       expect(() => {
-        resetHtml()
-        element = $('#address')
-        utils.setText(element[0])
-      }).toThrow()
-    })
-  })
+        resetHtml();
+        element = $('#address');
+        utils.setText(element[0]);
+      }).toThrow();
+    });
+  });
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_Days', () => {
-    let str = "I'm the content of html Monday."
+    let str = "I'm the content of html Monday.";
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         constantsKeyValuePairs
-      )
+      );
 
-    expect(matchingAndCorrectWords(str)[0]).toBe('Monday')
-    expect(matchingAndCorrectWords(str)[1]).toBe('Monday')
+    expect(matchingAndCorrectWords(str)[0]).toBe('Monday');
+    expect(matchingAndCorrectWords(str)[1]).toBe('Monday');
 
-    str = "I'm the content of html monday."
-    expect(matchingAndCorrectWords(str)[0]).toBe('monday')
-    expect(matchingAndCorrectWords(str)[1]).toBe('Monday')
+    str = "I'm the content of html monday.";
+    expect(matchingAndCorrectWords(str)[0]).toBe('monday');
+    expect(matchingAndCorrectWords(str)[1]).toBe('Monday');
 
-    str = "I'm the content of html monday-"
-    expect(matchingAndCorrectWords(str)[0]).toBe('')
-    expect(matchingAndCorrectWords(str)[1]).toBe('')
+    str = "I'm the content of html monday-";
+    expect(matchingAndCorrectWords(str)[0]).toBe('');
+    expect(matchingAndCorrectWords(str)[1]).toBe('');
 
-    str = "I'M THE CONTENT OF HTML MONDAY!"
-    expect(matchingAndCorrectWords(str)[0]).toBe('MONDAY')
-    expect(matchingAndCorrectWords(str)[1]).toBe('Monday')
+    str = "I'M THE CONTENT OF HTML MONDAY!";
+    expect(matchingAndCorrectWords(str)[0]).toBe('MONDAY');
+    expect(matchingAndCorrectWords(str)[1]).toBe('Monday');
 
-    str = "I'm the content of html."
-    expect(matchingAndCorrectWords(str)[0]).toBe('')
-    expect(matchingAndCorrectWords(str)[1]).toBe('')
-  })
+    str = "I'm the content of html.";
+    expect(matchingAndCorrectWords(str)[0]).toBe('');
+    expect(matchingAndCorrectWords(str)[1]).toBe('');
+  });
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_Months', () => {
-    let str = "I'm the content of html january."
+    let str = "I'm the content of html january.";
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         constantsKeyValuePairs
-      )
+      );
 
-    expect(matchingAndCorrectWords(str)[0]).toBe('january')
-    expect(matchingAndCorrectWords(str)[1]).toBe('January')
+    expect(matchingAndCorrectWords(str)[0]).toBe('january');
+    expect(matchingAndCorrectWords(str)[1]).toBe('January');
 
-    str = "I'M THE CONTENT OF HTML JANUARY!"
-    expect(matchingAndCorrectWords(str)[0]).toBe('JANUARY')
-    expect(matchingAndCorrectWords(str)[1]).toBe('January')
+    str = "I'M THE CONTENT OF HTML JANUARY!";
+    expect(matchingAndCorrectWords(str)[0]).toBe('JANUARY');
+    expect(matchingAndCorrectWords(str)[1]).toBe('January');
 
-    str = "I'm the content of html."
-    expect(matchingAndCorrectWords(str)[0]).toBe('')
-    expect(matchingAndCorrectWords(str)[1]).toBe('')
-  })
+    str = "I'm the content of html.";
+    expect(matchingAndCorrectWords(str)[0]).toBe('');
+    expect(matchingAndCorrectWords(str)[1]).toBe('');
+  });
 
   test('getCaseInsensitiveMatchingAndCorrectedWords', () => {
-    let str = "I'm the content of html James."
+    let str = "I'm the content of html James.";
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         namesKeyValuePairs
-      )
+      );
 
-    expect(matchingAndCorrectWords(str)[0]).toBe('James')
-    expect(matchingAndCorrectWords(str)[1]).toBe('James')
+    expect(matchingAndCorrectWords(str)[0]).toBe('James');
+    expect(matchingAndCorrectWords(str)[1]).toBe('James');
 
-    str = "I'm the content of html james."
-    expect(matchingAndCorrectWords(str)[0]).toBe('james')
-    expect(matchingAndCorrectWords(str)[1]).toBe('James')
+    str = "I'm the content of html james.";
+    expect(matchingAndCorrectWords(str)[0]).toBe('james');
+    expect(matchingAndCorrectWords(str)[1]).toBe('James');
 
-    str = "I'M THE CONTENT OF HTML JAMES!"
-    expect(matchingAndCorrectWords(str)[0]).toBe('JAMES')
-    expect(matchingAndCorrectWords(str)[1]).toBe('James')
+    str = "I'M THE CONTENT OF HTML JAMES!";
+    expect(matchingAndCorrectWords(str)[0]).toBe('JAMES');
+    expect(matchingAndCorrectWords(str)[1]).toBe('James');
 
-    str = "I'm the content of html."
-    expect(matchingAndCorrectWords(str)[0]).toBe('')
-    expect(matchingAndCorrectWords(str)[1]).toBe('')
-  })
+    str = "I'm the content of html.";
+    expect(matchingAndCorrectWords(str)[0]).toBe('');
+    expect(matchingAndCorrectWords(str)[1]).toBe('');
+  });
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_OtherPunctuation', () => {
-    let str = "I'm the content of html 'James'"
+    let str = "I'm the content of html 'James'";
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         namesKeyValuePairs
-      )
+      );
 
-    expect(matchingAndCorrectWords(str)[0]).toBe('James')
-    expect(matchingAndCorrectWords(str)[1]).toBe('James')
+    expect(matchingAndCorrectWords(str)[0]).toBe('James');
+    expect(matchingAndCorrectWords(str)[1]).toBe('James');
 
-    str = "I'm the content of html james!"
-    expect(matchingAndCorrectWords(str)[0]).toBe('james')
-    expect(matchingAndCorrectWords(str)[1]).toBe('James')
+    str = "I'm the content of html james!";
+    expect(matchingAndCorrectWords(str)[0]).toBe('james');
+    expect(matchingAndCorrectWords(str)[1]).toBe('James');
 
-    str = 'I\'M THE CONTENT OF HTML "JAMES"'
-    expect(matchingAndCorrectWords(str)[0]).toBe('JAMES')
-    expect(matchingAndCorrectWords(str)[1]).toBe('James')
+    str = 'I\'M THE CONTENT OF HTML "JAMES"';
+    expect(matchingAndCorrectWords(str)[0]).toBe('JAMES');
+    expect(matchingAndCorrectWords(str)[1]).toBe('James');
 
-    str = "I'm the content of html."
-    expect(matchingAndCorrectWords(str)[0]).toBe('')
-    expect(matchingAndCorrectWords(str)[1]).toBe('')
-  })
+    str = "I'm the content of html.";
+    expect(matchingAndCorrectWords(str)[0]).toBe('');
+    expect(matchingAndCorrectWords(str)[1]).toBe('');
+  });
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_CompanyNames', () => {
-    let str = "I'm the content of html 'GitHub'"
+    let str = "I'm the content of html 'GitHub'";
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         namesKeyValuePairs
-      )
+      );
 
-    expect(matchingAndCorrectWords(str)[0]).toBe('GitHub')
-    expect(matchingAndCorrectWords(str)[1]).toBe('GitHub')
+    expect(matchingAndCorrectWords(str)[0]).toBe('GitHub');
+    expect(matchingAndCorrectWords(str)[1]).toBe('GitHub');
 
-    str = "I'm the content of html github!"
-    expect(matchingAndCorrectWords(str)[0]).toBe('github')
-    expect(matchingAndCorrectWords(str)[1]).toBe('GitHub')
+    str = "I'm the content of html github!";
+    expect(matchingAndCorrectWords(str)[0]).toBe('github');
+    expect(matchingAndCorrectWords(str)[1]).toBe('GitHub');
 
-    str = 'I\'M THE CONTENT OF HTML "GITHUB"'
-    expect(matchingAndCorrectWords(str)[0]).toBe('GITHUB')
-    expect(matchingAndCorrectWords(str)[1]).toBe('GitHub')
+    str = 'I\'M THE CONTENT OF HTML "GITHUB"';
+    expect(matchingAndCorrectWords(str)[0]).toBe('GITHUB');
+    expect(matchingAndCorrectWords(str)[1]).toBe('GitHub');
 
-    str = "I'm the content of html."
-    expect(matchingAndCorrectWords(str)[0]).toBe('')
-    expect(matchingAndCorrectWords(str)[1]).toBe('')
-  })
+    str = "I'm the content of html.";
+    expect(matchingAndCorrectWords(str)[0]).toBe('');
+    expect(matchingAndCorrectWords(str)[1]).toBe('');
+  });
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_TechAbbreviations', () => {
-    let str = "I'm the content of html."
+    let str = "I'm the content of html.";
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         abbreviationsKeyValuePairs
-      )
+      );
 
-    expect(matchingAndCorrectWords(str)[0]).toBe('html')
-    expect(matchingAndCorrectWords(str)[1]).toBe('HTML')
+    expect(matchingAndCorrectWords(str)[0]).toBe('html');
+    expect(matchingAndCorrectWords(str)[1]).toBe('HTML');
 
-    str = "I'm the content of html!"
-    expect(matchingAndCorrectWords(str)[0]).toBe('html')
-    expect(matchingAndCorrectWords(str)[1]).toBe('HTML')
+    str = "I'm the content of html!";
+    expect(matchingAndCorrectWords(str)[0]).toBe('html');
+    expect(matchingAndCorrectWords(str)[1]).toBe('HTML');
 
-    str = "I'M THE CONTENT OF HTML."
-    expect(matchingAndCorrectWords(str)[0]).toBe('HTML')
-    expect(matchingAndCorrectWords(str)[1]).toBe('HTML')
+    str = "I'M THE CONTENT OF HTML.";
+    expect(matchingAndCorrectWords(str)[0]).toBe('HTML');
+    expect(matchingAndCorrectWords(str)[1]).toBe('HTML');
 
-    str = "I'm the content of "
-    expect(matchingAndCorrectWords(str)[0]).toBe('')
-    expect(matchingAndCorrectWords(str)[1]).toBe('')
-  })
+    str = "I'm the content of ";
+    expect(matchingAndCorrectWords(str)[0]).toBe('');
+    expect(matchingAndCorrectWords(str)[1]).toBe('');
+  });
 
   /* eg -
    * test.html
    * file.json
    */
   test('getCaseInsensitiveMatchingAndCorrectedWords_Abbreviations_DoesNotWorkOnWordsWithNonWordCharacterSeparator', () => {
-    let str = "I'm the content of file.json."
+    let str = "I'm the content of file.json.";
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         abbreviationsKeyValuePairs
-      )
+      );
 
-    expect(matchingAndCorrectWords(str)[0]).toBe('')
-    expect(matchingAndCorrectWords(str)[1]).toBe('')
-  })
+    expect(matchingAndCorrectWords(str)[0]).toBe('');
+    expect(matchingAndCorrectWords(str)[1]).toBe('');
+  });
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_AbbreviationsWithDotPrefix', () => {
-    let str = "I'm the content of .net "
+    let str = "I'm the content of .net ";
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         abbreviationsKeyValuePairs
-      )
+      );
 
-    expect(matchingAndCorrectWords(str)[0]).toBe('.net')
-    expect(matchingAndCorrectWords(str)[1]).toBe('.NET')
+    expect(matchingAndCorrectWords(str)[0]).toBe('.net');
+    expect(matchingAndCorrectWords(str)[1]).toBe('.NET');
 
-    str = "I'm the content of .Net!"
-    expect(matchingAndCorrectWords(str)[0]).toBe('.Net')
-    expect(matchingAndCorrectWords(str)[1]).toBe('.NET')
-  })
+    str = "I'm the content of .Net!";
+    expect(matchingAndCorrectWords(str)[0]).toBe('.Net');
+    expect(matchingAndCorrectWords(str)[1]).toBe('.NET');
+  });
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_Locations', () => {
-    let str = 'I was built in australia.'
+    let str = 'I was built in australia.';
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         locationsKeyValuePairs
-      )
+      );
 
-    expect(matchingAndCorrectWords(str)[0]).toBe('australia')
-    expect(matchingAndCorrectWords(str)[1]).toBe('Australia')
+    expect(matchingAndCorrectWords(str)[0]).toBe('australia');
+    expect(matchingAndCorrectWords(str)[1]).toBe('Australia');
 
-    str = 'I was built in australia!'
-    expect(matchingAndCorrectWords(str)[0]).toBe('australia')
-    expect(matchingAndCorrectWords(str)[1]).toBe('Australia')
+    str = 'I was built in australia!';
+    expect(matchingAndCorrectWords(str)[0]).toBe('australia');
+    expect(matchingAndCorrectWords(str)[1]).toBe('Australia');
 
-    str = 'I WAS BUILT IN AUSTRALIA.'
-    expect(matchingAndCorrectWords(str)[0]).toBe('AUSTRALIA')
-    expect(matchingAndCorrectWords(str)[1]).toBe('Australia')
+    str = 'I WAS BUILT IN AUSTRALIA.';
+    expect(matchingAndCorrectWords(str)[0]).toBe('AUSTRALIA');
+    expect(matchingAndCorrectWords(str)[1]).toBe('Australia');
 
-    str = 'I was built in '
-    expect(matchingAndCorrectWords(str)[0]).toBe('')
-    expect(matchingAndCorrectWords(str)[1]).toBe('')
-  })
+    str = 'I was built in ';
+    expect(matchingAndCorrectWords(str)[0]).toBe('');
+    expect(matchingAndCorrectWords(str)[1]).toBe('');
+  });
 
   test('getCaseSensitiveMatchingAndCorrectedWords_ApostropheWords', () => {
-    let str = 'I cant.'
+    let str = 'I cant.';
     let matchingAndCorrectWords = (text) =>
       utils.getCaseSensitiveMatchingAndCorrectedWords(
         text,
         constantsKeyValuePairs
-      )
+      );
 
-    expect(matchingAndCorrectWords(str)[0]).toBe('cant')
-    expect(matchingAndCorrectWords(str)[1]).toBe("can't")
+    expect(matchingAndCorrectWords(str)[0]).toBe('cant');
+    expect(matchingAndCorrectWords(str)[1]).toBe("can't");
 
-    str = 'I CANT '
-    expect(matchingAndCorrectWords(str)[0]).toBe('')
-    expect(matchingAndCorrectWords(str)[1]).toBe('')
+    str = 'I CANT ';
+    expect(matchingAndCorrectWords(str)[0]).toBe('');
+    expect(matchingAndCorrectWords(str)[1]).toBe('');
 
-    str = 'I wont '
-    expect(matchingAndCorrectWords(str)[0]).toBe('wont')
-    expect(matchingAndCorrectWords(str)[1]).toBe("won't")
-  })
+    str = 'I wont ';
+    expect(matchingAndCorrectWords(str)[0]).toBe('wont');
+    expect(matchingAndCorrectWords(str)[1]).toBe("won't");
+  });
 
   test('getCaseSensitiveMatchingAndCorrectedWords_ApostropheWords_TitleCase', () => {
-    let str = 'Doesnt.'
+    let str = 'Doesnt.';
     let matchingAndCorrectWords = (text) =>
       utils.getCaseSensitiveMatchingAndCorrectedWords(
         text,
         constantsKeyValuePairs
-      )
+      );
 
-    expect(matchingAndCorrectWords(str)[0]).toBe('Doesnt')
-    expect(matchingAndCorrectWords(str)[1]).toBe("Doesn't")
+    expect(matchingAndCorrectWords(str)[0]).toBe('Doesnt');
+    expect(matchingAndCorrectWords(str)[1]).toBe("Doesn't");
 
-    str = 'I Wont.'
-    expect(matchingAndCorrectWords(str)[0]).toBe('Wont')
-    expect(matchingAndCorrectWords(str)[1]).toBe("Won't")
-  })
+    str = 'I Wont.';
+    expect(matchingAndCorrectWords(str)[0]).toBe('Wont');
+    expect(matchingAndCorrectWords(str)[1]).toBe("Won't");
+  });
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_LocalAbbreviations', () => {
-    let str = "I'm the content of html 'syd'"
+    let str = "I'm the content of html 'syd'";
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         constantsKeyValuePairs
-      )
+      );
 
-    expect(matchingAndCorrectWords(str)[0]).toBe('syd')
-    expect(matchingAndCorrectWords(str)[1]).toBe('Syd')
+    expect(matchingAndCorrectWords(str)[0]).toBe('syd');
+    expect(matchingAndCorrectWords(str)[1]).toBe('Syd');
 
-    str = "I'm the content of html SYD!"
-    expect(matchingAndCorrectWords(str)[0]).toBe('SYD')
-    expect(matchingAndCorrectWords(str)[1]).toBe('Syd')
-  })
+    str = "I'm the content of html SYD!";
+    expect(matchingAndCorrectWords(str)[0]).toBe('SYD');
+    expect(matchingAndCorrectWords(str)[1]).toBe('Syd');
+  });
 
   test('getMatchingAndCorrectedWords_ExcludedWords', () => {
-    let str = "I'm the content of january."
-    let wordsToExclude = ['january']
-    let caseInsensitive = true
+    let str = "I'm the content of january.";
+    let wordsToExclude = ['january'];
+    let caseInsensitive = true;
 
     let matchingAndCorrectWords = (text) =>
       utils.getMatchingAndCorrectedWords(
@@ -608,76 +608,96 @@ describe('utilities test', function () {
         constantsKeyValuePairs,
         wordsToExclude,
         caseInsensitive
-      )
+      );
 
-    expect(matchingAndCorrectWords(str)[0]).toBe('')
-    expect(matchingAndCorrectWords(str)[1]).toBe('')
+    expect(matchingAndCorrectWords(str)[0]).toBe('');
+    expect(matchingAndCorrectWords(str)[1]).toBe('');
 
-    str = "I'M THE CONTENT OF HTML JANUARY!"
-    expect(matchingAndCorrectWords(str)[0]).toBe('')
-    expect(matchingAndCorrectWords(str)[1]).toBe('')
-  })
+    str = "I'M THE CONTENT OF HTML JANUARY!";
+    expect(matchingAndCorrectWords(str)[0]).toBe('');
+    expect(matchingAndCorrectWords(str)[1]).toBe('');
+  });
 
   test('getUpdatedString_ChangesSentence', () => {
     expect(
       utils.getUpdatedString('these es indexes are as es ', 'es', 'ES')
-    ).toBe('these es indexes are as ES ')
+    ).toBe('these es indexes are as ES ');
     expect(
       utils.getUpdatedString('these es indexes are as es!', 'es', 'ES')
-    ).toBe('these es indexes are as ES!')
+    ).toBe('these es indexes are as ES!');
     expect(
       utils.getUpdatedString('these es indexes are as es?', 'es', 'ES')
-    ).toBe('these es indexes are as ES?')
+    ).toBe('these es indexes are as ES?');
 
     expect(
       utils.getUpdatedString('these james and james ', 'james', 'James')
-    ).toBe('these james and James ')
+    ).toBe('these james and James ');
     expect(
       utils.getUpdatedString('these james and james.', 'james', 'James')
-    ).toBe('these james and James.')
+    ).toBe('these james and James.');
     expect(
       utils.getUpdatedString('these james and james!', 'james', 'James')
-    ).toBe('these james and James!')
-  })
+    ).toBe('these james and James!');
+  });
 
   test('getUpdatedString_DoesNotChangeSentence', () => {
     expect(utils.getUpdatedString('these james and ', 'james', 'James')).toBe(
       'these james and '
-    )
+    );
     expect(utils.getUpdatedString('these james and james!', '', '')).toBe(
       'these james and james!'
-    )
-    expect(utils.getUpdatedString('', '', '')).toBe('')
+    );
+    expect(utils.getUpdatedString('', '', '')).toBe('');
     expect(
       utils.getUpdatedString('these james and james!', '', undefined)
-    ).toBe('these james and james!')
-  })
+    ).toBe('these james and james!');
+  });
 
   test('setShouldCapitaliseOption_SetsTheValueToTrue', () => {
-    utils.setShouldCapitaliseOption(shouldCapitaliseI, true)
-    expect(utils.optionsDictionary[shouldCapitaliseI]).toBe(true)
+    utils.setShouldCapitaliseOption(shouldCapitaliseI, true);
+    expect(utils.optionsDictionary[shouldCapitaliseI]).toBe(true);
 
-    utils.setShouldCapitaliseOption(shouldCapitaliseNames, true)
-    expect(utils.optionsDictionary[shouldCapitaliseNames]).toBe(true)
+    utils.setShouldCapitaliseOption(shouldCapitaliseNames, true);
+    expect(utils.optionsDictionary[shouldCapitaliseNames]).toBe(true);
 
-    utils.setShouldCapitaliseOption(shouldCapitaliseAbbreviations, true)
-    expect(utils.optionsDictionary[shouldCapitaliseAbbreviations]).toBe(true)
+    utils.setShouldCapitaliseOption(shouldCapitaliseAbbreviations, true);
+    expect(utils.optionsDictionary[shouldCapitaliseAbbreviations]).toBe(true);
 
-    utils.setShouldCapitaliseOption(shouldCapitaliseLocations, true)
-    expect(utils.optionsDictionary[shouldCapitaliseLocations]).toBe(true)
-  })
+    utils.setShouldCapitaliseOption(shouldCapitaliseLocations, true);
+    expect(utils.optionsDictionary[shouldCapitaliseLocations]).toBe(true);
+  });
 
   test('setShouldCapitaliseOption_SetsTheValueToTrue', () => {
-    utils.setShouldCapitaliseOption(shouldCapitaliseI, false)
-    expect(utils.optionsDictionary[shouldCapitaliseI]).toBe(false)
+    utils.setShouldCapitaliseOption(shouldCapitaliseI, false);
+    expect(utils.optionsDictionary[shouldCapitaliseI]).toBe(false);
 
-    utils.setShouldCapitaliseOption(shouldCapitaliseNames, false)
-    expect(utils.optionsDictionary[shouldCapitaliseNames]).toBe(false)
+    utils.setShouldCapitaliseOption(shouldCapitaliseNames, false);
+    expect(utils.optionsDictionary[shouldCapitaliseNames]).toBe(false);
 
-    utils.setShouldCapitaliseOption(shouldCapitaliseAbbreviations, false)
-    expect(utils.optionsDictionary[shouldCapitaliseAbbreviations]).toBe(false)
+    utils.setShouldCapitaliseOption(shouldCapitaliseAbbreviations, false);
+    expect(utils.optionsDictionary[shouldCapitaliseAbbreviations]).toBe(false);
 
-    utils.setShouldCapitaliseOption(shouldCapitaliseLocations, false)
-    expect(utils.optionsDictionary[shouldCapitaliseLocations]).toBe(false)
-  })
-})
+    utils.setShouldCapitaliseOption(shouldCapitaliseLocations, false);
+    expect(utils.optionsDictionary[shouldCapitaliseLocations]).toBe(false);
+  });
+});
+
+describe('capitaliseText', () => {
+  test('capitaliseText_P', () => {
+    const element = $.parseHTML('<p><br data-text="true"></p>');
+
+    expect(utils.containsHtmlContent(element)).toBe(true);
+  });
+
+  test('capitaliseText_Span', () => {
+    const element = $.parseHTML('<span><br data-text="true"></span>');
+
+    expect(utils.containsHtmlContent(element)).toBe(true);
+  });
+
+  test('capitaliseText_Br', () => {
+    const element = $.parseHTML('<div><br data-text="true"></div>');
+
+    expect(utils.containsHtmlContent(element)).toBe(true);
+  });
+});
