@@ -187,11 +187,13 @@ function observeHtmlBody() {
             $.each(inputTags, function (_i, tagName) {
               var filteredEls = utils.getFilteredElements(addedNodes, tagName);
 
-              filteredEls.each(function (_index, element) {
-                $(element).on(`input.${pluginNamespace}`, function (event) {
-                  capitaliseText(event.target);
+              if (filteredEls?.length) {
+                filteredEls.each(function (_index, element) {
+                  $(element).on(`input.${pluginNamespace}`, function (event) {
+                    capitaliseText(event.target);
+                  });
                 });
-              });
+              }
             });
           }
         } else if (mutation.type === 'characterData') {
