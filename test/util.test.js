@@ -18,7 +18,7 @@ describe('utilities test', function () {
   test('getCapitalisedContent', () => {
     expect(utils.getCapitalisedContent('blah')).toBe('blaH');
     expect(utils.getCapitalisedContent('i')).toBe('I');
-    expect(utils.getCapitalisedContent("i'm")).toBe("i'M");
+    expect(utils.getCapitalisedContent('i\'m')).toBe('i\'M');
     expect(utils.getCapitalisedContent('i. m')).toBe('i. M');
     expect(utils.getCapitalisedContent('i? m')).toBe('i? M');
     expect(utils.getCapitalisedContent('')).toBe('');
@@ -29,7 +29,7 @@ describe('utilities test', function () {
 
   test('getCapitalisedContentForI', () => {
     expect(utils.getCapitalisedContentForI('i ')).toBe('I ');
-    expect(utils.getCapitalisedContentForI("i'")).toBe("I'");
+    expect(utils.getCapitalisedContentForI('i\'')).toBe('I\'');
     expect(utils.getCapitalisedContentForI('Hi this is i ')).toBe(
       'Hi this is I '
     );
@@ -39,8 +39,8 @@ describe('utilities test', function () {
     expect(utils.shouldCapitaliseForI('war i ')).toBe(true);
     expect(utils.shouldCapitaliseForI(' i ')).toBe(true);
     expect(utils.shouldCapitaliseForI('Hi this is i ')).toBe(true);
-    expect(utils.shouldCapitaliseForI(" i'")).toBe(true);
-    expect(utils.shouldCapitaliseForI("    i'")).toBe(true);
+    expect(utils.shouldCapitaliseForI(' i\'')).toBe(true);
+    expect(utils.shouldCapitaliseForI('    i\'')).toBe(true);
     expect(utils.shouldCapitaliseForI('    i ')).toBe(true);
     expect(utils.shouldCapitalise('       k')).toBe(false);
     expect(utils.shouldCapitalise('.       k')).toBe(false);
@@ -346,7 +346,7 @@ describe('utilities test', function () {
   });
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_Days', () => {
-    let str = "I'm the content of html Monday.";
+    let str = 'I\'m the content of html Monday.';
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
@@ -356,25 +356,25 @@ describe('utilities test', function () {
     expect(matchingAndCorrectWords(str)[0]).toBe('Monday');
     expect(matchingAndCorrectWords(str)[1]).toBe('Monday');
 
-    str = "I'm the content of html monday.";
+    str = 'I\'m the content of html monday.';
     expect(matchingAndCorrectWords(str)[0]).toBe('monday');
     expect(matchingAndCorrectWords(str)[1]).toBe('Monday');
 
-    str = "I'm the content of html monday-";
+    str = 'I\'m the content of html monday-';
     expect(matchingAndCorrectWords(str)[0]).toBe('');
     expect(matchingAndCorrectWords(str)[1]).toBe('');
 
-    str = "I'M THE CONTENT OF HTML MONDAY!";
+    str = 'I\'M THE CONTENT OF HTML MONDAY!';
     expect(matchingAndCorrectWords(str)[0]).toBe('MONDAY');
     expect(matchingAndCorrectWords(str)[1]).toBe('Monday');
 
-    str = "I'm the content of html.";
+    str = 'I\'m the content of html.';
     expect(matchingAndCorrectWords(str)[0]).toBe('');
     expect(matchingAndCorrectWords(str)[1]).toBe('');
   });
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_Months', () => {
-    let str = "I'm the content of html january.";
+    let str = 'I\'m the content of html january.';
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
@@ -384,17 +384,17 @@ describe('utilities test', function () {
     expect(matchingAndCorrectWords(str)[0]).toBe('january');
     expect(matchingAndCorrectWords(str)[1]).toBe('January');
 
-    str = "I'M THE CONTENT OF HTML JANUARY!";
+    str = 'I\'M THE CONTENT OF HTML JANUARY!';
     expect(matchingAndCorrectWords(str)[0]).toBe('JANUARY');
     expect(matchingAndCorrectWords(str)[1]).toBe('January');
 
-    str = "I'm the content of html.";
+    str = 'I\'m the content of html.';
     expect(matchingAndCorrectWords(str)[0]).toBe('');
     expect(matchingAndCorrectWords(str)[1]).toBe('');
   });
 
   test('getCaseInsensitiveMatchingAndCorrectedWords', () => {
-    let str = "I'm the content of html James.";
+    let str = 'I\'m the content of html James.';
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
@@ -404,21 +404,21 @@ describe('utilities test', function () {
     expect(matchingAndCorrectWords(str)[0]).toBe('James');
     expect(matchingAndCorrectWords(str)[1]).toBe('James');
 
-    str = "I'm the content of html james.";
+    str = 'I\'m the content of html james.';
     expect(matchingAndCorrectWords(str)[0]).toBe('james');
     expect(matchingAndCorrectWords(str)[1]).toBe('James');
 
-    str = "I'M THE CONTENT OF HTML JAMES!";
+    str = 'I\'M THE CONTENT OF HTML JAMES!';
     expect(matchingAndCorrectWords(str)[0]).toBe('JAMES');
     expect(matchingAndCorrectWords(str)[1]).toBe('James');
 
-    str = "I'm the content of html.";
+    str = 'I\'m the content of html.';
     expect(matchingAndCorrectWords(str)[0]).toBe('');
     expect(matchingAndCorrectWords(str)[1]).toBe('');
   });
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_OtherPunctuation', () => {
-    let str = "I'm the content of html 'James'";
+    let str = 'I\'m the content of html \'James\'';
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
@@ -428,7 +428,7 @@ describe('utilities test', function () {
     expect(matchingAndCorrectWords(str)[0]).toBe('James');
     expect(matchingAndCorrectWords(str)[1]).toBe('James');
 
-    str = "I'm the content of html james!";
+    str = 'I\'m the content of html james!';
     expect(matchingAndCorrectWords(str)[0]).toBe('james');
     expect(matchingAndCorrectWords(str)[1]).toBe('James');
 
@@ -436,13 +436,13 @@ describe('utilities test', function () {
     expect(matchingAndCorrectWords(str)[0]).toBe('JAMES');
     expect(matchingAndCorrectWords(str)[1]).toBe('James');
 
-    str = "I'm the content of html.";
+    str = 'I\'m the content of html.';
     expect(matchingAndCorrectWords(str)[0]).toBe('');
     expect(matchingAndCorrectWords(str)[1]).toBe('');
   });
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_CompanyNames', () => {
-    let str = "I'm the content of html 'GitHub'";
+    let str = 'I\'m the content of html \'GitHub\'';
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
@@ -452,7 +452,7 @@ describe('utilities test', function () {
     expect(matchingAndCorrectWords(str)[0]).toBe('GitHub');
     expect(matchingAndCorrectWords(str)[1]).toBe('GitHub');
 
-    str = "I'm the content of html github!";
+    str = 'I\'m the content of html github!';
     expect(matchingAndCorrectWords(str)[0]).toBe('github');
     expect(matchingAndCorrectWords(str)[1]).toBe('GitHub');
 
@@ -460,13 +460,13 @@ describe('utilities test', function () {
     expect(matchingAndCorrectWords(str)[0]).toBe('GITHUB');
     expect(matchingAndCorrectWords(str)[1]).toBe('GitHub');
 
-    str = "I'm the content of html.";
+    str = 'I\'m the content of html.';
     expect(matchingAndCorrectWords(str)[0]).toBe('');
     expect(matchingAndCorrectWords(str)[1]).toBe('');
   });
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_TechAbbreviations', () => {
-    let str = "I'm the content of html.";
+    let str = 'I\'m the content of html.';
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
@@ -476,15 +476,15 @@ describe('utilities test', function () {
     expect(matchingAndCorrectWords(str)[0]).toBe('html');
     expect(matchingAndCorrectWords(str)[1]).toBe('HTML');
 
-    str = "I'm the content of html!";
+    str = 'I\'m the content of html!';
     expect(matchingAndCorrectWords(str)[0]).toBe('html');
     expect(matchingAndCorrectWords(str)[1]).toBe('HTML');
 
-    str = "I'M THE CONTENT OF HTML.";
+    str = 'I\'M THE CONTENT OF HTML.';
     expect(matchingAndCorrectWords(str)[0]).toBe('HTML');
     expect(matchingAndCorrectWords(str)[1]).toBe('HTML');
 
-    str = "I'm the content of ";
+    str = 'I\'m the content of ';
     expect(matchingAndCorrectWords(str)[0]).toBe('');
     expect(matchingAndCorrectWords(str)[1]).toBe('');
   });
@@ -494,7 +494,7 @@ describe('utilities test', function () {
    * file.json
    */
   test('getCaseInsensitiveMatchingAndCorrectedWords_Abbreviations_DoesNotWorkOnWordsWithNonWordCharacterSeparator', () => {
-    let str = "I'm the content of file.json.";
+    let str = 'I\'m the content of file.json.';
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
@@ -506,7 +506,7 @@ describe('utilities test', function () {
   });
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_AbbreviationsWithDotPrefix', () => {
-    let str = "I'm the content of .net ";
+    let str = 'I\'m the content of .net ';
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
@@ -516,7 +516,7 @@ describe('utilities test', function () {
     expect(matchingAndCorrectWords(str)[0]).toBe('.net');
     expect(matchingAndCorrectWords(str)[1]).toBe('.NET');
 
-    str = "I'm the content of .Net!";
+    str = 'I\'m the content of .Net!';
     expect(matchingAndCorrectWords(str)[0]).toBe('.Net');
     expect(matchingAndCorrectWords(str)[1]).toBe('.NET');
   });
@@ -554,7 +554,7 @@ describe('utilities test', function () {
       );
 
     expect(matchingAndCorrectWords(str)[0]).toBe('cant');
-    expect(matchingAndCorrectWords(str)[1]).toBe("can't");
+    expect(matchingAndCorrectWords(str)[1]).toBe('can\'t');
 
     str = 'I CANT ';
     expect(matchingAndCorrectWords(str)[0]).toBe('');
@@ -562,7 +562,7 @@ describe('utilities test', function () {
 
     str = 'I wont ';
     expect(matchingAndCorrectWords(str)[0]).toBe('wont');
-    expect(matchingAndCorrectWords(str)[1]).toBe("won't");
+    expect(matchingAndCorrectWords(str)[1]).toBe('won\'t');
   });
 
   test('getCaseSensitiveMatchingAndCorrectedWords_ApostropheWords_TitleCase', () => {
@@ -574,15 +574,15 @@ describe('utilities test', function () {
       );
 
     expect(matchingAndCorrectWords(str)[0]).toBe('Doesnt');
-    expect(matchingAndCorrectWords(str)[1]).toBe("Doesn't");
+    expect(matchingAndCorrectWords(str)[1]).toBe('Doesn\'t');
 
     str = 'I Wont.';
     expect(matchingAndCorrectWords(str)[0]).toBe('Wont');
-    expect(matchingAndCorrectWords(str)[1]).toBe("Won't");
+    expect(matchingAndCorrectWords(str)[1]).toBe('Won\'t');
   });
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_LocalAbbreviations', () => {
-    let str = "I'm the content of html 'syd'";
+    let str = 'I\'m the content of html \'syd\'';
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
@@ -592,13 +592,13 @@ describe('utilities test', function () {
     expect(matchingAndCorrectWords(str)[0]).toBe('syd');
     expect(matchingAndCorrectWords(str)[1]).toBe('Syd');
 
-    str = "I'm the content of html SYD!";
+    str = 'I\'m the content of html SYD!';
     expect(matchingAndCorrectWords(str)[0]).toBe('SYD');
     expect(matchingAndCorrectWords(str)[1]).toBe('Syd');
   });
 
   test('getMatchingAndCorrectedWords_ExcludedWords', () => {
-    let str = "I'm the content of january.";
+    let str = 'I\'m the content of january.';
     let wordsToExclude = ['january'];
     let caseInsensitive = true;
 
@@ -613,7 +613,7 @@ describe('utilities test', function () {
     expect(matchingAndCorrectWords(str)[0]).toBe('');
     expect(matchingAndCorrectWords(str)[1]).toBe('');
 
-    str = "I'M THE CONTENT OF HTML JANUARY!";
+    str = 'I\'M THE CONTENT OF HTML JANUARY!';
     expect(matchingAndCorrectWords(str)[0]).toBe('');
     expect(matchingAndCorrectWords(str)[1]).toBe('');
   });

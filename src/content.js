@@ -150,7 +150,7 @@ function observeHtmlBody() {
   var inputTags = ['input[type=\'text\']', 'textarea'];
 
   var observer = new MutationObserver(function (mutations) {
-    let characterDataMutations=[];
+    let characterDataMutations = [];
 
     $.each(mutations, function (_i, mutation) {
       try {
@@ -175,11 +175,13 @@ function observeHtmlBody() {
             $.each(contentEditableTags, function (_i, tagName) {
               var filteredEls = utils.getFilteredElements(addedNodes, tagName);
 
-              filteredEls.each(function (_index, element) {
-                if (utils.shouldCapitaliseContent(element)) {
-                  capitaliseText(element);
-                }
-              });
+              if (filteredEls?.length) {
+                filteredEls.each(function (_index, element) {
+                  if (utils.shouldCapitaliseContent(element)) {
+                    capitaliseText(element);
+                  }
+                });
+              }
             });
 
             $.each(inputTags, function (_i, tagName) {
@@ -203,7 +205,7 @@ function observeHtmlBody() {
     });
 
     characterDataMutations = unique(characterDataMutations);
-    characterDataMutations.forEach((element)=>capitaliseText(element));
+    characterDataMutations.forEach((element) => capitaliseText(element));
   });
 
   var config = {
@@ -217,7 +219,7 @@ function observeHtmlBody() {
 
 function unique(list) {
   var result = [];
-  $.each(list, function(i, e) {
+  $.each(list, function (i, e) {
     if ($.inArray(e, result) == -1) result.push(e);
   });
   return result;
