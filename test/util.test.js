@@ -697,3 +697,23 @@ describe('utilities test', function () {
     expect(utils.optionsDictionary[shouldCapitaliseLocations]).toBe(false);
   });
 });
+
+describe('capitaliseText', () => {
+  test('capitaliseText_P', () => {
+    const element = $.parseHTML('<p><br data-text="true"></p>');
+
+    expect(utils.containsHtmlContent(element)).toBe(true);
+  });
+
+  test('capitaliseText_Span', () => {
+    const element = $.parseHTML('<span><br data-text="true"></span>');
+
+    expect(utils.containsHtmlContent(element)).toBe(true);
+  });
+
+  test('capitaliseText_Br', () => {
+    const element = $.parseHTML('<div><br data-text="true"></div>');
+
+    expect(utils.containsHtmlContent(element)).toBe(true);
+  });
+});

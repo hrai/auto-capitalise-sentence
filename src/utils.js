@@ -378,17 +378,6 @@ export function getCapitalisedContent(text) {
   return updatedStr;
 }
 
-export function containsHtmlContent(element) {
-  const content = $(element).html();
-
-  const brRegex = /\s*<br>/;
-  if (content && brRegex.test(content)) return false;
-
-  const regex = /<\/?\w+>/;
-  const hasHtmlTag = regex.test(content);
-  return hasHtmlTag;
-}
-
 export function isContentEditable(element) {
   return element && element.isContentEditable;
 }
@@ -407,6 +396,14 @@ export function isEditableElement(element, tagName) {
     tagName.toUpperCase() === 'INPUT' ||
     tagName.toUpperCase() === 'TEXTAREA'
   );
+}
+
+export function containsHtmlContent(element) {
+  const content = $(element).html();
+
+  const regex = /<\/?[a-z][\s\S]*>/i;
+  const hasHtmlTag = regex.test(content);
+  return hasHtmlTag;
 }
 
 export function setWordsToExclude(value) {

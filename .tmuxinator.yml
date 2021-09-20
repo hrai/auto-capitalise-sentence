@@ -47,7 +47,7 @@ windows:
   - test-build-watch:
       layout: even-horizontal
       panes:
-        - yarn test --watch
-        - yarn watch
+        - yarn test-watch
+        - yarn watch-dev
         - yarn web
         - yarn start:chrome
