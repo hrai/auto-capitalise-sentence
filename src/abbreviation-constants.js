@@ -80,7 +80,6 @@ const commonAbbreviations = [
   'TBH',
   'TC',
   'TGIF',
-  'THX',
   'TIA',
   'TTYL',
   'TWA',
