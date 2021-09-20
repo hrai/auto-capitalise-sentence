@@ -16,7 +16,7 @@
     "watch-dev": "yarn build-dev --watch",
     "web": "nodemon app.js",
     "test": "yarn jest",
-    "test:watch": "yarn jest --watch test/",
+    "test-watch": "yarn jest --watch test/",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
     "update-version": "yarn dot-json distribution/manifest.json version $VER",
