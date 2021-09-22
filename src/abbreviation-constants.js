@@ -152,6 +152,7 @@ const commonTechAbbreviations = [
   'PRs',
   'PV',
   'PaaS',
+  'Qs',
   'QA',
   'QAs',
   'RRS',
