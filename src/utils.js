@@ -401,6 +401,12 @@ export function isEditableElement(element, tagName) {
 export function containsHtmlContent(element) {
   const content = $(element).html();
 
+  const brRegex = /\s*<br>/;
+  //for gmail
+  if (content && brRegex.test(content)) {
+    return false;
+  }
+
   const regex = /<\/?[a-z][\s\S]*>/i;
   const hasHtmlTag = regex.test(content);
   return hasHtmlTag;

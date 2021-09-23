@@ -106,6 +106,7 @@ const commonTechAbbreviations = [
   'CIDR',
   'CLI',
   'CORS',
+  'CPU',
   'CSS',
   'DB',
   'DDoS',
