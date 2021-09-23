@@ -711,9 +711,15 @@ describe('capitaliseText', () => {
     expect(utils.containsHtmlContent(element)).toBe(true);
   });
 
-  test('capitaliseText_Br', () => {
+  test('capitaliseText_Div', () => {
     const element = $.parseHTML('<div><br data-text="true"></div>');
 
     expect(utils.containsHtmlContent(element)).toBe(true);
+  });
+
+  test('capitaliseText_Div', () => {
+    const element = $.parseHTML('<div>h<br></div>');
+
+    expect(utils.containsHtmlContent(element)).toBe(false);
   });
 });

@@ -95,6 +95,7 @@ const commonTechWords = [
   'Kibana',
   'LibreOffice',
   'LinkedIn',
+  'Lucidchart',
   'Mac',
   'Macintosh',
   'MariaDB',
@@ -120,6 +121,7 @@ const commonTechWords = [
   'Scala',
   'SharePoint',
   'TensorFlow',
+  'Trello',
   'Ubuntu',
   'Unicode',
   'Wii',
@@ -132,9 +134,9 @@ const commonTechWords = [
   'iTunes',
 ];
 
-let awsWords = ['Fargate'];
+let awsWords = ['Fargate', 'CloudWatch'];
 
-let expansions = {'thx':'thanks'};
+let expansions = { thx: 'thanks' };
 
 let commonLocalAbbreviations = ['Syd', 'Melb', 'AdID', 'AdIDs'];
 
@@ -159,7 +161,7 @@ let toTitleCase = (str) => {
 };
 
 let convertToTitleCase = (keyValuePairs) => {
-  let destination={};
+  let destination = {};
   for (const [key, value] of Object.entries(keyValuePairs)) {
     destination[toTitleCase(key)] = toTitleCase(value);
   }
@@ -172,7 +174,7 @@ export let constantsKeyValuePairs = {
   ...wordsWithApostrophe,
   ...convertToTitleCase(wordsWithApostrophe),
   ...expansions,
-  ...convertToTitleCase(expansions)
+  ...convertToTitleCase(expansions),
 };
 
 export let namesKeyValuePairs = names.reduce(stringToKeyValuePairs, {});
