@@ -95,6 +95,7 @@ const commonTechWords = [
   'Kibana',
   'LibreOffice',
   'LinkedIn',
+  'Lucidchart',
   'Mac',
   'Macintosh',
   'MariaDB',
