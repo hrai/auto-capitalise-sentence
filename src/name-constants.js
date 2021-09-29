@@ -1084,6 +1084,7 @@ let personNames = [
   'Ethel',
   'Ethelred',
   'Etta',
+  'Eugene',
   'Eugenia',
   'Eugenie',
   'Eugenio',
