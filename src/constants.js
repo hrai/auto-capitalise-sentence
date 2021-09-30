@@ -136,7 +136,7 @@ const commonTechWords = [
 
 let awsWords = ['Fargate', 'CloudWatch'];
 
-let expansions = { thx: 'thanks' };
+let expansions = { thx: 'thanks', np: 'no problem', nw: 'no worries' };
 
 let commonLocalAbbreviations = ['Syd', 'Melb', 'AdID', 'AdIDs'];
 
