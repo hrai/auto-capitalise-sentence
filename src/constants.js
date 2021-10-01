@@ -139,7 +139,12 @@ const commonTechWords = [
 
 let awsWords = ['Fargate', 'CloudWatch'];
 
-let expansions = { thx: 'thanks', np: 'no problem', nw: 'no worries' };
+let expansions = {
+  thx: 'thanks',
+  pls: 'please',
+  np: 'no problem',
+  nw: 'no worries',
+};
 
 let commonLocalAbbreviations = ['Syd', 'Melb', 'AdID', 'AdIDs'];
 
@@ -163,10 +168,22 @@ let toTitleCase = (str) => {
   });
 };
 
+let toSentenceCase = (str) => {
+  return str.charAt(0).toUpperCase() + str.substr(1).toLowerCase();
+};
+
 let convertToTitleCase = (keyValuePairs) => {
   let destination = {};
   for (const [key, value] of Object.entries(keyValuePairs)) {
     destination[toTitleCase(key)] = toTitleCase(value);
+  }
+  return destination;
+};
+
+let convertToSentenceCase = (keyValuePairs) => {
+  let destination = {};
+  for (const [key, value] of Object.entries(keyValuePairs)) {
+    destination[toSentenceCase(key)] = toSentenceCase(value);
   }
   return destination;
 };
@@ -177,7 +194,7 @@ export let constantsKeyValuePairs = {
   ...wordsWithApostrophe,
   ...convertToTitleCase(wordsWithApostrophe),
   ...expansions,
-  ...convertToTitleCase(expansions),
+  ...convertToSentenceCase(expansions),
 };
 
 export let namesKeyValuePairs = names.reduce(stringToKeyValuePairs, {});
