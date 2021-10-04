@@ -618,7 +618,7 @@ describe('utilities test', function () {
 
     str = "I'm the content of html Nw!";
     expect(matchingAndCorrectWords(str)[0]).toBe('Nw');
-    expect(matchingAndCorrectWords(str)[1]).toBe('No Worries');
+    expect(matchingAndCorrectWords(str)[1]).toBe('No worries');
   });
 
   test('getMatchingAndCorrectedWords_ExcludedWords', () => {
