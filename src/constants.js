@@ -102,6 +102,7 @@ const commonTechWords = [
   'Mac',
   'Macintosh',
   'MariaDB',
+  'Mixpanel',
   'MongoDB',
   'MySQL',
   'Netscape',
