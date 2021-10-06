@@ -122,6 +122,8 @@ const commonTechAbbreviations = [
   'ES',
   'FIFO',
   'FaaS',
+  'GQL',
+  'gRPC',
   'HD',
   'HPC',
   'HTTP',
@@ -135,6 +137,7 @@ const commonTechAbbreviations = [
   'JS',
   'JSON',
   'LB',
+  'LTS',
   'MFA',
   'MITM',
   'ML',
@@ -400,8 +403,11 @@ let awsAcronyms = [
   'VPG',
 ];
 
+let localAcronyms = ['GA'];
+
 export const abbreviations = commonAbbreviations.concat(
   timeAbbreviations,
   commonTechAbbreviations,
-  awsAcronyms
+  awsAcronyms,
+  localAcronyms
 );
