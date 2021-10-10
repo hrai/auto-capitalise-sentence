@@ -132,6 +132,7 @@ const commonTechAbbreviations = [
   'ICMP',
   'IOPS',
   'IP',
+  'IPs',
   'IPSec',
   'IaaS',
   'JS',
