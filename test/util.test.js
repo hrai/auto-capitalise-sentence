@@ -14,7 +14,7 @@ import {
 
 const $ = require('jquery');
 
-describe('utilities test', function () {
+describe('util file tests', function () {
   test('getCapitalisedContent', () => {
     expect(utils.getCapitalisedContent('blah')).toBe('blaH');
     expect(utils.getCapitalisedContent('i')).toBe('I');

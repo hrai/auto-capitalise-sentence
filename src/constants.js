@@ -55,6 +55,7 @@ const wordsWithApostrophe = {
   theyve: "they've",
   wasnt: "wasn't",
   werent: "weren't",
+  whats: "what's",
   wheres: "where's",
   whered: "where'd",
   whos: "who's",
@@ -153,7 +154,7 @@ let constants = days.concat(
   commonLocalAbbreviations
 );
 
-let stringToKeyValuePairs = (obj, val) => {
+export let stringToKeyValuePairs = (obj, val) => {
   obj[val.toLowerCase()] = val;
   return obj;
 };
@@ -170,7 +171,7 @@ let toSentenceCase = (str) => {
   return str.charAt(0).toUpperCase() + str.substr(1).toLowerCase();
 };
 
-let convertToTitleCase = (keyValuePairs) => {
+export let convertToTitleCase = (keyValuePairs) => {
   let destination = {};
   for (const [key, value] of Object.entries(keyValuePairs)) {
     destination[toTitleCase(key)] = toTitleCase(value);
@@ -178,7 +179,7 @@ let convertToTitleCase = (keyValuePairs) => {
   return destination;
 };
 
-let convertToSentenceCase = (keyValuePairs) => {
+export let convertToSentenceCase = (keyValuePairs) => {
   let destination = {};
   for (const [key, value] of Object.entries(keyValuePairs)) {
     destination[toSentenceCase(key)] = toSentenceCase(value);
