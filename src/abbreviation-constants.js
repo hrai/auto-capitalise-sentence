@@ -95,6 +95,7 @@ const commonAbbreviations = [
 
 const commonTechAbbreviations = [
   '.NET',
+  '2FA',
   'ADFS',
   'AES',
   'AI',
