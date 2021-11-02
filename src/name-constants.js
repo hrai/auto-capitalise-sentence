@@ -1,5 +1,6 @@
 let personNames = [
   'Aaliyah',
+  'Aaron',
   'Abbott',
   'Abby',
   'Abdul',
