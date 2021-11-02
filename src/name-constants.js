@@ -1993,6 +1993,7 @@ let personNames = [
   'Lockheed',
   'Lockwood',
   'Loews',
+  'Logan',
   'Lois',
   'Lola',
   'Lollobrigida',
