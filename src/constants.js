@@ -146,7 +146,7 @@ let expansions = {
   nw: 'no worries',
 };
 
-let commonConstants = ['Xmas', 'Christmas', 'Easter'];
+let commonConstants = ['Xmas', 'Christmas', 'Easter', 'Diwali', 'Holi'];
 
 let commonLocalAbbreviations = ['Syd', 'Melb', 'AdID', 'AdIDs'];
 
