@@ -144,6 +144,7 @@ let expansions = {
   pls: 'please',
   np: 'no problem',
   nw: 'no worries',
+  msg: 'message',
 };
 
 let commonConstants = ['Xmas', 'Christmas', 'Easter', 'Diwali', 'Holi'];
