@@ -597,6 +597,22 @@ describe('util file tests', function () {
     expect(matchingAndCorrectWords(str)[1]).toBe('Syd');
   });
 
+  test('getCaseInsensitiveMatchingAndCorrectedWords_CommonConstants', () => {
+    let str = "I'm the content of html xmas ";
+    let matchingAndCorrectWords = (text) =>
+      utils.getCaseInsensitiveMatchingAndCorrectedWords(
+        text,
+        constantsKeyValuePairs
+      );
+
+    expect(matchingAndCorrectWords(str)[0]).toBe('xmas');
+    expect(matchingAndCorrectWords(str)[1]).toBe('Xmas');
+
+    str = "I'm the content of html XMAS ";
+    expect(matchingAndCorrectWords(str)[0]).toBe('XMAS');
+    expect(matchingAndCorrectWords(str)[1]).toBe('Xmas');
+  });
+
   test('getCaseSensitiveMatchingAndCorrectedWords_Expansions', () => {
     let str = "I'm the content of html, thx ";
     let matchingAndCorrectWords = (text) =>

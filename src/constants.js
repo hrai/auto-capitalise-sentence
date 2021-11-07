@@ -144,7 +144,10 @@ let expansions = {
   pls: 'please',
   np: 'no problem',
   nw: 'no worries',
+  msg: 'message',
 };
+
+let commonConstants = ['Xmas', 'Christmas', 'Easter', 'Diwali', 'Holi'];
 
 let commonLocalAbbreviations = ['Syd', 'Melb', 'AdID', 'AdIDs'];
 
@@ -152,6 +155,7 @@ let constants = days.concat(
   months,
   commonTechWords,
   awsWords,
+  commonConstants,
   commonLocalAbbreviations
 );
 
