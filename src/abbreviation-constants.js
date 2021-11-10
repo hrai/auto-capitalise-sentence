@@ -21,6 +21,7 @@ const commonAbbreviations = [
   'DIY',
   'ELT',
   'ETA',
+  'EU',
   'FAQ',
   'FDR',
   'FNMA',
