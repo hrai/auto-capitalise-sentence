@@ -40,6 +40,7 @@ const wordsWithApostrophe = {
   hed: "he'd",
   heres: "here's",
   hes: "he's",
+  hows: "how's",
   isnt: "isn't",
   ias: "I'as",
   im: "I'm",
@@ -145,6 +146,9 @@ let expansions = {
   np: 'no problem',
   nw: 'no worries',
   msg: 'message',
+  msgs: 'messages',
+  thru: 'through',
+  tho: 'though',
 };
 
 let commonConstants = ['Xmas', 'Christmas', 'Easter', 'Diwali', 'Holi'];
