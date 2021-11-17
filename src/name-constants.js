@@ -2979,6 +2979,7 @@ let personNames = [
   'Salvatore',
   'Salween',
   'Salyut',
+  'Sam',
   'Samantha',
   'Samar',
   'Samarkand',
