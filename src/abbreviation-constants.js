@@ -170,6 +170,7 @@ const commonTechAbbreviations = [
   'SOA',
   'SQL',
   'SSE',
+  'SSMS',
   'SSR',
   'SSH',
   'SSL',
