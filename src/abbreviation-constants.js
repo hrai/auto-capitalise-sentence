@@ -154,6 +154,7 @@ const commonTechAbbreviations = [
   'OLAP',
   'OLTP',
   'PCI',
+  'PD',
   'PHP',
   'PR',
   'PRs',
