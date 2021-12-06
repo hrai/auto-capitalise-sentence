@@ -62,6 +62,7 @@ const commonAbbreviations = [
   'NVIDIA',
   'NW',
   'OKR',
+  'OMFG',
   'OMG',
   'OTOH',
   'POI',
