@@ -149,6 +149,12 @@ let expansions = {
   msgs: 'messages',
   thru: 'through',
   tho: 'though',
+  req: 'request',
+  reqs: 'requests',
+  mig: 'migration',
+  prob: 'problem',
+  probs: 'problems',
+  prolly: 'probably',
 };
 
 let commonConstants = ['Xmas', 'Christmas', 'Easter', 'Diwali', 'Holi'];

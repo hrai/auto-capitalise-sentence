@@ -61,6 +61,10 @@ describe('util file tests', function () {
       expect(utils.shouldCapitalise('war.    k')).toBe(true);
       expect(utils.shouldCapitalise('war!    k')).toBe(true);
       expect(utils.shouldCapitalise('war?    k')).toBe(true);
+      expect(utils.shouldCapitalise('this is (war)? k')).toBe(true);
+      expect(utils.shouldCapitalise('this is [war]? k')).toBe(true);
+      expect(utils.shouldCapitalise('this is {war}? k')).toBe(true);
+      expect(utils.shouldCapitalise('this is <war>? k')).toBe(true);
       expect(utils.shouldCapitalise('k')).toBe(true);
 
       expect(utils.shouldCapitalise('war? k')).toBe(true);
@@ -536,7 +540,7 @@ describe('util file tests', function () {
     expect(matchingAndCorrectWords(str)[0]).toBe('australia');
     expect(matchingAndCorrectWords(str)[1]).toBe('Australia');
 
-    str = 'I WAS BUILT IN AUSTRALIA.';
+    str = 'I WAS BUILT (IN) AUSTRALIA.';
     expect(matchingAndCorrectWords(str)[0]).toBe('AUSTRALIA');
     expect(matchingAndCorrectWords(str)[1]).toBe('Australia');
 
