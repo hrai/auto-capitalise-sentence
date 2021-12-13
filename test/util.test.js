@@ -61,6 +61,10 @@ describe('util file tests', function () {
       expect(utils.shouldCapitalise('war.    k')).toBe(true);
       expect(utils.shouldCapitalise('war!    k')).toBe(true);
       expect(utils.shouldCapitalise('war?    k')).toBe(true);
+      expect(utils.shouldCapitalise('this is (war)? k')).toBe(true);
+      expect(utils.shouldCapitalise('this is [war]? k')).toBe(true);
+      expect(utils.shouldCapitalise('this is {war}? k')).toBe(true);
+      expect(utils.shouldCapitalise('this is <war>? k')).toBe(true);
       expect(utils.shouldCapitalise('k')).toBe(true);
 
       expect(utils.shouldCapitalise('war? k')).toBe(true);

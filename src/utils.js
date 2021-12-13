@@ -159,7 +159,7 @@ export function shouldCapitalise(text) {
     return true;
   }
 
-  const sentenceRegex = /\w+\s*([.?!])+\s+\w$/;
+  const sentenceRegex = /\w+\s*\W?([.?!])+\s+\w$/;
   matches = sentenceRegex.test(text);
 
   if (!matches) {
