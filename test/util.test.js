@@ -536,7 +536,7 @@ describe('util file tests', function () {
     expect(matchingAndCorrectWords(str)[0]).toBe('australia');
     expect(matchingAndCorrectWords(str)[1]).toBe('Australia');
 
-    str = 'I WAS BUILT IN AUSTRALIA.';
+    str = 'I WAS BUILT (IN) AUSTRALIA.';
     expect(matchingAndCorrectWords(str)[0]).toBe('AUSTRALIA');
     expect(matchingAndCorrectWords(str)[1]).toBe('Australia');
 
