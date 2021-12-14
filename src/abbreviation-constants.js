@@ -60,7 +60,6 @@ const commonAbbreviations = [
   'NP',
   'NSA',
   'NVIDIA',
-  'NW',
   'OKR',
   'OMFG',
   'OMG',

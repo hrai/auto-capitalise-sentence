@@ -152,9 +152,13 @@ let expansions = {
   req: 'request',
   reqs: 'requests',
   mig: 'migration',
+  pkg: 'package',
+  pkgs: 'packages',
   prob: 'problem',
   probs: 'problems',
   prolly: 'probably',
+  svc: 'service',
+  svcs: 'services',
 };
 
 let commonConstants = ['Xmas', 'Christmas', 'Easter', 'Diwali', 'Holi'];
