@@ -3707,6 +3707,7 @@ let companyNames = [
   'Sega',
   'Ticketmaster',
   'Unilever',
+  'Uniqlo',
   'Viacom',
   'Wikileaks',
   'Wikipedia',
