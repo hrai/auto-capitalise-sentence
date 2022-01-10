@@ -1730,6 +1730,7 @@ let personNames = [
   'Kasai',
   'Kasey',
   'Kasparov',
+  'Kat',
   'Kate',
   'Katelyn',
   'Katharine',
