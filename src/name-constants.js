@@ -2120,6 +2120,8 @@ let personNames = [
   'Mandrell',
   'Mandy',
   'Manfred',
+  'Manish',
+  'Manisha',
   'Manitoulin',
   'Manley',
   'Mannheim',
