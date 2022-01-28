@@ -44,6 +44,7 @@ const wordsWithApostrophe = {
   isnt: "isn't",
   ias: "I'as",
   im: "I'm",
+  ive: "I've",
   neednt: "needn't",
   shes: "she's",
   shouldnt: "shouldn't",
