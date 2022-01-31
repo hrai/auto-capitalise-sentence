@@ -29,14 +29,14 @@
     "singleQuote": true
   },
   "devDependencies": {
-    "@babel/core": "^7.16.7",
+    "@babel/core": "^7.16.12",
+    "@babel/eslint-parser": "^7.16.5",
     "@babel/preset-env": "^7.16.8",
-    "babel-eslint": "^10.1.0",
     "bootstrap": "^5.1.3",
     "copy-webpack-plugin": "^10.2.0",
     "daily-version": "^2.0.0",
     "dot-json": "^1.2.1",
-    "eslint": "^8.7.0",
+    "eslint": "^8.8.0",
     "eslint-webpack-plugin": "^3.1.1",
     "express": "^4.17.2",
     "express-rate-limit": "^6.1.0",
