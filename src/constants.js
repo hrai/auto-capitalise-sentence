@@ -125,6 +125,7 @@ const commonTechWords = [
   'SQLite',
   'Scala',
   'SharePoint',
+  'TeamCity',
   'TensorFlow',
   'Trello',
   'Ubuntu',
