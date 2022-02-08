@@ -159,6 +159,8 @@ let expansions = {
   prob: 'problem',
   probs: 'problems',
   prolly: 'probably',
+  pwd: 'password',
+  lib: 'library',
   svc: 'service',
   svcs: 'services',
 };
