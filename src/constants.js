@@ -125,6 +125,7 @@ const commonTechWords = [
   'SQLite',
   'Scala',
   'SharePoint',
+  'TeamCity',
   'TensorFlow',
   'Trello',
   'Ubuntu',
@@ -158,6 +159,8 @@ let expansions = {
   prob: 'problem',
   probs: 'problems',
   prolly: 'probably',
+  pwd: 'password',
+  lib: 'library',
   svc: 'service',
   svcs: 'services',
 };

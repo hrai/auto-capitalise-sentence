@@ -20,6 +20,7 @@ const commonAbbreviations = [
   'CMS',
   'DIY',
   'ELT',
+  'EOI',
   'ETA',
   'EU',
   'FAQ',
