@@ -111,6 +111,7 @@ const commonTechWords = [
   'NuGet',
   'NuGets',
   'Ocaml',
+  'OpenSearch',
   'PagerDuty',
   'Perl',
   'PostgreSQL',
