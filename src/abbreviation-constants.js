@@ -66,6 +66,7 @@ const commonAbbreviations = [
   'OMFG',
   'OMG',
   'OTOH',
+  'PM',
   'POI',
   'POV',
   'PM',
