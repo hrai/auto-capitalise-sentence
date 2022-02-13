@@ -111,6 +111,7 @@ const commonTechWords = [
   'NuGet',
   'NuGets',
   'Ocaml',
+  'OpenSearch',
   'PagerDuty',
   'Perl',
   'PostgreSQL',
@@ -144,6 +145,7 @@ let awsWords = ['Fargate', 'CloudWatch'];
 
 let expansions = {
   thx: 'thanks',
+  tix: 'tickets',
   pls: 'please',
   np: 'no problem',
   nw: 'no worries',
