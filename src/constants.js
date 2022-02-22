@@ -165,6 +165,7 @@ let expansions = {
   lib: 'library',
   svc: 'service',
   svcs: 'services',
+  eg: 'example',
 };
 
 let commonConstants = ['Xmas', 'Christmas', 'Easter', 'Diwali', 'Holi'];
