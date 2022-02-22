@@ -3,7 +3,6 @@ const commonAbbreviations = [
   'AAA',
   'AFR',
   'AFAIK',
-  'AM',
   'AMD',
   'AOL',
   'APM',
