@@ -69,7 +69,6 @@ const commonAbbreviations = [
   'PM',
   'POI',
   'POV',
-  'PM',
   'PS',
   'RCA',
   'ROTFL',
