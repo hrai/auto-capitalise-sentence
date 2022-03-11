@@ -520,6 +520,7 @@ let personNames = [
   'Burl',
   'Burris',
   'Burt',
+  'Burton',
   'Busch',
   'Bushnell',
   'Butterfingers',

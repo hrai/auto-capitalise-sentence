@@ -41,6 +41,7 @@ const commonAbbreviations = [
   'ICYMI',
   'ID',
   'IDs',
+  'IDE',
   'IDK',
   'IKEA',
   'IMO',
