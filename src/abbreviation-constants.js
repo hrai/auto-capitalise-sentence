@@ -79,6 +79,8 @@ const commonAbbreviations = [
   'SEO',
   'SME',
   'SMH',
+  'STD',
+  'STI',
   'TBA',
   'TBC',
   'TBH',
