@@ -131,6 +131,7 @@ const commonTechAbbreviations = [
   'FaaS',
   'GQL',
   'gRPC',
+  'GUI',
   'HD',
   'HPC',
   'HTTP',
