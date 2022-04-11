@@ -496,6 +496,7 @@ describe('util file tests', function () {
   /* eg -
    * test.html
    * file.json
+   * user-api
    */
   test('getCaseInsensitiveMatchingAndCorrectedWords_Abbreviations_DoesNotWorkOnWordsWithNonWordCharacterSeparator', () => {
     let str = "I'm the content of file.json.";
@@ -505,6 +506,10 @@ describe('util file tests', function () {
         abbreviationsKeyValuePairs
       );
 
+    expect(matchingAndCorrectWords(str)[0]).toBe('');
+    expect(matchingAndCorrectWords(str)[1]).toBe('');
+
+    str = "I'm the content of users-api.";
     expect(matchingAndCorrectWords(str)[0]).toBe('');
     expect(matchingAndCorrectWords(str)[1]).toBe('');
   });
