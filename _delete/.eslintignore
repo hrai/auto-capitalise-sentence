@@ -1,0 +1,5 @@
+distribution/dependencies/*.css
+distribution/dependencies/*.js
+lib/
+jest.config.js
+test-env.js
