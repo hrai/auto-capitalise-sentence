@@ -3,8 +3,8 @@
 
 try {
   importScripts(
-    'dependencies/jquery.min.js',
     'lib/background.bundle.js' /*, and so on */
+    /* 'dependencies/jquery.min.js', */
   );
 } catch (e) {
   console.error(e);
