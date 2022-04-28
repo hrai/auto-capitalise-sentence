@@ -128,6 +128,7 @@ const commonTechWords = [
   'Scala',
   'SharePoint',
   'Snowflake',
+  'Tableau',
   'TeamCity',
   'TensorFlow',
   'Trello',
