@@ -411,7 +411,7 @@ let awsAcronyms = [
   'VPG',
 ];
 
-let localAcronyms = ['GA'];
+let localAcronyms = ['GA', 'PE'];
 
 export const abbreviations = commonAbbreviations.concat(
   timeAbbreviations,
