@@ -1,6 +1,6 @@
 {
   "name": "Auto Capitalise Sentence",
-  "description": "Browser add-on/extension to automatically capitalise the first letter of a sentence while typing.",
+  "description": "Browser add-on/extension to automatically capitalise the first letter of a sentence in text fields while typing.",
   "homepage_url": "https://github.com/hrai/auto-capitalise-sentence/",
   "manifest_version": 3,
   "version": "22.4.27",
