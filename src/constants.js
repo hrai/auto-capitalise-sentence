@@ -134,6 +134,7 @@ const commonTechWords = [
   'Trello',
   'Ubuntu',
   'Unicode',
+  'VisualCron',
   'Wii',
   'WordPress',
   'Xamarin',
