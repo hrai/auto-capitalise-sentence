@@ -145,7 +145,7 @@ const commonTechWords = [
   'iTunes',
 ];
 
-let awsWords = ['Fargate', 'CloudWatch'];
+let awsWords = ['Fargate', 'CloudWatch', 'QuickSight'];
 
 let expansions = {
   diag: 'diagram',
