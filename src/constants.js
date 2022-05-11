@@ -135,6 +135,7 @@ const commonTechWords = [
   'Ubuntu',
   'Unicode',
   'VisualCron',
+  'Webpack',
   'Wii',
   'WordPress',
   'Xamarin',
