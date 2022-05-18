@@ -5,11 +5,11 @@ import {
   sitesToIgnore,
   shouldCapitaliseI,
   shouldCapitaliseNames,
-  shouldCapitaliseAbbreviations,
+  shouldCapitaliseAcronyms,
   shouldCapitaliseLocations,
   constantsKeyVal,
   namesKeyVal,
-  abbreviationsKeyVal,
+  acronymsKeyVal,
   locationsKeyVal,
   wordsToExclude,
 } from './plugin-constants';
@@ -22,11 +22,11 @@ browser.storage.local
     sitesToIgnore,
     shouldCapitaliseI,
     shouldCapitaliseNames,
-    shouldCapitaliseAbbreviations,
+    shouldCapitaliseAcronyms,
     shouldCapitaliseLocations,
     constantsKeyVal,
     namesKeyVal,
-    abbreviationsKeyVal,
+    acronymsKeyVal,
     locationsKeyVal,
     wordsToExclude,
   ])
@@ -43,7 +43,7 @@ browser.storage.onChanged.addListener(function (
   if (areaName === 'local') {
     utils.toggleOptionsValue(changes, shouldCapitaliseI);
     utils.toggleOptionsValue(changes, shouldCapitaliseNames);
-    utils.toggleOptionsValue(changes, shouldCapitaliseAbbreviations);
+    utils.toggleOptionsValue(changes, shouldCapitaliseAcronyms);
     utils.toggleOptionsValue(changes, shouldCapitaliseLocations);
 
     if (changes.wordsToExclude != null) {
@@ -91,8 +91,8 @@ function setOptions(item) {
     item.shouldCapitaliseNames
   );
   utils.setShouldCapitaliseOption(
-    shouldCapitaliseAbbreviations,
-    item.shouldCapitaliseAbbreviations
+    shouldCapitaliseAcronyms,
+    item.shouldCapitaliseAcronyms
   );
   utils.setShouldCapitaliseOption(
     shouldCapitaliseLocations,
@@ -103,7 +103,7 @@ function setOptions(item) {
 function setKeyValues(item) {
   utils.setKeyValue(constantsKeyVal, item.constantsKeyVal);
   utils.setKeyValue(namesKeyVal, item.namesKeyVal);
-  utils.setKeyValue(abbreviationsKeyVal, item.abbreviationsKeyVal);
+  utils.setKeyValue(acronymsKeyVal, item.acronymsKeyVal);
   utils.setKeyValue(locationsKeyVal, item.locationsKeyVal);
   utils.setWordsToExclude(item.wordsToExclude);
 }
@@ -147,7 +147,7 @@ function observeHtmlBody() {
   var target = document.querySelector('body');
 
   var contentEditableTags = ['p', 'span'];
-  var inputTags = ['input[type=\'text\']', 'textarea'];
+  var inputTags = ["input[type='text']", 'textarea'];
 
   var observer = new MutationObserver(function (mutations) {
     let characterDataMutations = [];

@@ -5,7 +5,7 @@ import {
   wordsToExclude,
   shouldCapitaliseI,
   shouldCapitaliseNames,
-  shouldCapitaliseAbbreviations,
+  shouldCapitaliseAcronyms,
   shouldCapitaliseLocations,
 } from './plugin-constants';
 
@@ -79,7 +79,7 @@ $(document).on(
 
 loadFlagValuesFromBrowserStorage(shouldCapitaliseI);
 loadFlagValuesFromBrowserStorage(shouldCapitaliseNames);
-loadFlagValuesFromBrowserStorage(shouldCapitaliseAbbreviations);
+loadFlagValuesFromBrowserStorage(shouldCapitaliseAcronyms);
 loadFlagValuesFromBrowserStorage(shouldCapitaliseLocations);
 
 function loadFlagValuesFromBrowserStorage(flagName) {
@@ -99,7 +99,7 @@ function loadFlagValuesFromBrowserStorage(flagName) {
 
 setupCheckboxChangeEventHandlers(shouldCapitaliseI);
 setupCheckboxChangeEventHandlers(shouldCapitaliseNames);
-setupCheckboxChangeEventHandlers(shouldCapitaliseAbbreviations);
+setupCheckboxChangeEventHandlers(shouldCapitaliseAcronyms);
 setupCheckboxChangeEventHandlers(shouldCapitaliseLocations);
 
 function setupCheckboxChangeEventHandlers(flagName) {
