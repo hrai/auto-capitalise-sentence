@@ -135,6 +135,7 @@ const commonTechWords = [
   'Ubuntu',
   'Unicode',
   'VisualCron',
+  'Webpack',
   'Wii',
   'WordPress',
   'Xamarin',
@@ -145,7 +146,7 @@ const commonTechWords = [
   'iTunes',
 ];
 
-let awsWords = ['Fargate', 'CloudWatch'];
+let awsWords = ['Fargate', 'CloudWatch', 'QuickSight'];
 
 let expansions = {
   thx: 'thanks',
