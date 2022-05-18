@@ -2,7 +2,7 @@ import * as utils from '../src/utils.js';
 import {
   constantsKeyValuePairs,
   namesKeyValuePairs,
-  abbreviationsKeyValuePairs,
+  acronymsKeyValuePairs,
   locationsKeyValuePairs,
 } from '../src/constants.js';
 import {
@@ -474,7 +474,7 @@ describe('util file tests', function () {
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
-        abbreviationsKeyValuePairs
+        acronymsKeyValuePairs
       );
 
     expect(matchingAndCorrectWords(str)[0]).toBe('html');
@@ -503,7 +503,7 @@ describe('util file tests', function () {
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
-        abbreviationsKeyValuePairs
+        acronymsKeyValuePairs
       );
 
     expect(matchingAndCorrectWords(str)[0]).toBe('');
@@ -519,7 +519,7 @@ describe('util file tests', function () {
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
-        abbreviationsKeyValuePairs
+        acronymsKeyValuePairs
       );
 
     expect(matchingAndCorrectWords(str)[0]).toBe('.net');
@@ -590,12 +590,12 @@ describe('util file tests', function () {
     expect(matchingAndCorrectWords(str)[1]).toBe("Won't");
   });
 
-  test('getCaseInsensitiveMatchingAndCorrectedWords_LocalAbbreviations', () => {
+  test('getCaseInsensitiveMatchingAndCorrectedWords_LocalAcronyms', () => {
     let str = "I'm the content of html 'syd'";
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
-        constantsKeyValuePairs
+        acronymsKeyValuePairs
       );
 
     expect(matchingAndCorrectWords(str)[0]).toBe('syd');
