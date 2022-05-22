@@ -2,13 +2,13 @@ import * as utils from '../src/utils.js';
 import {
   constantsKeyValuePairs,
   namesKeyValuePairs,
-  abbreviationsKeyValuePairs,
+  acronymsKeyValuePairs,
   locationsKeyValuePairs,
 } from '../src/constants.js';
 import {
   shouldCapitaliseI,
   shouldCapitaliseNames,
-  shouldCapitaliseAbbreviations,
+  shouldCapitaliseAcronyms,
   shouldCapitaliseLocations,
 } from '../src/plugin-constants.js';
 
@@ -469,12 +469,12 @@ describe('util file tests', function () {
     expect(matchingAndCorrectWords(str)[1]).toBe('');
   });
 
-  test('getCaseInsensitiveMatchingAndCorrectedWords_TechAbbreviations', () => {
+  test('getCaseInsensitiveMatchingAndCorrectedWords_TechAcronyms', () => {
     let str = "I'm the content of html.";
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
-        abbreviationsKeyValuePairs
+        acronymsKeyValuePairs
       );
 
     expect(matchingAndCorrectWords(str)[0]).toBe('html');
@@ -498,12 +498,12 @@ describe('util file tests', function () {
    * file.json
    * user-api
    */
-  test('getCaseInsensitiveMatchingAndCorrectedWords_Abbreviations_DoesNotWorkOnWordsWithNonWordCharacterSeparator', () => {
+  test('getCaseInsensitiveMatchingAndCorrectedWords_Acronyms_DoesNotWorkOnWordsWithNonWordCharacterSeparator', () => {
     let str = "I'm the content of file.json.";
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
-        abbreviationsKeyValuePairs
+        acronymsKeyValuePairs
       );
 
     expect(matchingAndCorrectWords(str)[0]).toBe('');
@@ -514,12 +514,12 @@ describe('util file tests', function () {
     expect(matchingAndCorrectWords(str)[1]).toBe('');
   });
 
-  test('getCaseInsensitiveMatchingAndCorrectedWords_AbbreviationsWithDotPrefix', () => {
+  test('getCaseInsensitiveMatchingAndCorrectedWords_AcronymsWithDotPrefix', () => {
     let str = "I'm the content of .net ";
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
-        abbreviationsKeyValuePairs
+        acronymsKeyValuePairs
       );
 
     expect(matchingAndCorrectWords(str)[0]).toBe('.net');
@@ -590,12 +590,12 @@ describe('util file tests', function () {
     expect(matchingAndCorrectWords(str)[1]).toBe("Won't");
   });
 
-  test('getCaseInsensitiveMatchingAndCorrectedWords_LocalAbbreviations', () => {
+  test('getCaseInsensitiveMatchingAndCorrectedWords_LocalAcronyms', () => {
     let str = "I'm the content of html 'syd'";
     let matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
-        constantsKeyValuePairs
+        acronymsKeyValuePairs
       );
 
     expect(matchingAndCorrectWords(str)[0]).toBe('syd');
@@ -709,8 +709,8 @@ describe('util file tests', function () {
     utils.setShouldCapitaliseOption(shouldCapitaliseNames, true);
     expect(utils.optionsDictionary[shouldCapitaliseNames]).toBe(true);
 
-    utils.setShouldCapitaliseOption(shouldCapitaliseAbbreviations, true);
-    expect(utils.optionsDictionary[shouldCapitaliseAbbreviations]).toBe(true);
+    utils.setShouldCapitaliseOption(shouldCapitaliseAcronyms, true);
+    expect(utils.optionsDictionary[shouldCapitaliseAcronyms]).toBe(true);
 
     utils.setShouldCapitaliseOption(shouldCapitaliseLocations, true);
     expect(utils.optionsDictionary[shouldCapitaliseLocations]).toBe(true);
@@ -723,8 +723,8 @@ describe('util file tests', function () {
     utils.setShouldCapitaliseOption(shouldCapitaliseNames, false);
     expect(utils.optionsDictionary[shouldCapitaliseNames]).toBe(false);
 
-    utils.setShouldCapitaliseOption(shouldCapitaliseAbbreviations, false);
-    expect(utils.optionsDictionary[shouldCapitaliseAbbreviations]).toBe(false);
+    utils.setShouldCapitaliseOption(shouldCapitaliseAcronyms, false);
+    expect(utils.optionsDictionary[shouldCapitaliseAcronyms]).toBe(false);
 
     utils.setShouldCapitaliseOption(shouldCapitaliseLocations, false);
     expect(utils.optionsDictionary[shouldCapitaliseLocations]).toBe(false);

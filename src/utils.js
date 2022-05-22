@@ -1,11 +1,11 @@
 import {
   shouldCapitaliseI,
   shouldCapitaliseNames,
-  shouldCapitaliseAbbreviations,
+  shouldCapitaliseAcronyms,
   shouldCapitaliseLocations,
   constantsKeyVal,
   namesKeyVal,
-  abbreviationsKeyVal,
+  acronymsKeyVal,
   locationsKeyVal,
 } from './plugin-constants';
 
@@ -13,13 +13,13 @@ let wordsToExclude = [];
 export let optionsDictionary = {
   [shouldCapitaliseI]: false,
   [shouldCapitaliseNames]: false,
-  [shouldCapitaliseAbbreviations]: false,
+  [shouldCapitaliseAcronyms]: false,
   [shouldCapitaliseLocations]: false,
 };
 let keyValueDictionary = {
   [constantsKeyVal]: {},
   [namesKeyVal]: {},
-  [abbreviationsKeyVal]: {},
+  [acronymsKeyVal]: {},
   [locationsKeyVal]: {},
 };
 const nbsp = '&nbsp;';
@@ -97,12 +97,12 @@ export function capitaliseText(
     );
   }
 
-  if (optionsDictionary[shouldCapitaliseAbbreviations]) {
+  if (optionsDictionary[shouldCapitaliseAcronyms]) {
     updateConstant(
       text,
       element,
       tagName,
-      keyValueDictionary[abbreviationsKeyVal],
+      keyValueDictionary[acronymsKeyVal],
       !caseSensitive
     );
   }

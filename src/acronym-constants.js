@@ -1,4 +1,4 @@
-const commonAbbreviations = [
+const commonAcronyms = [
   'AA',
   'AAA',
   'AFR',
@@ -57,6 +57,7 @@ const commonAbbreviations = [
   'MIT',
   'MMW',
   'MSDN',
+  'MVP',
   'NASCAR',
   'NORAD',
   'NP',
@@ -82,6 +83,7 @@ const commonAbbreviations = [
   'SMH',
   'STD',
   'STI',
+  'SVP',
   'TBA',
   'TBC',
   'TBH',
@@ -100,7 +102,7 @@ const commonAbbreviations = [
   'WTH',
 ];
 
-const commonTechAbbreviations = [
+const commonTechAcronyms = [
   '.NET',
   '2FA',
   'ADFS',
@@ -211,7 +213,7 @@ const commonTechAbbreviations = [
   'iSCSI',
 ];
 
-const timeAbbreviations = [
+const timeAcronyms = [
   'ACDT',
   'ACST',
   'ACWST',
@@ -414,11 +416,14 @@ let awsAcronyms = [
   'VPG',
 ];
 
+let commonLocalAcronyms = ['Syd', 'Melb', 'AdID', 'AdIDs'];
+
 let localAcronyms = ['GA', 'PE'];
 
-export const abbreviations = commonAbbreviations.concat(
-  timeAbbreviations,
-  commonTechAbbreviations,
+export const acronyms = commonAcronyms.concat(
+  timeAcronyms,
+  commonTechAcronyms,
   awsAcronyms,
+  commonLocalAcronyms,
   localAcronyms
 );
