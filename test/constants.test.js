@@ -1,14 +1,8 @@
 import {
-  constantsKeyValuePairs,
-  namesKeyValuePairs,
-  abbreviationsKeyValuePairs,
-  locationsKeyValuePairs,
   stringToKeyValuePairs,
   convertToTitleCase,
   convertToSentenceCase,
 } from '../src/constants.js';
-
-const $ = require('jquery');
 
 describe('constants file tests', function () {
   test('stringToKeyValuePairs', () => {

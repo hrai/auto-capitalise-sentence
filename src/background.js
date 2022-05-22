@@ -1,13 +1,13 @@
 import {
   constantsKeyValuePairs,
   namesKeyValuePairs,
-  abbreviationsKeyValuePairs,
+  acronymsKeyValuePairs,
   locationsKeyValuePairs,
 } from './constants';
 import {
   constantsKeyVal,
   namesKeyVal,
-  abbreviationsKeyVal,
+  acronymsKeyVal,
   locationsKeyVal,
 } from './plugin-constants';
 import browser from 'webextension-polyfill';
@@ -15,6 +15,6 @@ import browser from 'webextension-polyfill';
 browser.storage.local.set({
   [constantsKeyVal]: constantsKeyValuePairs,
   [namesKeyVal]: namesKeyValuePairs,
-  [abbreviationsKeyVal]: abbreviationsKeyValuePairs,
+  [acronymsKeyVal]: acronymsKeyValuePairs,
   [locationsKeyVal]: locationsKeyValuePairs,
 });

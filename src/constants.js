@@ -1,5 +1,5 @@
 import { names } from './name-constants';
-import { abbreviations } from './abbreviation-constants';
+import { acronyms } from './acronym-constants';
 import { locations } from './location-constants';
 
 const days = [
@@ -72,82 +72,6 @@ const wordsWithApostrophe = {
   youll: "you'll",
 };
 
-const commonTechWords = [
-  'Akamai',
-  'Artifactory',
-  'Baidu',
-  'BigQuery',
-  'BitTorrent',
-  'Bluetooth',
-  'Compaq',
-  'CompuServe',
-  'CosmosDB',
-  'Detectify',
-  'DevOps',
-  'Drupal',
-  'DynamoDB',
-  'ECMAScript',
-  'Emacs',
-  'HBase',
-  'Instagram',
-  'JavaScript',
-  'Jekyll',
-  'Jenkins',
-  'Jira',
-  'Jiras',
-  'jQuery',
-  'Kibana',
-  'LibreOffice',
-  'LinkedIn',
-  'Lucidchart',
-  'Mac',
-  'Macintosh',
-  'MariaDB',
-  'Mixpanel',
-  'MongoDB',
-  'MySQL',
-  'Netscape',
-  'Nielsen',
-  'NuGet',
-  'NuGets',
-  'Ocaml',
-  'Okta',
-  'OpenSearch',
-  'PagerDuty',
-  'Perl',
-  'PostgreSQL',
-  'PowerPC',
-  'PowerPoint',
-  'PyTorch',
-  'Raygun',
-  'README',
-  'Reddit',
-  'Redis',
-  'Redshift',
-  'SQLite',
-  'Scala',
-  'SharePoint',
-  'Snowflake',
-  'Tableau',
-  'TeamCity',
-  'TensorFlow',
-  'Trello',
-  'Ubuntu',
-  'Unicode',
-  'VisualCron',
-  'Webpack',
-  'Wii',
-  'WordPress',
-  'Xamarin',
-  'iOS',
-  'iPad',
-  'iPhone',
-  'iPod',
-  'iTunes',
-];
-
-let awsWords = ['Fargate', 'CloudWatch', 'QuickSight'];
-
 let expansions = {
   thx: 'thanks',
   tix: 'tickets',
@@ -175,15 +99,7 @@ let expansions = {
 
 let commonConstants = ['Xmas', 'Christmas', 'Easter', 'Diwali', 'Holi'];
 
-let commonLocalAbbreviations = ['Syd', 'Melb', 'AdID', 'AdIDs'];
-
-let constants = days.concat(
-  months,
-  commonTechWords,
-  awsWords,
-  commonConstants,
-  commonLocalAbbreviations
-);
+let constants = days.concat(months, commonConstants);
 
 export let stringToKeyValuePairs = (obj, val) => {
   obj[val.toLowerCase()] = val;
@@ -228,8 +144,5 @@ export let constantsKeyValuePairs = {
 };
 
 export let namesKeyValuePairs = names.reduce(stringToKeyValuePairs, {});
-export let abbreviationsKeyValuePairs = abbreviations.reduce(
-  stringToKeyValuePairs,
-  {}
-);
+export let acronymsKeyValuePairs = acronyms.reduce(stringToKeyValuePairs, {});
 export let locationsKeyValuePairs = locations.reduce(stringToKeyValuePairs, {});
