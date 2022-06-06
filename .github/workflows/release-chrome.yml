@@ -8,7 +8,7 @@ on:
   # You can manually trigger a deployment on GitHub.com
   # https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/
   schedule:
-    - cron: '30 10 * * 1' #https://crontab.guru/#30_10_*_*_1
+    - cron: '30 11 * * 1' #https://crontab.guru/#30_11_*_*_1
 
 jobs:
   Version:
