@@ -36,6 +36,9 @@ jobs:
     strategy:
       matrix:
         node-version: [14.x]
+        command:
+          - firefox
+          - chrome
     steps:
     - uses: actions/checkout@v2
     - run: yarn install --frozen-lockfile
@@ -52,7 +55,7 @@ jobs:
       env:
         VER: ${{ needs.Version.outputs.version }}
       run: |
-        yarn update-version
+        'yarn update-version:${{ matrix.command }}'
     - uses: actions/upload-artifact@v2
       with:
         path: distribution
@@ -65,7 +68,7 @@ jobs:
       matrix:
         command:
           - firefox
-          # - chrome
+          - chrome
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -75,13 +78,13 @@ jobs:
         env:
           VER: ${{ needs.Version.outputs.version }}
         run: |
-          yarn update-version
+          'yarn update-version:${{ matrix.command }}'
       - run: 'yarn release:${{ matrix.command }}'
         env:
-          # EXTENSION_ID: '${{ secrets.EXTENSION_ID }}'
-          # CLIENT_ID: '${{ secrets.CLIENT_ID }}'
-          # CLIENT_SECRET: '${{ secrets.CLIENT_SECRET }}'
-          # REFRESH_TOKEN: '${{ secrets.REFRESH_TOKEN }}'
+          EXTENSION_ID: '${{ secrets.EXTENSION_ID }}'
+          CLIENT_ID: '${{ secrets.CLIENT_ID }}'
+          CLIENT_SECRET: '${{ secrets.CLIENT_SECRET }}'
+          REFRESH_TOKEN: '${{ secrets.REFRESH_TOKEN }}'
           WEB_EXT_API_KEY: '${{ secrets.WEB_EXT_API_KEY }}'
           WEB_EXT_API_SECRET: '${{ secrets.WEB_EXT_API_SECRET }}'
           WEB_EXT_ID: '${{ secrets.WEB_EXT_ID }}'
