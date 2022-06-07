@@ -19,8 +19,8 @@
     "test-watch": "yarn jest --watch test/",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
-    "update-version:chrome": "cd distribution && rm -f manifest.json && cp manifest_v3.json manifest.json && yarn dot-json manifest.json version $VER",
-    "update-version:firefox": "cd distribution && rm -f manifest.json && cp manifest_v2.json manifest.json && yarn dot-json manifest.json version $VER",
+    "update-version:chrome": "yarn dot-json distribution/manifest_v3.json version $VER && cd distribution && mv manifest_v3.json manifest.json",
+    "update-version:firefox": "yarn dot-json distribution/manifest_v2.json version $VER && cd distribution && mv manifest_v2.json manifest.json",
     "release:firefox": "cd distribution && yarn web-ext-submit",
     "release:chrome": "cd distribution && npx chrome-webstore-upload-cli@2 upload --auto-publish",
     "prepare": "yarn husky install"
