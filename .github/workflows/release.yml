@@ -40,25 +40,25 @@ jobs:
           - firefox
           - chrome
     steps:
-    - uses: actions/checkout@v2
-    - run: yarn install --frozen-lockfile
+      - uses: actions/checkout@v2
+      - run: yarn install --frozen-lockfile
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: yarn install, build, and test
-      run: |
-        yarn build
-        yarn test
-    - name: Update extension’s meta
-      env:
-        VER: ${{ needs.Version.outputs.version }}
-      run: |
-        'yarn update-version:${{ matrix.command }}'
-    - uses: actions/upload-artifact@v2
-      with:
-        path: distribution
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: yarn install, build, and test
+        run: |
+          yarn build
+          yarn test
+      - name: Update extension’s meta
+        env:
+          VER: ${{ needs.Version.outputs.version }}
+        run: |
+          'yarn update-version:${{ matrix.command }}'
+      - uses: actions/upload-artifact@v2
+        with:
+          path: distribution
 
   Submit:
     needs: Version
