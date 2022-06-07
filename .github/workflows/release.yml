@@ -78,8 +78,8 @@ jobs:
         env:
           VER: ${{ needs.Version.outputs.version }}
         run: |
-          'yarn update-version:${{ matrix.command }}'
-      - run: 'yarn release:${{ matrix.command }}'
+          yarn update-version:${{ matrix.command }}
+      - run: yarn release:${{ matrix.command }}
         env:
           EXTENSION_ID: '${{ secrets.EXTENSION_ID }}'
           CLIENT_ID: '${{ secrets.CLIENT_ID }}'
