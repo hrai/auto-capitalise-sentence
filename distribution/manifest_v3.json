@@ -1,21 +1,18 @@
 {
   "name": "Auto Capitalise Sentence",
-  "description": "Browser add-on/extension to automatically capitalise the first letter of a sentence while typing.",
+  "description": "Browser add-on/extension to automatically capitalise the first letter of a sentence in text fields while typing.",
   "homepage_url": "https://github.com/hrai/auto-capitalise-sentence/",
-  "manifest_version": 2,
+  "manifest_version": 3,
   "version": "0.0.0",
-  "browser_action": {
-    "default_icon": "icons/auto-capitalise-sentence.png",
-    "default_title": "Auto-capitalise sentence",
-    "default_popup": "popup/settings.html"
-  },
   "background": {
-    "scripts": ["dependencies/jquery.min.js", "lib/background.bundle.js"]
+    "service_worker": "service_worker.js"
   },
   "content_scripts": [
     {
       "run_at": "document_end",
-      "matches": ["<all_urls>"],
+      "matches": [
+        "<all_urls>"
+      ],
       "js": [
         "dependencies/jquery.min.js",
         "lib/main.bundle.js",
@@ -28,5 +25,14 @@
     "48": "icons/auto-capitalise-sentence.png",
     "128": "icons/auto-capitalise-sentence.png"
   },
-  "permissions": ["storage", "tabs"]
+  "permissions": [
+    "storage",
+    "tabs"
+  ],
+  "action": {
+    "default_icon": "icons/auto-capitalise-sentence.png",
+    "default_title": "Auto-capitalise sentence",
+    "default_popup": "popup/settings.html"
+  },
+  "content_security_policy": {}
 }

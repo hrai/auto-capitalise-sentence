@@ -8,7 +8,7 @@
     "start:win32": "yarn build-dev && web-ext run --firefox=\"c:/Program Files/Firefox Developer Edition/firefox.exe\" --start-url localhost:3000",
     "start:darwin:linux": "yarn build-dev && web-ext run --firefox=firefox-developer --start-url localhost:3000",
     "start:chrome": "run-script-os",
-    "start:chrome:win32": "yarn build-dev && cd distribution && web-ext run -t chromium --start-url localhost:3000",
+    "start:chrome:win32": "yarn build-dev && cd distribution && web-ext run -t chrome --start-url localhost:3000",
     "start:chrome:linux": "yarn build-dev && cd distribution && web-ext run -t chromium --chromium-binary '/usr/bin/microsoft-edge' --start-url localhost:3000",
     "build": "yarn webpack",
     "build-dev": "yarn webpack --mode=development",
@@ -19,8 +19,10 @@
     "test-watch": "yarn jest --watch test/",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
-    "update-version": "yarn dot-json distribution/manifest.json version $VER",
+    "update-version:chrome": "cd distribution && rm manifest.json && cp manifest_v3.json manifest.json && yarn dot-json manifest.json version $VER",
+    "update-version:firefox": "cd distribution && rm manifest.json && cp manifest_v2.json manifest.json && yarn dot-json manifest.json version $VER",
     "release:firefox": "cd distribution && yarn web-ext-submit",
+    "release:chrome": "cd distribution && npx chrome-webstore-upload-cli@2 upload --auto-publish",
     "prepare": "yarn husky install"
   },
   "prettier": {
@@ -82,5 +84,7 @@
       ]
     }
   },
-  "dependencies": {}
+  "dependencies": {
+    "chrome-webstore-upload-cli": "^2.1.0"
+  }
 }
