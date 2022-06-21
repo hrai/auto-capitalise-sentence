@@ -136,6 +136,7 @@ const commonTechAcronyms = [
   'GQL',
   'gRPC',
   'GUI',
+  'GUID',
   'HD',
   'HPC',
   'HTTP',
