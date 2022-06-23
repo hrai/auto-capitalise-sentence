@@ -16,6 +16,7 @@ const commonAcronyms = [
   'BRB',
   'BSD',
   'BTW',
+  'BYO',
   'CRE',
   'CMS',
   'DIY',
