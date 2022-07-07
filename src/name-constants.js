@@ -3619,6 +3619,7 @@ let personNames = [
   'Winchell',
   'Windex',
   'Windward',
+  'Windy',
   'Winfred',
   'Winfrey',
   'Winifred',
