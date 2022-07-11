@@ -163,17 +163,21 @@ function observeHtmlBody() {
 
           var addedNodes = mutation.addedNodes;
           if (addedNodes && addedNodes.length > 0) {
-            addedNodes.forEach((node) => {
+            let addedNodesArr = Array.from(addedNodes);
+            addedNodesArr.forEach((node) => {
               if (utils.isFirstTextOfEditableTextNode(node)) {
                 capitaliseText(node.parentNode);
-                addedNodes = addedNodes.filter((addedNode) => {
+                addedNodesArr = addedNodesArr.filter((addedNode) => {
                   addedNode != node;
                 });
               }
             });
 
             $.each(contentEditableTags, function (_i, tagName) {
-              var filteredEls = utils.getFilteredElements(addedNodes, tagName);
+              var filteredEls = utils.getFilteredElements(
+                addedNodesArr,
+                tagName
+              );
 
               if (filteredEls?.length) {
                 filteredEls.each(function (_index, element) {
@@ -185,7 +189,10 @@ function observeHtmlBody() {
             });
 
             $.each(inputTags, function (_i, tagName) {
-              var filteredEls = utils.getFilteredElements(addedNodes, tagName);
+              var filteredEls = utils.getFilteredElements(
+                addedNodesArr,
+                tagName
+              );
 
               if (filteredEls?.length) {
                 filteredEls.each(function (_index, element) {
