@@ -3799,6 +3799,7 @@ const commonTechNames = [
   'VisualCron',
   'Webpack',
   'Wii',
+  'WhatsApp',
   'WordPress',
   'Xamarin',
   'iOS',
