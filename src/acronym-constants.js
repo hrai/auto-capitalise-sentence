@@ -8,6 +8,8 @@ const commonAcronyms = [
   'APM',
   'ATM',
   'AWS',
+  'B2B',
+  'B2C',
   'BAU',
   'BBB',
   'BBQ',
