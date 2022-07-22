@@ -3,6 +3,7 @@ import {
   pluginNamespace,
   sitesToIgnore,
   wordsToExclude,
+  wordsToInclude,
   shouldCapitaliseI,
   shouldCapitaliseNames,
   shouldCapitaliseAcronyms,
@@ -10,7 +11,7 @@ import {
 } from './plugin-constants';
 
 browser.storage.local
-  .get([sitesToIgnore, wordsToExclude])
+  .get([sitesToIgnore, wordsToExclude, wordsToInclude])
   .then(updateIgnoreLists, onError);
 
 function updateIgnoreLists(item) {
@@ -22,6 +23,11 @@ function updateIgnoreLists(item) {
   var wordsToExclude = item.wordsToExclude;
   if (wordsToExclude) {
     $('#excluded_words_textbox').val(wordsToExclude.join('\n'));
+  }
+
+  var wordsToInclude = item.wordsToInclude;
+  if (wordsToInclude) {
+    $('#included_words_textbox').val(wordsToInclude.join('\n'));
   }
 }
 
@@ -66,10 +72,25 @@ $(document).on(
   `click.${pluginNamespace}`,
   '#submitButtonExcludedWords',
   function () {
-    var words = getExcludedWords();
+    var excludedWords = getExcludedWords();
 
     browser.storage.local.set({
-      wordsToExclude: words,
+      wordsToExclude: excludedWords,
+    });
+
+    $(this).prop('disabled', true);
+    $(this).val('Saved');
+  }
+);
+
+$(document).on(
+  `click.${pluginNamespace}`,
+  '#submitButtonIncludedWords',
+  function () {
+    var includedWords = getIncludedWords();
+
+    browser.storage.local.set({
+      wordsToInclude: includedWords,
     });
 
     $(this).prop('disabled', true);
@@ -129,6 +150,17 @@ function getSites() {
   return [];
 }
 
+function getIncludedWords() {
+  var wordsBoxVal = $('#included_words_textbox').val();
+
+  if (wordsBoxVal) {
+    var words = wordsBoxVal.split('\n');
+    return words;
+  }
+
+  return [];
+}
+
 function getExcludedWords() {
   var wordsBoxVal = $('#excluded_words_textbox').val();
 
@@ -142,6 +174,10 @@ function getExcludedWords() {
 
 $('#sites').on(`input.${pluginNamespace}`, function () {
   $('#submitButton').prop('disabled', false);
+});
+
+$('#included_words_textbox').on(`input.${pluginNamespace}`, function () {
+  $('#submitButtonIncludedWords').prop('disabled', false);
 });
 
 $('#excluded_words_textbox').on(`input.${pluginNamespace}`, function () {

@@ -22,6 +22,9 @@
                         <button class="nav-link active" id="excluded-sites-tab" data-bs-toggle="tab" data-bs-target="#excluded_sites" type="button" role="tab" aria-controls="excluded-sites" aria-selected="true">Excluded websites</button>
                     </li>
                     <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="included-words-tab" data-bs-toggle="tab" data-bs-target="#included_words" type="button" role="tab" aria-controls="included-words" aria-selected="false">Included words</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
                         <button class="nav-link" id="excluded-words-tab" data-bs-toggle="tab" data-bs-target="#excluded_words" type="button" role="tab" aria-controls="excluded-words" aria-selected="false">Excluded words</button>
                     </li>
                     <li class="nav-item" role="presentation">
@@ -38,6 +41,16 @@
                         <div class="d-grid gap-2">
                                 <input type="button" value="Save" id="submitButton" class="btn btn-primary btn-block" disabled>
                                 <input type="button" value="Add current site to ignore list" id="ignoreSiteButton" class="btn btn-primary btn-block">
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" role="tabpanel" aria-labelledby="included-words-tab" id="included_words">
+                        <div class="mb-2">
+                            <small>Enter words which you want to be capitalised.</small>
+                            <textarea id="included_words_textbox" rows="4" class="form-control" placeholder="Add words to include"></textarea>
+                            <small class="text-muted">Note: Add each word in a separate row and click 'Save' button.</small>
+                        </div>
+                        <div class="d-grid gap-2">
+                                <input type="button" value="Save" id="submitButtonIncludedWords" class="btn btn-primary btn-block" disabled>
                         </div>
                     </div>
                     <div class="tab-pane fade" role="tabpanel" aria-labelledby="excluded-words-tab" id="excluded_words">
