@@ -7,6 +7,7 @@ import {
   namesKeyVal,
   acronymsKeyVal,
   locationsKeyVal,
+  wordsToIncludeKeyVal,
 } from './plugin-constants';
 
 let wordsToExclude = [];
@@ -21,6 +22,7 @@ let keyValueDictionary = {
   [namesKeyVal]: {},
   [acronymsKeyVal]: {},
   [locationsKeyVal]: {},
+  [wordsToIncludeKeyVal]: {},
 };
 const nbsp = '&nbsp;';
 const contentEditableTags = ['SPAN', 'DIV', 'P'];
@@ -426,4 +428,13 @@ export function toggleOptionsValue(changes, variableName) {
       setShouldCapitaliseOption(variableName, newValue);
     }
   }
+}
+
+export let stringToKeyValuePairs = (obj, val) => {
+  obj[val.toLowerCase()] = val;
+  return obj;
+};
+
+export function arrayToMap(array) {
+  return array.reduce(stringToKeyValuePairs, {});
 }

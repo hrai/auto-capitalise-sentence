@@ -1,6 +1,7 @@
 import { names } from './name-constants';
 import { acronyms } from './acronym-constants';
 import { locations } from './location-constants';
+import { arrayToMap } from './utils';
 
 const days = [
   'Monday',
@@ -102,12 +103,7 @@ let commonConstants = ['Xmas', 'Christmas', 'Easter', 'Diwali', 'Holi'];
 
 let constants = days.concat(months, commonConstants);
 
-export let stringToKeyValuePairs = (obj, val) => {
-  obj[val.toLowerCase()] = val;
-  return obj;
-};
-
-let constantsMap = constants.reduce(stringToKeyValuePairs, {});
+let constantsMap = arrayToMap(constants);
 
 let toTitleCase = (str) => {
   return str.replace(/\w\S*/g, (txt) => {
@@ -144,6 +140,6 @@ export let constantsKeyValuePairs = {
   ...convertToSentenceCase(expansions),
 };
 
-export let namesKeyValuePairs = names.reduce(stringToKeyValuePairs, {});
-export let acronymsKeyValuePairs = acronyms.reduce(stringToKeyValuePairs, {});
-export let locationsKeyValuePairs = locations.reduce(stringToKeyValuePairs, {});
+export let namesKeyValuePairs = arrayToMap(names);
+export let acronymsKeyValuePairs = arrayToMap(acronyms);
+export let locationsKeyValuePairs = arrayToMap(locations);

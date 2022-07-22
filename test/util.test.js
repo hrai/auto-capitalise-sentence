@@ -756,3 +756,19 @@ describe('capitaliseText', () => {
     expect(utils.containsHtmlContent(element)).toBe(false);
   });
 });
+
+describe('string manipulation', () => {
+  test('stringToKeyValuePairs', () => {
+    expect(utils.stringToKeyValuePairs({}, 'blah')).toStrictEqual({
+      blah: 'blah',
+    });
+  });
+
+  test('arrayToMap', () => {
+    expect(utils.arrayToMap(['ab', 'test', 'me'])).toStrictEqual({
+      ab: 'ab',
+      me: 'me',
+      test: 'test',
+    });
+  });
+});

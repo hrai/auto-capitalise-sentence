@@ -1,6 +1,7 @@
 export const pluginNamespace = 'auto-capitalise-extension';
 
 export const sitesToIgnore = 'sitesToIgnore',
+  wordsToInclude = 'wordsToInclude',
   wordsToExclude = 'wordsToExclude',
   shouldCapitaliseI = 'shouldCapitaliseI',
   shouldCapitaliseNames = 'shouldCapitaliseNames',
@@ -9,4 +10,5 @@ export const sitesToIgnore = 'sitesToIgnore',
   constantsKeyVal = 'constantsKeyVal',
   namesKeyVal = 'namesKeyVal',
   acronymsKeyVal = 'acronymsKeyVal',
-  locationsKeyVal = 'locationsKeyVal';
+  locationsKeyVal = 'locationsKeyVal',
+  wordsToIncludeKeyVal = 'wordsToIncludeKeyVal';

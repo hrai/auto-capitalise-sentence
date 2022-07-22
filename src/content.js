@@ -12,6 +12,8 @@ import {
   acronymsKeyVal,
   locationsKeyVal,
   wordsToExclude,
+  // wordsToInclude,
+  wordsToIncludeKeyVal,
 } from './plugin-constants';
 
 const errorMsg = 'breaking loop';
@@ -105,6 +107,10 @@ function setKeyValues(item) {
   utils.setKeyValue(namesKeyVal, item.namesKeyVal);
   utils.setKeyValue(acronymsKeyVal, item.acronymsKeyVal);
   utils.setKeyValue(locationsKeyVal, item.locationsKeyVal);
+  utils.setKeyValue(
+    wordsToIncludeKeyVal,
+    utils.arrayToMap(item.wordsToInclude)
+  );
   utils.setWordsToExclude(item.wordsToExclude);
 }
 
