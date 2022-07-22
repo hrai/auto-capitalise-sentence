@@ -12,7 +12,7 @@ import {
   acronymsKeyVal,
   locationsKeyVal,
   wordsToExclude,
-  // wordsToInclude,
+  wordsToInclude,
   wordsToIncludeKeyVal,
 } from './plugin-constants';
 
@@ -31,6 +31,7 @@ browser.storage.local
     acronymsKeyVal,
     locationsKeyVal,
     wordsToExclude,
+    wordsToInclude,
   ])
   .then(processResponse, utils.onError);
 

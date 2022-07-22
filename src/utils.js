@@ -88,6 +88,13 @@ export function capitaliseText(
     keyValueDictionary[constantsKeyVal],
     caseSensitive
   );
+  updateConstant(
+    text,
+    element,
+    tagName,
+    keyValueDictionary[wordsToIncludeKeyVal],
+    caseSensitive
+  );
 
   if (optionsDictionary[shouldCapitaliseNames]) {
     updateConstant(
