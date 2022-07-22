@@ -3807,6 +3807,7 @@ const commonTechNames = [
   'iPhone',
   'iPod',
   'iTunes',
+  'Zendesk',
 ];
 
 let awsWords = ['Fargate', 'CloudWatch', 'QuickSight'];
