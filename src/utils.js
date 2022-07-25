@@ -442,6 +442,19 @@ export let stringToKeyValuePairs = (obj, val) => {
   return obj;
 };
 
-export function arrayToMap(array) {
-  return array.reduce(stringToKeyValuePairs, {});
+export function arrayToMap(obj) {
+  if (obj) {
+    // 👈 null and undefined check
+
+    if (
+      Object.keys(obj).length === 0 &&
+      Object.getPrototypeOf(obj) === Object.prototype
+    ) {
+      return {};
+    }
+
+    return obj.reduce(stringToKeyValuePairs, {});
+  }
+
+  return {};
 }
