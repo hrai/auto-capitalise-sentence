@@ -770,5 +770,9 @@ describe('string manipulation', () => {
       me: 'me',
       test: 'test',
     });
+
+    expect(utils.arrayToMap({})).toStrictEqual({});
+    expect(utils.arrayToMap(null)).toStrictEqual({});
+    expect(utils.arrayToMap(undefined)).toStrictEqual({});
   });
 });
