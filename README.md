@@ -35,6 +35,7 @@ There are 4 sections to configure the extension.
 
 ## Add-on download links
 
+- [Chrome](https://chrome.google.com/webstore/detail/auto-capitalise-sentence/ibihgblnfolhldgjbikghldfhkgknlpa?hl=en-GB)
 - [Firefox](https://addons.mozilla.org/en-US/firefox/addon/auto-capitalise-sentence/)
 - [Microsoft Edge](https://microsoftedge.microsoft.com/addons/detail/auto-capitalise-sentence/ifebcbphlfoifeajpbecncpgjflpbann)
 
