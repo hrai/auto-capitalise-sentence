@@ -420,7 +420,7 @@ let awsAcronyms = [
   'VPG',
 ];
 
-let commonLocalAcronyms = ['Syd', 'Melb', 'AdID', 'AdIDs'];
+let commonLocalAcronyms = ['Syd', 'Melb', 'AdID', 'AdIDs', 'ABN', 'ACN'];
 
 let localAcronyms = ['GA', 'PE'];
 
