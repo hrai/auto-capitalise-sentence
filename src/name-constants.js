@@ -2839,6 +2839,7 @@ let personNames = [
   'Rhoda',
   'Rhode',
   'Rhonda',
+  'Richard',
   'Richie',
   'Rick',
   'Rickenbacker',
