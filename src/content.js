@@ -242,8 +242,6 @@ function unique(list) {
 }
 
 function capitaliseText(element) {
-  console.trace();
-
   utils.capitaliseText(
     element,
     utils.shouldCapitalise,
