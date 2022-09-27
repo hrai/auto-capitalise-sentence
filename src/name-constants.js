@@ -157,6 +157,8 @@ let personNames = [
   'Anacin',
   'Analects',
   'Anatole',
+  'Anderson',
+  'Andersson',
   'Andre',
   'Andrea',
   'Andrei',
