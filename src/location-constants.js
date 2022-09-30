@@ -328,14 +328,14 @@ const capitals = [
   'Moroni',
   'Moscow',
   'Muscat',
-  'N\'Djamena',
+  "N'Djamena",
   'Nairobi',
   'Nassau',
   'Niamey',
   'Nicosia',
   'Nouakchott',
   'Novo',
-  'Nuku\'alofa',
+  "Nuku'alofa",
   'Nur-Sultan',
   'Oslo',
   'Ottawa',
@@ -362,7 +362,7 @@ const capitals = [
   'Rome',
   'Roseau',
   'Salvador',
-  'Sana\'a',
+  "Sana'a",
   'Santiago',
   'Santo',
   'Sao',
@@ -415,6 +415,7 @@ const cities = [
   'Perth',
   'Darwin',
   'Hobart',
+  'Townsville',
 ];
 
 export let locations = countries.concat(capitals, cities);
