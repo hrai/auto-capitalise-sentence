@@ -164,6 +164,8 @@ export function shouldCapitalise(text) {
   const multilineRegex = /\s*\n+\s*\w$/;
   let matches = multilineRegex.test(text);
 
+  //console.log("matches:" + matches);
+
   if (matches) {
     return true;
   }
@@ -283,6 +285,9 @@ export function getNbspCount(text) {
 }
 
 export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
+  //console.log("setting text: "+ updatedStr);
+  //debugger
+
   if (
     tagName.toUpperCase() === 'INPUT' ||
     tagName.toUpperCase() === 'TEXTAREA'
@@ -303,15 +308,16 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
   setEndOfContenteditable(htmlControl);
 }
 
-export function isFirstTextOfEditableTextNode(node) {
+export function isFirstTextOfEditableTextNode(node, lastUpdatedText) {
   const data = node.data;
   const textNode = '#text';
 
   if (
     node.nodeName === textNode &&
-    data.length === 1 &&
+    data.trim().length === 1 &&
     data.toUpperCase() != data &&
-    shouldCapitaliseContent(node.parentNode)
+    shouldCapitaliseContent(node.parentNode) &&
+    data !== lastUpdatedText
   ) {
     return true;
   }

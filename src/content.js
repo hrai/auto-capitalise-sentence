@@ -156,6 +156,7 @@ function observeHtmlBody() {
   var contentEditableTags = ['p', 'span'];
   var inputTags = ["input[type='text']", 'textarea'];
 
+  let lastUpdatedText = '';
   var observer = new MutationObserver(function (mutations) {
     let characterDataMutations = [];
 
@@ -172,8 +173,14 @@ function observeHtmlBody() {
           if (addedNodes && addedNodes.length > 0) {
             let addedNodesArr = Array.from(addedNodes);
             addedNodesArr.forEach((node) => {
-              if (utils.isFirstTextOfEditableTextNode(node)) {
+              if (utils.isFirstTextOfEditableTextNode(node, lastUpdatedText)) {
                 capitaliseText(node.parentNode);
+
+                // console.log(lastUpdatedText + " " + node.data);
+                // lastUpdatedText = node.data;
+                // console.log(lastUpdatedText + " " + node.data);
+
+                // capitaliseText(node);
                 addedNodesArr = addedNodesArr.filter((addedNode) => {
                   addedNode != node;
                 });
