@@ -3722,6 +3722,7 @@ let companyNames = [
   'GitLab',
   'Google',
   'Honeywell',
+  'LastPass',
   'Microsoft',
   'Motorola',
   'Mozilla',
