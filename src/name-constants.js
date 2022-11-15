@@ -1437,6 +1437,7 @@ let personNames = [
   'Hench',
   'Henderson',
   'Hendricks',
+  'Hendy',
   'Hennessy',
   'Henri',
   'Henrietta',
