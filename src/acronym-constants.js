@@ -93,6 +93,7 @@ const commonAcronyms = [
   'TC',
   'TGIF',
   'TIA',
+  'TMZ',
   'TTYL',
   'TWA',
   'UBS',
