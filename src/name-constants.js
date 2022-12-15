@@ -2376,6 +2376,7 @@ let personNames = [
   'Mitford',
   'Mithra',
   'Mithridates',
+  'Mitsu',
   'Mitsubishi',
   'Mitterrand',
   'Mitty',
