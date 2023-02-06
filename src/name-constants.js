@@ -2333,7 +2333,7 @@ let personNames = [
   'Mfume',
   'Mia',
   'Miaplacidus',
-  'Micheal',
+  'Michael',
   'Michel',
   'Michele',
   'Michelin',
