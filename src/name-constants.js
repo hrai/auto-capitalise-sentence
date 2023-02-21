@@ -3805,6 +3805,7 @@ const commonTechNames = [
   'Reddit',
   'Redis',
   'Redshift',
+  'SendGrid',
   'SQLite',
   'Scala',
   'SharePoint',
