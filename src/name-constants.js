@@ -3765,6 +3765,7 @@ const commonTechNames = [
   'Detectify',
   'DevOps',
   'Drupal',
+  'Dynamo',
   'DynamoDB',
   'ECMAScript',
   'Emacs',

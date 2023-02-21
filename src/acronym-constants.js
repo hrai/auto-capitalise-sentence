@@ -423,7 +423,7 @@ let awsAcronyms = [
 
 let commonLocalAcronyms = ['Syd', 'Melb', 'AdID', 'AdIDs', 'ABN', 'ACN'];
 
-let localAcronyms = ['GA', 'PE', 'AAv1', 'AAv3', 'SB', 'FF'];
+let localAcronyms = ['GA', 'PE', 'AAv1', 'AAv3', 'SB', 'FF', 'EP'];
 
 export const acronyms = commonAcronyms.concat(
   timeAcronyms,
