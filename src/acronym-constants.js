@@ -142,6 +142,7 @@ const commonTechAcronyms = [
   'GUI',
   'GUID',
   'HD',
+  'HDD',
   'HPC',
   'HTTP',
   'HTTPS',
