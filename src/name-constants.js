@@ -3733,6 +3733,7 @@ let companyNames = [
   'Honeywell',
   'LastPass',
   'Microsoft',
+  'Miro',
   'Motorola',
   'Mozilla',
   'MySpace',
