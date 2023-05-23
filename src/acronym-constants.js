@@ -4,6 +4,7 @@ const commonAcronyms = [
   'AFR',
   'AFAIK',
   'AMD',
+  'ANZ',
   'AOL',
   'APM',
   'ATM',
