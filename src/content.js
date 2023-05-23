@@ -17,7 +17,7 @@ import {
 } from './plugin-constants';
 
 const errorMsg = 'breaking loop';
-let sitesToExclude = [];
+let sitesToExclude = ['aws.amazon.com', 'whatsapp.com', 'messenger.com'];
 
 browser.storage.local
   .get([
@@ -116,7 +116,9 @@ function setKeyValues(item) {
 }
 
 function processResponse(item) {
-  sitesToExclude = item.sitesToIgnore;
+  if (item.sitesToIgnore) {
+    sitesToExclude = sitesToExclude.concat(item.sitesToIgnore);
+  }
 
   setOptions(item);
   setKeyValues(item);
