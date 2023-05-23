@@ -99,7 +99,14 @@ let expansions = {
   tix: 'tickets',
 };
 
-let commonConstants = ['Xmas', 'Christmas', 'Easter', 'Diwali', 'Holi'];
+let commonConstants = [
+  'Xmas',
+  'Christmas',
+  'Easter',
+  'Diwali',
+  'Holi',
+  'Anzac',
+];
 
 let constants = days.concat(months, commonConstants);
 
