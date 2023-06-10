@@ -36,6 +36,8 @@ export function capitaliseText(
 ) {
   if (!element) return;
 
+  // debugger
+
   let tagName = element.tagName;
 
   if (!isEditableElement(element, tagName)) return;
@@ -128,6 +130,7 @@ export function capitaliseText(
 }
 
 function updateConstant(text, element, tagName, keyValuePairs, caseSensitive) {
+  // console.log(element);
   const [matchedWord, correctedWord] =
     caseSensitive === true
       ? getCaseSensitiveMatchingAndCorrectedWords(text, keyValuePairs)
@@ -304,7 +307,17 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
     updatedStr += '<br>';
   }
 
-  htmlControl.innerHTML = updatedStr;
+  if (window.location.origin.includes('atlassian.net')) {
+    let innerHtml = $.parseHTML(updatedStr);
+    // console.log(innerHtml);
+
+    let assistiveSpan = $(innerHtml).find('span.assistive');
+    assistiveSpan.remove();
+    $(htmlControl).html(innerHtml);
+  } else {
+    $(htmlControl).html(updatedStr);
+  }
+
   setEndOfContenteditable(htmlControl);
 }
 
