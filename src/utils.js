@@ -307,6 +307,7 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
     updatedStr += '<br>';
   }
 
+  //fix for confluence and jira user tags
   if (window.location.origin.includes('atlassian.net')) {
     let innerHtml = $.parseHTML(updatedStr);
     // console.log(innerHtml);
