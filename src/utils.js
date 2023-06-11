@@ -308,7 +308,7 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
   }
 
   //fix for confluence and jira user tags
-  if (window.location.origin.includes('atlassian.net')) {
+  if (window.location.host.includes('atlassian.net')) {
     let innerHtml = getCleanHtmlForAtlassian(updatedStr);
     $(htmlControl).html(innerHtml);
   } else {
