@@ -309,17 +309,21 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
 
   //fix for confluence and jira user tags
   if (window.location.origin.includes('atlassian.net')) {
-    let innerHtml = $.parseHTML(updatedStr);
-    // console.log(innerHtml);
-
-    let assistiveSpan = $(innerHtml).find('span.assistive');
-    assistiveSpan.remove();
+    let innerHtml = getCleanHtmlForAtlassian(updatedStr);
     $(htmlControl).html(innerHtml);
   } else {
     $(htmlControl).html(updatedStr);
   }
 
   setEndOfContenteditable(htmlControl);
+}
+export function getCleanHtmlForAtlassian(updatedStr) {
+  var html = $.parseHTML(updatedStr);
+  // console.log(innerHtml);
+
+  let assistiveSpan = $(html).find('span.assistive');
+  assistiveSpan.remove();
+  return html;
 }
 
 export function isFirstTextOfEditableTextNode(node, lastUpdatedText) {
