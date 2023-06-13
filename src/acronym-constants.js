@@ -396,6 +396,7 @@ const timeAcronyms = [
 
 let awsAcronyms = [
   'ACL',
+  'AGA',
   'AMI',
   'ARN',
   'ASG',
@@ -424,6 +425,13 @@ let awsAcronyms = [
   'VPG',
 ];
 
+let gcpAcronyms = [
+  'GCE',
+  'GCP',
+  'GCS',
+  'GKE',
+];
+
 let commonLocalAcronyms = ['Syd', 'Melb', 'AdID', 'AdIDs', 'ABN', 'ACN'];
 
 let localAcronyms = ['GA', 'PE', 'AAv1', 'AAv3', 'SB', 'FF', 'EP'];
@@ -432,6 +440,7 @@ export const acronyms = commonAcronyms.concat(
   timeAcronyms,
   commonTechAcronyms,
   awsAcronyms,
+  gcpAcronyms,
   commonLocalAcronyms,
   localAcronyms
 );
