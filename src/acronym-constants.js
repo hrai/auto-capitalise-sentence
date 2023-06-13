@@ -397,6 +397,7 @@ const timeAcronyms = [
 let awsAcronyms = [
   'ACL',
   'AGA',
+  'ALB',
   'AMI',
   'ARN',
   'ASG',
@@ -414,6 +415,7 @@ let awsAcronyms = [
   'EMR',
   'ENI',
   'IGW',
+  'NLB',
   'RDS',
   'S3',
   'SES',
