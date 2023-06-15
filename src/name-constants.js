@@ -2766,6 +2766,7 @@ let personNames = [
   'Putin',
   'Puzo',
   'Pygmalion',
+  'Pyit',
   'Pyle',
   'Pynchon',
   'Pyotr',
