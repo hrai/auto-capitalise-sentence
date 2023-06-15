@@ -716,6 +716,15 @@ describe('util file tests', function () {
     expect(utils.optionsDictionary[shouldCapitaliseLocations]).toBe(true);
   });
 
+  test('getCleanHtmlForAtlassian_ReturnsHtmlWithoutAssistiveSpanTag', () => {
+    let str =
+      '<span contenteditable="false" id="5d10383aea7a170c895a4379" text="@Hangjit Rai" accesslevel="CONTAINER" usertype="null" class="mentionView-content-wrap inlineNodeView"><span aria-hidden="true" class="zeroWidthSpaceContainer"><span class="inlineNodeViewAddZeroWidthSpace"></span>​</span><span class="assistive">Tagged user @Hangjit Rai</span><span aria-hidden="true"><span data-mention-id="5d10383aea7a170c895a4379" data-access-level="CONTAINER" spellcheck="false"><span spellcheck="false" class="css-18wbb8r">@Hangjit Rai</span></span></span><span aria-hidden="true" class="inlineNodeViewAddZeroWidthSpace"></span></span> PE&nbsp;';
+
+    expect($(utils.getCleanHtmlForAtlassian(str)).html()).toBe(
+      '<span aria-hidden="true" class="zeroWidthSpaceContainer"><span class="inlineNodeViewAddZeroWidthSpace"></span>​</span><span aria-hidden="true"><span data-mention-id="5d10383aea7a170c895a4379" data-access-level="CONTAINER" spellcheck="false"><span spellcheck="false" class="css-18wbb8r">@Hangjit Rai</span></span></span><span aria-hidden="true" class="inlineNodeViewAddZeroWidthSpace"></span>'
+    );
+  });
+
   test('setShouldCapitaliseOption_SetsTheValueToTrue', () => {
     utils.setShouldCapitaliseOption(shouldCapitaliseI, false);
     expect(utils.optionsDictionary[shouldCapitaliseI]).toBe(false);

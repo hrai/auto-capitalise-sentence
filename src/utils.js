@@ -36,6 +36,8 @@ export function capitaliseText(
 ) {
   if (!element) return;
 
+  // debugger
+
   let tagName = element.tagName;
 
   if (!isEditableElement(element, tagName)) return;
@@ -128,6 +130,7 @@ export function capitaliseText(
 }
 
 function updateConstant(text, element, tagName, keyValuePairs, caseSensitive) {
+  // console.log(element);
   const [matchedWord, correctedWord] =
     caseSensitive === true
       ? getCaseSensitiveMatchingAndCorrectedWords(text, keyValuePairs)
@@ -304,8 +307,23 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
     updatedStr += '<br>';
   }
 
-  htmlControl.innerHTML = updatedStr;
+  //fix for confluence and jira user tags
+  if (window.location.host.includes('atlassian.net')) {
+    let innerHtml = getCleanHtmlForAtlassian(updatedStr);
+    $(htmlControl).html(innerHtml);
+  } else {
+    $(htmlControl).html(updatedStr);
+  }
+
   setEndOfContenteditable(htmlControl);
+}
+export function getCleanHtmlForAtlassian(updatedStr) {
+  var html = $.parseHTML(updatedStr);
+  // console.log(innerHtml);
+
+  let assistiveSpan = $(html).find('span.assistive');
+  assistiveSpan.remove();
+  return html;
 }
 
 export function isFirstTextOfEditableTextNode(node, lastUpdatedText) {
