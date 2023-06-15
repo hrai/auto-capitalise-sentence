@@ -313,13 +313,21 @@ export function isFirstTextOfEditableTextNode(node, lastUpdatedText) {
   const textNode = '#text';
 
   if (
-    node.nodeName === textNode &&
-    data.trim().length === 1 &&
-    data.toUpperCase() != data &&
-    shouldCapitaliseContent(node.parentNode) &&
-    data !== lastUpdatedText
-  ) {
-    return true;
+    !data ||
+    node.nodeName !== textNode ||
+    data.trim().length !== 1 ||
+    data.toUpperCase() == data ||
+    data === lastUpdatedText
+  )
+    return false;
+
+  try {
+    if (shouldCapitaliseContent(node.parentNode)) {
+      return true;
+    }
+  } catch (e) {
+    console.error(e);
+    return false;
   }
 
   return false;

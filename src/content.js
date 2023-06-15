@@ -164,6 +164,8 @@ function observeHtmlBody() {
 
     $.each(mutations, function (_i, mutation) {
       try {
+        // console.log(mutation);
+
         if (mutation.type === 'childList') {
           // add support for div block in gmail and outlook
           if (['P'].includes(mutation.target.nodeName)) {
