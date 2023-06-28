@@ -1,12 +1,12 @@
-import sinon from 'sinon';
 import * as utils from '../src/utils.js';
+import sinon from 'sinon';
 
 describe('capitaliseText', () => {
   test('capitaliseText_HtmlContent', () => {
     const element = {
       isContentEditable: true,
       tagName: 'div',
-      innerHTML: 'I\'m the content of html tag.',
+      innerHTML: "I'm the content of html tag.",
     };
     const shouldCapitaliseFake = sinon.fake();
     const shouldCapitaliseForIFake = sinon.fake();
@@ -25,10 +25,10 @@ describe('capitaliseText', () => {
     expect(element.tagName.calledOnce).toBeTruthy;
 
     expect(shouldCapitaliseFake.getCall(0).args[0]).toBe(
-      'I\'m the content of html tag.'
+      "I'm the content of html tag."
     );
     expect(shouldCapitaliseForIFake.getCall(0).args[0]).toBe(
-      'I\'m the content of html tag.'
+      "I'm the content of html tag."
     );
   });
 
@@ -66,7 +66,7 @@ describe('capitaliseText', () => {
   test('capitaliseText_NoTagName', () => {
     const element = {
       isContentEditable: true,
-      innerHTML: 'I\'m the content of html tag.',
+      innerHTML: "I'm the content of html tag.",
     };
     const shouldCapitaliseFake = sinon.fake();
     const shouldCapitaliseForIFake = sinon.fake();
@@ -90,7 +90,7 @@ describe('capitaliseText', () => {
     const element = {
       isContentEditable: true,
       tagName: 'div',
-      innerHTML: 'I\'m the content of html tag.<br>',
+      innerHTML: "I'm the content of html tag.<br>",
     };
 
     const shouldCapitaliseFake = sinon.fake();
@@ -195,11 +195,11 @@ describe('capitaliseText', () => {
     const element = {
       isContentEditable: true,
       tagName: 'div',
-      innerHTML: 'I\'m the content of html taG',
+      innerHTML: "I'm the content of html taG",
     };
     const shouldCapitaliseFake = sinon.fake();
     const shouldCapitaliseForIFake = sinon.fake();
-    const getTextFake = sinon.fake.returns('I\'m the content of html taG');
+    const getTextFake = sinon.fake.returns("I'm the content of html taG");
     const setTextFake = sinon.fake();
 
     expect(
@@ -222,7 +222,7 @@ describe('capitaliseText', () => {
     const element = {
       isContentEditable: true,
       tagName: 'div',
-      innerHTML: 'I\'m the content of html taG',
+      innerHTML: "I'm the content of html taG",
     };
     const shouldCapitaliseFake = sinon.fake();
     const shouldCapitaliseForIFake = sinon.fake();
@@ -248,7 +248,7 @@ describe('capitaliseText', () => {
     const element = {
       isContentEditable: true,
       tagName: 'div',
-      innerHTML: 'I\'m the content of html tag.<br>',
+      innerHTML: "I'm the content of html tag.<br>",
     };
     const shouldCapitaliseFake = sinon.fake();
     const shouldCapitaliseForIFake = sinon.fake();
@@ -267,10 +267,10 @@ describe('capitaliseText', () => {
     expect(element.tagName.calledOnce).toBeFalsy;
 
     expect(shouldCapitaliseFake.getCall(0).args[0]).toBe(
-      'I\'m the content of html tag.'
+      "I'm the content of html tag."
     );
     expect(shouldCapitaliseForIFake.getCall(0).args[0]).toBe(
-      'I\'m the content of html tag.'
+      "I'm the content of html tag."
     );
   });
 
@@ -279,7 +279,7 @@ describe('capitaliseText', () => {
       const element = {
         isContentEditable: true,
         tagName: 'div',
-        innerHTML: 'I\'m the content of html tag.<br>',
+        innerHTML: "I'm the content of html tag.<br>",
       };
       const shouldCapitaliseFake = sinon.fake();
       const shouldCapitaliseForIFake = sinon.fake();
@@ -301,12 +301,12 @@ describe('capitaliseText', () => {
     const element = {
       isContentEditable: true,
       tagName: 'div',
-      innerHTML: 'I\'m the content of html tag.',
+      innerHTML: "I'm the content of html tag.",
     };
 
     const shouldCapitaliseFake = sinon.fake();
     const shouldCapitaliseForIFake = sinon.fake();
-    const getTextFake = sinon.fake.returns('I\'m the content of html tag.');
+    const getTextFake = sinon.fake.returns("I'm the content of html tag.");
     const setTextFake = sinon.fake();
 
     utils.capitaliseText(
@@ -318,14 +318,14 @@ describe('capitaliseText', () => {
     );
 
     expect(shouldCapitaliseFake.getCall(0).args[0]).toBe(
-      'I\'m the content of html tag.'
+      "I'm the content of html tag."
     );
     expect(shouldCapitaliseForIFake.getCall(0).args[0]).toBe(
-      'I\'m the content of html tag.'
+      "I'm the content of html tag."
     );
     expect(getTextFake.getCall(0).args[0]).toBe(element);
     expect(shouldCapitaliseFake.getCall(0).args[0]).toBe(
-      'I\'m the content of html tag.'
+      "I'm the content of html tag."
     );
   });
 
@@ -333,12 +333,12 @@ describe('capitaliseText', () => {
     const element = {
       isContentEditable: true,
       tagName: 'div',
-      innerHTML: 'I\'m the content of html tag.',
+      innerHTML: "I'm the content of html tag.",
     };
 
     const shouldCapitaliseFake = sinon.fake.returns(true);
     const shouldCapitaliseForIFake = sinon.fake();
-    const getTextFake = sinon.fake.returns('I\'m the content of html tag.');
+    const getTextFake = sinon.fake.returns("I'm the content of html tag.");
     const setTextFake = sinon.fake();
 
     utils.capitaliseText(
@@ -350,12 +350,12 @@ describe('capitaliseText', () => {
     );
 
     expect(shouldCapitaliseFake.getCall(0).args[0]).toBe(
-      'I\'m the content of html tag.'
+      "I'm the content of html tag."
     );
     expect(shouldCapitaliseForIFake.getCall(0)).toBeNull();
     expect(getTextFake.getCall(0).args[0]).toBe(element);
     expect(shouldCapitaliseFake.getCall(0).args[0]).toBe(
-      'I\'m the content of html tag.'
+      "I'm the content of html tag."
     );
   });
 
@@ -363,12 +363,12 @@ describe('capitaliseText', () => {
     const element = {
       isContentEditable: true,
       tagName: 'div',
-      innerHTML: 'I\'m the content of html tag.',
+      innerHTML: "I'm the content of html tag.",
     };
 
     const shouldCapitaliseFake = sinon.fake.returns(false);
     const shouldCapitaliseForIFake = sinon.fake();
-    const getTextFake = sinon.fake.returns('I\'m the content of html tag.');
+    const getTextFake = sinon.fake.returns("I'm the content of html tag.");
     const setTextFake = sinon.fake();
 
     utils.capitaliseText(
@@ -380,14 +380,14 @@ describe('capitaliseText', () => {
     );
 
     expect(shouldCapitaliseFake.getCall(0).args[0]).toBe(
-      'I\'m the content of html tag.'
+      "I'm the content of html tag."
     );
     expect(shouldCapitaliseForIFake.getCall(0).args[0]).toBe(
-      'I\'m the content of html tag.'
+      "I'm the content of html tag."
     );
     expect(getTextFake.getCall(0).args[0]).toBe(element);
     expect(shouldCapitaliseFake.getCall(0).args[0]).toBe(
-      'I\'m the content of html tag.'
+      "I'm the content of html tag."
     );
   });
 });
