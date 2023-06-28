@@ -170,6 +170,7 @@ module.exports = {
   // transformIgnorePatterns: [
   //   "/node_modules/"
   // ],
+  transformIgnorePatterns: ['/node_modules/(?!(sinon)/)'],
 
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
   // unmockedModulePathPatterns: undefined,
@@ -182,4 +183,4 @@ module.exports = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
-}
+};
