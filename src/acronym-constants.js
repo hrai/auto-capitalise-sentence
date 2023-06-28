@@ -124,6 +124,7 @@ const commonTechAcronyms = [
   'CORS',
   'CPU',
   'CSS',
+  'CSV',
   'DB',
   'DDoS',
   'DI',
