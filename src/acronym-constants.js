@@ -94,6 +94,7 @@ const commonAcronyms = [
   'TC',
   'TGIF',
   'TIA',
+  'TIL',
   'TMZ',
   'TTYL',
   'TWA',
@@ -123,6 +124,7 @@ const commonTechAcronyms = [
   'CORS',
   'CPU',
   'CSS',
+  'CSV',
   'DB',
   'DDoS',
   'DI',
@@ -407,6 +409,7 @@ let awsAcronyms = [
   'AZ',
   'CDK',
   'CF',
+  'CW',
   'DLQ',
   'EBS',
   'EC2',
@@ -423,18 +426,14 @@ let awsAcronyms = [
   'SES',
   'SNS',
   'SQS',
+  'SSM',
   'STS',
   'SWF',
   'VPC',
   'VPG',
 ];
 
-let gcpAcronyms = [
-  'GCE',
-  'GCP',
-  'GCS',
-  'GKE',
-];
+let gcpAcronyms = ['GCE', 'GCP', 'GCS', 'GKE'];
 
 let commonLocalAcronyms = ['Syd', 'Melb', 'AdID', 'AdIDs', 'ABN', 'ACN'];
 
