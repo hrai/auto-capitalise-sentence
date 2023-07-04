@@ -437,7 +437,7 @@ let gcpAcronyms = ['GCE', 'GCP', 'GCS', 'GKE'];
 
 let commonLocalAcronyms = ['Syd', 'Melb', 'AdID', 'AdIDs', 'ABN', 'ACN'];
 
-let localAcronyms = ['GA', 'PE', 'AAv1', 'AAv3', 'SB', 'FF', 'EP'];
+let localAcronyms = ['GA', 'PE', 'AAv1', 'AAv3', 'SB', 'FF', 'EP', 'EPs'];
 
 export const acronyms = commonAcronyms.concat(
   timeAcronyms,
