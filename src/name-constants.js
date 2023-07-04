@@ -1444,6 +1444,7 @@ let personNames = [
   'Hennessy',
   'Henri',
   'Henrietta',
+  'Henry',
   'Hensley',
   'Henson',
   'Heriberto',
