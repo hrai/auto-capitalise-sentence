@@ -3785,6 +3785,7 @@ const commonTechNames = [
   'ECMAScript',
   'Emacs',
   'GraphQL',
+  'Hangfire',
   'HBase',
   'Instagram',
   'JavaScript',
