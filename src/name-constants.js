@@ -3768,8 +3768,10 @@ let companyNames = [
 const commonTechNames = [
   'Akamai',
   'Artifactory',
+  'Atlassian',
   'Baidu',
   'BigQuery',
+  'BitBucket',
   'BitTorrent',
   'Bluetooth',
   'Compaq',
