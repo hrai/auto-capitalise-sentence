@@ -44,7 +44,7 @@ function getUrlDomain(data) {
 $(document).on(`click.${pluginNamespace}`, '#ignoreSiteButton', function () {
   browser.tabs.query({ currentWindow: true, active: true }).then((tabs) => {
     var hostname = getUrlDomain(tabs[0].url);
-    var sites = getSites();
+    var sites = getExcludedSites();
     sites.push(hostname);
 
     browser.storage.local.set({
@@ -58,7 +58,7 @@ $(document).on(`click.${pluginNamespace}`, '#ignoreSiteButton', function () {
 });
 
 $(document).on(`click.${pluginNamespace}`, '#submitButton', function () {
-  var sites = getSites();
+  var sites = getExcludedSites();
 
   browser.storage.local.set({
     sitesToIgnore: sites,
@@ -139,7 +139,7 @@ function setShouldCapitaliseVariable(variableName, value) {
   });
 }
 
-function getSites() {
+function getExcludedSites() {
   var sitesBoxVal = $('#sites').val();
 
   if (sitesBoxVal) {
