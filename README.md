@@ -9,7 +9,7 @@ Firefox/Microsoft Edge Chromium add-on to automatically capitalise words while t
 - Capitalise common [names](src/name-constants.js#L1)
 - Capitalise common [locations/places](src/location-constants.js#L1)
 - Capitalise common [abbreviations/acronyms](src/acronym-constants.js#L1)
-- Capitalise constants such as [days](src/constants.js#L4), [months](src/constants.js#L16)
+- Capitalise constants such as [days](src/constants.js#L6), [months](src/constants.js#L16)
 - Add apostrophe to common [English words](src/constants.js#L27)
 - Capitalise custom words
 
