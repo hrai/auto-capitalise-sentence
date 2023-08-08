@@ -81,6 +81,7 @@ const commonAcronyms = [
   'RSI',
   'RSVP',
   'SARS',
+  'SLPR',
   'SLR',
   'SEO',
   'SME',
