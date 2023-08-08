@@ -107,6 +107,7 @@ let commonConstants = [
   'Holi',
   'Anzac',
   'Mews',
+  'Allhomes',
 ];
 
 let constants = days.concat(months, commonConstants);
