@@ -174,6 +174,8 @@ const commonTechAcronyms = [
   'NS',
   'OLAP',
   'OLTP',
+  'OS',
+  'OSS',
   'PCI',
   'PD',
   'PHP',
