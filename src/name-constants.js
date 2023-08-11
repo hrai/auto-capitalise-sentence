@@ -1190,6 +1190,7 @@ let personNames = [
   'Fourneyron',
   'Fran',
   'Francine',
+  'Francis',
   'Francisca',
   'Francisco',
   'Francois',
