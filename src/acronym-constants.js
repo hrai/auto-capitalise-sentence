@@ -216,6 +216,7 @@ const commonTechAcronyms = [
   'UIs',
   'URL',
   'URLs',
+  'UTM',
   'VDI',
   'VLAN',
   'VM',
