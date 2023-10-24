@@ -22,6 +22,7 @@ const commonAcronyms = [
   'CCTV',
   'CRE',
   'CMS',
+  'CTA',
   'DIY',
   'ELT',
   'EOI',
