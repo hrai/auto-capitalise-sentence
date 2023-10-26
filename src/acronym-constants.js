@@ -437,6 +437,7 @@ let awsAcronyms = [
   'SWF',
   'VPC',
   'VPG',
+  'WAF',
 ];
 
 let gcpAcronyms = ['GCE', 'GCP', 'GCS', 'GKE'];
