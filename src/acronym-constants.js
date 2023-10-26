@@ -426,6 +426,7 @@ let awsAcronyms = [
   'EMR',
   'ENI',
   'IGW',
+  'KMS',
   'NLB',
   'RDS',
   'S3',
