@@ -3787,8 +3787,6 @@ const commonTechNames = [
   'Detectify',
   'DevOps',
   'Drupal',
-  'Dynamo',
-  'DynamoDB',
   'ECMAScript',
   'Emacs',
   'GraphQL',
@@ -3817,7 +3815,6 @@ const commonTechNames = [
   'NuGets',
   'Ocaml',
   'Okta',
-  'OpenSearch',
   'PagerDuty',
   'Perl',
   'PostgreSQL',
@@ -3828,7 +3825,6 @@ const commonTechNames = [
   'README',
   'Reddit',
   'Redis',
-  'Redshift',
   'SendGrid',
   'SQLite',
   'Scala',
@@ -3860,6 +3856,11 @@ let awsWords = [
   'QuickSight',
   'CloudFront',
   'CloudFormation',
+  'ElastiCache',
+  'Dynamo',
+  'DynamoDB',
+  'Redshift',
+  'OpenSearch',
 ];
 
 export let names = personNames.concat(companyNames, awsWords, commonTechNames);
