@@ -405,6 +405,7 @@ const timeAcronyms = [
 
 let awsAcronyms = [
   'ACL',
+  'ACM',
   'AGA',
   'ALB',
   'AMI',
