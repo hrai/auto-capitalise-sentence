@@ -3854,6 +3854,12 @@ const commonTechNames = [
   'Zendesk',
 ];
 
-let awsWords = ['Fargate', 'CloudWatch', 'QuickSight'];
+let awsWords = [
+  'Fargate',
+  'CloudWatch',
+  'QuickSight',
+  'CloudFront',
+  'CloudFormation',
+];
 
 export let names = personNames.concat(companyNames, awsWords, commonTechNames);
