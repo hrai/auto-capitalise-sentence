@@ -444,7 +444,17 @@ let awsAcronyms = [
 
 let gcpAcronyms = ['GCE', 'GCP', 'GCS', 'GKE'];
 
-let commonLocalAcronyms = ['Syd', 'Melb', 'AdID', 'AdIDs', 'ABN', 'ACN', 'LPO'];
+let commonLocalAcronyms = [
+  'Syd',
+  'Melb',
+  'AdID',
+  'AdIDs',
+  'ABN',
+  'ACN',
+  'LPO',
+  'CG',
+  'VX',
+];
 
 let localAcronyms = [
   'GA',
