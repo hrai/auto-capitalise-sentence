@@ -19,7 +19,7 @@ import {
 const errorMsg = 'breaking loop';
 let sitesToExclude = ['aws.amazon.com', 'whatsapp.com', 'messenger.com'];
 
-browser.storage.local
+browser.storage.sync
   .get([
     sitesToIgnore,
     shouldCapitaliseI,
@@ -39,26 +39,28 @@ browser.storage.local
  * The browser doesn't register the change and doesn't capitalise I by default after installing the extension.
  * This block will capture the event and update the value of 'shouldCapitaliseI'.
  */
-browser.storage.onChanged.addListener(function (
-  changes, // object
-  areaName // string
-) {
-  if (areaName === 'local') {
-    utils.toggleOptionsValue(changes, shouldCapitaliseI);
-    utils.toggleOptionsValue(changes, shouldCapitaliseNames);
-    utils.toggleOptionsValue(changes, shouldCapitaliseAcronyms);
-    utils.toggleOptionsValue(changes, shouldCapitaliseLocations);
+browser.storage.onChanged.addListener(
+  function (
+    changes, // object
+    areaName // string
+  ) {
+    if (areaName === 'local') {
+      utils.toggleOptionsValue(changes, shouldCapitaliseI);
+      utils.toggleOptionsValue(changes, shouldCapitaliseNames);
+      utils.toggleOptionsValue(changes, shouldCapitaliseAcronyms);
+      utils.toggleOptionsValue(changes, shouldCapitaliseLocations);
 
-    if (changes.wordsToExclude != null) {
-      const newValue = changes.wordsToExclude.newValue;
+      if (changes.wordsToExclude != null) {
+        const newValue = changes.wordsToExclude.newValue;
 
-      if (newValue != null) {
-        utils.setWordsToExclude(newValue);
+        if (newValue != null) {
+          utils.setWordsToExclude(newValue);
+        }
       }
+      //browser.runtime.reload() - reload browser
     }
-    //browser.runtime.reload() - reload browser
   }
-});
+);
 
 function hookupEventHandlers() {
   observeInputTags();

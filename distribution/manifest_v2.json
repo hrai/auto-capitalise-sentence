@@ -9,6 +9,11 @@
       "default_title": "Auto-capitalise sentence",
       "default_popup": "popup/settings.html"
     },
+    "browser_specific_settings": {
+      "gecko": {
+        "id": "auto-capitalise-sentence"
+      }
+    },
     "background": {
       "scripts": ["dependencies/jquery.min.js", "lib/background.bundle.js"]
     },
@@ -30,4 +35,3 @@
     },
     "permissions": ["storage", "tabs"]
   }
-  

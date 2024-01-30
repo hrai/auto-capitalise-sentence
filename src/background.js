@@ -12,7 +12,7 @@ import {
 } from './plugin-constants';
 import browser from 'webextension-polyfill';
 
-browser.storage.local.set({
+browser.storage.sync.set({
   [constantsKeyVal]: constantsKeyValuePairs,
   [namesKeyVal]: namesKeyValuePairs,
   [acronymsKeyVal]: acronymsKeyValuePairs,
