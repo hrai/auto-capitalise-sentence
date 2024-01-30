@@ -1813,6 +1813,7 @@ let personNames = [
   'Khwarizmi',
   'Khyber',
   'Kieth',
+  'Kieran',
   'Kilroy',
   'Kim',
   'Kimberly',
