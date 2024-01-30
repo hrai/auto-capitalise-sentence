@@ -20,14 +20,18 @@ jobs:
           fetch-depth: 20
       - run: yarn install
       - run: yarn test
-      - uses: fregante/daily-version-action@v1
+      - uses: fregante/daily-version-action@v2
         name: Create tag if necessary
         id: daily-version
-      - uses: notlmn/release-with-changelog@v3
-        if: steps.daily-version.outputs.created
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          exclude: '^Meta|^Document|^Readme|^Lint'
+      # - name: Created?
+      #   if: steps.version.outputs.created
+      #   runs: echo "Created ${{ steps.version.outputs.version }}"
+      - if: steps.daily-version.outputs.created
+        name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run:
+          gh release create "${{ steps.daily-version.outputs.version }}"
 
   Build-and-upload-artifacts:
     needs: Version
@@ -35,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [14.x]
         command:
           - firefox
           - chrome
