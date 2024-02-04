@@ -3784,6 +3784,7 @@ const commonTechNames = [
   'Compaq',
   'CompuServe',
   'CosmosDB',
+  'DBeaver',
   'Detectify',
   'DevOps',
   'Drupal',
