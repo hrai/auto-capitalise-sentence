@@ -461,6 +461,7 @@ let commonLocalAcronyms = [
   'LPO',
   'CG',
   'VX',
+  'SF',
 ];
 
 let localAcronyms = [
