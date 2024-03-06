@@ -182,6 +182,7 @@ const commonTechAcronyms = [
   'PCI',
   'PD',
   'PHP',
+  'PII',
   'PR',
   'PRs',
   'PV',
