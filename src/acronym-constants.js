@@ -476,6 +476,8 @@ let localAcronyms = [
   'EPs',
   'Realbase',
   'AIM',
+  'AB',
+  'ABv2',
 ];
 
 export const acronyms = commonAcronyms.concat(
