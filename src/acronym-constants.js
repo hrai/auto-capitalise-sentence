@@ -425,6 +425,7 @@ let awsAcronyms = [
   'DLQs',
   'EBS',
   'EC2',
+  'ECR',
   'ECS',
   'EFS',
   'EIP',
