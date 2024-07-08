@@ -479,6 +479,8 @@ let localAcronyms = [
   'AIM',
   'AB',
   'ABv2',
+  'CX',
+  'PX',
 ];
 
 export const acronyms = commonAcronyms.concat(
