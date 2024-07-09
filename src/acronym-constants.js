@@ -425,6 +425,7 @@ let awsAcronyms = [
   'DLQs',
   'EBS',
   'EC2',
+  'ECR',
   'ECS',
   'EFS',
   'EIP',
@@ -478,6 +479,8 @@ let localAcronyms = [
   'AIM',
   'AB',
   'ABv2',
+  'CX',
+  'PX',
 ];
 
 export const acronyms = commonAcronyms.concat(

@@ -1,4 +1,11 @@
 #!/bin/bash
+
+# Bash sets the BASH environment variable, so if it is not set, then we
+# are running in a different shell, so manually run ourselves in BASH.
+if [ -z "${BASH:-}" ]; then
+  exec bash "$0" "$@"
+fi
+
 # Include any branches for which you wish to disable this script
 if [ -z "$BRANCHES_TO_SKIP" ]; then
     BRANCHES_TO_SKIP=(master develop staging test)
