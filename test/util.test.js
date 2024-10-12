@@ -76,6 +76,8 @@ describe('util file tests', function () {
       expect(utils.shouldCapitalise('    k ')).toBe(false);
       expect(utils.shouldCapitalise('    k ')).toBe(false);
       expect(utils.shouldCapitalise('    ')).toBe(false);
+      expect(utils.shouldCapitalise(' 1')).toBe(false);
+      expect(utils.shouldCapitalise('this is <war>? 1')).toBe(false);
 
       expect(utils.shouldCapitalise('?')).toBe(true);
       expect(utils.shouldCapitalise('!')).toBe(true);
@@ -97,6 +99,9 @@ describe('util file tests', function () {
       expect(utils.shouldCapitalise('war? lasting \n peace \n\n   k')).toBe(
         true
       );
+
+      expect(utils.shouldCapitalise('war? \n\n   1')).toBe(false);
+      expect(utils.shouldCapitalise('war? \n\n   12')).toBe(false);
     });
 
     test('shouldCapitalise_singleChar', () => {
