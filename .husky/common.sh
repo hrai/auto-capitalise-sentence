@@ -1,5 +1,5 @@
 command_exists () {
-  command -v "$1" >/dev/null 2>&1
+  command -v "$1" > /dev/null 2>&1 &
 }
 
 # Windows 10, Git Bash and Yarn workaround

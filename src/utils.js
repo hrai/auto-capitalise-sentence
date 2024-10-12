@@ -164,7 +164,7 @@ export function setKeyValue(keyValueName, value) {
 }
 
 export function shouldCapitalise(text) {
-  const multilineRegex = /\s*\n+\s*\w$/;
+  const multilineRegex = /\s*\n+\s*[a-z]$/;
   let matches = multilineRegex.test(text);
 
   //console.log("matches:" + matches);
@@ -173,7 +173,7 @@ export function shouldCapitalise(text) {
     return true;
   }
 
-  const sentenceRegex = /\w+\s*\W?([.?!])+\s+\w$/;
+  const sentenceRegex = /\w+\s*\W?([.?!])+\s+[a-z]$/;
   matches = sentenceRegex.test(text);
 
   if (!matches) {
