@@ -1,5 +1,8 @@
 #!/bin/bash
 
+. "$(dirname "$0")/_/husky.sh"
+. "$(dirname "$0")/common.sh"
+
 # Bash sets the BASH environment variable, so if it is not set, then we
 # are running in a different shell, so manually run ourselves in BASH.
 if [ -z "${BASH:-}" ]; then
