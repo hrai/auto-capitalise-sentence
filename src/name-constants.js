@@ -2067,6 +2067,7 @@ let personNames = [
   'Lucinda',
   'Lucio',
   'Lucius',
+  'Lucy',
   'Ludwig',
   'Luella',
   'Lufthansa',
