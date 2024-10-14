@@ -24,6 +24,7 @@ const commonAcronyms = [
   'CMS',
   'CTA',
   'DIY',
+  'DM',
   'ELT',
   'EOI',
   'ETA',
@@ -181,6 +182,7 @@ const commonTechAcronyms = [
   'PCI',
   'PD',
   'PHP',
+  'PII',
   'PR',
   'PRs',
   'PV',
@@ -423,6 +425,7 @@ let awsAcronyms = [
   'DLQs',
   'EBS',
   'EC2',
+  'ECR',
   'ECS',
   'EFS',
   'EIP',
@@ -456,9 +459,11 @@ let commonLocalAcronyms = [
   'AdIDs',
   'ABN',
   'ACN',
+  'ATO',
   'LPO',
   'CG',
   'VX',
+  'SF',
 ];
 
 let localAcronyms = [
@@ -472,6 +477,10 @@ let localAcronyms = [
   'EPs',
   'Realbase',
   'AIM',
+  'AB',
+  'ABv2',
+  'CX',
+  'PX',
 ];
 
 export const acronyms = commonAcronyms.concat(
