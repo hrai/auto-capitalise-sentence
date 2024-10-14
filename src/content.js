@@ -19,7 +19,7 @@ import {
 const errorMsg = 'breaking loop';
 let sitesToExclude = ['aws.amazon.com', 'whatsapp.com', 'messenger.com'];
 
-browser.storage.sync
+browser.storage.local
   .get([
     sitesToIgnore,
     shouldCapitaliseI,

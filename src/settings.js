@@ -10,7 +10,7 @@ import {
   shouldCapitaliseLocations,
 } from './plugin-constants';
 
-browser.storage.sync
+browser.storage.local
   .get([sitesToIgnore, wordsToExclude, wordsToInclude])
   .then(updateIgnoreLists, onError);
 
@@ -47,7 +47,7 @@ $(document).on(`click.${pluginNamespace}`, '#ignoreSiteButton', function () {
     var sites = getExcludedSites();
     sites.push(hostname);
 
-    browser.storage.sync.set({
+    browser.storage.local.set({
       sitesToIgnore: sites,
     });
 
@@ -60,7 +60,7 @@ $(document).on(`click.${pluginNamespace}`, '#ignoreSiteButton', function () {
 $(document).on(`click.${pluginNamespace}`, '#submitButton', function () {
   var sites = getExcludedSites();
 
-  browser.storage.sync.set({
+  browser.storage.local.set({
     sitesToIgnore: sites,
   });
 
@@ -74,7 +74,7 @@ $(document).on(
   function () {
     var excludedWords = getExcludedWords();
 
-    browser.storage.sync.set({
+    browser.storage.local.set({
       wordsToExclude: excludedWords,
     });
 
@@ -89,7 +89,7 @@ $(document).on(
   function () {
     var includedWords = getIncludedWords();
 
-    browser.storage.sync.set({
+    browser.storage.local.set({
       wordsToInclude: includedWords,
     });
 
@@ -104,7 +104,7 @@ loadFlagValuesFromBrowserStorage(shouldCapitaliseAcronyms);
 loadFlagValuesFromBrowserStorage(shouldCapitaliseLocations);
 
 function loadFlagValuesFromBrowserStorage(flagName) {
-  browser.storage.sync.get(flagName).then((items) => {
+  browser.storage.local.get(flagName).then((items) => {
     const flagValue = items[flagName];
 
     if (flagValue === true || flagValue === undefined) {
@@ -134,7 +134,7 @@ function setupCheckboxChangeEventHandlers(flagName) {
 }
 
 function setShouldCapitaliseVariable(variableName, value) {
-  browser.storage.sync.set({
+  browser.storage.local.set({
     [variableName]: value,
   });
 }
