@@ -10,17 +10,12 @@
     "default_popup": "popup/settings.html"
   },
   "background": {
-    "scripts": [
-      "dependencies/jquery.min.js",
-      "lib/background.bundle.js"
-    ]
+    "scripts": ["dependencies/jquery.min.js", "lib/background.bundle.js"]
   },
   "content_scripts": [
     {
       "run_at": "document_end",
-      "matches": [
-        "<all_urls>"
-      ],
+      "matches": ["<all_urls>"],
       "js": [
         "dependencies/jquery.min.js",
         "lib/main.bundle.js",
@@ -33,10 +28,7 @@
     "48": "icons/auto-capitalise-sentence.png",
     "128": "icons/auto-capitalise-sentence.png"
   },
-  "permissions": [
-    "storage",
-    "tabs"
-  ],
+  "permissions": ["storage", "tabs"],
   "browser_specific_settings": {
     "gecko": {
       "id": "{680e06ed-65ed-4e11-a9c0-0e6f80b9a347}"

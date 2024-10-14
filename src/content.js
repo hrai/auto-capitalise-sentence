@@ -19,23 +19,25 @@ import {
 const errorMsg = 'breaking loop';
 let sitesToExclude = ['aws.amazon.com', 'whatsapp.com', 'messenger.com'];
 
-browser.storage.local
-  .get([
-    sitesToIgnore,
-    shouldCapitaliseI,
-    shouldCapitaliseNames,
-    shouldCapitaliseAcronyms,
-    shouldCapitaliseLocations,
-    constantsKeyVal,
-    namesKeyVal,
-    acronymsKeyVal,
-    locationsKeyVal,
-    wordsToExclude,
-    wordsToInclude,
-  ])
-  .then(processResponse, utils.onError);
+console.log(errorMsg);
 
-/* Updating the value of this local storage variable in settings.js happens AFTER content.js.
+browser.storage.local
+  .get([constantsKeyVal, namesKeyVal, acronymsKeyVal, locationsKeyVal])
+  .then(() => {
+    browser.storage.sync
+      .get([
+        sitesToIgnore,
+        shouldCapitaliseI,
+        shouldCapitaliseNames,
+        shouldCapitaliseAcronyms,
+        shouldCapitaliseLocations,
+        wordsToExclude,
+        wordsToInclude,
+      ])
+      .then(processResponse, utils.onError);
+  }, utils.onError);
+
+/* Updating the value of this sync storage variable in settings.js happens AFTER content.js.
  * The browser doesn't register the change and doesn't capitalise I by default after installing the extension.
  * This block will capture the event and update the value of 'shouldCapitaliseI'.
  */
@@ -44,7 +46,7 @@ browser.storage.onChanged.addListener(
     changes, // object
     areaName // string
   ) {
-    if (areaName === 'local') {
+    if (areaName === 'sync') {
       utils.toggleOptionsValue(changes, shouldCapitaliseI);
       utils.toggleOptionsValue(changes, shouldCapitaliseNames);
       utils.toggleOptionsValue(changes, shouldCapitaliseAcronyms);
