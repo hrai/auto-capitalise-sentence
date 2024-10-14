@@ -15,7 +15,7 @@ jobs:
       version: ${{ steps.daily-version.outputs.version }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 20
       - run: yarn install
@@ -30,8 +30,7 @@ jobs:
         name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run:
-          gh release create "${{ steps.daily-version.outputs.version }}"
+        run: gh release create "${{ steps.daily-version.outputs.version }}"
 
   Build-and-upload-artifacts:
     needs: Version
@@ -39,16 +38,16 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [18.x]
         command:
           - firefox
           - chrome
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - run: yarn install --frozen-lockfile
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
       - name: yarn install, build, and test
@@ -60,8 +59,9 @@ jobs:
           VER: ${{ needs.Version.outputs.version }}
         run: |
           yarn update-version:${{ matrix.command }}
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
+          name: auto-capitalise-artifacts-${{ strategy.job-index }}
           path: distribution
 
   Submit:
@@ -75,7 +75,7 @@ jobs:
           - chrome
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - run: yarn install
       - run: yarn build
       - name: Update extension’s meta

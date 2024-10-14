@@ -21,7 +21,7 @@
     "lint-fix": "yarn eslint --fix .",
     "update-version:chrome": "yarn dot-json distribution/manifest_v3.json version $VER && cd distribution && mv manifest_v3.json manifest.json",
     "update-version:firefox": "yarn dot-json distribution/manifest_v2.json version $VER && cd distribution && mv manifest_v2.json manifest.json",
-    "release:firefox": "cd distribution && yarn web-ext-submit",
+    "release:firefox": "cd distribution && yarn web-ext sign --channel listed",
     "release:chrome": "cd distribution && npx chrome-webstore-upload-cli@2 upload --auto-publish",
     "prepare": "yarn husky install"
   },
@@ -55,7 +55,6 @@
     "run-script-os": "^1.1.3",
     "sinon": "^19.0.2",
     "web-ext": "^8.2.0",
-    "web-ext-submit": "^7.8.0",
     "webextension-polyfill": "^0.12.0",
     "webpack": "^5.94.0",
     "webpack-cli": "^5.1.4"
