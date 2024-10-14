@@ -1,42 +1,4 @@
 {
-<<<<<<< HEAD
-    "name": "Auto Capitalise Sentence",
-    "description": "Browser add-on/extension to automatically capitalise the first letter of a sentence while typing.",
-    "homepage_url": "https://github.com/hrai/auto-capitalise-sentence/",
-    "manifest_version": 2,
-    "version": "0.0.0",
-    "browser_action": {
-      "default_icon": "icons/auto-capitalise-sentence.png",
-      "default_title": "Auto-capitalise sentence",
-      "default_popup": "popup/settings.html"
-    },
-    "browser_specific_settings": {
-      "gecko": {
-        "id": "auto-capitalise-sentence"
-      }
-    },
-    "background": {
-      "scripts": ["dependencies/jquery.min.js", "lib/background.bundle.js"]
-    },
-    "content_scripts": [
-      {
-        "run_at": "document_end",
-        "matches": ["<all_urls>"],
-        "js": [
-          "dependencies/jquery.min.js",
-          "lib/main.bundle.js",
-          "lib/settings.bundle.js"
-        ]
-      }
-    ],
-    "icons": {
-      "16": "icons/auto-capitalise-sentence.png",
-      "48": "icons/auto-capitalise-sentence.png",
-      "128": "icons/auto-capitalise-sentence.png"
-    },
-    "permissions": ["storage", "tabs"]
-  }
-=======
   "name": "Auto Capitalise Sentence",
   "description": "Firefox browser add-on/extension to automatically capitalise the first letter of a sentence while typing.",
   "homepage_url": "https://github.com/hrai/auto-capitalise-sentence/",
@@ -48,17 +10,12 @@
     "default_popup": "popup/settings.html"
   },
   "background": {
-    "scripts": [
-      "dependencies/jquery.min.js",
-      "lib/background.bundle.js"
-    ]
+    "scripts": ["dependencies/jquery.min.js", "lib/background.bundle.js"]
   },
   "content_scripts": [
     {
       "run_at": "document_end",
-      "matches": [
-        "<all_urls>"
-      ],
+      "matches": ["<all_urls>"],
       "js": [
         "dependencies/jquery.min.js",
         "lib/main.bundle.js",
@@ -71,14 +28,10 @@
     "48": "icons/auto-capitalise-sentence.png",
     "128": "icons/auto-capitalise-sentence.png"
   },
-  "permissions": [
-    "storage",
-    "tabs"
-  ],
+  "permissions": ["storage", "tabs"],
   "browser_specific_settings": {
     "gecko": {
       "id": "{680e06ed-65ed-4e11-a9c0-0e6f80b9a347}"
     }
   }
 }
->>>>>>> master
