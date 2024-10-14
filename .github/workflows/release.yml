@@ -61,7 +61,7 @@ jobs:
           yarn update-version:${{ matrix.command }}
       - uses: actions/upload-artifact@v4
         with:
-          name: auto-capitalise-artifacts-${{ strategy.job-index }}
+          name: auto-capitalise-artifacts-${{ matrix.command }} # {{ strategy.job-index }}
           path: distribution
 
   Submit:
