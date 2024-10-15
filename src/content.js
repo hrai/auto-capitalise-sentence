@@ -23,7 +23,7 @@ console.log(errorMsg);
 
 browser.storage.local
   .get([constantsKeyVal, namesKeyVal, acronymsKeyVal, locationsKeyVal])
-  .then(() => {
+  .then((localDict) => {
     browser.storage.sync
       .get([
         sitesToIgnore,
@@ -34,8 +34,46 @@ browser.storage.local
         wordsToExclude,
         wordsToInclude,
       ])
-      .then(processResponse, utils.onError);
+      .then((remoteDict) => {
+        processResponse({ ...localDict, ...remoteDict });
+      }, utils.onError);
   }, utils.onError);
+
+function processResponse(item) {
+  if (item.sitesToIgnore) {
+    sitesToExclude = sitesToExclude.concat(item.sitesToIgnore);
+  }
+
+  setOptions(item);
+  setKeyValues(item);
+
+  if (item && sitesToExclude) {
+    //https://stackoverflow.com/questions/406192/get-current-url-with-jquery
+    var currentUrlDomain = window.location.origin;
+
+    try {
+      var shouldEnableCapitalisingOnCurrentSite = true;
+
+      $.each(sitesToExclude, function (_i, siteToExclude) {
+        if (currentUrlDomain.includes(siteToExclude)) {
+          shouldEnableCapitalisingOnCurrentSite = false;
+        }
+      });
+
+      if (shouldEnableCapitalisingOnCurrentSite) {
+        hookupEventHandlers();
+
+        throw new Error(errorMsg);
+      }
+    } catch (e) {
+      if (e.message !== errorMsg) {
+        throw e;
+      }
+    }
+  } else {
+    hookupEventHandlers();
+  }
+}
 
 /* Updating the value of this sync storage variable in settings.js happens AFTER content.js.
  * The browser doesn't register the change and doesn't capitalise I by default after installing the extension.
@@ -117,42 +155,6 @@ function setKeyValues(item) {
     utils.arrayToMap(item.wordsToInclude)
   );
   utils.setWordsToExclude(item.wordsToExclude);
-}
-
-function processResponse(item) {
-  if (item.sitesToIgnore) {
-    sitesToExclude = sitesToExclude.concat(item.sitesToIgnore);
-  }
-
-  setOptions(item);
-  setKeyValues(item);
-
-  if (item && sitesToExclude) {
-    //https://stackoverflow.com/questions/406192/get-current-url-with-jquery
-    var currentUrlDomain = window.location.origin;
-
-    try {
-      var shouldEnableCapitalisingOnCurrentSite = true;
-
-      $.each(sitesToExclude, function (_i, siteToExclude) {
-        if (currentUrlDomain.includes(siteToExclude)) {
-          shouldEnableCapitalisingOnCurrentSite = false;
-        }
-      });
-
-      if (shouldEnableCapitalisingOnCurrentSite) {
-        hookupEventHandlers();
-
-        throw new Error(errorMsg);
-      }
-    } catch (e) {
-      if (e.message !== errorMsg) {
-        throw e;
-      }
-    }
-  } else {
-    hookupEventHandlers();
-  }
 }
 
 /*eslint no-debugger: "error"*/
