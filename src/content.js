@@ -39,15 +39,15 @@ browser.storage.local
       }, utils.onError);
   }, utils.onError);
 
-function processResponse(item) {
-  if (item.sitesToIgnore) {
-    sitesToExclude = sitesToExclude.concat(item.sitesToIgnore);
+function processResponse(storageDict) {
+  if (storageDict.sitesToIgnore) {
+    sitesToExclude = sitesToExclude.concat(storageDict.sitesToIgnore);
   }
 
-  setOptions(item);
-  setKeyValues(item);
+  setOptions(storageDict);
+  setKeyValues(storageDict);
 
-  if (item && sitesToExclude) {
+  if (storageDict && sitesToExclude) {
     //https://stackoverflow.com/questions/406192/get-current-url-with-jquery
     var currentUrlDomain = window.location.origin;
 
