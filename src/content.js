@@ -19,8 +19,6 @@ import {
 const errorMsg = 'breaking loop';
 let sitesToExclude = ['aws.amazon.com', 'whatsapp.com', 'messenger.com'];
 
-console.log(errorMsg);
-
 browser.storage.local
   .get([constantsKeyVal, namesKeyVal, acronymsKeyVal, locationsKeyVal])
   .then((localDict) => {
