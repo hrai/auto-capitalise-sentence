@@ -20,22 +20,60 @@ const errorMsg = 'breaking loop';
 let sitesToExclude = ['aws.amazon.com', 'whatsapp.com', 'messenger.com'];
 
 browser.storage.local
-  .get([
-    sitesToIgnore,
-    shouldCapitaliseI,
-    shouldCapitaliseNames,
-    shouldCapitaliseAcronyms,
-    shouldCapitaliseLocations,
-    constantsKeyVal,
-    namesKeyVal,
-    acronymsKeyVal,
-    locationsKeyVal,
-    wordsToExclude,
-    wordsToInclude,
-  ])
-  .then(processResponse, utils.onError);
+  .get([constantsKeyVal, namesKeyVal, acronymsKeyVal, locationsKeyVal])
+  .then((localDict) => {
+    browser.storage.sync
+      .get([
+        sitesToIgnore,
+        shouldCapitaliseI,
+        shouldCapitaliseNames,
+        shouldCapitaliseAcronyms,
+        shouldCapitaliseLocations,
+        wordsToExclude,
+        wordsToInclude,
+      ])
+      .then((remoteDict) => {
+        processResponse({ ...localDict, ...remoteDict });
+      }, utils.onError);
+  }, utils.onError);
 
-/* Updating the value of this local storage variable in settings.js happens AFTER content.js.
+function processResponse(storageDict) {
+  if (storageDict.sitesToIgnore) {
+    sitesToExclude = sitesToExclude.concat(storageDict.sitesToIgnore);
+  }
+
+  setOptions(storageDict);
+  setKeyValues(storageDict);
+
+  if (storageDict && sitesToExclude) {
+    //https://stackoverflow.com/questions/406192/get-current-url-with-jquery
+    var currentUrlDomain = window.location.origin;
+
+    try {
+      var shouldEnableCapitalisingOnCurrentSite = true;
+
+      $.each(sitesToExclude, function (_i, siteToExclude) {
+        if (currentUrlDomain.includes(siteToExclude)) {
+          shouldEnableCapitalisingOnCurrentSite = false;
+        }
+      });
+
+      if (shouldEnableCapitalisingOnCurrentSite) {
+        hookupEventHandlers();
+
+        throw new Error(errorMsg);
+      }
+    } catch (e) {
+      if (e.message !== errorMsg) {
+        throw e;
+      }
+    }
+  } else {
+    hookupEventHandlers();
+  }
+}
+
+/* Updating the value of this sync storage variable in settings.js happens AFTER content.js.
  * The browser doesn't register the change and doesn't capitalise I by default after installing the extension.
  * This block will capture the event and update the value of 'shouldCapitaliseI'.
  */
@@ -44,7 +82,7 @@ browser.storage.onChanged.addListener(
     changes, // object
     areaName // string
   ) {
-    if (areaName === 'local') {
+    if (areaName === 'sync') {
       utils.toggleOptionsValue(changes, shouldCapitaliseI);
       utils.toggleOptionsValue(changes, shouldCapitaliseNames);
       utils.toggleOptionsValue(changes, shouldCapitaliseAcronyms);
@@ -115,42 +153,6 @@ function setKeyValues(item) {
     utils.arrayToMap(item.wordsToInclude)
   );
   utils.setWordsToExclude(item.wordsToExclude);
-}
-
-function processResponse(item) {
-  if (item.sitesToIgnore) {
-    sitesToExclude = sitesToExclude.concat(item.sitesToIgnore);
-  }
-
-  setOptions(item);
-  setKeyValues(item);
-
-  if (item && sitesToExclude) {
-    //https://stackoverflow.com/questions/406192/get-current-url-with-jquery
-    var currentUrlDomain = window.location.origin;
-
-    try {
-      var shouldEnableCapitalisingOnCurrentSite = true;
-
-      $.each(sitesToExclude, function (_i, siteToExclude) {
-        if (currentUrlDomain.includes(siteToExclude)) {
-          shouldEnableCapitalisingOnCurrentSite = false;
-        }
-      });
-
-      if (shouldEnableCapitalisingOnCurrentSite) {
-        hookupEventHandlers();
-
-        throw new Error(errorMsg);
-      }
-    } catch (e) {
-      if (e.message !== errorMsg) {
-        throw e;
-      }
-    }
-  } else {
-    hookupEventHandlers();
-  }
 }
 
 /*eslint no-debugger: "error"*/
