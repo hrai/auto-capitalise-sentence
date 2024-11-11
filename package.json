@@ -23,7 +23,7 @@
     "update-version:firefox": "yarn dot-json distribution/manifest_v2.json version $VER && cd distribution && mv manifest_v2.json manifest.json",
     "release:firefox": "cd distribution && yarn web-ext sign --channel listed",
     "release:chrome": "cd distribution && npx chrome-webstore-upload-cli@2 upload --auto-publish",
-    "prepare": "yarn husky install"
+    "prepare": "yarn husky"
   },
   "prettier": {
     "trailingComma": "es5",
