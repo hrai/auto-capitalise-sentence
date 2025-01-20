@@ -74,6 +74,7 @@ const wordsWithApostrophe = {
 };
 
 let expansions = {
+  altho: 'although',
   diag: 'diagram',
   eg: 'example',
   lib: 'library',
