@@ -180,6 +180,7 @@ const commonTechAcronyms = [
   'FIFO',
   'FaaS',
   'FTP',
+  'FTPS',
   'GQL',
   'gRPC',
   'GUI',
