@@ -7,6 +7,7 @@ const commonAcronyms = [
   'ANZ',
   'AOL',
   'APM',
+  'APAC',
   'ATM',
   'B2B',
   'B2C',
@@ -21,6 +22,7 @@ const commonAcronyms = [
   'BYO',
   'CCTV',
   'CRE',
+  'CRM',
   'CMS',
   'CTA',
   'DIY',
@@ -201,6 +203,7 @@ const commonTechAcronyms = [
   'JSON',
   'JWT',
   'LB',
+  'Linux',
   'LTS',
   'MFA',
   'MITM',
@@ -266,6 +269,7 @@ const commonTechAcronyms = [
   'VoIP',
   'WAF',
   'WiFi',
+  'Windows',
   'iSCSI',
 ];
 
