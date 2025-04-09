@@ -3772,6 +3772,7 @@ let companyNames = [
   'PayPal',
   'Qualcomm',
   'Sega',
+  'Thoughtworks',
   'Ticketmaster',
   'Uber',
   'Unilever',

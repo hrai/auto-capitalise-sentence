@@ -504,6 +504,7 @@ let commonLocalAcronyms = [
   'ACN',
   'ATO',
   'LPO',
+  'REA',
 ];
 
 let localAcronyms = [
