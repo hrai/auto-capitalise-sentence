@@ -39,6 +39,15 @@ There are 4 sections to configure the extension.
 - [Firefox](https://addons.mozilla.org/en-US/firefox/addon/auto-capitalise-sentence/)
 - [Microsoft Edge](https://microsoftedge.microsoft.com/addons/detail/auto-capitalise-sentence/ifebcbphlfoifeajpbecncpgjflpbann)
 
+## Exceptions
+
+Certain sites reset the text change so this extension will not work on them.
+- Reddit 
+- WhatsApp Web
+- Facebook Messenger
+- Discord
+
+
 ## How to contribute?
 
 ### Sponsor
