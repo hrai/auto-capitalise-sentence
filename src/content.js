@@ -17,7 +17,7 @@ import {
 } from './plugin-constants';
 
 const errorMsg = 'breaking loop';
-let sitesToExclude = ['aws.amazon.com', 'whatsapp.com', 'messenger.com', 'discord.com', 'facebook.com'];
+let sitesToExclude = ['aws.amazon.com', 'web.whatsapp.com', 'messenger.com', 'discord.com', 'facebook.com'];
 
 browser.storage.local
   .get([constantsKeyVal, namesKeyVal, acronymsKeyVal, locationsKeyVal])
