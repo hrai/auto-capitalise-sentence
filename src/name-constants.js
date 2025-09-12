@@ -2522,6 +2522,8 @@ let personNames = [
   'Nichiren',
   'Nichole',
   'Nichols',
+  'Nick',
+  'Nicky',
   'Nickelodeon',
   'Nickolas',
   'Nicobar',
