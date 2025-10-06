@@ -312,7 +312,7 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
     let innerHtml = getCleanHtmlForAtlassian(updatedStr);
     $(htmlControl).html(innerHtml);
   } else {
-    $(htmlControl).html(updatedStr);
+    $(htmlControl).html(escapeHtml(updatedStr));
   }
 
   setEndOfContenteditable(htmlControl);
@@ -404,6 +404,18 @@ export function getUpdatedString(text, matchedWord, correctedWord) {
   }
 
   return text;
+}
+
+
+// Escape HTML metacharacters to prevent XSS.
+export function escapeHtml(str) {
+  if (!str) return '';
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 export function getCapitalisedContentForI(text) {
