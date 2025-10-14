@@ -1,17 +1,6 @@
 import globals from "globals";
 import babelParser from "@babel/eslint-parser";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
-});
 
 export default [{
     ignores: [
@@ -21,7 +10,7 @@ export default [{
         "**/jest.config.js",
         "**/test-env.js",
     ],
-}, ...compat.extends("eslint:recommended"), {
+}, {
     languageOptions: {
         globals: {
             ...globals.jest,
@@ -32,10 +21,14 @@ export default [{
         },
 
         parser: babelParser,
-        ecmaVersion: 7,
+        ecmaVersion: 2020,
         sourceType: "module",
 
         parserOptions: {
+            requireConfigFile: false,
+            babelOptions: {
+                presets: ["@babel/preset-env"]
+            },
             ecmaFeatures: {
                 modules: true,
             },
@@ -43,7 +36,21 @@ export default [{
     },
 
     rules: {
+        ...js.configs.recommended.rules,
         "linebreak-style": ["error", "unix"],
         "no-console": "off",
+        "constructor-super": "error",
+        "no-class-assign": "error",
+        "no-const-assign": "error",
+        "no-dupe-class-members": "error",
+        "no-new-symbol": "error",
+        "no-this-before-super": "error",
+        "no-useless-computed-key": "error",
+        "no-useless-constructor": "error",
+        "no-useless-rename": "error",
+        "no-var": "warn",
+        "prefer-const": "warn",
+        "prefer-rest-params": "warn",
+        "prefer-spread": "warn",
     },
 }];

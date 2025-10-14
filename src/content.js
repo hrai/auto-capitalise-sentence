@@ -7,6 +7,7 @@ import {
   shouldCapitaliseNames,
   shouldCapitaliseAcronyms,
   shouldCapitaliseLocations,
+  shouldConvertToSentenceCase,
   constantsKeyVal,
   namesKeyVal,
   acronymsKeyVal,
@@ -17,7 +18,13 @@ import {
 } from './plugin-constants';
 
 const errorMsg = 'breaking loop';
-let sitesToExclude = ['aws.amazon.com', 'web.whatsapp.com', 'messenger.com', 'discord.com', 'facebook.com'];
+let sitesToExclude = [
+  'aws.amazon.com',
+  'web.whatsapp.com',
+  'messenger.com',
+  'discord.com',
+  'facebook.com',
+];
 
 browser.storage.local
   .get([constantsKeyVal, namesKeyVal, acronymsKeyVal, locationsKeyVal])
@@ -29,6 +36,7 @@ browser.storage.local
         shouldCapitaliseNames,
         shouldCapitaliseAcronyms,
         shouldCapitaliseLocations,
+        shouldConvertToSentenceCase,
         wordsToExclude,
         wordsToInclude,
       ])
@@ -47,10 +55,10 @@ function processResponse(storageDict) {
 
   if (storageDict && sitesToExclude) {
     //https://stackoverflow.com/questions/406192/get-current-url-with-jquery
-    var currentUrlDomain = window.location.origin;
+    const currentUrlDomain = window.location.origin;
 
     try {
-      var shouldEnableCapitalisingOnCurrentSite = true;
+      let shouldEnableCapitalisingOnCurrentSite = true;
 
       $.each(sitesToExclude, function (_i, siteToExclude) {
         if (currentUrlDomain.includes(siteToExclude)) {
@@ -87,6 +95,7 @@ browser.storage.onChanged.addListener(
       utils.toggleOptionsValue(changes, shouldCapitaliseNames);
       utils.toggleOptionsValue(changes, shouldCapitaliseAcronyms);
       utils.toggleOptionsValue(changes, shouldCapitaliseLocations);
+      utils.toggleOptionsValue(changes, shouldConvertToSentenceCase);
 
       if (changes.wordsToExclude != null) {
         const newValue = changes.wordsToExclude.newValue;
@@ -109,7 +118,7 @@ function hookupEventHandlers() {
 
 function observeIframeInputTags() {
   $('iframe').on('load', (event) => {
-    let iframe = event.target;
+    const iframe = event.target;
     $(iframe)
       .contents()
       .find(':text,textarea')
@@ -141,6 +150,10 @@ function setOptions(item) {
     shouldCapitaliseLocations,
     item.shouldCapitaliseLocations
   );
+  utils.setShouldCapitaliseOption(
+    shouldConvertToSentenceCase,
+    item.shouldConvertToSentenceCase
+  );
 }
 
 function setKeyValues(item) {
@@ -157,13 +170,13 @@ function setKeyValues(item) {
 
 /*eslint no-debugger: "error"*/
 function observeHtmlBody() {
-  var target = document.querySelector('body');
+  const target = document.querySelector('body');
 
-  var contentEditableTags = ['p', 'span'];
-  var inputTags = ["input[type='text']", 'textarea'];
+  const contentEditableTags = ['p', 'span'];
+  const inputTags = ["input[type='text']", 'textarea'];
 
-  let lastUpdatedText = '';
-  var observer = new MutationObserver(function (mutations) {
+  const lastUpdatedText = '';
+  const observer = new MutationObserver(function (mutations) {
     let characterDataMutations = [];
 
     $.each(mutations, function (_i, mutation) {
@@ -177,7 +190,7 @@ function observeHtmlBody() {
             throw new Error(errorMsg);
           }
 
-          var addedNodes = mutation.addedNodes;
+          const addedNodes = mutation.addedNodes;
           if (addedNodes && addedNodes.length > 0) {
             let addedNodesArr = Array.from(addedNodes);
             addedNodesArr.forEach((node) => {
@@ -196,7 +209,7 @@ function observeHtmlBody() {
             });
 
             $.each(contentEditableTags, function (_i, tagName) {
-              var filteredEls = utils.getFilteredElements(
+              const filteredEls = utils.getFilteredElements(
                 addedNodesArr,
                 tagName
               );
@@ -211,7 +224,7 @@ function observeHtmlBody() {
             });
 
             $.each(inputTags, function (_i, tagName) {
-              var filteredEls = utils.getFilteredElements(
+              const filteredEls = utils.getFilteredElements(
                 addedNodesArr,
                 tagName
               );
@@ -239,7 +252,7 @@ function observeHtmlBody() {
     characterDataMutations.forEach((element) => capitaliseText(element));
   });
 
-  var config = {
+  const config = {
     subtree: true,
     childList: true,
     characterData: true,
@@ -249,7 +262,7 @@ function observeHtmlBody() {
 }
 
 function unique(list) {
-  var result = [];
+  const result = [];
   $.each(list, function (i, e) {
     if ($.inArray(e, result) == -1) result.push(e);
   });
@@ -257,11 +270,7 @@ function unique(list) {
 }
 
 function capitaliseText(element) {
-  utils.capitaliseText(
-    element,
-    utils.shouldCapitalise,
-    utils.shouldCapitaliseForI,
-    utils.getText,
-    utils.setText
-  );
+  // Use debounced version with 5-second sliding window
+  const debouncedFn = utils.getDebouncedCapitaliseText(element);
+  debouncedFn(element);
 }

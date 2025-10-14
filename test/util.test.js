@@ -356,7 +356,7 @@ describe('util file tests', function () {
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_Days', () => {
     let str = "I'm the content of html Monday.";
-    let matchingAndCorrectWords = (text) =>
+    const matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         constantsKeyValuePairs
@@ -384,7 +384,7 @@ describe('util file tests', function () {
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_Months', () => {
     let str = "I'm the content of html january.";
-    let matchingAndCorrectWords = (text) =>
+    const matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         constantsKeyValuePairs
@@ -404,7 +404,7 @@ describe('util file tests', function () {
 
   test('getCaseInsensitiveMatchingAndCorrectedWords', () => {
     let str = "I'm the content of html James.";
-    let matchingAndCorrectWords = (text) =>
+    const matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         namesKeyValuePairs
@@ -428,7 +428,7 @@ describe('util file tests', function () {
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_OtherPunctuation', () => {
     let str = "I'm the content of html 'James'";
-    let matchingAndCorrectWords = (text) =>
+    const matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         namesKeyValuePairs
@@ -452,7 +452,7 @@ describe('util file tests', function () {
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_CompanyNames', () => {
     let str = "I'm the content of html 'GitHub'";
-    let matchingAndCorrectWords = (text) =>
+    const matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         namesKeyValuePairs
@@ -476,7 +476,7 @@ describe('util file tests', function () {
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_TechAcronyms', () => {
     let str = "I'm the content of html.";
-    let matchingAndCorrectWords = (text) =>
+    const matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         acronymsKeyValuePairs
@@ -505,7 +505,7 @@ describe('util file tests', function () {
    */
   test('getCaseInsensitiveMatchingAndCorrectedWords_Acronyms_DoesNotWorkOnWordsWithNonWordCharacterSeparator', () => {
     let str = "I'm the content of file.json.";
-    let matchingAndCorrectWords = (text) =>
+    const matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         acronymsKeyValuePairs
@@ -521,7 +521,7 @@ describe('util file tests', function () {
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_AcronymsWithDotPrefix', () => {
     let str = "I'm the content of .net ";
-    let matchingAndCorrectWords = (text) =>
+    const matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         acronymsKeyValuePairs
@@ -537,7 +537,7 @@ describe('util file tests', function () {
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_Locations', () => {
     let str = 'I was built in australia.';
-    let matchingAndCorrectWords = (text) =>
+    const matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         locationsKeyValuePairs
@@ -561,7 +561,7 @@ describe('util file tests', function () {
 
   test('getCaseSensitiveMatchingAndCorrectedWords_ApostropheWords', () => {
     let str = 'I cant.';
-    let matchingAndCorrectWords = (text) =>
+    const matchingAndCorrectWords = (text) =>
       utils.getCaseSensitiveMatchingAndCorrectedWords(
         text,
         constantsKeyValuePairs
@@ -581,7 +581,7 @@ describe('util file tests', function () {
 
   test('getCaseSensitiveMatchingAndCorrectedWords_ApostropheWords_TitleCase', () => {
     let str = 'Doesnt.';
-    let matchingAndCorrectWords = (text) =>
+    const matchingAndCorrectWords = (text) =>
       utils.getCaseSensitiveMatchingAndCorrectedWords(
         text,
         constantsKeyValuePairs
@@ -597,7 +597,7 @@ describe('util file tests', function () {
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_LocalAcronyms', () => {
     let str = "I'm the content of html 'syd'";
-    let matchingAndCorrectWords = (text) =>
+    const matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         acronymsKeyValuePairs
@@ -613,7 +613,7 @@ describe('util file tests', function () {
 
   test('getCaseInsensitiveMatchingAndCorrectedWords_CommonConstants', () => {
     let str = "I'm the content of html xmas ";
-    let matchingAndCorrectWords = (text) =>
+    const matchingAndCorrectWords = (text) =>
       utils.getCaseInsensitiveMatchingAndCorrectedWords(
         text,
         constantsKeyValuePairs
@@ -629,7 +629,7 @@ describe('util file tests', function () {
 
   test('getCaseSensitiveMatchingAndCorrectedWords_Expansions', () => {
     let str = "I'm the content of html, thx ";
-    let matchingAndCorrectWords = (text) =>
+    const matchingAndCorrectWords = (text) =>
       utils.getCaseSensitiveMatchingAndCorrectedWords(
         text,
         constantsKeyValuePairs
@@ -653,10 +653,10 @@ describe('util file tests', function () {
 
   test('getMatchingAndCorrectedWords_ExcludedWords', () => {
     let str = "I'm the content of january.";
-    let wordsToExclude = ['january'];
-    let caseInsensitive = true;
+    const wordsToExclude = ['january'];
+    const caseInsensitive = true;
 
-    let matchingAndCorrectWords = (text) =>
+    const matchingAndCorrectWords = (text) =>
       utils.getMatchingAndCorrectedWords(
         text,
         constantsKeyValuePairs,
@@ -722,7 +722,7 @@ describe('util file tests', function () {
   });
 
   test('getCleanHtmlForAtlassian_ReturnsHtmlWithoutAssistiveSpanTag', () => {
-    let str =
+    const str =
       '<span contenteditable="false" id="5d10383aea7a170c895a4379" text="@Hangjit Rai" accesslevel="CONTAINER" usertype="null" class="mentionView-content-wrap inlineNodeView"><span aria-hidden="true" class="zeroWidthSpaceContainer"><span class="inlineNodeViewAddZeroWidthSpace"></span>​</span><span class="assistive">Tagged user @Hangjit Rai</span><span aria-hidden="true"><span data-mention-id="5d10383aea7a170c895a4379" data-access-level="CONTAINER" spellcheck="false"><span spellcheck="false" class="css-18wbb8r">@Hangjit Rai</span></span></span><span aria-hidden="true" class="inlineNodeViewAddZeroWidthSpace"></span></span> PE&nbsp;';
 
     expect($(utils.getCleanHtmlForAtlassian(str)).html()).toBe(
@@ -788,5 +788,322 @@ describe('string manipulation', () => {
     expect(utils.arrayToMap({})).toStrictEqual({});
     expect(utils.arrayToMap(null)).toStrictEqual({});
     expect(utils.arrayToMap(undefined)).toStrictEqual({});
+  });
+
+  describe('Sentence Case Functionality', () => {
+    test('shouldConvertToSentenceCaseText - sentence endings', () => {
+      expect(utils.shouldConvertToSentenceCaseText('Hello world.')).toBe(true);
+      expect(utils.shouldConvertToSentenceCaseText('Are you okay?')).toBe(true);
+      expect(utils.shouldConvertToSentenceCaseText('Stop right now!')).toBe(
+        true
+      );
+      expect(utils.shouldConvertToSentenceCaseText('Hello world. ')).toBe(true);
+      expect(utils.shouldConvertToSentenceCaseText('Are you okay? ')).toBe(
+        true
+      );
+      expect(utils.shouldConvertToSentenceCaseText('Stop right now! ')).toBe(
+        true
+      );
+    });
+
+    test('shouldConvertToSentenceCaseText - line breaks', () => {
+      expect(utils.shouldConvertToSentenceCaseText('Hello world\n')).toBe(true);
+      expect(utils.shouldConvertToSentenceCaseText('Hello world\n ')).toBe(
+        true
+      );
+      expect(utils.shouldConvertToSentenceCaseText('Hello\nWorld')).toBe(false);
+    });
+
+    test('shouldConvertToSentenceCaseText - sentence case opportunities', () => {
+      expect(utils.shouldConvertToSentenceCaseText('hello world')).toBe(true); // starts with lowercase
+      expect(utils.shouldConvertToSentenceCaseText('Hello. world')).toBe(true); // multiple sentences
+      expect(utils.shouldConvertToSentenceCaseText('Hello? yes')).toBe(true); // multiple sentences
+      expect(utils.shouldConvertToSentenceCaseText('Hello! there')).toBe(true); // multiple sentences
+      expect(utils.shouldConvertToSentenceCaseText('Hello World')).toBe(false); // proper case
+      expect(utils.shouldConvertToSentenceCaseText('HELLO WORLD')).toBe(false); // all caps
+    });
+
+    test('hasSentenceCaseOpportunity', () => {
+      // Multiple sentences
+      expect(utils.hasSentenceCaseOpportunity('Hello. world')).toBe(true);
+      expect(utils.hasSentenceCaseOpportunity('Hello? yes')).toBe(true);
+      expect(utils.hasSentenceCaseOpportunity('Hello! there')).toBe(true);
+
+      // Starts with lowercase
+      expect(utils.hasSentenceCaseOpportunity('hello world')).toBe(true);
+      expect(utils.hasSentenceCaseOpportunity('  hello world')).toBe(true);
+
+      // Properly capitalized
+      expect(utils.hasSentenceCaseOpportunity('Hello World')).toBe(false);
+      expect(utils.hasSentenceCaseOpportunity('Hello. World')).toBe(false);
+    });
+
+    test('getConvertedToSentenceCase - basic conversion', () => {
+      expect(utils.getConvertedToSentenceCase('hello world')).toBe(
+        'Hello world'
+      );
+      expect(utils.getConvertedToSentenceCase('HELLO WORLD')).toBe(
+        'HELLO WORLD'
+      );
+      expect(utils.getConvertedToSentenceCase('hELLo WoRLD')).toBe(
+        'HELLo WoRLD'
+      );
+    });
+
+    test('getConvertedToSentenceCase - multiple sentences', () => {
+      expect(
+        utils.getConvertedToSentenceCase('hello world. how are you?')
+      ).toBe('Hello world. How are you?');
+      expect(
+        utils.getConvertedToSentenceCase('great news! we did it. amazing!')
+      ).toBe('Great news! We did it. Amazing!');
+      expect(utils.getConvertedToSentenceCase('what? really? yes!')).toBe(
+        'What? Really? Yes!'
+      );
+    });
+
+    test('getConvertedToSentenceCase - line breaks', () => {
+      expect(
+        utils.getConvertedToSentenceCase('hello world\ngood morning')
+      ).toBe('Hello world\nGood morning');
+      expect(
+        utils.getConvertedToSentenceCase('hello world\n  good morning')
+      ).toBe('Hello world\n  Good morning');
+      expect(utils.getConvertedToSentenceCase('hello\nworld\ntest')).toBe(
+        'Hello\nWorld\nTest'
+      );
+    });
+
+    test('getConvertedToSentenceCase - capitalize I', () => {
+      expect(utils.getConvertedToSentenceCase('hello i am here')).toBe(
+        'Hello I am here'
+      );
+      expect(utils.getConvertedToSentenceCase('yes i think so')).toBe(
+        'Yes I think so'
+      );
+      expect(utils.getConvertedToSentenceCase('hello world. i am fine')).toBe(
+        'Hello world. I am fine'
+      );
+    });
+
+    test('getConvertedToSentenceCase - abbreviations', () => {
+      expect(utils.getConvertedToSentenceCase('hello mr. smith')).toBe(
+        'Hello Mr. Smith'
+      );
+      expect(utils.getConvertedToSentenceCase('dear dr. jones')).toBe(
+        'Dear Dr. Jones'
+      );
+      expect(utils.getConvertedToSentenceCase('visit st. paul')).toBe(
+        'Visit St. Paul'
+      );
+      expect(utils.getConvertedToSentenceCase('see mrs. wilson')).toBe(
+        'See Mrs. Wilson'
+      );
+      expect(utils.getConvertedToSentenceCase('call prof. brown')).toBe(
+        'Call Prof. Brown'
+      );
+    });
+
+    test('getConvertedToSentenceCase - edge cases', () => {
+      expect(utils.getConvertedToSentenceCase('')).toBe('');
+      expect(utils.getConvertedToSentenceCase(' ')).toBe(' ');
+      expect(utils.getConvertedToSentenceCase(null)).toBe(null);
+      expect(utils.getConvertedToSentenceCase(undefined)).toBe(undefined);
+      expect(utils.getConvertedToSentenceCase('A')).toBe('A');
+      expect(utils.getConvertedToSentenceCase('a')).toBe('A');
+    });
+
+    test('getConvertedToSentenceCase - preserve spacing', () => {
+      expect(utils.getConvertedToSentenceCase('  hello world  ')).toBe(
+        '  Hello world  '
+      );
+      expect(utils.getConvertedToSentenceCase('hello.  world')).toBe(
+        'Hello.  World'
+      );
+      expect(utils.getConvertedToSentenceCase('hello.    world')).toBe(
+        'Hello.    World'
+      );
+    });
+
+    test('getConvertedToSentenceCase - complex sentences', () => {
+      const input =
+        'hello world! how are you today? i am fine. thank you for asking.';
+      const expected =
+        'Hello world! How are you today? I am fine. Thank you for asking.';
+      expect(utils.getConvertedToSentenceCase(input)).toBe(expected);
+
+      const input2 = 'this is a test.\n\nhello world!\nwhat do you think?';
+      const expected2 = 'This is a test.\n\nHello world!\nWhat do you think?';
+      expect(utils.getConvertedToSentenceCase(input2)).toBe(expected2);
+    });
+
+    test('sentence case integration with optionsDictionary', () => {
+      const {
+        shouldConvertToSentenceCase,
+      } = require('../src/plugin-constants.js');
+
+      // Test that the sentence case option exists in optionsDictionary
+      expect(utils.optionsDictionary).toHaveProperty(
+        shouldConvertToSentenceCase
+      );
+      expect(typeof utils.optionsDictionary[shouldConvertToSentenceCase]).toBe(
+        'boolean'
+      );
+
+      // Test that the default value is false
+      expect(utils.optionsDictionary[shouldConvertToSentenceCase]).toBe(false);
+
+      // Test setShouldCapitaliseOption function works for sentence case
+      utils.setShouldCapitaliseOption(shouldConvertToSentenceCase, true);
+      expect(utils.optionsDictionary[shouldConvertToSentenceCase]).toBe(true);
+
+      utils.setShouldCapitaliseOption(shouldConvertToSentenceCase, false);
+      expect(utils.optionsDictionary[shouldConvertToSentenceCase]).toBe(false);
+    });
+  });
+
+  describe('Debounce Functionality', () => {
+    beforeEach(() => {
+      jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+      jest.useRealTimers();
+    });
+
+    test('debounce function exists and is exported', () => {
+      expect(typeof utils.debounce).toBe('function');
+    });
+
+    test('debounce delays function execution', () => {
+      const mockFn = jest.fn();
+      const debouncedFn = utils.debounce(mockFn, 5000);
+
+      debouncedFn('test');
+      expect(mockFn).not.toHaveBeenCalled();
+
+      jest.advanceTimersByTime(4999);
+      expect(mockFn).not.toHaveBeenCalled();
+
+      jest.advanceTimersByTime(1);
+      expect(mockFn).toHaveBeenCalledWith('test');
+    });
+
+    test('debounce implements sliding window - resets timer on new calls', () => {
+      const mockFn = jest.fn();
+      const debouncedFn = utils.debounce(mockFn, 5000);
+
+      // First call
+      debouncedFn('call1');
+      expect(mockFn).not.toHaveBeenCalled();
+
+      // Second call after 3 seconds (should reset timer)
+      jest.advanceTimersByTime(3000);
+      debouncedFn('call2');
+      expect(mockFn).not.toHaveBeenCalled();
+
+      // Third call after 4 more seconds (should reset timer again)
+      jest.advanceTimersByTime(4000);
+      debouncedFn('call3');
+      expect(mockFn).not.toHaveBeenCalled();
+
+      // Now wait full 5 seconds - only last call should execute
+      jest.advanceTimersByTime(5000);
+      expect(mockFn).toHaveBeenCalledTimes(1);
+      expect(mockFn).toHaveBeenCalledWith('call3');
+    });
+
+    test('debounce preserves function context and arguments', () => {
+      const mockFn = jest.fn();
+      const debouncedFn = utils.debounce(mockFn, 1000);
+
+      const testContext = { test: true };
+      debouncedFn.call(testContext, 'arg1', 'arg2', 'arg3');
+
+      jest.advanceTimersByTime(1000);
+      expect(mockFn).toHaveBeenCalledWith('arg1', 'arg2', 'arg3');
+    });
+
+    test('getDebouncedCapitaliseText function exists', () => {
+      expect(typeof utils.getDebouncedCapitaliseText).toBe('function');
+    });
+
+    test('getDebouncedCapitaliseText returns same debounced function for same element', () => {
+      const mockElement = { id: 'test' };
+      const debouncedFn1 = utils.getDebouncedCapitaliseText(mockElement);
+      const debouncedFn2 = utils.getDebouncedCapitaliseText(mockElement);
+
+      expect(debouncedFn1).toBe(debouncedFn2);
+    });
+
+    test('getDebouncedCapitaliseText uses default 5000ms delay', () => {
+      const mockElement = { id: 'test' };
+      const mockCapitaliseText = jest
+        .spyOn(utils, 'capitaliseText')
+        .mockImplementation(() => {});
+
+      const debouncedFn = utils.getDebouncedCapitaliseText(mockElement);
+      debouncedFn(mockElement);
+
+      // Should not execute immediately
+      expect(mockCapitaliseText).not.toHaveBeenCalled();
+
+      // Should execute after 5000ms
+      jest.advanceTimersByTime(5000);
+      expect(mockCapitaliseText).toHaveBeenCalledWith(
+        mockElement,
+        utils.shouldCapitalise,
+        utils.shouldCapitaliseForI,
+        utils.getText,
+        utils.setText
+      );
+
+      mockCapitaliseText.mockRestore();
+    });
+
+    test('multiple elements have independent debounce timers', () => {
+      const element1 = { id: 'element1' };
+      const element2 = { id: 'element2' };
+      const mockCapitaliseText = jest
+        .spyOn(utils, 'capitaliseText')
+        .mockImplementation(() => {});
+
+      const debouncedFn1 = utils.getDebouncedCapitaliseText(element1);
+      const debouncedFn2 = utils.getDebouncedCapitaliseText(element2);
+
+      // Trigger both elements
+      debouncedFn1(element1);
+      debouncedFn2(element2);
+
+      // Advance time partially
+      jest.advanceTimersByTime(3000);
+
+      // Trigger element1 again (should reset its timer)
+      debouncedFn1(element1);
+
+      // Advance to 5000ms total - only element2 should fire
+      jest.advanceTimersByTime(2000);
+      expect(mockCapitaliseText).toHaveBeenCalledTimes(1);
+      expect(mockCapitaliseText).toHaveBeenCalledWith(
+        element2,
+        expect.any(Function),
+        expect.any(Function),
+        expect.any(Function),
+        expect.any(Function)
+      );
+
+      // Advance another 3000ms - now element1 should fire
+      jest.advanceTimersByTime(3000);
+      expect(mockCapitaliseText).toHaveBeenCalledTimes(2);
+      expect(mockCapitaliseText).toHaveBeenLastCalledWith(
+        element1,
+        expect.any(Function),
+        expect.any(Function),
+        expect.any(Function),
+        expect.any(Function)
+      );
+
+      mockCapitaliseText.mockRestore();
+    });
   });
 });

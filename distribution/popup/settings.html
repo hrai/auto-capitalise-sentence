@@ -79,7 +79,17 @@
                     </div>
                 </div>
                 <div class="tab-pane fade" role="tabpanel" aria-labelledby="checkboxes-tab" id="checkboxes">
+                    <div class="mb-3">
+                        <h6 class="text-primary">Sentence Case Mode</h6>
+                        <input type="checkbox" id="shouldConvertToSentenceCase" name="shouldConvertToSentenceCase">
+                        <label for="shouldConvertToSentenceCase">Convert entire text to sentence case</label><br>
+                        <small class="text-muted">When enabled, converts all text to proper sentence case format. Disables individual word
+                            capitalization below.</small>
+                    </div>
+
+                    <hr>
                     <div class="mb-2">
+                        <h6 class="text-secondary">Individual Word Capitalization</h6>
                         <input type="checkbox" id="shouldCapitaliseI" name="shouldCapitaliseI" checked>
                         <label for="shouldCapitaliseI">Should capitalise 'I'?</label><br>
 
@@ -92,6 +102,7 @@
                         <input type="checkbox" id="shouldCapitaliseLocations" name="shouldCapitaliseLocations" checked>
                         <label for="shouldCapitaliseLocations">Should capitalise locations?</label><br>
 
+                        <small class="text-muted">These options are disabled when sentence case mode is enabled.</small>
                     </div>
                 </div>
             </div>

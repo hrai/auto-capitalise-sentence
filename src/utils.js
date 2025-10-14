@@ -3,6 +3,7 @@ import {
   shouldCapitaliseNames,
   shouldCapitaliseAcronyms,
   shouldCapitaliseLocations,
+  shouldConvertToSentenceCase,
   constantsKeyVal,
   namesKeyVal,
   acronymsKeyVal,
@@ -11,13 +12,14 @@ import {
 } from './plugin-constants';
 
 let wordsToExclude = [];
-export let optionsDictionary = {
+export const optionsDictionary = {
   [shouldCapitaliseI]: false,
   [shouldCapitaliseNames]: false,
   [shouldCapitaliseAcronyms]: false,
   [shouldCapitaliseLocations]: false,
+  [shouldConvertToSentenceCase]: false,
 };
-let keyValueDictionary = {
+const keyValueDictionary = {
   [constantsKeyVal]: {},
   [namesKeyVal]: {},
   [acronymsKeyVal]: {},
@@ -38,7 +40,7 @@ export function capitaliseText(
 
   // debugger
 
-  let tagName = element.tagName;
+  const tagName = element.tagName;
 
   if (!isEditableElement(element, tagName)) return;
 
@@ -64,68 +66,81 @@ export function capitaliseText(
     shouldAppendBr = true;
   }
 
-  if (shouldCapitalise(text)) {
-    const updatedStr = getCapitalisedContent(text);
+  // Handle sentence case conversion (exclusive with other capitalization modes)
+  if (optionsDictionary[shouldConvertToSentenceCase]) {
+    if (shouldConvertToSentenceCaseText(text)) {
+      const updatedStr = getConvertedToSentenceCase(text);
+      setText(element, tagName, updatedStr, shouldAppendBr);
+      return;
+    }
+  } else {
+    // Only apply other capitalization modes if sentence case is disabled
+    if (shouldCapitalise(text)) {
+      const updatedStr = getCapitalisedContent(text);
 
-    setText(element, tagName, updatedStr, shouldAppendBr);
-    return;
+      setText(element, tagName, updatedStr, shouldAppendBr);
+      return;
+    }
   }
 
-  if (
-    text.length >= 2 &&
-    shouldCapitaliseForI(text) &&
-    optionsDictionary[shouldCapitaliseI]
-  ) {
-    const updatedStr = getCapitalisedContentForI(text);
+  // Only apply individual word capitalization if sentence case is disabled
+  if (!optionsDictionary[shouldConvertToSentenceCase]) {
+    if (
+      text.length >= 2 &&
+      shouldCapitaliseForI(text) &&
+      optionsDictionary[shouldCapitaliseI]
+    ) {
+      const updatedStr = getCapitalisedContentForI(text);
 
-    setText(element, tagName, updatedStr, shouldAppendBr);
-    return;
-  }
+      setText(element, tagName, updatedStr, shouldAppendBr);
+      return;
+    }
 
-  const caseSensitive = true;
-  updateConstant(
-    text,
-    element,
-    tagName,
-    keyValueDictionary[constantsKeyVal],
-    caseSensitive
-  );
-  updateConstant(
-    text,
-    element,
-    tagName,
-    keyValueDictionary[wordsToIncludeKeyVal],
-    caseSensitive
-  );
-
-  if (optionsDictionary[shouldCapitaliseNames]) {
+    const caseSensitive = true;
     updateConstant(
       text,
       element,
       tagName,
-      keyValueDictionary[namesKeyVal],
-      !caseSensitive
+      keyValueDictionary[constantsKeyVal],
+      caseSensitive
     );
-  }
-
-  if (optionsDictionary[shouldCapitaliseAcronyms]) {
     updateConstant(
       text,
       element,
       tagName,
-      keyValueDictionary[acronymsKeyVal],
-      !caseSensitive
+      keyValueDictionary[wordsToIncludeKeyVal],
+      caseSensitive
     );
-  }
 
-  if (optionsDictionary[shouldCapitaliseLocations]) {
-    updateConstant(
-      text,
-      element,
-      tagName,
-      keyValueDictionary[locationsKeyVal],
-      !caseSensitive
-    );
+    if (optionsDictionary[shouldCapitaliseNames]) {
+      updateConstant(
+        text,
+        element,
+        tagName,
+        keyValueDictionary[namesKeyVal],
+        !caseSensitive
+      );
+    }
+
+    if (optionsDictionary[shouldCapitaliseAcronyms]) {
+      updateConstant(
+        text,
+        element,
+        tagName,
+        keyValueDictionary[acronymsKeyVal],
+        !caseSensitive
+      );
+    }
+
+    if (optionsDictionary[shouldCapitaliseLocations]) {
+      updateConstant(
+        text,
+        element,
+        tagName,
+        keyValueDictionary[locationsKeyVal],
+        !caseSensitive
+      );
+    }
   }
 }
 
@@ -212,7 +227,7 @@ export function getMatchingAndCorrectedWords(
 ) {
   const lastWordRegex = /((-|\.)?\w+)([^\w-])$/;
 
-  let match = lastWordRegex.exec(text);
+  const match = lastWordRegex.exec(text);
   const noMatch = ['', ''];
 
   if (match) {
@@ -223,7 +238,7 @@ export function getMatchingAndCorrectedWords(
         return noMatch;
       }
 
-      let correctedWord = getCorrectedWord(
+      const correctedWord = getCorrectedWord(
         caseInsensitive,
         matchedWord,
         keyValuePairs
@@ -268,7 +283,7 @@ export function getText(htmlControl, tagName) {
 
 export function getTextForSpanTag(text) {
   if (text && getNbspCount(text) === 1) {
-    let result = replaceLastOccurrenceInString(text, nbsp, ' ');
+    const result = replaceLastOccurrenceInString(text, nbsp, ' ');
     return result;
   }
 
@@ -309,7 +324,7 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
 
   //fix for confluence and jira user tags
   if (window.location.host.includes('atlassian.net')) {
-    let innerHtml = getCleanHtmlForAtlassian(updatedStr);
+    const innerHtml = getCleanHtmlForAtlassian(updatedStr);
     $(htmlControl).html(innerHtml);
   } else {
     $(htmlControl).html(updatedStr);
@@ -318,10 +333,10 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
   setEndOfContenteditable(htmlControl);
 }
 export function getCleanHtmlForAtlassian(updatedStr) {
-  var html = $.parseHTML(updatedStr);
+  const html = $.parseHTML(updatedStr);
   // console.log(innerHtml);
 
-  let assistiveSpan = $(html).find('span.assistive');
+  const assistiveSpan = $(html).find('span.assistive');
   assistiveSpan.remove();
   return html;
 }
@@ -419,6 +434,73 @@ export function getCapitalisedContent(text) {
   return updatedStr;
 }
 
+export function shouldConvertToSentenceCaseText(text) {
+  // Convert to sentence case when user finishes typing a sentence or paragraph
+  const sentenceEndingRegex = /[.!?]\s*$/;
+  const multilineRegex = /\n\s*$/;
+
+  // Trigger conversion at sentence endings or paragraph breaks
+  return (
+    sentenceEndingRegex.test(text) ||
+    multilineRegex.test(text) ||
+    // Also convert if the text looks like it needs sentence case formatting
+    hasSentenceCaseOpportunity(text)
+  );
+}
+
+export function hasSentenceCaseOpportunity(text) {
+  // Check if text has multiple sentences that could benefit from sentence case
+  const multipleSentencesRegex = /[.!?]\s+[a-z]/;
+  const startWithLowercaseRegex = /^\s*[a-z]/;
+
+  return (
+    multipleSentencesRegex.test(text) || startWithLowercaseRegex.test(text)
+  );
+}
+
+export function getConvertedToSentenceCase(text) {
+  if (!text || typeof text !== 'string') return text;
+
+  // Only capitalize first letter of sentences and common words, preserve all other casing
+  let result = text;
+
+  // Capitalize first letter of text (case-insensitive match, preserve rest)
+  result = result.replace(/^\s*([a-z])/i, (match, letter) =>
+    match.replace(letter, letter.toUpperCase())
+  );
+
+  // Capitalize first letter after sentence endings (preserve other casing)
+  result = result.replace(
+    /([.!?])\s+([a-z])/gi,
+    (match, punctuation, letter) =>
+      punctuation + match.slice(1).replace(letter, letter.toUpperCase())
+  );
+
+  // Capitalize first letter after line breaks (preserve other casing)
+  result = result.replace(
+    /(\n)\s*([a-z])/gi,
+    (match, linebreak, letter) =>
+      linebreak + match.slice(1).replace(letter, letter.toUpperCase())
+  );
+
+  // Capitalize "I" when it stands alone
+  result = result.replace(/ i /g, ' I ');
+  result = result.replace(/^i /g, 'I ');
+  result = result.replace(/ i$/g, ' I');
+
+  // Capitalize first letter after common abbreviations (Mr., Dr., etc.)
+  result = result.replace(
+    /\b(mr|mrs|ms|dr|prof|st)\.\s+([a-z])/gi,
+    (match, abbrev, letter) =>
+      abbrev.charAt(0).toUpperCase() +
+      abbrev.slice(1).toLowerCase() +
+      '.' +
+      match.slice(abbrev.length + 1).replace(letter, letter.toUpperCase())
+  );
+
+  return result;
+}
+
 export function isContentEditable(element) {
   return element && element.isContentEditable;
 }
@@ -469,7 +551,7 @@ export function toggleOptionsValue(changes, variableName) {
   }
 }
 
-export let stringToKeyValuePairs = (obj, val) => {
+export const stringToKeyValuePairs = (obj, val) => {
   obj[val.toLowerCase()] = val;
   return obj;
 };
@@ -489,4 +571,47 @@ export function arrayToMap(obj) {
   }
 
   return {};
+}
+
+// Debounce function for sliding window delay
+export function debounce(func, delay) {
+  let timeoutId;
+
+  return function (...args) {
+    // Clear the previous timeout if it exists (sliding window)
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    // Set a new timeout
+    timeoutId = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
+}
+
+// Store debounced functions per element to maintain individual timers
+const debouncedCapitalizationMap = new WeakMap();
+
+export function getDebouncedCapitaliseText(element, delay = 5000) {
+  // Check if we already have a debounced function for this element
+  if (debouncedCapitalizationMap.has(element)) {
+    return debouncedCapitalizationMap.get(element);
+  }
+
+  // Create a new debounced function for this element
+  const debouncedFn = debounce((targetElement) => {
+    capitaliseText(
+      targetElement,
+      shouldCapitalise,
+      shouldCapitaliseForI,
+      getText,
+      setText
+    );
+  }, delay);
+
+  // Store it for future use
+  debouncedCapitalizationMap.set(element, debouncedFn);
+
+  return debouncedFn;
 }
