@@ -90,12 +90,15 @@
                                                                                 <!-- Hidden input retained for existing logic hooks -->
                                                                                 <input type="hidden" id="shouldConvertToSentenceCase" name="shouldConvertToSentenceCase" />
                                                                                 <div class="mode-info mb-2">
-                                                                                    <ul class="list-unstyled mode-facts small mb-1">
-                                                                                        <li><span class="badge bg-primary me-1">1</span>Capitalises the first letter after sentence-ending punctuation.</li>
-                                                                                        <li><span class="badge bg-primary me-1">2</span>Skips all individual word rules (names, I, acronyms, locations).</li>
-                                                                                        <li><span class="badge bg-primary me-1">3</span>Faster incremental updates when delay = 0.</li>
-                                                                                    </ul>
-                                                                                    <div class="small text-muted">Switch back to Word mode to restore your previous word rule selections.</div>
+                                                                                    <details class="mode-details" open>
+                                                                                        <summary class="small fw-semibold text-primary pointer">Details</summary>
+                                                                                        <ul class="list-unstyled mode-facts small mb-1 mt-1">
+                                                                                            <li><span class="icon-bullet sentence"></span>Capitalises the first letter after ., ! or ? (with closing quotes/brackets handled).</li>
+                                                                                            <li><span class="icon-bullet sentence"></span>Ignores word-level rules (names, I, acronyms, locations) while active.</li>
+                                                                                            <li><span class="icon-bullet sentence"></span>Set delay to 0 for immediate updates; higher values reduce processing on rapid typing.</li>
+                                                                                        </ul>
+                                                                                    </details>
+                                                                                    <div class="small text-muted">Switch back to Word Mode to restore your previous word rule selections.</div>
                                                                                 </div>
                                                                                 <div id="sentence_case_hint" class="alert alert-info py-1 px-2 mt-2 d-none" role="alert" style="font-size:12px;">
                                                                                     Sentence case active. Word-level options below are paused.
@@ -113,33 +116,36 @@
                                       <div id="wordModeSection" class="mode-section mb-2 border rounded p-2" data-mode="word">
                                         <h6 class="text-secondary mb-2">Word Mode</h6>
                                         <div class="mode-info mb-2">
-                                            <ul class="list-unstyled mode-facts small mb-1">
-                                                <li><span class="badge bg-secondary me-1">1</span>Applies selected rules below while you type.</li>
-                                                <li><span class="badge bg-secondary me-1">2</span>Sentence starts are still capitalised if a word rule triggers them.</li>
-                                                <li><span class="badge bg-secondary me-1">3</span>All rules turn off automatically if you switch to Sentence Case Mode.</li>
-                                            </ul>
+                                            <details class="mode-details" open>
+                                                <summary class="small fw-semibold text-secondary pointer">Details</summary>
+                                                <ul class="list-unstyled mode-facts small mb-1 mt-1">
+                                                    <li><span class="icon-bullet word"></span>Applies the selected rules live as you type.</li>
+                                                    <li><span class="icon-bullet word"></span>Does not interfere with natural sentence starts (they're still capitalised where appropriate).</li>
+                                                    <li><span class="icon-bullet word"></span>Automatically paused when Sentence Case Mode is enabled.</li>
+                                                </ul>
+                                            </details>
                                             <div class="small text-muted">Use the master toggle to enable or disable every rule at once.</div>
                                         </div>
                                         <div class="form-check mb-1">
-                                            <input type="checkbox" id="shouldEnableAllWordCapitalisation" class="form-check-input">
+                                            <input type="checkbox" id="shouldEnableAllWordCapitalisation" class="form-check-input" title="Turn ON/OFF every word rule below in one click.">
                                             <label for="shouldEnableAllWordCapitalisation" class="form-check-label"><strong>Toggle all options below</strong></label><br>
                                             <small class="text-muted">Quick master switch for the individual rules.</small>
                                         </div>
                                         <div id="wordOptionsNested" class="ms-3 ps-2 border-start mb-2">
                                             <div class="form-check mb-1">
-                                                <input type="checkbox" id="shouldCapitaliseI" name="shouldCapitaliseI" class="form-check-input" checked>
+                                                <input type="checkbox" id="shouldCapitaliseI" name="shouldCapitaliseI" class="form-check-input" checked title="Example: i went home → I went home">
                                                 <label for="shouldCapitaliseI" class="form-check-label">Capitalise standalone 'i'</label>
                                             </div>
                                             <div class="form-check mb-1">
-                                                <input type="checkbox" id="shouldCapitaliseAcronyms" name="shouldCapitaliseAcronyms" class="form-check-input" checked>
+                                                <input type="checkbox" id="shouldCapitaliseAcronyms" name="shouldCapitaliseAcronyms" class="form-check-input" checked title="Example: nasa api → NASA API">
                                                 <label for="shouldCapitaliseAcronyms" class="form-check-label">Capitalise acronyms & abbreviations</label>
                                             </div>
                                             <div class="form-check mb-1">
-                                                <input type="checkbox" id="shouldCapitaliseNames" name="shouldCapitaliseNames" class="form-check-input" checked>
+                                                <input type="checkbox" id="shouldCapitaliseNames" name="shouldCapitaliseNames" class="form-check-input" checked title="Example: alice and bob → Alice and Bob">
                                                 <label for="shouldCapitaliseNames" class="form-check-label">Capitalise names</label>
                                             </div>
                                             <div class="form-check mb-1">
-                                                <input type="checkbox" id="shouldCapitaliseLocations" name="shouldCapitaliseLocations" class="form-check-input" checked>
+                                                <input type="checkbox" id="shouldCapitaliseLocations" name="shouldCapitaliseLocations" class="form-check-input" checked title="Example: sydney harbour → Sydney Harbour">
                                                 <label for="shouldCapitaliseLocations" class="form-check-label">Capitalise locations</label>
                                             </div>
                                         </div>
@@ -207,6 +213,18 @@
     .card-header.bg-primary { background: linear-gradient(135deg,#0d6efd,#0a58ca)!important; }
     .card-header.bg-secondary { background: linear-gradient(135deg,#6c757d,#495057)!important; }
     .card-body { background:#fff; }
+
+    /* Mode details & icons */
+    details.mode-details { border:1px solid var(--acs-border); border-radius: var(--acs-radius-sm); padding:4px 8px 6px; background:#ffffff; box-shadow:0 1px 2px rgba(0,0,0,.05); }
+    details.mode-details[open] { background:#fdfefe; }
+    details.mode-details summary { cursor:pointer; list-style:none; }
+    details.mode-details summary::-webkit-details-marker { display:none; }
+    details.mode-details summary:before { content:'\25BE'; display:inline-block; font-size: .7rem; margin-right:6px; transition: transform 160ms ease; }
+    details.mode-details[open] summary:before { transform: rotate(180deg); }
+    .icon-bullet { display:inline-block; width:14px; height:14px; border-radius:4px; margin-right:6px; position:relative; top:2px; background: var(--acs-accent-soft); box-shadow: inset 0 0 0 1px var(--acs-accent); }
+    .icon-bullet.sentence { background:linear-gradient(135deg,#0d6efd20,#0d6efd55); box-shadow: inset 0 0 0 1px #0d6efd; }
+    .icon-bullet.word { background:linear-gradient(135deg,#6c757d20,#6c757d55); box-shadow: inset 0 0 0 1px #6c757d; }
+    .icon-bullet:after { content:''; width:6px; height:6px; background:#fff; border-radius:2px; position:absolute; top:4px; left:4px; box-shadow:0 0 0 1px rgba(0,0,0,.15); }
 
     /* Mode sections */
     #modeSectionsWrapper { display:flex; flex-direction:column; gap:14px; }
