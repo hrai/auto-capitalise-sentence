@@ -1,0 +1,57 @@
+name: Dependabot Auto Merge
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - labeled
+      - unlabeled
+      - ready_for_review
+  pull_request_review:
+    types: [submitted]
+  check_suite:
+    types: [completed]
+  status: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    if: >-
+      github.actor == 'dependabot[bot]' || github.actor == 'dependabot'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+      - name: Enable auto-merge if criteria met
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          # Fetch metadata
+          echo "Evaluating PR #$PR_NUMBER from Dependabot"
+          # Require all required checks to pass before auto-merge
+          gh pr view $PR_NUMBER --json mergeStateStatus,reviewDecision,headRefName,labels,author || exit 0
+          MERGE_STATE=$(gh pr view $PR_NUMBER --json mergeStateStatus -q .mergeStateStatus)
+          if [ "$MERGE_STATE" != "CLEAN" ] && [ "$MERGE_STATE" != "HAS_HOOKS" ]; then
+            echo "Merge state not clean ($MERGE_STATE). Skipping."; exit 0; fi
+          # Optional: skip major version bumps unless label allow-major is present
+          TITLE=$(gh pr view $PR_NUMBER --json title -q .title)
+          if echo "$TITLE" | grep -Eqi '\\bmajor\\b'; then
+            if ! gh pr view $PR_NUMBER --json labels -q '.labels[].name' | grep -q '^allow-major$'; then
+              echo "Detected potential major bump. Add label 'allow-major' to permit auto-merge."; exit 0; fi
+          fi
+          # Approve if not already approved (Dependabot PRs sometimes need an approval)
+          if gh pr view $PR_NUMBER --json reviewDecision -q .reviewDecision | grep -q "REVIEW_REQUIRED"; then
+            gh pr review $PR_NUMBER --approve --body "Auto-approval for Dependabot update" || true
+          fi
+          # Attempt enable auto-merge (squash by default)
+          gh pr merge $PR_NUMBER --auto --squash --delete-branch || true
