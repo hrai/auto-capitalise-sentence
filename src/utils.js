@@ -602,18 +602,23 @@ export function arrayToMap(obj) {
 export const DEFAULT_DEBOUNCE_DELAY = 5000;
 
 export function debounce(func, delay) {
+  // Normalise delay: fall back to DEFAULT_DEBOUNCE_DELAY for invalid values (NaN, negative, null, undefined)
+  const normalisedDelay =
+    Number.isFinite(delay) && delay >= 0 ? delay : DEFAULT_DEBOUNCE_DELAY;
+
+  // Special case: a zero delay should execute immediately (synchronously) as per test expectations
+  if (normalisedDelay === 0) {
+    return function (...args) {
+      return func.apply(this, args);
+    };
+  }
+
   let timeoutId;
-
   return function (...args) {
-    // Clear the previous timeout if it exists (sliding window)
     if (timeoutId) {
-      clearTimeout(timeoutId);
+      clearTimeout(timeoutId); // sliding window behaviour
     }
-
-    // Set a new timeout
-    timeoutId = setTimeout(() => {
-      func.apply(this, args);
-    }, delay);
+    timeoutId = setTimeout(() => func.apply(this, args), normalisedDelay);
   };
 }
 
