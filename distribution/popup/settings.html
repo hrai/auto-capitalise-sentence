@@ -85,26 +85,41 @@
                                                             <button type="button" class="btn btn-sm btn-outline-primary w-100" id="modeToggleButton" data-mode="word">Enable Sentence Case Mode</button>
                                                         </div>
                                     <div id="modeSectionsWrapper" class="mb-3">
-                                                                            <div id="sentenceModeSection" class="mode-section mb-3 border rounded p-2 bg-light" data-mode="sentence">
-                                        <h6 class="text-primary mb-2">Sentence Case Mode</h6>
-                                        <!-- Hidden input retained for existing logic hooks -->
-                                        <input type="hidden" id="shouldConvertToSentenceCase" name="shouldConvertToSentenceCase" />
-                                        <p class="mb-2 small text-muted">Automatically capitalises the start of each sentence and ignores all word-level rules while active.</p>
-                                        <div id="sentence_case_hint" class="alert alert-info py-1 px-2 mt-2 d-none" role="alert" style="font-size:12px;">
-                                            Sentence case active. Word-level options below are paused.
-                                        </div>
+                                                                              <div id="sentenceModeSection" class="mode-section mb-3 border rounded p-2 bg-light" data-mode="sentence">
+                                                                                <h6 class="text-primary mb-2">Sentence Case Mode</h6>
+                                                                                <!-- Hidden input retained for existing logic hooks -->
+                                                                                <input type="hidden" id="shouldConvertToSentenceCase" name="shouldConvertToSentenceCase" />
+                                                                                <div class="mode-info mb-2">
+                                                                                    <ul class="list-unstyled mode-facts small mb-1">
+                                                                                        <li><span class="badge bg-primary me-1">1</span>Capitalises the first letter after sentence-ending punctuation.</li>
+                                                                                        <li><span class="badge bg-primary me-1">2</span>Skips all individual word rules (names, I, acronyms, locations).</li>
+                                                                                        <li><span class="badge bg-primary me-1">3</span>Faster incremental updates when delay = 0.</li>
+                                                                                    </ul>
+                                                                                    <div class="small text-muted">Switch back to Word mode to restore your previous word rule selections.</div>
+                                                                                </div>
+                                                                                <div id="sentence_case_hint" class="alert alert-info py-1 px-2 mt-2 d-none" role="alert" style="font-size:12px;">
+                                                                                    Sentence case active. Word-level options below are paused.
+                                                                                </div>
                                                                                 <div class="card mt-3 mb-1 border-secondary sentence-performance" id="sentencePerformanceCard">
                                                                                     <div class="card-header py-1 bg-secondary text-white">Performance & Timing</div>
                                                                                     <div class="card-body pt-2 pb-2">
                                                                                         <label for="debounce_delay_ms" class="form-label mb-1">Processing Delay (ms)</label>
                                                                                         <input type="number" id="debounce_delay_ms" class="form-control form-control-sm" min="0" max="60000" step="100" placeholder="5000" />
-                                                                                        <div class="form-text">Wait time after typing stops before sentence case runs. 0 = instant.</div>
+                                                                                        <div class="form-text">Wait after typing stops before sentence case runs. 0 = immediate.</div>
                                                                                         <div id="debounce_delay_status" class="small text-muted mt-1"></div>
                                                                                     </div>
                                                                                 </div>
-                                      </div>
+                                                                              </div>
                                       <div id="wordModeSection" class="mode-section mb-2 border rounded p-2" data-mode="word">
-                                        <h6 class="text-secondary mb-2">Word Mode Options</h6>
+                                        <h6 class="text-secondary mb-2">Word Mode</h6>
+                                        <div class="mode-info mb-2">
+                                            <ul class="list-unstyled mode-facts small mb-1">
+                                                <li><span class="badge bg-secondary me-1">1</span>Applies selected rules below while you type.</li>
+                                                <li><span class="badge bg-secondary me-1">2</span>Sentence starts are still capitalised if a word rule triggers them.</li>
+                                                <li><span class="badge bg-secondary me-1">3</span>All rules turn off automatically if you switch to Sentence Case Mode.</li>
+                                            </ul>
+                                            <div class="small text-muted">Use the master toggle to enable or disable every rule at once.</div>
+                                        </div>
                                         <div class="form-check mb-1">
                                             <input type="checkbox" id="shouldEnableAllWordCapitalisation" class="form-check-input">
                                             <label for="shouldEnableAllWordCapitalisation" class="form-check-label"><strong>Toggle all options below</strong></label><br>
@@ -116,8 +131,7 @@
                                                 <label for="shouldCapitaliseI" class="form-check-label">Capitalise standalone 'i'</label>
                                             </div>
                                             <div class="form-check mb-1">
-                                                <input type="checkbox" id="shouldCapitaliseAcronyms" name="shouldCapitaliseAcronyms" class="form-check-input"
-                                                    checked>
+                                                <input type="checkbox" id="shouldCapitaliseAcronyms" name="shouldCapitaliseAcronyms" class="form-check-input" checked>
                                                 <label for="shouldCapitaliseAcronyms" class="form-check-label">Capitalise acronyms & abbreviations</label>
                                             </div>
                                             <div class="form-check mb-1">
@@ -125,8 +139,7 @@
                                                 <label for="shouldCapitaliseNames" class="form-check-label">Capitalise names</label>
                                             </div>
                                             <div class="form-check mb-1">
-                                                <input type="checkbox" id="shouldCapitaliseLocations" name="shouldCapitaliseLocations" class="form-check-input"
-                                                    checked>
+                                                <input type="checkbox" id="shouldCapitaliseLocations" name="shouldCapitaliseLocations" class="form-check-input" checked>
                                                 <label for="shouldCapitaliseLocations" class="form-check-label">Capitalise locations</label>
                                             </div>
                                         </div>
