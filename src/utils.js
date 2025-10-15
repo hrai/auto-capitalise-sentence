@@ -1,6 +1,4 @@
-/* Merge conflict resolved: retaining original comprehensive utils implementation (pre-refactor). */
-/* Planned future: replace monolith with modular barrel once lib/ modules are finalised. */
-export * from './lib/index.js';
+/* Retained monolithic utils implementation. TODO: introduce modular lib/ barrel before exporting. */
 import {
   shouldCapitaliseI,
   shouldCapitaliseNames,
