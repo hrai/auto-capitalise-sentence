@@ -13,7 +13,7 @@ on:
     types: [submitted]
   check_suite:
     types: [completed]
-  status: {}
+  # 'status' event omitted (deprecated for most use cases); check_suite completion suffices.
 
 permissions:
   contents: write
@@ -21,8 +21,8 @@ permissions:
 
 jobs:
   auto-merge:
-    if: >-
-      github.actor == 'dependabot[bot]' || github.actor == 'dependabot'
+    # Run for all subscribed events; we filter to Dependabot PRs inside the script so
+    # label / status / check_suite events initiated by other actors still evaluate.
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -35,23 +35,54 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          PR_NUMBER=${{ github.event.pull_request.number }}
-          # Fetch metadata
-          echo "Evaluating PR #$PR_NUMBER from Dependabot"
-          # Require all required checks to pass before auto-merge
-          gh pr view $PR_NUMBER --json mergeStateStatus,reviewDecision,headRefName,labels,author || exit 0
-          MERGE_STATE=$(gh pr view $PR_NUMBER --json mergeStateStatus -q .mergeStateStatus)
-          if [ "$MERGE_STATE" != "CLEAN" ] && [ "$MERGE_STATE" != "HAS_HOOKS" ]; then
-            echo "Merge state not clean ($MERGE_STATE). Skipping."; exit 0; fi
-          # Optional: skip major version bumps unless label allow-major is present
-          TITLE=$(gh pr view $PR_NUMBER --json title -q .title)
-          if echo "$TITLE" | grep -Eqi '\\bmajor\\b'; then
-            if ! gh pr view $PR_NUMBER --json labels -q '.labels[].name' | grep -q '^allow-major$'; then
-              echo "Detected potential major bump. Add label 'allow-major' to permit auto-merge."; exit 0; fi
+          set -euo pipefail
+          echo "Event name: ${{ github.event_name }} | Actor: ${{ github.actor }}"
+
+          # 1. Collect candidate PR numbers.
+          RAW_NUMBER='${{ github.event.pull_request.number }}'
+          if [ -n "$RAW_NUMBER" ]; then
+            PR_NUMBERS="$RAW_NUMBER"
+            echo "Pull request context present: $PR_NUMBERS"
+          else
+            SHA='${{ github.sha }}'
+            echo "No direct pull_request context; resolving PR(s) by commit SHA $SHA"
+            PR_NUMBERS=$(gh pr list --state open --json number,headRefOid -q \
+              ".[] | select(.headRefOid==\"$SHA\") | .number") || true
           fi
-          # Approve if not already approved (Dependabot PRs sometimes need an approval)
-          if gh pr view $PR_NUMBER --json reviewDecision -q .reviewDecision | grep -q "REVIEW_REQUIRED"; then
-            gh pr review $PR_NUMBER --approve --body "Auto-approval for Dependabot update" || true
+
+          if [ -z "${PR_NUMBERS:-}" ]; then
+            echo "No associated open PRs found; exiting."
+            exit 0
           fi
-          # Attempt enable auto-merge (squash by default)
-          gh pr merge $PR_NUMBER --auto --squash --delete-branch || true
+
+          # 2. Iterate through each PR (normally one) and attempt auto-merge if Dependabot.
+          for PR_NUMBER in $PR_NUMBERS; do
+            echo "\n--- Evaluating PR #$PR_NUMBER ---"
+            AUTHOR=$(gh pr view "$PR_NUMBER" --json author -q .author.login || echo unknown)
+            if [ "$AUTHOR" != "dependabot[bot]" ] && [ "$AUTHOR" != "dependabot" ]; then
+              echo "PR #$PR_NUMBER author is '$AUTHOR' (not Dependabot); skipping."
+              continue
+            fi
+            # Fetch metadata (will exit loop iteration if PR no longer exists)
+            gh pr view "$PR_NUMBER" --json mergeStateStatus,reviewDecision,headRefName,labels,title || continue
+            MERGE_STATE=$(gh pr view "$PR_NUMBER" --json mergeStateStatus -q .mergeStateStatus)
+            echo "Merge state: $MERGE_STATE"
+            if [ "$MERGE_STATE" != "CLEAN" ] && [ "$MERGE_STATE" != "HAS_HOOKS" ]; then
+              echo "Not clean (state=$MERGE_STATE); will retry on next event."; continue
+            fi
+            TITLE=$(gh pr view "$PR_NUMBER" --json title -q .title)
+            # Optional: skip major version bumps unless allow-major label is present.
+            if echo "$TITLE" | grep -Eqi '\\bmajor\\b'; then
+              LABELS=$(gh pr view "$PR_NUMBER" --json labels -q '.labels[].name' || true)
+              if ! echo "$LABELS" | grep -q '^allow-major$'; then
+                echo "Appears to be a major bump without 'allow-major' label; skipping."; continue
+              fi
+            fi
+            REVIEW_DECISION=$(gh pr view "$PR_NUMBER" --json reviewDecision -q .reviewDecision || echo null)
+            if echo "$REVIEW_DECISION" | grep -q "REVIEW_REQUIRED"; then
+              echo "Approving PR #$PR_NUMBER (review required)."
+              gh pr review "$PR_NUMBER" --approve --body "Auto-approval for Dependabot update" || true
+            fi
+            echo "Enabling auto-merge (squash) for PR #$PR_NUMBER"
+            gh pr merge "$PR_NUMBER" --auto --squash --delete-branch || true
+          done
