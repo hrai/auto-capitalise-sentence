@@ -333,7 +333,7 @@ function unique(list) {
 
 function capitaliseText(element) {
   // Only apply debounce when sentence case feature is enabled; otherwise capitalize immediately
-  if (utils.isSentenceCaseEnabled()) {
+  if (utils.isSentenceCaseModeActive()) {
     utils.applyImmediateSentenceStartCapitalisation(element);
     const debouncedFn = utils.getDebouncedCapitaliseText(
       element,

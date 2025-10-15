@@ -40,84 +40,96 @@
                 </li>
             </ul>
             <div class="tab-content">
-                <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="excluded-sites-tab"
-                    id="excluded_sites">
-                    <div class="mb-2">
-                        <small>Enter websites where you want the capitalising to be disabled.</small>
-                        <textarea id="sites" rows="4" class="form-control"
-                            placeholder="Add sites to exclude"></textarea>
-
-                            <div class="mb-3">
-                                <label for="debounce_delay_ms" class="form-label">Debounce Delay (milliseconds)</label>
-                                <input type="number" id="debounce_delay_ms" class="form-control" min="0" max="60000" step="100" placeholder="5000" />
-                                <div class="form-text">Time to wait after the last keystroke before capitalisation runs. Range: 0 - 60000. Default: 5000.</div>
-                                <div id="debounce_delay_status" class="small text-muted mt-1"></div>
-                            </div>
-                        <small class="text-muted">Note: Add each site in a separate row and click 'Save' button.</small>
-                    </div>
-                    <div class="d-grid gap-2">
-                        <input type="button" value="Save" id="submitButton" class="btn btn-primary btn-block" disabled>
-                        <input type="button" value="Add current site to ignore list" id="ignoreSiteButton"
-                            class="btn btn-primary btn-block">
-                    </div>
-                </div>
-                <div class="tab-pane fade" role="tabpanel" aria-labelledby="included-words-tab" id="included_words">
-                    <div class="mb-2">
-                        <small>Enter words which you want to be capitalised.</small>
-                        <textarea id="included_words_textbox" rows="4" class="form-control"
-                            placeholder="Add words to include"></textarea>
-                        <small class="text-muted">Note: Add each word in a separate row and click 'Save' button.</small>
-                    </div>
-                    <div class="d-grid gap-2">
-                        <input type="button" value="Save" id="submitButtonIncludedWords"
-                            class="btn btn-primary btn-block" disabled>
-                    </div>
-                </div>
-                <div class="tab-pane fade" role="tabpanel" aria-labelledby="excluded-words-tab" id="excluded_words">
-                    <div class="mb-2">
-                        <small>Enter words which you don't want to be capitalised.</small>
-                        <textarea id="excluded_words_textbox" rows="4" class="form-control"
-                            placeholder="Add words to exclude"></textarea>
-                        <small class="text-muted">Note: Add each word in a separate row and click 'Save' button.</small>
-                    </div>
-                    <div class="d-grid gap-2">
-                        <input type="button" value="Save" id="submitButtonExcludedWords"
-                            class="btn btn-primary btn-block" disabled>
-                    </div>
-                </div>
-                <div class="tab-pane fade" role="tabpanel" aria-labelledby="checkboxes-tab" id="checkboxes">
-                    <div class="mb-3">
-                        <h6 class="text-primary">Sentence Case Mode</h6>
-                        <input type="checkbox" id="shouldConvertToSentenceCase" name="shouldConvertToSentenceCase">
-                        <label for="shouldConvertToSentenceCase">Convert entire text to sentence case</label><br>
-                        <small class="text-muted">When enabled, converts all text to proper sentence case format. Disables individual word
-                            capitalisation below.</small>
-                    </div>
-
-                    <hr>
-                    <div class="mb-2">
-                        <h6 class="text-secondary">Individual Word Capitalisation</h6>
-                        <div class="form-check mb-1">
-                            <input type="checkbox" id="shouldEnableAllWordCapitalisation" class="form-check-input">
-                <label for="shouldEnableAllWordCapitalisation" class="form-check-label"><strong>Enable all individual word
-                    capitalisation options</strong></label><br>
-                            <small class="text-muted">Toggles all checkboxes below on/off together.</small>
-                        </div>
-                        <input type="checkbox" id="shouldCapitaliseI" name="shouldCapitaliseI" checked>
-                        <label for="shouldCapitaliseI">Should capitalise 'I'?</label><br>
-
-                        <input type="checkbox" id="shouldCapitaliseAcronyms" name="shouldCapitaliseAcronyms" checked>
-                        <label for="shouldCapitaliseAcronyms">Should capitalise abbreviations/acronyms?</label><br>
-
-                        <input type="checkbox" id="shouldCapitaliseNames" name="shouldCapitaliseNames" checked>
-                        <label for="shouldCapitaliseNames">Should capitalise names?</label><br>
-
-                        <input type="checkbox" id="shouldCapitaliseLocations" name="shouldCapitaliseLocations" checked>
-                        <label for="shouldCapitaliseLocations">Should capitalise locations?</label><br>
-
-                        <small class="text-muted">These options are disabled when sentence case mode is enabled.</small>
-                    </div>
-                </div>
+                                <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="excluded-sites-tab" id="excluded_sites">
+                                    <div class="card mb-3 border-primary">
+                                        <div class="card-header py-2 bg-primary text-white">Excluded Websites</div>
+                                        <div class="card-body pt-3 pb-2">
+                                            <small class="d-block mb-2">Enter websites where you want the capitalising to be disabled (one per line).</small>
+                                            <textarea id="sites" rows="4" class="form-control mb-2" placeholder="Add sites to exclude"></textarea>
+                                            <div class="d-grid gap-2 mb-2">
+                                                <input type="button" value="Save" id="submitButton" class="btn btn-primary btn-block" disabled>
+                                                <input type="button" value="Add current site to ignore list" id="ignoreSiteButton" class="btn btn-outline-primary btn-block">
+                                            </div>
+                                            <small class="text-muted">Sites listed here will completely disable the extension on matching domains.</small>
+                                        </div>
+                                    </div>
+                                    <div class="card mb-2 border-secondary">
+                                        <div class="card-header py-2 bg-secondary text-white">Performance & Timing</div>
+                                        <div class="card-body pt-3 pb-2">
+                                            <label for="debounce_delay_ms" class="form-label">Debounce Delay (milliseconds)</label>
+                                            <input type="number" id="debounce_delay_ms" class="form-control" min="0" max="60000" step="100" placeholder="5000" />
+                                            <div class="form-text">Time to wait after the last keystroke before sentence case processing executes (word mode is mostly immediate). Range: 0–60000.</div>
+                                            <div id="debounce_delay_status" class="small text-muted mt-2"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" role="tabpanel" aria-labelledby="included-words-tab" id="included_words">
+                                    <div class="card border-success">
+                                        <div class="card-header py-2 bg-success text-white">Custom Inclusion List</div>
+                                        <div class="card-body pt-3 pb-2">
+                                            <small class="d-block mb-2">Words you add here will always be capitalised (applies only in Word Capitalisation Mode).</small>
+                                            <textarea id="included_words_textbox" rows="4" class="form-control mb-2" placeholder="Add words to include"></textarea>
+                                            <div class="d-grid gap-2 mb-2">
+                                                <input type="button" value="Save" id="submitButtonIncludedWords" class="btn btn-success btn-block" disabled>
+                                            </div>
+                                            <small class="text-muted">One word per line. Case of stored value becomes the canonical replacement.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" role="tabpanel" aria-labelledby="excluded-words-tab" id="excluded_words">
+                                    <div class="card border-danger">
+                                        <div class="card-header py-2 bg-danger text-white">Exclusion List</div>
+                                        <div class="card-body pt-3 pb-2">
+                                            <small class="d-block mb-2">Words listed here will never be auto-capitalised (takes priority in Word Capitalisation Mode).</small>
+                                            <textarea id="excluded_words_textbox" rows="4" class="form-control mb-2" placeholder="Add words to exclude"></textarea>
+                                            <div class="d-grid gap-2 mb-2">
+                                                <input type="button" value="Save" id="submitButtonExcludedWords" class="btn btn-danger btn-block" disabled>
+                                            </div>
+                                            <small class="text-muted">One word per line. Use to suppress capitalisation for edge cases.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" role="tabpanel" aria-labelledby="checkboxes-tab" id="checkboxes">
+                                                        <div class="d-flex mb-3" id="modeToggleGroup">
+                                                            <button type="button" class="btn btn-sm btn-outline-primary w-100" id="modeToggleButton" data-mode="word">Switch to Sentence Case Mode</button>
+                                                        </div>
+                                    <div id="sentenceModeSection" class="mb-3 border rounded p-2 bg-light">
+                                        <h6 class="text-primary mb-2">Sentence Case Mode</h6>
+                                        <div class="form-check mb-2">
+                                            <input type="checkbox" id="shouldConvertToSentenceCase" name="shouldConvertToSentenceCase" class="form-check-input">
+                                            <label for="shouldConvertToSentenceCase" class="form-check-label">Convert entire text to sentence case</label>
+                                        </div>
+                                        <small class="text-muted d-block">When enabled, converts text to sentence starts only and disables word-level options.</small>
+                                        <div id="sentence_case_hint" class="alert alert-info py-1 px-2 mt-2 d-none" role="alert" style="font-size:12px;">
+                                            Sentence case is active. Individual word capitalisation options below are temporarily inactive.
+                                        </div>
+                                    </div>
+                                    <div id="wordModeSection" class="mb-2 border rounded p-2">
+                                        <h6 class="text-secondary mb-2">Individual Word Capitalisation</h6>
+                                        <div class="form-check mb-1">
+                                            <input type="checkbox" id="shouldEnableAllWordCapitalisation" class="form-check-input">
+                                            <label for="shouldEnableAllWordCapitalisation" class="form-check-label"><strong>Enable all individual word capitalisation options</strong></label><br>
+                                            <small class="text-muted">Toggles all checkboxes below on/off together.</small>
+                                        </div>
+                                        <div class="form-check mb-1">
+                                            <input type="checkbox" id="shouldCapitaliseI" name="shouldCapitaliseI" class="form-check-input" checked>
+                                            <label for="shouldCapitaliseI" class="form-check-label">Should capitalise 'I'?</label>
+                                        </div>
+                                        <div class="form-check mb-1">
+                                            <input type="checkbox" id="shouldCapitaliseAcronyms" name="shouldCapitaliseAcronyms" class="form-check-input" checked>
+                                            <label for="shouldCapitaliseAcronyms" class="form-check-label">Should capitalise abbreviations/acronyms?</label>
+                                        </div>
+                                        <div class="form-check mb-1">
+                                            <input type="checkbox" id="shouldCapitaliseNames" name="shouldCapitaliseNames" class="form-check-input" checked>
+                                            <label for="shouldCapitaliseNames" class="form-check-label">Should capitalise names?</label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input type="checkbox" id="shouldCapitaliseLocations" name="shouldCapitaliseLocations" class="form-check-input" checked>
+                                            <label for="shouldCapitaliseLocations" class="form-check-label">Should capitalise locations?</label>
+                                        </div>
+                                        <small class="text-muted">These options are disabled when sentence case mode is enabled.</small>
+                                    </div>
+                                </div>
             </div>
         </div>
         <hr>

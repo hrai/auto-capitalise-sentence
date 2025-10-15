@@ -11,6 +11,7 @@ import {
   shouldConvertToSentenceCase,
   shouldEnableAllWordCapitalisation,
   debounceDelayMs,
+  // (no new constants required for tab persistence)
 } from './plugin-constants';
 
 browser.storage.sync
@@ -118,6 +119,33 @@ loadFlagValuesFromBrowserStorage(shouldCapitaliseLocations);
 loadSentenceCaseFlagFromBrowserStorage(shouldConvertToSentenceCase);
 loadMasterWordFlagFromBrowserStorage();
 
+// Restore last active tab after popup open
+const LAST_ACTIVE_TAB_KEY = 'lastActiveSettingsTab';
+browser.storage.sync.get(LAST_ACTIVE_TAB_KEY).then((res) => {
+  const targetId = res[LAST_ACTIVE_TAB_KEY];
+  if (targetId && document.querySelector(`#${targetId}.tab-pane`)) {
+    // Defer until bootstrap has initialised tabs
+    setTimeout(() => {
+      const triggerBtn = document.querySelector(
+        `[data-bs-target="#${targetId}"]`
+      );
+      if (triggerBtn) {
+        // Simulate click to activate stored tab
+        triggerBtn.click();
+      }
+    }, 50);
+  }
+});
+
+// Track tab changes and persist
+$(document).on('shown.bs.tab', 'button[data-bs-toggle="tab"]', function (e) {
+  const targetSelector = $(e.target).attr('data-bs-target');
+  if (targetSelector && targetSelector.startsWith('#')) {
+    const paneId = targetSelector.substring(1);
+    browser.storage.sync.set({ [LAST_ACTIVE_TAB_KEY]: paneId });
+  }
+});
+
 function loadMasterWordFlagFromBrowserStorage() {
   browser.storage.sync
     .get([
@@ -165,13 +193,10 @@ function loadSentenceCaseFlagFromBrowserStorage(flagName) {
     const flagValue = items[flagName];
 
     // Sentence case defaults to false (disabled by default)
-    if (flagValue === true) {
-      $(`#${flagName}`).prop('checked', true);
-      setShouldCapitaliseVariable(flagName, true);
-    } else {
-      $(`#${flagName}`).prop('checked', false);
-      setShouldCapitaliseVariable(flagName, false);
-    }
+    const enabled = flagValue === true;
+    $(`#${flagName}`).prop('checked', enabled);
+    setShouldCapitaliseVariable(flagName, enabled);
+    toggleSentenceCaseHint(enabled);
   });
 }
 
@@ -214,6 +239,11 @@ $(document).on('change', `#${shouldEnableAllWordCapitalisation}`, function () {
 
 // Mutual exclusion: enabling sentence case disables other capitalisation checkboxes,
 // and enabling any other disables sentence case.
+// There are exactly TWO modes:
+// 1. Sentence Case Mode (only sentence starts capitalised) -> all word-level flags OFF
+// 2. Word Capitalisation Mode (any of I/Names/Acronyms/Locations) -> sentence case OFF
+// Toggling a mode switch must immediately flip the other group off visually & in storage.
+
 const sentenceCaseFlag = shouldConvertToSentenceCase;
 const otherFlags = [
   shouldCapitaliseI,
@@ -265,6 +295,7 @@ $(document).on('change', `#${sentenceCaseFlag}`, function () {
     // Recalculate master based on existing child states
     updateMasterFromChildren();
   }
+  toggleSentenceCaseHint(enabled);
 });
 
 // When any other flag turns on, ensure sentence case is off.
@@ -275,11 +306,22 @@ otherFlags.forEach((f) => {
       if ($sentence.prop('checked')) {
         $sentence.prop('checked', false);
         setShouldCapitaliseVariable(sentenceCaseFlag, false);
+        toggleSentenceCaseHint(false);
       }
     }
     updateMasterFromChildren();
   });
 });
+
+function toggleSentenceCaseHint(enabled) {
+  const $hint = $('#sentence_case_hint');
+  if (!$hint.length) return; // safety if HTML not present
+  if (enabled) {
+    $hint.removeClass('d-none');
+  } else {
+    $hint.addClass('d-none');
+  }
+}
 
 // Debounce delay change handler
 $(document).on('input', '#debounce_delay_ms', function () {
@@ -352,4 +394,179 @@ $('#included_words_textbox').on(`input.${pluginNamespace}`, function () {
 
 $('#excluded_words_textbox').on(`input.${pluginNamespace}`, function () {
   $('#submitButtonExcludedWords').prop('disabled', false);
+});
+
+// MODE TOGGLE BUTTONS (Sentence vs Word mode visual grouping)
+let cachedWordFlags = null;
+const CACHED_WORD_FLAGS_KEY = 'cachedWordFlagsSnapshot';
+
+function updateCachedWordFlagsSnapshot() {
+  // Only update snapshot if currently in word mode (sentence case not active)
+  const sentenceActive = $('#' + shouldConvertToSentenceCase).prop('checked');
+  if (sentenceActive) return; // do not overwrite snapshot with disabled flags
+  cachedWordFlags = {
+    [shouldCapitaliseI]: $('#shouldCapitaliseI').prop('checked'),
+    [shouldCapitaliseNames]: $('#shouldCapitaliseNames').prop('checked'),
+    [shouldCapitaliseAcronyms]: $('#shouldCapitaliseAcronyms').prop('checked'),
+    [shouldCapitaliseLocations]: $('#shouldCapitaliseLocations').prop(
+      'checked'
+    ),
+    [shouldEnableAllWordCapitalisation]: $(
+      '#shouldEnableAllWordCapitalisation'
+    ).prop('checked'),
+  };
+  browser.storage.sync.set({ [CACHED_WORD_FLAGS_KEY]: cachedWordFlags });
+}
+
+function applySentenceCaseMode() {
+  // Cache current word flags so we can restore later
+  if (!cachedWordFlags) {
+    // First time entering sentence case this session and no prior snapshot loaded
+    updateCachedWordFlagsSnapshot();
+  }
+  browser.storage.sync.set({
+    [shouldConvertToSentenceCase]: true,
+    [shouldCapitaliseI]: false,
+    [shouldCapitaliseNames]: false,
+    [shouldCapitaliseAcronyms]: false,
+    [shouldCapitaliseLocations]: false,
+    [shouldEnableAllWordCapitalisation]: false,
+  });
+  $('#shouldConvertToSentenceCase').prop('checked', true);
+  [
+    '#shouldCapitaliseI',
+    '#shouldCapitaliseNames',
+    '#shouldCapitaliseAcronyms',
+    '#shouldCapitaliseLocations',
+    '#shouldEnableAllWordCapitalisation',
+  ].forEach((sel) => $(sel).prop('checked', false).prop('disabled', true));
+  toggleSentenceCaseHint(true);
+  $('#sentenceModeSection').removeClass('d-none');
+  $('#wordModeSection').addClass('d-none');
+  const $btn = $('#modeToggleButton');
+  $btn
+    .attr('data-mode', 'sentence')
+    .text('Switch to Word Capitalisation Mode')
+    .removeClass('btn-outline-primary')
+    .addClass('btn-primary text-white');
+}
+
+function applyWordMode() {
+  // Restore cached flags if available
+  const restore = cachedWordFlags || {};
+  const updates = { [shouldConvertToSentenceCase]: false };
+  Object.keys(restore).forEach((k) => {
+    updates[k] = restore[k];
+  });
+  browser.storage.sync.set(updates);
+  $('#shouldConvertToSentenceCase').prop('checked', false);
+  [
+    '#shouldCapitaliseI',
+    '#shouldCapitaliseNames',
+    '#shouldCapitaliseAcronyms',
+    '#shouldCapitaliseLocations',
+    '#shouldEnableAllWordCapitalisation',
+  ].forEach((sel) => $(sel).prop('disabled', false));
+  Object.entries(restore).forEach(([k, v]) => {
+    if (v !== undefined) {
+      $('#' + k).prop('checked', v);
+    }
+  });
+  // Ensure snapshot persisted (in case it was only in-memory before navigation or restore)
+  if (cachedWordFlags) {
+    browser.storage.sync.set({ [CACHED_WORD_FLAGS_KEY]: cachedWordFlags });
+  } else {
+    // If no snapshot existed (fresh install, first toggle back), capture now
+    updateCachedWordFlagsSnapshot();
+  }
+  toggleSentenceCaseHint(false);
+  $('#wordModeSection').removeClass('d-none');
+  $('#sentenceModeSection').addClass('d-none');
+  const $btn = $('#modeToggleButton');
+  $btn
+    .attr('data-mode', 'word')
+    .text('Switch to Sentence Case Mode')
+    .removeClass('btn-primary text-white')
+    .addClass('btn-outline-primary');
+}
+
+$(document).on('click', '#modeToggleButton', function () {
+  const mode = $(this).attr('data-mode');
+  if (mode === 'word') {
+    applySentenceCaseMode();
+  } else {
+    applyWordMode();
+  }
+});
+
+// Initialise grouping visibility based on current stored state after a short delay
+setTimeout(() => {
+  browser.storage.sync
+    .get([
+      shouldConvertToSentenceCase,
+      shouldCapitaliseI,
+      shouldCapitaliseNames,
+      shouldCapitaliseAcronyms,
+      shouldCapitaliseLocations,
+      shouldEnableAllWordCapitalisation,
+      CACHED_WORD_FLAGS_KEY,
+    ])
+    .then((res) => {
+      if (res[shouldConvertToSentenceCase]) {
+        // Load persisted snapshot if available before applying sentence case
+        if (
+          res[CACHED_WORD_FLAGS_KEY] &&
+          typeof res[CACHED_WORD_FLAGS_KEY] === 'object'
+        ) {
+          cachedWordFlags = res[CACHED_WORD_FLAGS_KEY];
+        }
+        applySentenceCaseMode();
+      } else {
+        const applyFlag = (id, val) => {
+          const effective = val === undefined ? true : !!val;
+          $(id).prop('checked', effective);
+        };
+        applyFlag('#shouldCapitaliseI', res[shouldCapitaliseI]);
+        applyFlag('#shouldCapitaliseNames', res[shouldCapitaliseNames]);
+        applyFlag('#shouldCapitaliseAcronyms', res[shouldCapitaliseAcronyms]);
+        applyFlag('#shouldCapitaliseLocations', res[shouldCapitaliseLocations]);
+        applyFlag(
+          '#shouldEnableAllWordCapitalisation',
+          res[shouldEnableAllWordCapitalisation]
+        );
+        // If there's a persisted snapshot, prefer it (user may have changed flags then reloaded popup)
+        if (
+          res[CACHED_WORD_FLAGS_KEY] &&
+          typeof res[CACHED_WORD_FLAGS_KEY] === 'object'
+        ) {
+          cachedWordFlags = res[CACHED_WORD_FLAGS_KEY];
+          Object.entries(cachedWordFlags).forEach(([k, v]) => {
+            if (v !== undefined) {
+              $('#' + k).prop('checked', v);
+            }
+          });
+        } else {
+          // Capture initial snapshot based on currently applied flags
+          updateCachedWordFlagsSnapshot();
+        }
+        applyWordMode();
+      }
+    });
+}, 120);
+
+// Keep snapshot current when user changes word flags while in word mode
+otherFlags.forEach((f) => {
+  $(document).on('change', `#${f}`, function () {
+    const sentenceActive = $('#' + shouldConvertToSentenceCase).prop('checked');
+    if (!sentenceActive) {
+      updateCachedWordFlagsSnapshot();
+    }
+  });
+});
+
+$(document).on('change', `#${shouldEnableAllWordCapitalisation}`, function () {
+  const sentenceActive = $('#' + shouldConvertToSentenceCase).prop('checked');
+  if (!sentenceActive) {
+    updateCachedWordFlagsSnapshot();
+  }
 });

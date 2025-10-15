@@ -10,6 +10,19 @@ import {
   locationsKeyVal,
   wordsToIncludeKeyVal,
 } from './plugin-constants';
+// Re-export commonly used option and key names so tests can reliably import them from a single module.
+export {
+  shouldCapitaliseI,
+  shouldCapitaliseNames,
+  shouldCapitaliseAcronyms,
+  shouldCapitaliseLocations,
+  shouldConvertToSentenceCase,
+  constantsKeyVal,
+  namesKeyVal,
+  acronymsKeyVal,
+  locationsKeyVal,
+  wordsToIncludeKeyVal,
+};
 
 let wordsToExclude = [];
 export const optionsDictionary = {
@@ -28,6 +41,23 @@ const keyValueDictionary = {
 };
 const nbsp = '&nbsp;';
 const contentEditableTags = ['SPAN', 'DIV', 'P'];
+
+// Test-only helper to reset option flags & key/dictionary state ensuring isolation between test suites.
+// Safe no-op in production usage unless explicitly imported & invoked.
+export function __resetAllOptionsAndDictionariesForTests() {
+  optionsDictionary[shouldCapitaliseI] = false;
+  optionsDictionary[shouldCapitaliseNames] = false;
+  optionsDictionary[shouldCapitaliseAcronyms] = false;
+  optionsDictionary[shouldCapitaliseLocations] = false;
+  optionsDictionary[shouldConvertToSentenceCase] = false;
+  keyValueDictionary[constantsKeyVal] = {};
+  keyValueDictionary[namesKeyVal] = {};
+  keyValueDictionary[acronymsKeyVal] = {};
+  keyValueDictionary[locationsKeyVal] = {};
+  keyValueDictionary[wordsToIncludeKeyVal] = {};
+  wordsToExclude = [];
+  clearDebouncedCapitalisationCache();
+}
 
 export function capitaliseText(
   element,
@@ -175,16 +205,57 @@ function updateConstant(text, element, tagName, keyValuePairs, caseSensitive) {
 }
 
 export function shouldCapitaliseForI(text) {
-  const regex = /\s+i(\s+|')$/;
-  const matches = regex.test(text);
-
-  return matches;
+  // Match whitespace + i followed by either: whitespace, apostrophe, end-of-string, or punctuation commonly ending a thought.
+  const regex = /\s+i(?=\s+|'|$|[.,!?])/;
+  return regex.test(text);
 }
 
 export function setShouldCapitaliseOption(optionName, value) {
   if (value != null) {
-    optionsDictionary[optionName] = value;
+    // Enforce strict mutual exclusion here as a single source of truth.
+    if (optionName === shouldConvertToSentenceCase && value === true) {
+      optionsDictionary[shouldConvertToSentenceCase] = true;
+      // Turn off all word-level flags explicitly
+      optionsDictionary[shouldCapitaliseI] = false;
+      optionsDictionary[shouldCapitaliseNames] = false;
+      optionsDictionary[shouldCapitaliseAcronyms] = false;
+      optionsDictionary[shouldCapitaliseLocations] = false;
+    } else if (
+      value === true &&
+      (optionName === shouldCapitaliseI ||
+        optionName === shouldCapitaliseNames ||
+        optionName === shouldCapitaliseAcronyms ||
+        optionName === shouldCapitaliseLocations)
+    ) {
+      // Turning on any word-level flag disables sentence case.
+      optionsDictionary[shouldConvertToSentenceCase] = false;
+      optionsDictionary[optionName] = true;
+    } else {
+      optionsDictionary[optionName] = value;
+    }
   }
+}
+
+// Explicit mode helpers for clarity in calling code & tests
+export function isSentenceCaseModeActive() {
+  return !!optionsDictionary[shouldConvertToSentenceCase];
+}
+
+export function isAnyWordCapitalisationFlagActive() {
+  return (
+    !!optionsDictionary[shouldCapitaliseI] ||
+    !!optionsDictionary[shouldCapitaliseNames] ||
+    !!optionsDictionary[shouldCapitaliseAcronyms] ||
+    !!optionsDictionary[shouldCapitaliseLocations]
+  );
+}
+
+export function getActiveCapitalisationMode() {
+  return isSentenceCaseModeActive()
+    ? 'sentence-case'
+    : isAnyWordCapitalisationFlagActive()
+      ? 'word'
+      : 'none';
 }
 
 export function setKeyValue(keyValueName, value) {
@@ -476,46 +547,25 @@ export function hasSentenceCaseOpportunity(text) {
 export function getConvertedToSentenceCase(text) {
   if (!text || typeof text !== 'string') return text;
 
-  // Only capitalize first letter of sentences and common words, preserve all other casing
+  // Simplified: only capitalise first letter of text and first letter after sentence-ending punctuation or newline.
+  // Do NOT modify standalone 'i', abbreviations, acronyms, or titles – ensures strict mutual exclusivity with word mode.
   let result = text;
 
-  // Capitalize first letter of text (case-insensitive match, preserve rest)
-  result = result.replace(/^\s*([a-z])/i, (match, letter) =>
-    match.replace(letter, letter.toUpperCase())
-  );
-
-  // Capitalize first letter after sentence endings (preserve other casing)
+  // Start of text
   result = result.replace(
-    /([.!?])\s+([a-z])/gi,
-    (match, punctuation, letter) =>
-      punctuation + match.slice(1).replace(letter, letter.toUpperCase())
+    /^(\s*)([a-z])/,
+    (m, ws, ch) => ws + ch.toUpperCase()
   );
-
-  // Capitalize first letter after line breaks (preserve other casing)
+  // After sentence-ending punctuation
   result = result.replace(
-    /(\n)\s*([a-z])/gi,
-    (match, linebreak, letter) =>
-      linebreak + match.slice(1).replace(letter, letter.toUpperCase())
+    /([.!?]\s+)([a-z])/g,
+    (m, prefix, ch) => prefix + ch.toUpperCase()
   );
-
-  // Capitalize "I" when it stands alone
-  result = result.replace(/ i /g, ' I ');
-  result = result.replace(/^i /g, 'I ');
-  result = result.replace(/ i$/g, ' I');
-  // Capitalize common abbreviations themselves (Mr., Dr., etc.) followed by a space
-  // We only change the abbreviation token and not the following word here.
+  // After newline
   result = result.replace(
-    /\b(mr|mrs|ms|dr|prof|st)\.(?=\s)/gi,
-    (match) => match.charAt(0).toUpperCase() + match.slice(1).toLowerCase()
+    /(\n\s*)([a-z])/g,
+    (m, prefix, ch) => prefix + ch.toUpperCase()
   );
-  // Capitalize the first character of the following word when it is a name/title continuation
-  result = result.replace(
-    /\b(Mr|Mrs|Ms|Dr|Prof|St)\.\s+([a-z])(\w*)/g,
-    (match, title, firstLetter, rest) =>
-      `${title}. ${firstLetter.toUpperCase()}${rest}`
-  );
-  // Capitalize the first letter after an abbreviation sentence boundary IF it starts a new sentence (handled earlier).
-
   return result;
 }
 
