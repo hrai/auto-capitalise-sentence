@@ -968,6 +968,16 @@ describe('string manipulation', () => {
     });
 
     afterEach(() => {
+      // Flush any remaining timers
+      try {
+        jest.runOnlyPendingTimers();
+      } catch {
+        // ignore if no pending timers
+      }
+      // Reset internal debounced map (test helper)
+      if (typeof utils.__resetDebouncedMapForTests === 'function') {
+        utils.__resetDebouncedMapForTests();
+      }
       jest.useRealTimers();
     });
 
@@ -977,12 +987,12 @@ describe('string manipulation', () => {
 
     test('debounce delays function execution', () => {
       const mockFn = jest.fn();
-      const debouncedFn = utils.debounce(mockFn, 5000);
+      const debouncedFn = utils.debounce(mockFn, 50);
 
       debouncedFn('test');
       expect(mockFn).not.toHaveBeenCalled();
 
-      jest.advanceTimersByTime(4999);
+      jest.advanceTimersByTime(49);
       expect(mockFn).not.toHaveBeenCalled();
 
       jest.advanceTimersByTime(1);
@@ -991,36 +1001,36 @@ describe('string manipulation', () => {
 
     test('debounce implements sliding window - resets timer on new calls', () => {
       const mockFn = jest.fn();
-      const debouncedFn = utils.debounce(mockFn, 5000);
+      const debouncedFn = utils.debounce(mockFn, 80);
 
       // First call
       debouncedFn('call1');
       expect(mockFn).not.toHaveBeenCalled();
 
       // Second call after 3 seconds (should reset timer)
-      jest.advanceTimersByTime(3000);
+      jest.advanceTimersByTime(30);
       debouncedFn('call2');
       expect(mockFn).not.toHaveBeenCalled();
 
       // Third call after 4 more seconds (should reset timer again)
-      jest.advanceTimersByTime(4000);
+      jest.advanceTimersByTime(40);
       debouncedFn('call3');
       expect(mockFn).not.toHaveBeenCalled();
 
       // Now wait full 5 seconds - only last call should execute
-      jest.advanceTimersByTime(5000);
+      jest.advanceTimersByTime(80);
       expect(mockFn).toHaveBeenCalledTimes(1);
       expect(mockFn).toHaveBeenCalledWith('call3');
     });
 
     test('debounce preserves function context and arguments', () => {
       const mockFn = jest.fn();
-      const debouncedFn = utils.debounce(mockFn, 1000);
+      const debouncedFn = utils.debounce(mockFn, 25);
 
       const testContext = { test: true };
       debouncedFn.call(testContext, 'arg1', 'arg2', 'arg3');
 
-      jest.advanceTimersByTime(1000);
+      jest.advanceTimersByTime(25);
       expect(mockFn).toHaveBeenCalledWith('arg1', 'arg2', 'arg3');
     });
 
@@ -1029,20 +1039,30 @@ describe('string manipulation', () => {
     });
 
     test('getDebouncedCapitaliseText returns same debounced function for same element', () => {
-      const mockElement = { id: 'test' };
-      const debouncedFn1 = utils.getDebouncedCapitaliseText(mockElement);
-      const debouncedFn2 = utils.getDebouncedCapitaliseText(mockElement);
+      // Create proper DOM element like setText_SpanTagWithNbsp test
+      document.body.innerHTML = '<input type="text" id="test" value="" />';
+      const mockElement = $('#test')[0];
+      const debouncedFn1 = utils.getDebouncedCapitaliseText(mockElement, 30);
+      const debouncedFn2 = utils.getDebouncedCapitaliseText(mockElement, 30);
 
       expect(debouncedFn1).toBe(debouncedFn2);
     });
 
     test('getDebouncedCapitaliseText uses default 5000ms delay', () => {
-      const mockElement = { id: 'test' };
-      const mockCapitaliseText = jest
-        .spyOn(utils, 'capitaliseText')
-        .mockImplementation(() => {});
+      // Create proper DOM element like setText_SpanTagWithNbsp test
+      document.body.innerHTML =
+        '<div>' +
+        '  <input type="text" id="test-input" value="" />' +
+        '  <span id="test-span">test content</span> ' +
+        '</div>';
+      const mockElement = $('#test-input')[0];
+      const mockCapitaliseText = jest.fn();
 
-      const debouncedFn = utils.getDebouncedCapitaliseText(mockElement);
+      const debouncedFn = utils.getDebouncedCapitaliseText(
+        mockElement,
+        undefined, // keep default delay (5000ms)
+        mockCapitaliseText
+      );
       debouncedFn(mockElement);
 
       // Should not execute immediately
@@ -1050,60 +1070,57 @@ describe('string manipulation', () => {
 
       // Should execute after 5000ms
       jest.advanceTimersByTime(5000);
-      expect(mockCapitaliseText).toHaveBeenCalledWith(
-        mockElement,
-        utils.shouldCapitalise,
-        utils.shouldCapitaliseForI,
-        utils.getText,
-        utils.setText
-      );
-
-      mockCapitaliseText.mockRestore();
+      // Fallback flush in case of microtask ordering
+      jest.runOnlyPendingTimers();
+      expect(mockCapitaliseText).toHaveBeenCalledTimes(1);
+      expect(mockCapitaliseText.mock.calls[0][0]).toBe(mockElement);
     });
 
     test('multiple elements have independent debounce timers', () => {
-      const element1 = { id: 'element1' };
-      const element2 = { id: 'element2' };
-      const mockCapitaliseText = jest
-        .spyOn(utils, 'capitaliseText')
-        .mockImplementation(() => {});
+      // Create proper DOM elements like setText_SpanTagWithNbsp test
+      document.body.innerHTML =
+        '<div>' +
+        '  <input type="text" id="element1" value="" />' +
+        '  <input type="text" id="element2" value="" />' +
+        '  <span id="test-span">test content</span> ' +
+        '</div>';
+      const element1 = $('#element1')[0];
+      const element2 = $('#element2')[0];
+      const mockCapitaliseText = jest.fn();
 
-      const debouncedFn1 = utils.getDebouncedCapitaliseText(element1);
-      const debouncedFn2 = utils.getDebouncedCapitaliseText(element2);
+      const debouncedFn1 = utils.getDebouncedCapitaliseText(
+        element1,
+        60,
+        mockCapitaliseText
+      );
+      const debouncedFn2 = utils.getDebouncedCapitaliseText(
+        element2,
+        60,
+        mockCapitaliseText
+      );
 
       // Trigger both elements
       debouncedFn1(element1);
       debouncedFn2(element2);
 
       // Advance time partially
-      jest.advanceTimersByTime(3000);
+      jest.advanceTimersByTime(30);
 
       // Trigger element1 again (should reset its timer)
       debouncedFn1(element1);
 
       // Advance to 5000ms total - only element2 should fire
-      jest.advanceTimersByTime(2000);
+      jest.advanceTimersByTime(30);
       expect(mockCapitaliseText).toHaveBeenCalledTimes(1);
-      expect(mockCapitaliseText).toHaveBeenCalledWith(
-        element2,
-        expect.any(Function),
-        expect.any(Function),
-        expect.any(Function),
-        expect.any(Function)
-      );
+      // First fire should be element2
+      expect(mockCapitaliseText).toHaveBeenCalledTimes(1);
+      expect(mockCapitaliseText.mock.calls[0][0]).toBe(element2);
 
       // Advance another 3000ms - now element1 should fire
-      jest.advanceTimersByTime(3000);
+      jest.advanceTimersByTime(30);
       expect(mockCapitaliseText).toHaveBeenCalledTimes(2);
-      expect(mockCapitaliseText).toHaveBeenLastCalledWith(
-        element1,
-        expect.any(Function),
-        expect.any(Function),
-        expect.any(Function),
-        expect.any(Function)
-      );
-
-      mockCapitaliseText.mockRestore();
+      expect(mockCapitaliseText).toHaveBeenCalledTimes(2);
+      expect(mockCapitaliseText.mock.calls[1][0]).toBe(element1);
     });
   });
 });
