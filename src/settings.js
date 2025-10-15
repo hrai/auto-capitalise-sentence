@@ -152,6 +152,43 @@ setupCheckboxChangeEventHandlers(shouldCapitaliseAcronyms);
 setupCheckboxChangeEventHandlers(shouldCapitaliseLocations);
 setupCheckboxChangeEventHandlers(shouldConvertToSentenceCase);
 
+// Mutual exclusion: enabling sentence case disables other capitalisation checkboxes,
+// and enabling any other disables sentence case.
+const sentenceCaseFlag = shouldConvertToSentenceCase;
+const otherFlags = [
+  shouldCapitaliseI,
+  shouldCapitaliseNames,
+  shouldCapitaliseAcronyms,
+  shouldCapitaliseLocations,
+];
+
+// When sentence case toggles on, turn others off.
+$(document).on('change', `#${sentenceCaseFlag}`, function () {
+  const enabled = $(this).prop('checked');
+  if (enabled) {
+    otherFlags.forEach((f) => {
+      const $el = $(`#${f}`);
+      if ($el.prop('checked')) {
+        $el.prop('checked', false);
+        setShouldCapitaliseVariable(f, false);
+      }
+    });
+  }
+});
+
+// When any other flag turns on, ensure sentence case is off.
+otherFlags.forEach((f) => {
+  $(document).on('change', `#${f}`, function () {
+    if ($(this).prop('checked')) {
+      const $sentence = $(`#${sentenceCaseFlag}`);
+      if ($sentence.prop('checked')) {
+        $sentence.prop('checked', false);
+        setShouldCapitaliseVariable(sentenceCaseFlag, false);
+      }
+    }
+  });
+});
+
 // Debounce delay change handler
 $(document).on('input', '#debounce_delay_ms', function () {
   const raw = $(this).val();
