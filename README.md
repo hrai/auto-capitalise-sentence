@@ -12,6 +12,8 @@ Firefox/Microsoft Edge Chromium add-on to automatically capitalise words while t
 - Capitalise constants such as [days](src/constants.js#L6), [months](src/constants.js#L16)
 - Add apostrophe to common [English words](src/constants.js#L27)
 - Capitalise custom words
+- Optional Sentence Case mode (preserve internal word casing while capitalising sentence starts and standalone "I")
+- Per-field debounced processing to reduce performance impact (configurable delay)
 
 ## Configuration/Settings
 
@@ -33,6 +35,29 @@ There are 4 sections to configure the extension.
 
   ![features](imgs/features.png)
 
+### Debounce Delay (New)
+
+You can now configure how long the extension waits after your last keystroke before performing capitalization. This helps avoid unnecessary work while you're still typing rapidly.
+
+Defaults:
+
+- Default delay: 5000 ms (5 seconds)
+- Range: 0 – 60000 ms
+
+Behaviour:
+
+- Sliding window: each new keystroke resets the timer.
+- Setting delay to 0 applies capitalization immediately (no debouncing) – may reduce performance on very large editors.
+- Each editable field gets its own independent timer.
+
+Recommendations:
+
+- 3000–5000 ms: Good balance for most users.
+- 0–500 ms: Only if you prefer near-instant capitalization and your pages are lightweight.
+- >10000 ms: Use if you type in long uninterrupted bursts and want minimal interruptions.
+
+To change it, open the extension popup settings and update the Debounce Delay (ms) field. The change applies immediately to all newly observed inputs.
+
 ## Add-on download links
 
 - [Chrome](https://chrome.google.com/webstore/detail/auto-capitalise-sentence/ibihgblnfolhldgjbikghldfhkgknlpa?hl=en-GB)
@@ -42,7 +67,8 @@ There are 4 sections to configure the extension.
 ## Exceptions
 
 Certain sites reset the text change so this extension will not work on them.
-- Reddit 
+
+- Reddit
 - WhatsApp Web
 - Facebook Messenger
 - Discord
@@ -56,5 +82,5 @@ Certain sites reset the text change so this extension will not work on them.
 
 ### Raise issues
 
-- Please feel free to raise issues [here](https://github.com/hrai/auto-capitalise-extension/issues)
+- Please feel free to raise issues on the GitHub issues page: [Issue Tracker](https://github.com/hrai/auto-capitalise-extension/issues)
 - PRs are welcome! :)

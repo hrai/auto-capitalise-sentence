@@ -968,13 +968,11 @@ describe('string manipulation', () => {
     });
 
     afterEach(() => {
-      // Flush any remaining timers
       try {
         jest.runOnlyPendingTimers();
       } catch {
-        // ignore if no pending timers
+        // no pending timers
       }
-      // Reset internal debounced map (test helper)
       if (typeof utils.__resetDebouncedMapForTests === 'function') {
         utils.__resetDebouncedMapForTests();
       }
@@ -1121,6 +1119,82 @@ describe('string manipulation', () => {
       expect(mockCapitaliseText).toHaveBeenCalledTimes(2);
       expect(mockCapitaliseText).toHaveBeenCalledTimes(2);
       expect(mockCapitaliseText.mock.calls[1][0]).toBe(element1);
+    });
+
+    test('integration: rapid sequential capitalization triggers only one execution', () => {
+      document.body.innerHTML =
+        '<input type="text" id="debounce-int-test" value="h" />';
+      const el = $('#debounce-int-test')[0];
+      const mockCapitalise = jest.fn();
+
+      const debounced = utils.getDebouncedCapitaliseText(
+        el,
+        100,
+        mockCapitalise
+      );
+
+      // Simulate rapid typing: 5 keystrokes within 80ms (< delay)
+      for (let i = 0; i < 5; i++) {
+        debounced(el);
+        jest.advanceTimersByTime(20); // 0,20,40,60,80
+      }
+
+      // Still within sliding window: should not have fired yet
+      expect(mockCapitalise).not.toHaveBeenCalled();
+
+      // Advance past full delay from last call
+      jest.advanceTimersByTime(100);
+      expect(mockCapitalise).toHaveBeenCalledTimes(1);
+      expect(mockCapitalise.mock.calls[0][0]).toBe(el);
+    });
+
+    test('edge case: zero delay executes immediately each time', () => {
+      document.body.innerHTML =
+        '<input type="text" id="debounce-zero" value="h" />';
+      const el = $('#debounce-zero')[0];
+      const mockCapitalise = jest.fn();
+      const debounced = utils.getDebouncedCapitaliseText(el, 0, mockCapitalise);
+
+      debounced(el);
+      expect(mockCapitalise).toHaveBeenCalledTimes(1);
+      debounced(el);
+      expect(mockCapitalise).toHaveBeenCalledTimes(2);
+    });
+
+    test('edge case: large delay does not fire early', () => {
+      document.body.innerHTML =
+        '<input type="text" id="debounce-large" value="h" />';
+      const el = $('#debounce-large')[0];
+      const mockCapitalise = jest.fn();
+      const debounced = utils.getDebouncedCapitaliseText(
+        el,
+        1000,
+        mockCapitalise
+      );
+
+      debounced(el);
+      jest.advanceTimersByTime(999);
+      expect(mockCapitalise).not.toHaveBeenCalled();
+      jest.advanceTimersByTime(1);
+      expect(mockCapitalise).toHaveBeenCalledTimes(1);
+    });
+
+    test('invalid delay (NaN) falls back to default 5000', () => {
+      document.body.innerHTML =
+        '<input type="text" id="debounce-nan" value="h" />';
+      const el = $('#debounce-nan')[0];
+      const mockCapitalise = jest.fn();
+      // Call with undefined to trigger default
+      const debounced = utils.getDebouncedCapitaliseText(
+        el,
+        undefined,
+        mockCapitalise
+      );
+      debounced(el);
+      jest.advanceTimersByTime(4999);
+      expect(mockCapitalise).not.toHaveBeenCalled();
+      jest.advanceTimersByTime(1);
+      expect(mockCapitalise).toHaveBeenCalledTimes(1);
     });
   });
 });

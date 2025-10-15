@@ -9,10 +9,11 @@ import {
   shouldCapitaliseAcronyms,
   shouldCapitaliseLocations,
   shouldConvertToSentenceCase,
+  debounceDelayMs,
 } from './plugin-constants';
 
 browser.storage.sync
-  .get([sitesToIgnore, wordsToExclude, wordsToInclude])
+  .get([sitesToIgnore, wordsToExclude, wordsToInclude, debounceDelayMs])
   .then(updateIgnoreLists, onError);
 
 function updateIgnoreLists(item) {
@@ -30,6 +31,16 @@ function updateIgnoreLists(item) {
   if (wordsToInclude) {
     $('#included_words_textbox').val(wordsToInclude.join('\n'));
   }
+
+  // Debounce delay (ms) default 5000
+  let delay = 5000;
+  if (item.debounceDelayMs != null) {
+    const parsed = parseInt(item.debounceDelayMs, 10);
+    if (!isNaN(parsed)) {
+      delay = parsed;
+    }
+  }
+  $('#debounce_delay_ms').val(delay);
 }
 
 function onError(error) {
@@ -140,6 +151,18 @@ setupCheckboxChangeEventHandlers(shouldCapitaliseNames);
 setupCheckboxChangeEventHandlers(shouldCapitaliseAcronyms);
 setupCheckboxChangeEventHandlers(shouldCapitaliseLocations);
 setupCheckboxChangeEventHandlers(shouldConvertToSentenceCase);
+
+// Debounce delay change handler
+$(document).on('input', '#debounce_delay_ms', function () {
+  const raw = $(this).val();
+  const parsed = parseInt(raw, 10);
+  if (!isNaN(parsed) && parsed >= 0 && parsed <= 60000) {
+    browser.storage.sync.set({ [debounceDelayMs]: parsed });
+    $('#debounce_delay_status').text('Saved');
+  } else {
+    $('#debounce_delay_status').text('Enter 0 - 60000');
+  }
+});
 
 function setupCheckboxChangeEventHandlers(flagName) {
   $(document).on('change', `#${flagName}`, function (event) {

@@ -46,6 +46,13 @@
                         <small>Enter websites where you want the capitalising to be disabled.</small>
                         <textarea id="sites" rows="4" class="form-control"
                             placeholder="Add sites to exclude"></textarea>
+
+                            <div class="mb-3">
+                                <label for="debounce_delay_ms" class="form-label">Debounce Delay (milliseconds)</label>
+                                <input type="number" id="debounce_delay_ms" class="form-control" min="0" max="60000" step="100" placeholder="5000" />
+                                <div class="form-text">Time to wait after the last keystroke before capitalisation runs. Range: 0 - 60000. Default: 5000.</div>
+                                <div id="debounce_delay_status" class="small text-muted mt-1"></div>
+                            </div>
                         <small class="text-muted">Note: Add each site in a separate row and click 'Save' button.</small>
                     </div>
                     <div class="d-grid gap-2">

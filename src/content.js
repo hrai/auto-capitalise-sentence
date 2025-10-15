@@ -8,6 +8,7 @@ import {
   shouldCapitaliseAcronyms,
   shouldCapitaliseLocations,
   shouldConvertToSentenceCase,
+  debounceDelayMs,
   constantsKeyVal,
   namesKeyVal,
   acronymsKeyVal,
@@ -26,6 +27,8 @@ let sitesToExclude = [
   'facebook.com',
 ];
 
+let configuredDebounceDelay = 5000;
+
 browser.storage.local
   .get([constantsKeyVal, namesKeyVal, acronymsKeyVal, locationsKeyVal])
   .then((localDict) => {
@@ -37,6 +40,7 @@ browser.storage.local
         shouldCapitaliseAcronyms,
         shouldCapitaliseLocations,
         shouldConvertToSentenceCase,
+        debounceDelayMs,
         wordsToExclude,
         wordsToInclude,
       ])
@@ -48,6 +52,13 @@ browser.storage.local
 function processResponse(storageDict) {
   if (storageDict.sitesToIgnore) {
     sitesToExclude = sitesToExclude.concat(storageDict.sitesToIgnore);
+  }
+
+  if (storageDict.debounceDelayMs != null) {
+    const parsed = parseInt(storageDict.debounceDelayMs, 10);
+    if (!isNaN(parsed) && parsed >= 0 && parsed <= 60000) {
+      configuredDebounceDelay = parsed;
+    }
   }
 
   setOptions(storageDict);
@@ -96,6 +107,12 @@ browser.storage.onChanged.addListener(
       utils.toggleOptionsValue(changes, shouldCapitaliseAcronyms);
       utils.toggleOptionsValue(changes, shouldCapitaliseLocations);
       utils.toggleOptionsValue(changes, shouldConvertToSentenceCase);
+      if (changes.debounceDelayMs) {
+        const v = parseInt(changes.debounceDelayMs.newValue, 10);
+        if (!isNaN(v) && v >= 0 && v <= 60000) {
+          configuredDebounceDelay = v;
+        }
+      }
 
       if (changes.wordsToExclude != null) {
         const newValue = changes.wordsToExclude.newValue;
@@ -271,6 +288,9 @@ function unique(list) {
 
 function capitaliseText(element) {
   // Use debounced version with 5-second sliding window
-  const debouncedFn = utils.getDebouncedCapitaliseText(element);
+  const debouncedFn = utils.getDebouncedCapitaliseText(
+    element,
+    configuredDebounceDelay
+  );
   debouncedFn(element);
 }
