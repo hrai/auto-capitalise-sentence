@@ -121,6 +121,7 @@ loadMasterWordFlagFromBrowserStorage();
 
 // Restore last active tab after popup open
 const LAST_ACTIVE_TAB_KEY = 'lastActiveSettingsTab';
+const MODE_DETAILS_STATE_KEY = 'modeDetailsOpenState';
 browser.storage.sync.get(LAST_ACTIVE_TAB_KEY).then((res) => {
   const targetId = res[LAST_ACTIVE_TAB_KEY];
   if (targetId && document.querySelector(`#${targetId}.tab-pane`)) {
@@ -133,6 +134,32 @@ browser.storage.sync.get(LAST_ACTIVE_TAB_KEY).then((res) => {
         // Simulate click to activate stored tab
         triggerBtn.click();
       }
+      // After tab restore, restore details open state
+      browser.storage.sync.get(MODE_DETAILS_STATE_KEY).then((r) => {
+        const map = r[MODE_DETAILS_STATE_KEY];
+        if (map && typeof map === 'object') {
+          document
+            .querySelectorAll('details.mode-details')
+            .forEach((el, idx) => {
+              const key =
+                el.getAttribute('data-details-id') || `details-${idx}`;
+              if (map[key] === false) {
+                el.removeAttribute('open');
+              } else if (map[key] === true) {
+                el.setAttribute('open', '');
+              }
+            });
+        } else {
+          // Attach ids if missing for future persistence
+          document
+            .querySelectorAll('details.mode-details')
+            .forEach((el, idx) => {
+              if (!el.getAttribute('data-details-id')) {
+                el.setAttribute('data-details-id', `details-${idx}`);
+              }
+            });
+        }
+      });
     }, 50);
   }
 });
@@ -143,6 +170,44 @@ $(document).on('shown.bs.tab', 'button[data-bs-toggle="tab"]', function (e) {
   if (targetSelector && targetSelector.startsWith('#')) {
     const paneId = targetSelector.substring(1);
     browser.storage.sync.set({ [LAST_ACTIVE_TAB_KEY]: paneId });
+  }
+});
+
+// Persist <details> open/closed state for mode info panels
+function persistDetailsState() {
+  const state = {};
+  document.querySelectorAll('details.mode-details').forEach((el, idx) => {
+    let id = el.getAttribute('data-details-id');
+    if (!id) {
+      id = `details-${idx}`;
+      el.setAttribute('data-details-id', id);
+    }
+    state[id] = el.hasAttribute('open');
+  });
+  browser.storage.sync.set({ [MODE_DETAILS_STATE_KEY]: state });
+}
+
+// Delegate toggle events (captures both click and keyboard activation)
+document.addEventListener(
+  'toggle',
+  (evt) => {
+    const target = evt.target;
+    if (target && target.matches && target.matches('details.mode-details')) {
+      persistDetailsState();
+    }
+  },
+  true
+);
+
+// Fallback: if browser doesn't dispatch 'toggle', bind click on summary
+document.addEventListener('click', (evt) => {
+  const summary = evt.target.closest && evt.target.closest('summary');
+  if (summary) {
+    const parent = summary.parentElement;
+    if (parent && parent.matches && parent.matches('details.mode-details')) {
+      // Debounce a tick to allow DOM to apply open attribute
+      setTimeout(persistDetailsState, 0);
+    }
   }
 });
 
