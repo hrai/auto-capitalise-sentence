@@ -1,4 +1,5 @@
-import {
+import * as utils from '../src/utils';
+const {
   capitaliseTextProxy,
   setShouldCapitaliseOption,
   setKeyValue,
@@ -8,7 +9,7 @@ import {
   acronymsKeyVal,
   shouldCapitaliseI,
   fullReprocessElement,
-} from '../src/utils';
+} = utils;
 
 // Minimal mock element
 function makeEl(initial) {
@@ -71,7 +72,7 @@ describe('Sentence case suppresses word-level corrections', () => {
     // Now switch to sentence case and reset text to lower-case again to test isolation
     el.value = 'i went home ';
     setShouldCapitaliseOption(shouldConvertToSentenceCase, true);
-    setShouldCapitaliseOption(shouldCapitaliseI, true); // even if flag true, should be ignored now
+    // Do NOT re-enable I flag; exclusivity keeps word flags off in sentence case mode.
     capitaliseTextProxy(el, undefined, undefined, getText, setText);
     // Sentence case should only capitalise first char of sentence, which IS the i; to differentiate we move i inside sentence
     el.value = 'today i went home ';

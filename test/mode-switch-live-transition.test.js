@@ -1,4 +1,5 @@
-import {
+import * as utils from '../src/utils';
+const {
   capitaliseTextProxy,
   setShouldCapitaliseOption,
   setKeyValue,
@@ -10,7 +11,7 @@ import {
   namesKeyVal,
   acronymsKeyVal,
   fullReprocessElement,
-} from '../src/utils';
+} = utils;
 
 function el(initial = '') {
   return { tagName: 'INPUT', value: initial };
@@ -52,10 +53,9 @@ describe('Live mode switching mutual exclusion', () => {
 
     // Enable sentence case mid-session
     setShouldCapitaliseOption(shouldConvertToSentenceCase, true);
-    // Disable word flags to mirror UI auto-disable
-    setShouldCapitaliseOption(shouldCapitaliseAcronyms, false);
-    setShouldCapitaliseOption(shouldCapitaliseNames, false);
-    setShouldCapitaliseOption(shouldCapitaliseI, false);
+    // Automatic exclusivity: all word flags should now be false
+    expect(utils.isSentenceCaseModeActive()).toBe(true);
+    expect(utils.isAnyWordCapitalisationFlagActive()).toBe(false);
 
     // Continue typing a lowercase name that would normally auto-capitalise under word mode
     const before = e.value.length;
@@ -71,7 +71,8 @@ describe('Live mode switching mutual exclusion', () => {
     typeSequence(e, 'world ');
     // Switch on sentence case
     setShouldCapitaliseOption(shouldConvertToSentenceCase, true);
-    setShouldCapitaliseOption(shouldCapitaliseNames, false);
+    // Word flags should be auto-disabled
+    expect(utils.isAnyWordCapitalisationFlagActive()).toBe(false);
     // Type another word that would be a name replacement
     typeSequence(e, 'john ');
     // Should not have turned john into John

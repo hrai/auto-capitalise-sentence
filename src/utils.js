@@ -233,6 +233,28 @@ export function setShouldCapitaliseOption(optionName, value) {
     } else {
       optionsDictionary[optionName] = value;
     }
+    // Final safeguard: ensure exclusivity invariant ALWAYS holds even if future flags added.
+    enforceExclusiveModeInvariant();
+  }
+}
+
+// Internal safeguard to guarantee exclusivity even if multiple flags are toggled in rapid succession or new flag logic added later.
+export function enforceExclusiveModeInvariant() {
+  if (optionsDictionary[shouldConvertToSentenceCase]) {
+    // Sentence case trumps word flags: clear any stray word flags that might have been set directly.
+    if (
+      optionsDictionary[shouldCapitaliseI] ||
+      optionsDictionary[shouldCapitaliseNames] ||
+      optionsDictionary[shouldCapitaliseAcronyms] ||
+      optionsDictionary[shouldCapitaliseLocations]
+    ) {
+      optionsDictionary[shouldCapitaliseI] = false;
+      optionsDictionary[shouldCapitaliseNames] = false;
+      optionsDictionary[shouldCapitaliseAcronyms] = false;
+      optionsDictionary[shouldCapitaliseLocations] = false;
+    }
+  } else {
+    // If sentence case off but NO word flags on, remain as-is (neutral mode). If sentence case off and any word flag on, valid word mode.
   }
 }
 

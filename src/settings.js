@@ -399,6 +399,37 @@ $('#excluded_words_textbox').on(`input.${pluginNamespace}`, function () {
 // MODE TOGGLE BUTTONS (Sentence vs Word mode visual grouping)
 let cachedWordFlags = null;
 const CACHED_WORD_FLAGS_KEY = 'cachedWordFlagsSnapshot';
+// Helper to refresh visual state (active/inactive sections + button) based on current checkbox values.
+function refreshModeUI() {
+  const sentenceActive = $('#' + shouldConvertToSentenceCase).prop('checked');
+  if (sentenceActive) {
+    $('#sentenceModeSection').addClass('active').removeClass('inactive');
+    $('#wordModeSection').addClass('inactive').removeClass('active');
+    reorderModeSections('sentence');
+    const $btn = $('#modeToggleButton');
+    $btn
+      .attr('data-mode', 'sentence')
+      .text('Switch to Word Capitalisation Mode')
+      .removeClass('btn-outline-primary')
+      .addClass('btn-primary text-white');
+    // Enable debounce controls
+    $('#debounce_delay_ms').prop('disabled', false);
+    $('#sentencePerformanceCard').removeClass('opacity-50');
+  } else {
+    $('#wordModeSection').addClass('active').removeClass('inactive');
+    $('#sentenceModeSection').addClass('inactive').removeClass('active');
+    reorderModeSections('word');
+    const $btn = $('#modeToggleButton');
+    $btn
+      .attr('data-mode', 'word')
+      .text('Switch to Sentence Case Mode')
+      .removeClass('btn-primary text-white')
+      .addClass('btn-outline-primary');
+    // Disable debounce controls (only relevant in sentence mode)
+    $('#debounce_delay_ms').prop('disabled', true);
+    $('#sentencePerformanceCard').addClass('opacity-50');
+  }
+}
 
 function updateCachedWordFlagsSnapshot() {
   // Only update snapshot if currently in word mode (sentence case not active)
@@ -441,14 +472,7 @@ function applySentenceCaseMode() {
     '#shouldEnableAllWordCapitalisation',
   ].forEach((sel) => $(sel).prop('checked', false).prop('disabled', true));
   toggleSentenceCaseHint(true);
-  $('#sentenceModeSection').removeClass('d-none');
-  $('#wordModeSection').addClass('d-none');
-  const $btn = $('#modeToggleButton');
-  $btn
-    .attr('data-mode', 'sentence')
-    .text('Switch to Word Capitalisation Mode')
-    .removeClass('btn-outline-primary')
-    .addClass('btn-primary text-white');
+  refreshModeUI();
 }
 
 function applyWordMode() {
@@ -480,14 +504,22 @@ function applyWordMode() {
     updateCachedWordFlagsSnapshot();
   }
   toggleSentenceCaseHint(false);
-  $('#wordModeSection').removeClass('d-none');
-  $('#sentenceModeSection').addClass('d-none');
-  const $btn = $('#modeToggleButton');
-  $btn
-    .attr('data-mode', 'word')
-    .text('Switch to Sentence Case Mode')
-    .removeClass('btn-primary text-white')
-    .addClass('btn-outline-primary');
+  refreshModeUI();
+}
+
+// Ensure the active section is visually first in the wrapper for clarity.
+function reorderModeSections(activeMode) {
+  const wrapper = $('#modeSectionsWrapper');
+  if (!wrapper.length) return;
+  const sentence = $('#sentenceModeSection');
+  const word = $('#wordModeSection');
+  if (activeMode === 'sentence') {
+    sentence.detach();
+    wrapper.prepend(sentence);
+  } else if (activeMode === 'word') {
+    word.detach();
+    wrapper.prepend(word);
+  }
 }
 
 $(document).on('click', '#modeToggleButton', function () {
@@ -561,6 +593,8 @@ otherFlags.forEach((f) => {
     if (!sentenceActive) {
       updateCachedWordFlagsSnapshot();
     }
+    // If user unchecks all word flags manually, reflect neutral state (still considered word mode but no features). Button state remains consistent.
+    refreshModeUI();
   });
 });
 
@@ -569,4 +603,8 @@ $(document).on('change', `#${shouldEnableAllWordCapitalisation}`, function () {
   if (!sentenceActive) {
     updateCachedWordFlagsSnapshot();
   }
+  refreshModeUI();
 });
+
+// When sentence case checkbox itself changes directly (user clicks inside sentence section), ensure UI refresh.
+// Hidden checkbox retained; mode changes now driven exclusively by toggle button so we do not bind a direct change handler.

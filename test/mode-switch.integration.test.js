@@ -2,7 +2,8 @@
  * Integration tests for mode switching between word capitalisation and sentence case.
  * These tests focus on logic exported from utils rather than DOM mutation observers.
  */
-import {
+import * as utils from '../src/utils';
+const {
   capitaliseTextProxy,
   setShouldCapitaliseOption,
   __resetAllOptionsAndDictionariesForTests,
@@ -12,7 +13,7 @@ import {
   shouldCapitaliseAcronyms,
   shouldCapitaliseLocations,
   getConvertedToSentenceCase,
-} from '../src/utils';
+} = utils;
 
 // NOTE: We re-import constants through require to avoid circular (use relative path if necessary)
 
@@ -62,8 +63,8 @@ describe('Mode switching behaviour', () => {
   test('Sentence case mode applies even without trigger punctuation', () => {
     const el = makeEl('hello world');
     setShouldCapitaliseOption(shouldConvertToSentenceCase, true);
-    // Disable word flags implicitly
-    wordFlags.forEach((f) => setShouldCapitaliseOption(f, false));
+    // Word flags should have been auto-disabled by exclusivity logic
+    expect(wordFlags.some((f) => utils.optionsDictionary[f])).toBe(false);
     const result = run(el, 'hello world');
     expect(result.startsWith('Hello')).toBeTruthy();
   });
@@ -71,7 +72,7 @@ describe('Mode switching behaviour', () => {
   test('Sentence case preserves internal casing (current behaviour)', () => {
     const el = makeEl('hello NASA test');
     setShouldCapitaliseOption(shouldConvertToSentenceCase, true);
-    wordFlags.forEach((f) => setShouldCapitaliseOption(f, false));
+    expect(wordFlags.some((f) => utils.optionsDictionary[f])).toBe(false);
     const result = run(el, 'hello NASA test');
     // Only first letter changed to uppercase if needed, internal acronym preserved
     expect(result).toBe('Hello NASA test');
