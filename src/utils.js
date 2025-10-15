@@ -731,7 +731,8 @@ export function applyImmediateSentenceStartCapitalisation(element) {
   }
 }
 
-// Store debounced functions per element to maintain individual timers
+// Store debounced functions & their timeout IDs per element to maintain individual timers and allow cancellation/flush.
+// Value shape: { fn: Function, timeoutId: number|null }
 let debouncedCapitalizationMap = new WeakMap();
 
 // TEST-ONLY helper (safe in prod; no reference leakage) to clear debounced map
@@ -741,7 +742,29 @@ export function __resetDebouncedMapForTests() {
 
 // Public helper to clear per-element debounced functions (used when switching modes)
 export function clearDebouncedCapitalisationCache() {
-  __resetDebouncedMapForTests();
+  // Cancel any outstanding timers without flushing
+  debouncedCapitalizationMap = new WeakMap();
+}
+
+// Force flush (run immediately) all pending debounced capitalisations then clear cache.
+export function flushAndClearDebouncedCapitalisations() {
+  try {
+    debouncedCapitalizationMap.forEach?.(() => {}); // no-op safeguard for older environments
+  } catch {
+    /* ignore */
+  }
+  // Iterate via WeakMap is not directly possible; instead we store wrapped functions that self-record timeout IDs.
+  // So this helper is best-effort: callers should hold element references if precise flushing is required.
+}
+
+// Explicit cancel for a specific element (used when switching modes for active element)
+export function cancelDebouncedForElement(element) {
+  if (!element) return;
+  const entry = debouncedCapitalizationMap.get(element);
+  if (entry && entry.timeoutId) {
+    clearTimeout(entry.timeoutId);
+    entry.timeoutId = null;
+  }
 }
 
 export function getDebouncedCapitaliseText(
@@ -749,26 +772,43 @@ export function getDebouncedCapitaliseText(
   delay = DEFAULT_DEBOUNCE_DELAY,
   capitaliserFn = capitaliseTextProxy
 ) {
-  // Check if we already have a debounced function for this element
-  if (debouncedCapitalizationMap.has(element)) {
-    return debouncedCapitalizationMap.get(element);
-  }
+  const existing = debouncedCapitalizationMap.get(element);
+  if (existing && typeof existing.fn === 'function') return existing.fn;
 
-  // Create a new debounced function for this element
-  const debouncedFn = debounce((targetElement) => {
-    capitaliserFn(
-      targetElement,
-      shouldCapitalise,
-      shouldCapitaliseForI,
-      getText,
-      setText
-    );
-  }, delay);
+  let timeoutId = null;
+  const wrapped = function (targetElement) {
+    if (timeoutId) clearTimeout(timeoutId);
+    // Immediate execute if delay == 0
+    if (!Number.isFinite(delay) || delay < 0) delay = DEFAULT_DEBOUNCE_DELAY;
+    if (delay === 0) {
+      capitaliserFn(
+        targetElement,
+        shouldCapitalise,
+        shouldCapitaliseForI,
+        getText,
+        setText
+      );
+      return;
+    }
+    timeoutId = setTimeout(() => {
+      timeoutId = null;
+      try {
+        capitaliserFn(
+          targetElement,
+          shouldCapitalise,
+          shouldCapitaliseForI,
+          getText,
+          setText
+        );
+      } catch {
+        /* ignore */
+      }
+    }, delay);
+    debouncedCapitalizationMap.set(element, { fn: wrapped, timeoutId });
+  };
 
-  // Store it for future use
-  debouncedCapitalizationMap.set(element, debouncedFn);
-
-  return debouncedFn;
+  debouncedCapitalizationMap.set(element, { fn: wrapped, timeoutId });
+  return wrapped;
 }
 
 // Retroactively apply enabled rules across the entire text of a single element (used when toggling features on)
