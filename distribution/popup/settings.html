@@ -110,21 +110,25 @@
                                             <label for="shouldEnableAllWordCapitalisation" class="form-check-label"><strong>Toggle all options below</strong></label><br>
                                             <small class="text-muted">Quick master switch for the individual rules.</small>
                                         </div>
-                                        <div class="form-check mb-1">
-                                            <input type="checkbox" id="shouldCapitaliseI" name="shouldCapitaliseI" class="form-check-input" checked>
-                                            <label for="shouldCapitaliseI" class="form-check-label">Capitalise standalone 'i'</label>
-                                        </div>
-                                        <div class="form-check mb-1">
-                                            <input type="checkbox" id="shouldCapitaliseAcronyms" name="shouldCapitaliseAcronyms" class="form-check-input" checked>
-                                            <label for="shouldCapitaliseAcronyms" class="form-check-label">Capitalise acronyms & abbreviations</label>
-                                        </div>
-                                        <div class="form-check mb-1">
-                                            <input type="checkbox" id="shouldCapitaliseNames" name="shouldCapitaliseNames" class="form-check-input" checked>
-                                            <label for="shouldCapitaliseNames" class="form-check-label">Capitalise names</label>
-                                        </div>
-                                        <div class="form-check mb-2">
-                                            <input type="checkbox" id="shouldCapitaliseLocations" name="shouldCapitaliseLocations" class="form-check-input" checked>
-                                            <label for="shouldCapitaliseLocations" class="form-check-label">Capitalise locations</label>
+                                        <div id="wordOptionsNested" class="ms-3 ps-2 border-start mb-2">
+                                            <div class="form-check mb-1">
+                                                <input type="checkbox" id="shouldCapitaliseI" name="shouldCapitaliseI" class="form-check-input" checked>
+                                                <label for="shouldCapitaliseI" class="form-check-label">Capitalise standalone 'i'</label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input type="checkbox" id="shouldCapitaliseAcronyms" name="shouldCapitaliseAcronyms" class="form-check-input"
+                                                    checked>
+                                                <label for="shouldCapitaliseAcronyms" class="form-check-label">Capitalise acronyms & abbreviations</label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input type="checkbox" id="shouldCapitaliseNames" name="shouldCapitaliseNames" class="form-check-input" checked>
+                                                <label for="shouldCapitaliseNames" class="form-check-label">Capitalise names</label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input type="checkbox" id="shouldCapitaliseLocations" name="shouldCapitaliseLocations" class="form-check-input"
+                                                    checked>
+                                                <label for="shouldCapitaliseLocations" class="form-check-label">Capitalise locations</label>
+                                            </div>
                                         </div>
                                         <small class="text-muted">Disabled while sentence case is active.</small>
                                       </div>
