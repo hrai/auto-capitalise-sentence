@@ -16,6 +16,7 @@ import {
   wordsToExclude,
   wordsToInclude,
   wordsToIncludeKeyVal,
+  shouldEnableAllWordCapitalisation,
 } from './plugin-constants';
 
 const errorMsg = 'breaking loop';
@@ -43,6 +44,7 @@ browser.storage.local
         debounceDelayMs,
         wordsToExclude,
         wordsToInclude,
+        shouldEnableAllWordCapitalisation,
       ])
       .then((remoteDict) => {
         processResponse({ ...localDict, ...remoteDict });
@@ -63,6 +65,26 @@ function processResponse(storageDict) {
 
   setOptions(storageDict);
   setKeyValues(storageDict);
+
+  // Default: enable word group if sentence case disabled AND none of the individual flags are true
+  if (!storageDict[shouldConvertToSentenceCase]) {
+    const wordFlags = [
+      shouldCapitaliseI,
+      shouldCapitaliseNames,
+      shouldCapitaliseAcronyms,
+      shouldCapitaliseLocations,
+    ];
+    const anyTrue = wordFlags.some((f) => storageDict[f] === true);
+    if (!anyTrue) {
+      const enableAll = {};
+      wordFlags.forEach((f) => {
+        enableAll[f] = true;
+        utils.setShouldCapitaliseOption(f, true);
+      });
+      enableAll[shouldEnableAllWordCapitalisation] = true;
+      browser.storage.sync.set(enableAll); // persist defaults
+    }
+  }
 
   if (storageDict && sitesToExclude) {
     //https://stackoverflow.com/questions/406192/get-current-url-with-jquery
@@ -119,6 +141,29 @@ browser.storage.onChanged.addListener(
 
         if (newValue != null) {
           utils.setWordsToExclude(newValue);
+        }
+      }
+      // Re-run capitalization immediately on active element after mode changes so UI reflects new mode without waiting
+      if (
+        changes.shouldConvertToSentenceCase ||
+        changes.shouldCapitaliseI ||
+        changes.shouldCapitaliseNames ||
+        changes.shouldCapitaliseAcronyms ||
+        changes.shouldCapitaliseLocations
+      ) {
+        if (changes.shouldConvertToSentenceCase) {
+          // Clear existing debounced functions so no delayed word-mode updates fire after switching
+          utils.clearDebouncedCapitalisationCache();
+        }
+        if (
+          changes.shouldConvertToSentenceCase &&
+          changes.shouldConvertToSentenceCase.newValue === true
+        ) {
+          // Force full sentence case pass across all elements
+          fullReprocessAllVisible(true);
+        } else {
+          reprocessActiveElement();
+          fullReprocessAllVisible(false);
         }
       }
       //browser.runtime.reload() - reload browser
@@ -287,10 +332,58 @@ function unique(list) {
 }
 
 function capitaliseText(element) {
-  // Use debounced version with 5-second sliding window
-  const debouncedFn = utils.getDebouncedCapitaliseText(
-    element,
-    configuredDebounceDelay
-  );
-  debouncedFn(element);
+  // Only apply debounce when sentence case feature is enabled; otherwise capitalize immediately
+  if (utils.isSentenceCaseEnabled()) {
+    utils.applyImmediateSentenceStartCapitalisation(element);
+    const debouncedFn = utils.getDebouncedCapitaliseText(
+      element,
+      configuredDebounceDelay
+    );
+    debouncedFn(element);
+  } else {
+    try {
+      utils.capitaliseTextProxy(element);
+    } catch {
+      // swallow errors to avoid disrupting typing
+    }
+  }
+}
+
+// Immediately invoke capitalization (bypassing debounce) for the currently focused editable element
+function reprocessActiveElement() {
+  const active = document.activeElement;
+  if (!active) return;
+  const tag = active.tagName?.toUpperCase();
+  const isEditable =
+    active.isContentEditable || tag === 'INPUT' || tag === 'TEXTAREA';
+  if (!isEditable) return;
+  // Directly call underlying capitalise logic synchronously using current mode flags
+  try {
+    utils.capitaliseTextProxy(active);
+  } catch {
+    // swallow to avoid disrupting user typing
+  }
+}
+
+function fullReprocessAllVisible(forceSentenceCase) {
+  const selector =
+    "input[type='text'], textarea, [contenteditable=''], [contenteditable='true'], [contenteditable='plaintext-only']";
+  document.querySelectorAll(selector).forEach((el) => {
+    try {
+      if (forceSentenceCase && utils.isSentenceCaseEnabled()) {
+        const tag = el.tagName;
+        const text = utils.getText(el, tag);
+        if (text && typeof text === 'string') {
+          const updated = utils.getConvertedToSentenceCase(text);
+          if (updated !== text) {
+            utils.setText(el, tag, updated, false);
+          }
+        }
+      } else {
+        utils.fullReprocessElement(el);
+      }
+    } catch {
+      // ignore element-level failures
+    }
+  });
 }

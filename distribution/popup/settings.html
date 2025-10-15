@@ -91,12 +91,18 @@
                         <input type="checkbox" id="shouldConvertToSentenceCase" name="shouldConvertToSentenceCase">
                         <label for="shouldConvertToSentenceCase">Convert entire text to sentence case</label><br>
                         <small class="text-muted">When enabled, converts all text to proper sentence case format. Disables individual word
-                            capitalization below.</small>
+                            capitalisation below.</small>
                     </div>
 
                     <hr>
                     <div class="mb-2">
-                        <h6 class="text-secondary">Individual Word Capitalization</h6>
+                        <h6 class="text-secondary">Individual Word Capitalisation</h6>
+                        <div class="form-check mb-1">
+                            <input type="checkbox" id="shouldEnableAllWordCapitalisation" class="form-check-input">
+                <label for="shouldEnableAllWordCapitalisation" class="form-check-label"><strong>Enable all individual word
+                    capitalisation options</strong></label><br>
+                            <small class="text-muted">Toggles all checkboxes below on/off together.</small>
+                        </div>
                         <input type="checkbox" id="shouldCapitaliseI" name="shouldCapitaliseI" checked>
                         <label for="shouldCapitaliseI">Should capitalise 'I'?</label><br>
 

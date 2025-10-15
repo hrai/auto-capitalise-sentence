@@ -66,32 +66,30 @@ export function capitaliseText(
     shouldAppendBr = true;
   }
 
-  // Handle sentence case conversion (exclusive with other capitalization modes)
+  // Sentence case: if enabled always apply (idempotent) so mode switch has immediate visible effect.
   if (optionsDictionary[shouldConvertToSentenceCase]) {
-    if (shouldConvertToSentenceCaseText(text)) {
-      const updatedStr = getConvertedToSentenceCase(text);
+    const updatedStr = getConvertedToSentenceCase(text);
+    if (updatedStr !== text) {
       setText(element, tagName, updatedStr, shouldAppendBr);
-      return;
     }
-  } else {
-    // Only apply other capitalization modes if sentence case is disabled
-    if (shouldCapitalise(text)) {
-      const updatedStr = getCapitalisedContent(text);
-
-      setText(element, tagName, updatedStr, shouldAppendBr);
-      return;
-    }
+    return; // Skip all other capitalization paths while in sentence case mode
   }
 
-  // Only apply individual word capitalization if sentence case is disabled
-  if (!optionsDictionary[shouldConvertToSentenceCase]) {
+  // Per-character last-letter capitalisation (word mode only)
+  if (shouldCapitalise(text)) {
+    const updatedStr = getCapitalisedContent(text);
+    setText(element, tagName, updatedStr, shouldAppendBr);
+    return;
+  }
+
+  // Word-level corrections (I, names, acronyms, locations, custom words)
+  {
     if (
       text.length >= 2 &&
       shouldCapitaliseForI(text) &&
       optionsDictionary[shouldCapitaliseI]
     ) {
       const updatedStr = getCapitalisedContentForI(text);
-
       setText(element, tagName, updatedStr, shouldAppendBr);
       return;
     }
@@ -622,12 +620,56 @@ export function debounce(func, delay) {
   };
 }
 
+// Helper to expose current sentence case mode without leaking internal dictionary object
+export function isSentenceCaseEnabled() {
+  return !!optionsDictionary[shouldConvertToSentenceCase];
+}
+
+// Lightweight immediate feedback: capitalise the first alphabetical character if it starts lowercase
+export function applyImmediateSentenceStartCapitalisation(element) {
+  if (!element) return;
+  const tag = element.tagName?.toUpperCase();
+  const isEditable =
+    element.isContentEditable || tag === 'INPUT' || tag === 'TEXTAREA';
+  if (!isEditable) return;
+  try {
+    let current =
+      tag === 'INPUT' || tag === 'TEXTAREA'
+        ? element.value
+        : element.innerText || '';
+    if (
+      typeof current === 'string' &&
+      current.length &&
+      /^(\s*[a-z])/.test(current)
+    ) {
+      const updated = current.replace(
+        /^(\s*)([a-z])/,
+        (m, ws, ch) => ws + ch.toUpperCase()
+      );
+      if (updated !== current) {
+        if (tag === 'INPUT' || tag === 'TEXTAREA') {
+          element.value = updated;
+        } else if (element.isContentEditable) {
+          element.innerText = updated;
+        }
+      }
+    }
+  } catch {
+    /* ignore */
+  }
+}
+
 // Store debounced functions per element to maintain individual timers
 let debouncedCapitalizationMap = new WeakMap();
 
 // TEST-ONLY helper (safe in prod; no reference leakage) to clear debounced map
 export function __resetDebouncedMapForTests() {
   debouncedCapitalizationMap = new WeakMap();
+}
+
+// Public helper to clear per-element debounced functions (used when switching modes)
+export function clearDebouncedCapitalisationCache() {
+  __resetDebouncedMapForTests();
 }
 
 export function getDebouncedCapitaliseText(
@@ -655,4 +697,64 @@ export function getDebouncedCapitaliseText(
   debouncedCapitalizationMap.set(element, debouncedFn);
 
   return debouncedFn;
+}
+
+// Retroactively apply enabled rules across the entire text of a single element (used when toggling features on)
+export function fullReprocessElement(element) {
+  if (!element) return;
+  const tagName = element.tagName;
+  if (!isEditableElement(element, tagName)) return;
+  let text = getText(element, tagName);
+  if (text == null || typeof text !== 'string' || text.length === 0) return;
+
+  // If sentence case is enabled, only apply sentence case conversion and skip all word-level corrections
+  if (optionsDictionary[shouldConvertToSentenceCase]) {
+    const updated = getConvertedToSentenceCase(text);
+    if (updated !== text) {
+      setText(element, tagName, updated, false);
+    }
+    return;
+  }
+
+  let updated = text;
+
+  // Capitalise standalone 'i' when option enabled (covers whole text not just last token)
+  if (optionsDictionary[shouldCapitaliseI]) {
+    updated = updated.replace(/\b[iI]\b/g, 'I');
+  }
+
+  function applyDict(dict, enabled) {
+    if (!enabled) return;
+    const keys = Object.keys(dict || {});
+    if (!keys.length) return;
+    keys.sort((a, b) => b.length - a.length);
+    keys.forEach((k) => {
+      if (!k) return;
+      const canonical = dict[k];
+      const escaped = k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const boundaryPrefix = k.startsWith('.') ? '' : '\\b';
+      const boundarySuffix = k.startsWith('.') ? '\\b' : '\\b';
+      const regex = new RegExp(boundaryPrefix + escaped + boundarySuffix, 'gi');
+      updated = updated.replace(regex, canonical);
+    });
+  }
+
+  applyDict(
+    keyValueDictionary[namesKeyVal],
+    optionsDictionary[shouldCapitaliseNames]
+  );
+  applyDict(
+    keyValueDictionary[acronymsKeyVal],
+    optionsDictionary[shouldCapitaliseAcronyms]
+  );
+  applyDict(
+    keyValueDictionary[locationsKeyVal],
+    optionsDictionary[shouldCapitaliseLocations]
+  );
+  applyDict(keyValueDictionary[constantsKeyVal], true);
+  applyDict(keyValueDictionary[wordsToIncludeKeyVal], true);
+
+  if (updated !== text) {
+    setText(element, tagName, updated, false);
+  }
 }

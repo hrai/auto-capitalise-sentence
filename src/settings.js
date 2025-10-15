@@ -9,6 +9,7 @@ import {
   shouldCapitaliseAcronyms,
   shouldCapitaliseLocations,
   shouldConvertToSentenceCase,
+  shouldEnableAllWordCapitalisation,
   debounceDelayMs,
 } from './plugin-constants';
 
@@ -115,6 +116,34 @@ loadFlagValuesFromBrowserStorage(shouldCapitaliseNames);
 loadFlagValuesFromBrowserStorage(shouldCapitaliseAcronyms);
 loadFlagValuesFromBrowserStorage(shouldCapitaliseLocations);
 loadSentenceCaseFlagFromBrowserStorage(shouldConvertToSentenceCase);
+loadMasterWordFlagFromBrowserStorage();
+
+function loadMasterWordFlagFromBrowserStorage() {
+  browser.storage.sync
+    .get([
+      shouldEnableAllWordCapitalisation,
+      shouldCapitaliseI,
+      shouldCapitaliseNames,
+      shouldCapitaliseAcronyms,
+      shouldCapitaliseLocations,
+    ])
+    .then((items) => {
+      // Master flag is true only if all individual flags are true
+      const allOn = [
+        shouldCapitaliseI,
+        shouldCapitaliseNames,
+        shouldCapitaliseAcronyms,
+        shouldCapitaliseLocations,
+      ].every((f) => items[f] === true || items[f] === undefined); // treat undefined as true (legacy default)
+      const storedMaster = items[shouldEnableAllWordCapitalisation];
+      const masterValue = storedMaster != null ? storedMaster : allOn; // prefer stored value else infer
+      if (masterValue) {
+        $('#' + shouldEnableAllWordCapitalisation).prop('checked', true);
+      } else {
+        $('#' + shouldEnableAllWordCapitalisation).prop('checked', false);
+      }
+    });
+}
 
 function loadFlagValuesFromBrowserStorage(flagName) {
   browser.storage.sync.get(flagName).then((items) => {
@@ -152,6 +181,37 @@ setupCheckboxChangeEventHandlers(shouldCapitaliseAcronyms);
 setupCheckboxChangeEventHandlers(shouldCapitaliseLocations);
 setupCheckboxChangeEventHandlers(shouldConvertToSentenceCase);
 
+// Master checkbox change handler
+$(document).on('change', `#${shouldEnableAllWordCapitalisation}`, function () {
+  const enabled = $(this).prop('checked');
+  // Persist master state for convenience (not required for runtime logic)
+  browser.storage.sync.set({ [shouldEnableAllWordCapitalisation]: enabled });
+  // If turning on master, ensure sentence case is off (mutual exclusion)
+  if (enabled) {
+    const $sentence = $(`#${shouldConvertToSentenceCase}`);
+    if ($sentence.prop('checked')) {
+      $sentence.prop('checked', false);
+      setShouldCapitaliseVariable(shouldConvertToSentenceCase, false);
+    }
+  }
+  // Apply to each individual flag
+  [
+    shouldCapitaliseI,
+    shouldCapitaliseNames,
+    shouldCapitaliseAcronyms,
+    shouldCapitaliseLocations,
+  ].forEach((flag) => {
+    const $el = $(`#${flag}`);
+    if ($el.prop('checked') !== enabled) {
+      $el.prop('checked', enabled);
+      setShouldCapitaliseVariable(flag, enabled);
+    } else {
+      // still set storage to ensure explicit value
+      setShouldCapitaliseVariable(flag, enabled);
+    }
+  });
+});
+
 // Mutual exclusion: enabling sentence case disables other capitalisation checkboxes,
 // and enabling any other disables sentence case.
 const sentenceCaseFlag = shouldConvertToSentenceCase;
@@ -161,6 +221,18 @@ const otherFlags = [
   shouldCapitaliseAcronyms,
   shouldCapitaliseLocations,
 ];
+
+// Helper: update master checkbox (shouldEnableAllWordCapitalisation) to reflect current child states
+function updateMasterFromChildren() {
+  const $sentence = $(`#${sentenceCaseFlag}`);
+  if ($sentence.prop('checked')) return; // while sentence case active, master remains unchecked/disabled
+  const allOn = otherFlags.every((f) => $(`#${f}`).prop('checked'));
+  const $master = $(`#${shouldEnableAllWordCapitalisation}`);
+  if ($master.prop('checked') !== allOn) {
+    $master.prop('checked', allOn);
+    browser.storage.sync.set({ [shouldEnableAllWordCapitalisation]: allOn });
+  }
+}
 
 // When sentence case toggles on, turn others off.
 $(document).on('change', `#${sentenceCaseFlag}`, function () {
@@ -173,6 +245,25 @@ $(document).on('change', `#${sentenceCaseFlag}`, function () {
         setShouldCapitaliseVariable(f, false);
       }
     });
+    // Also uncheck and disable master checkbox
+    const $master = $(`#${shouldEnableAllWordCapitalisation}`);
+    if ($master.prop('checked')) {
+      $master.prop('checked', false);
+      browser.storage.sync.set({ [shouldEnableAllWordCapitalisation]: false });
+    }
+    $master.prop('disabled', true);
+    // Disable child boxes (UI) while sentence case active
+    otherFlags.forEach((f) => {
+      $(`#${f}`).prop('disabled', true);
+    });
+  } else {
+    // Re-enable master and child checkboxes when sentence case turns off
+    $(`#${shouldEnableAllWordCapitalisation}`).prop('disabled', false);
+    otherFlags.forEach((f) => {
+      $(`#${f}`).prop('disabled', false);
+    });
+    // Recalculate master based on existing child states
+    updateMasterFromChildren();
   }
 });
 
@@ -186,6 +277,7 @@ otherFlags.forEach((f) => {
         setShouldCapitaliseVariable(sentenceCaseFlag, false);
       }
     }
+    updateMasterFromChildren();
   });
 });
 

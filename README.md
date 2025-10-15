@@ -37,7 +37,7 @@ There are 4 sections to configure the extension.
 
 ### Debounce Delay (New)
 
-You can now configure how long the extension waits after your last keystroke before performing capitalization. This helps avoid unnecessary work while you're still typing rapidly.
+You can now configure how long the extension waits after your last keystroke before performing capitalisation. This helps avoid unnecessary work while you're still typing rapidly.
 
 Defaults:
 
@@ -47,13 +47,13 @@ Defaults:
 Behaviour:
 
 - Sliding window: each new keystroke resets the timer.
-- Setting delay to 0 applies capitalization immediately (no debouncing) – may reduce performance on very large editors.
+- Setting delay to 0 applies capitalisation immediately (no debouncing) – may reduce performance on very large editors.
 - Each editable field gets its own independent timer.
 
 Recommendations:
 
 - 3000–5000 ms: Good balance for most users.
-- 0–500 ms: Only if you prefer near-instant capitalization and your pages are lightweight.
+- 0–500 ms: Only if you prefer near-instant capitalisation and your pages are lightweight.
 - >10000 ms: Use if you type in long uninterrupted bursts and want minimal interruptions.
 
 To change it, open the extension popup settings and update the Debounce Delay (ms) field. The change applies immediately to all newly observed inputs.
