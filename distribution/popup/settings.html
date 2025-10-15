@@ -21,79 +21,131 @@
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="excluded-sites-tab" data-bs-toggle="tab"
                         data-bs-target="#excluded_sites" type="button" role="tab" aria-controls="excluded-sites"
-                        aria-selected="true">Excluded websites</button>
+                        aria-selected="true">Ignored sites</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="included-words-tab" data-bs-toggle="tab"
                         data-bs-target="#included_words" type="button" role="tab" aria-controls="included-words"
-                        aria-selected="false">Included words</button>
+                        aria-selected="false">Always capitalise</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="excluded-words-tab" data-bs-toggle="tab"
                         data-bs-target="#excluded_words" type="button" role="tab" aria-controls="excluded-words"
-                        aria-selected="false">Excluded words</button>
+                        aria-selected="false">Never capitalise</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="checkboxes-tab" data-bs-toggle="tab" data-bs-target="#checkboxes"
-                        type="button" role="tab" aria-controls="checkboxes" aria-selected="false">Enable/disable
-                        features</button>
+                        type="button" role="tab" aria-controls="checkboxes" aria-selected="false">Modes & options</button>
                 </li>
             </ul>
             <div class="tab-content">
-                <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="excluded-sites-tab"
-                    id="excluded_sites">
-                    <div class="mb-2">
-                        <small>Enter websites where you want the capitalising to be disabled.</small>
-                        <textarea id="sites" rows="4" class="form-control"
-                            placeholder="Add sites to exclude"></textarea>
-                        <small class="text-muted">Note: Add each site in a separate row and click 'Save' button.</small>
-                    </div>
-                    <div class="d-grid gap-2">
-                        <input type="button" value="Save" id="submitButton" class="btn btn-primary btn-block" disabled>
-                        <input type="button" value="Add current site to ignore list" id="ignoreSiteButton"
-                            class="btn btn-primary btn-block">
-                    </div>
-                </div>
-                <div class="tab-pane fade" role="tabpanel" aria-labelledby="included-words-tab" id="included_words">
-                    <div class="mb-2">
-                        <small>Enter words which you want to be capitalised.</small>
-                        <textarea id="included_words_textbox" rows="4" class="form-control"
-                            placeholder="Add words to include"></textarea>
-                        <small class="text-muted">Note: Add each word in a separate row and click 'Save' button.</small>
-                    </div>
-                    <div class="d-grid gap-2">
-                        <input type="button" value="Save" id="submitButtonIncludedWords"
-                            class="btn btn-primary btn-block" disabled>
-                    </div>
-                </div>
-                <div class="tab-pane fade" role="tabpanel" aria-labelledby="excluded-words-tab" id="excluded_words">
-                    <div class="mb-2">
-                        <small>Enter words which you don't want to be capitalised.</small>
-                        <textarea id="excluded_words_textbox" rows="4" class="form-control"
-                            placeholder="Add words to exclude"></textarea>
-                        <small class="text-muted">Note: Add each word in a separate row and click 'Save' button.</small>
-                    </div>
-                    <div class="d-grid gap-2">
-                        <input type="button" value="Save" id="submitButtonExcludedWords"
-                            class="btn btn-primary btn-block" disabled>
-                    </div>
-                </div>
-                <div class="tab-pane fade" role="tabpanel" aria-labelledby="checkboxes-tab" id="checkboxes">
-                    <div class="mb-2">
-                        <input type="checkbox" id="shouldCapitaliseI" name="shouldCapitaliseI" checked>
-                        <label for="shouldCapitaliseI">Should capitalise 'I'?</label><br>
-
-                        <input type="checkbox" id="shouldCapitaliseAcronyms" name="shouldCapitaliseAcronyms" checked>
-                        <label for="shouldCapitaliseAcronyms">Should capitalise abbreviations/acronyms?</label><br>
-
-                        <input type="checkbox" id="shouldCapitaliseNames" name="shouldCapitaliseNames" checked>
-                        <label for="shouldCapitaliseNames">Should capitalise names?</label><br>
-
-                        <input type="checkbox" id="shouldCapitaliseLocations" name="shouldCapitaliseLocations" checked>
-                        <label for="shouldCapitaliseLocations">Should capitalise locations?</label><br>
-
-                    </div>
-                </div>
+                                <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="excluded-sites-tab" id="excluded_sites">
+                                    <div class="card mb-3 border-primary">
+                                        <div class="card-header py-2 bg-primary text-white">Ignored Websites</div>
+                                        <div class="card-body pt-3 pb-2">
+                                            <small class="d-block mb-2">One domain per line. Text on these sites will be left untouched.</small>
+                                            <textarea id="sites" rows="4" class="form-control mb-2" placeholder="example.com"></textarea>
+                                            <div class="d-grid gap-2 mb-2">
+                                                <input type="button" value="Save" id="submitButton" class="btn btn-primary btn-block" disabled>
+                                                <input type="button" value="Add current site" id="ignoreSiteButton" class="btn btn-outline-primary btn-block">
+                                            </div>
+                                            <small class="text-muted">Matching domains are skipped entirely.</small>
+                                        </div>
+                                    </div>
+                                    <!-- Performance card moved to sentence case mode section -->
+                                </div>
+                                <div class="tab-pane fade" role="tabpanel" aria-labelledby="included-words-tab" id="included_words">
+                                    <div class="card border-success">
+                                        <div class="card-header py-2 bg-success text-white">Always Capitalise</div>
+                                        <div class="card-body pt-3 pb-2">
+                                            <small class="d-block mb-2">One word per line. Only applies in Word Mode.</small>
+                                            <textarea id="included_words_textbox" rows="4" class="form-control mb-2" placeholder="ProperNoun"></textarea>
+                                            <div class="d-grid gap-2 mb-2">
+                                                <input type="button" value="Save" id="submitButtonIncludedWords" class="btn btn-success btn-block" disabled>
+                                            </div>
+                                            <small class="text-muted">Stored casing is reused when capitalising.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" role="tabpanel" aria-labelledby="excluded-words-tab" id="excluded_words">
+                                    <div class="card border-danger">
+                                        <div class="card-header py-2 bg-danger text-white">Never Capitalise</div>
+                                        <div class="card-body pt-3 pb-2">
+                                            <small class="d-block mb-2">Higher priority than inclusion list. One per line.</small>
+                                            <textarea id="excluded_words_textbox" rows="4" class="form-control mb-2" placeholder="dontCapitaliseMe"></textarea>
+                                            <div class="d-grid gap-2 mb-2">
+                                                <input type="button" value="Save" id="submitButtonExcludedWords" class="btn btn-danger btn-block" disabled>
+                                            </div>
+                                            <small class="text-muted">Use for exceptions and edge cases.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" role="tabpanel" aria-labelledby="checkboxes-tab" id="checkboxes">
+                                                        <div class="d-flex mb-3" id="modeToggleGroup">
+                                                            <button type="button" class="btn btn-sm btn-outline-primary w-100" id="modeToggleButton" data-mode="word">Enable Sentence Case Mode</button>
+                                                        </div>
+                                    <div id="modeSectionsWrapper" class="mb-3">
+                                                                              <div id="sentenceModeSection" class="mode-section mb-3 border rounded p-2 bg-light" data-mode="sentence">
+                                                                                <h6 class="text-primary mb-2">Sentence Case Mode</h6>
+                                                                                <!-- Hidden input retained for existing logic hooks -->
+                                                                                <input type="hidden" id="shouldConvertToSentenceCase" name="shouldConvertToSentenceCase" />
+                                                                                <div class="mode-info mb-2">
+                                                                                    <details class="mode-details" open>
+                                                                                        <summary class="small fw-semibold text-primary pointer">Details</summary>
+                                                                                        <ul class="list-unstyled mode-facts small mb-1 mt-1">
+                                                                                            <li><span class="icon-bullet sentence"></span>Capitalises the first letter after ., ! or ? (with closing quotes/brackets handled).</li>
+                                                                                            <li><span class="icon-bullet sentence"></span>Ignores word-level rules (names, I, acronyms, locations) while active.</li>
+                                                                                            <li><span class="icon-bullet sentence"></span>Set delay to 0 for immediate updates; higher values reduce processing on rapid typing.</li>
+                                                                                        </ul>
+                                                                                    </details>
+                                                                                </div>
+                                                                                <div class="card mt-3 mb-1 border-secondary sentence-performance" id="sentencePerformanceCard">
+                                                                                    <div class="card-header py-1 bg-secondary text-white">Performance & Timing</div>
+                                                                                    <div class="card-body pt-2 pb-2">
+                                                                                        <label for="debounce_delay_ms" class="form-label mb-1">Processing Delay (ms)</label>
+                                                                                        <input type="number" id="debounce_delay_ms" class="form-control form-control-sm" min="0" max="60000" step="100" placeholder="5000" />
+                                                                                        <div class="form-text">Wait after typing stops before sentence case runs. 0 = immediate.</div>
+                                                                                        <div id="debounce_delay_status" class="small text-muted mt-1"></div>
+                                                                                    </div>
+                                                                                </div>
+                                                                              </div>
+                                      <div id="wordModeSection" class="mode-section mb-2 border rounded p-2" data-mode="word">
+                                        <h6 class="text-secondary mb-2">Word Mode</h6>
+                                        <div class="mode-info mb-2">
+                                            <details class="mode-details" open>
+                                                <summary class="small fw-semibold text-secondary pointer">Details</summary>
+                                                <ul class="list-unstyled mode-facts small mb-1 mt-1">
+                                                    <li><span class="icon-bullet word"></span>Applies the selected rules live as you type.</li>
+                                                    <li><span class="icon-bullet word"></span>Does not interfere with natural sentence starts (they're still capitalised where appropriate).</li>
+                                                    <li><span class="icon-bullet word"></span>Automatically paused when Sentence Case Mode is enabled.</li>
+                                                </ul>
+                                            </details>
+                                        </div>
+                                        <div class="form-check mb-1">
+                                            <input type="checkbox" id="shouldEnableAllWordCapitalisation" class="form-check-input" title="Turn ON/OFF every word rule below in one click.">
+                                            <label for="shouldEnableAllWordCapitalisation" class="form-check-label"><strong>Toggle all options below</strong></label><br>
+                                        </div>
+                                        <div id="wordOptionsNested" class="ms-3 ps-2 border-start mb-2">
+                                            <div class="form-check mb-1">
+                                                <input type="checkbox" id="shouldCapitaliseI" name="shouldCapitaliseI" class="form-check-input" checked title="Example: i went home → I went home">
+                                                <label for="shouldCapitaliseI" class="form-check-label">Capitalise standalone 'i'</label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input type="checkbox" id="shouldCapitaliseAcronyms" name="shouldCapitaliseAcronyms" class="form-check-input" checked title="Example: nasa api → NASA API">
+                                                <label for="shouldCapitaliseAcronyms" class="form-check-label">Capitalise acronyms & abbreviations</label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input type="checkbox" id="shouldCapitaliseNames" name="shouldCapitaliseNames" class="form-check-input" checked title="Example: alice and bob → Alice and Bob">
+                                                <label for="shouldCapitaliseNames" class="form-check-label">Capitalise names</label>
+                                            </div>
+                                            <div class="form-check mb-1">
+                                                <input type="checkbox" id="shouldCapitaliseLocations" name="shouldCapitaliseLocations" class="form-check-input" checked title="Example: sydney harbour → Sydney Harbour">
+                                                <label for="shouldCapitaliseLocations" class="form-check-label">Capitalise locations</label>
+                                            </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </div>
             </div>
         </div>
         <hr>
@@ -116,73 +168,92 @@
 </html>
 
 <style type="text/css">
-    .btn {
-        padding-top: 3px;
+    :root {
+        --acs-bg: #f5f8fb;
+        --acs-accent: #0d6efd;
+        --acs-accent-soft: #0d6efd12;
+        --acs-border: #d8e2ec;
+        --acs-radius-sm: 6px;
+        --acs-radius: 10px;
+        --acs-shadow: 0 1px 2px rgba(0,0,0,0.06), 0 4px 14px -6px rgba(0,0,0,0.12);
+        --acs-gradient: linear-gradient(135deg,#0d6efd,#6610f2);
     }
 
-    #settings {
-        width: 560px;
-    }
+    body { background: var(--acs-bg); font-size: 14px; }
+    #settings { width: 560px; padding-bottom: 4px; }
+    .btn { padding-top: 3px; }
+    hr { margin: 6px 0 4px; opacity: .4; }
 
-    .tab-content {
-        padding-top: 3%;
-    }
+    /* Header */
+    #header { display:flex; flex-direction:row; align-items:center; gap:14px; padding:10px 4px 4px; margin:0 0 6px; background: transparent; border-bottom:1px solid var(--acs-border); border-radius:0; box-shadow:none; }
+    #logo { height:60px; width:60px; border-radius:12px; box-shadow:0 2px 6px -2px rgba(0,0,0,.25); background:#fff; padding:4px; }
+    #box-img { width:auto; padding:0; }
+    #box-title { width:100%; padding:0; }
+    #box-title>h3 { color:#1d3557; font-weight:600; letter-spacing:.5px; text-shadow:none; margin:0; font-size:1.15rem; background:linear-gradient(90deg,#1d3557,#274766); -webkit-background-clip:text; background-clip:text; color:transparent; }
 
-    hr {
-        margin: 5px;
-    }
+    /* Tabs */
+    .nav-tabs { border-bottom: 2px solid var(--acs-border); gap:4px; margin-bottom: 12px; }
+    .nav-tabs .nav-link { border-radius: var(--acs-radius-sm) var(--acs-radius-sm) 0 0; position:relative; padding:.4rem .9rem; color:#495866; background: #eef3f8; border:1px solid #d5dee7; border-bottom:none; font-weight:500; }
+    .nav-tabs .nav-link:not(.active):hover { background:#e1eaf1; border-color:#c7d5e2; }
+    .nav-tabs .nav-link.active { background:#fff; font-weight:600; color:#0d4a7f; border:1px solid #c5d3e0; border-bottom: 2px solid #fff; box-shadow:0 2px 4px -2px rgba(0,0,0,.15); }
+    .tab-content { padding: 2px 2px 8px; }
 
-    /* Header style */
-    #logo {
-        height: 80px;
-        width: 80px;
-    }
+    /* Cards */
+    .card { border-radius: var(--acs-radius); border:1px solid var(--acs-border); box-shadow: var(--acs-shadow); overflow:hidden; }
+    .card-header { font-size:.75rem; text-transform:uppercase; letter-spacing: .08em; background:linear-gradient(135deg,#4e6e91,#2a4664) !important; opacity:.95; }
+    .card-header.bg-success { background: linear-gradient(135deg,#2e7d32,#1b5e20)!important; }
+    .card-header.bg-danger { background: linear-gradient(135deg,#c62828,#8e0000)!important; }
+    .card-header.bg-primary { background: linear-gradient(135deg,#0d6efd,#0a58ca)!important; }
+    .card-header.bg-secondary { background: linear-gradient(135deg,#6c757d,#495057)!important; }
+    .card-body { background:#fff; }
 
-    #header,
-    #footer {
-        display: flex;
-        flex-direction: row;
-    }
+    /* Mode details & icons */
+    details.mode-details { border:1px solid var(--acs-border); border-radius: var(--acs-radius-sm); padding:4px 8px 6px; background:#ffffff; box-shadow:0 1px 2px rgba(0,0,0,.05); }
+    details.mode-details[open] { background:#fdfefe; }
+    details.mode-details summary { cursor:pointer; list-style:none; }
+    details.mode-details summary::-webkit-details-marker { display:none; }
+    details.mode-details summary:before { content:'\25BE'; display:inline-block; font-size: .7rem; margin-right:6px; transition: transform 160ms ease; }
+    details.mode-details[open] summary:before { transform: rotate(180deg); }
+    .icon-bullet { display:inline-block; width:14px; height:14px; border-radius:4px; margin-right:6px; position:relative; top:2px; background: var(--acs-accent-soft); box-shadow: inset 0 0 0 1px var(--acs-accent); }
+    .icon-bullet.sentence { background:linear-gradient(135deg,#0d6efd20,#0d6efd55); box-shadow: inset 0 0 0 1px #0d6efd; }
+    .icon-bullet.word { background:linear-gradient(135deg,#6c757d20,#6c757d55); box-shadow: inset 0 0 0 1px #6c757d; }
+    .icon-bullet:after { content:''; width:6px; height:6px; background:#fff; border-radius:2px; position:absolute; top:4px; left:4px; box-shadow:0 0 0 1px rgba(0,0,0,.15); }
 
-    #box-img {
-        width: 20%;
-        padding: 2px;
-    }
+    /* Mode sections */
+    #modeSectionsWrapper { display:flex; flex-direction:column; gap:14px; }
+    .mode-section { background:#fff; border:1px solid var(--acs-border); border-radius: var(--acs-radius); position:relative; box-shadow: var(--acs-shadow); }
+    .mode-section h6 { font-weight:600; font-size:.8rem; text-transform:uppercase; letter-spacing:.06em; }
+    .mode-section.active { box-shadow:0 0 0 2px var(--acs-accent-soft), var(--acs-shadow); }
+    .mode-section.inactive { filter: blur(1px) grayscale(30%); opacity:.6; }
+    .mode-section.inactive::after { top:10px; right:10px; background: var(--acs-accent); font-size:9px; padding:2px 7px; }
 
-    #box-title {
-        width: 80%;
-        padding: 5px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
+    /* Toggle button */
+    #modeToggleButton { font-size:.75rem; letter-spacing:.05em; text-transform:uppercase; border-radius: 40px; padding:.45rem .9rem; box-shadow:0 2px 6px -2px rgba(0,0,0,.35); }
+    #modeToggleGroup { position:sticky; top:0; z-index:5; background:linear-gradient(#fff,#f2f5f8); padding:4px 4px 6px; border-radius: var(--acs-radius-sm); box-shadow:0 2px 4px -2px rgba(0,0,0,.2); }
 
-    #box-title>h3 {
-        color: royalblue;
-    }
+    /* Forms */
+    textarea.form-control { font-family: Menlo, Consolas, monospace; font-size:12px; resize:vertical; }
+    .form-check-label { cursor:pointer; }
+    #wordOptionsNested { background:#f9fbfc; border-left:4px solid var(--acs-accent); border-radius:0 var(--acs-radius-sm) var(--acs-radius-sm) 0; padding-top:6px; padding-bottom:4px; }
+    #wordOptionsNested .form-check { padding-left:4px; }
 
-    /* Tabs style */
-    .nav-tabs .nav-link.active {
-        font-weight: bold;
-        border-color: #53708e #53708e #fff;
-    }
+    /* Footer */
+    #footer { display:flex; flex-direction:row; justify-content:space-between; margin-top:4px; }
+    #footer a { flex:1 1 auto; margin:4px; border-radius: var(--acs-radius-sm); background:#fff; border:1px solid #cfd9e3; color:#0d4a7f; box-shadow:0 2px 4px -2px rgba(0,0,0,.15); }
+    #footer a:hover { background:#f0f5fa; }
 
-    .nav-tabs .nav-link:hover {
-        border-color: #9ccad0 #9ccad0 #dee2e6;
-    }
+    /* Small helpers */
+    .form-text, small.text-muted { font-size:11px; }
+    #sentence_case_hint { font-size:11px!important; border-radius: var(--acs-radius-sm); }
+    #debounce_delay_ms { max-width: 140px; }
+    .border-start { border-color: var(--acs-border)!important; }
+    .alert-info { background:#e7f3ff; border-color:#b6dbff; color:#0f4675; }
 
-    .nav-tabs {
-        border-bottom-color: #53708e;
-    }
-
-    .nav-item>a {
-        color: #167316;
-    }
-
-    /* footer style */
-    #footer a {
-        border-radius: unset;
-        width: 31%;
-        margin: 5px;
-    }
+    /* Scrollbar subtle styling (WebKit + fallback) */
+    ::-webkit-scrollbar { width:10px; }
+    ::-webkit-scrollbar-track { background: #eef3f7; }
+    ::-webkit-scrollbar-thumb { background:#c2ced9; border-radius:20px; border:2px solid #eef3f7; }
+    ::-webkit-scrollbar-thumb:hover { background:#aebbc7; }
 </style>
+
+<!-- Retained transitional effect definitions (already merged into main style above) -->

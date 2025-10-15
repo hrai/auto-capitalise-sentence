@@ -7,6 +7,8 @@ import {
   shouldCapitaliseNames,
   shouldCapitaliseAcronyms,
   shouldCapitaliseLocations,
+  shouldConvertToSentenceCase,
+  debounceDelayMs,
   constantsKeyVal,
   namesKeyVal,
   acronymsKeyVal,
@@ -14,10 +16,19 @@ import {
   wordsToExclude,
   wordsToInclude,
   wordsToIncludeKeyVal,
+  shouldEnableAllWordCapitalisation,
 } from './plugin-constants';
 
 const errorMsg = 'breaking loop';
-let sitesToExclude = ['aws.amazon.com', 'web.whatsapp.com', 'messenger.com', 'discord.com', 'facebook.com'];
+let sitesToExclude = [
+  'aws.amazon.com',
+  'web.whatsapp.com',
+  'messenger.com',
+  'discord.com',
+  'facebook.com',
+];
+
+let configuredDebounceDelay = 5000;
 
 browser.storage.local
   .get([constantsKeyVal, namesKeyVal, acronymsKeyVal, locationsKeyVal])
@@ -29,8 +40,11 @@ browser.storage.local
         shouldCapitaliseNames,
         shouldCapitaliseAcronyms,
         shouldCapitaliseLocations,
+        shouldConvertToSentenceCase,
+        debounceDelayMs,
         wordsToExclude,
         wordsToInclude,
+        shouldEnableAllWordCapitalisation,
       ])
       .then((remoteDict) => {
         processResponse({ ...localDict, ...remoteDict });
@@ -42,15 +56,42 @@ function processResponse(storageDict) {
     sitesToExclude = sitesToExclude.concat(storageDict.sitesToIgnore);
   }
 
+  if (storageDict.debounceDelayMs != null) {
+    const parsed = parseInt(storageDict.debounceDelayMs, 10);
+    if (!isNaN(parsed) && parsed >= 0 && parsed <= 60000) {
+      configuredDebounceDelay = parsed;
+    }
+  }
+
   setOptions(storageDict);
   setKeyValues(storageDict);
 
+  // Default: enable word group if sentence case disabled AND none of the individual flags are true
+  if (!storageDict[shouldConvertToSentenceCase]) {
+    const wordFlags = [
+      shouldCapitaliseI,
+      shouldCapitaliseNames,
+      shouldCapitaliseAcronyms,
+      shouldCapitaliseLocations,
+    ];
+    const anyTrue = wordFlags.some((f) => storageDict[f] === true);
+    if (!anyTrue) {
+      const enableAll = {};
+      wordFlags.forEach((f) => {
+        enableAll[f] = true;
+        utils.setShouldCapitaliseOption(f, true);
+      });
+      enableAll[shouldEnableAllWordCapitalisation] = true;
+      browser.storage.sync.set(enableAll); // persist defaults
+    }
+  }
+
   if (storageDict && sitesToExclude) {
     //https://stackoverflow.com/questions/406192/get-current-url-with-jquery
-    var currentUrlDomain = window.location.origin;
+    const currentUrlDomain = window.location.origin;
 
     try {
-      var shouldEnableCapitalisingOnCurrentSite = true;
+      let shouldEnableCapitalisingOnCurrentSite = true;
 
       $.each(sitesToExclude, function (_i, siteToExclude) {
         if (currentUrlDomain.includes(siteToExclude)) {
@@ -87,12 +128,42 @@ browser.storage.onChanged.addListener(
       utils.toggleOptionsValue(changes, shouldCapitaliseNames);
       utils.toggleOptionsValue(changes, shouldCapitaliseAcronyms);
       utils.toggleOptionsValue(changes, shouldCapitaliseLocations);
+      utils.toggleOptionsValue(changes, shouldConvertToSentenceCase);
+      if (changes.debounceDelayMs) {
+        const v = parseInt(changes.debounceDelayMs.newValue, 10);
+        if (!isNaN(v) && v >= 0 && v <= 60000) {
+          configuredDebounceDelay = v;
+        }
+      }
 
       if (changes.wordsToExclude != null) {
         const newValue = changes.wordsToExclude.newValue;
 
         if (newValue != null) {
           utils.setWordsToExclude(newValue);
+        }
+      }
+      // Re-run capitalization immediately on active element after mode changes so UI reflects new mode without waiting
+      if (
+        changes.shouldConvertToSentenceCase ||
+        changes.shouldCapitaliseI ||
+        changes.shouldCapitaliseNames ||
+        changes.shouldCapitaliseAcronyms ||
+        changes.shouldCapitaliseLocations
+      ) {
+        if (changes.shouldConvertToSentenceCase) {
+          // Clear existing debounced functions so no delayed word-mode updates fire after switching
+          utils.clearDebouncedCapitalisationCache();
+        }
+        if (
+          changes.shouldConvertToSentenceCase &&
+          changes.shouldConvertToSentenceCase.newValue === true
+        ) {
+          // Force full sentence case pass across all elements
+          fullReprocessAllVisible(true);
+        } else {
+          reprocessActiveElement();
+          fullReprocessAllVisible(false);
         }
       }
       //browser.runtime.reload() - reload browser
@@ -109,7 +180,7 @@ function hookupEventHandlers() {
 
 function observeIframeInputTags() {
   $('iframe').on('load', (event) => {
-    let iframe = event.target;
+    const iframe = event.target;
     $(iframe)
       .contents()
       .find(':text,textarea')
@@ -141,6 +212,10 @@ function setOptions(item) {
     shouldCapitaliseLocations,
     item.shouldCapitaliseLocations
   );
+  utils.setShouldCapitaliseOption(
+    shouldConvertToSentenceCase,
+    item.shouldConvertToSentenceCase
+  );
 }
 
 function setKeyValues(item) {
@@ -157,13 +232,13 @@ function setKeyValues(item) {
 
 /*eslint no-debugger: "error"*/
 function observeHtmlBody() {
-  var target = document.querySelector('body');
+  const target = document.querySelector('body');
 
-  var contentEditableTags = ['p', 'span'];
-  var inputTags = ["input[type='text']", 'textarea'];
+  const contentEditableTags = ['p', 'span'];
+  const inputTags = ["input[type='text']", 'textarea'];
 
-  let lastUpdatedText = '';
-  var observer = new MutationObserver(function (mutations) {
+  const lastUpdatedText = '';
+  const observer = new MutationObserver(function (mutations) {
     let characterDataMutations = [];
 
     $.each(mutations, function (_i, mutation) {
@@ -177,7 +252,7 @@ function observeHtmlBody() {
             throw new Error(errorMsg);
           }
 
-          var addedNodes = mutation.addedNodes;
+          const addedNodes = mutation.addedNodes;
           if (addedNodes && addedNodes.length > 0) {
             let addedNodesArr = Array.from(addedNodes);
             addedNodesArr.forEach((node) => {
@@ -196,7 +271,7 @@ function observeHtmlBody() {
             });
 
             $.each(contentEditableTags, function (_i, tagName) {
-              var filteredEls = utils.getFilteredElements(
+              const filteredEls = utils.getFilteredElements(
                 addedNodesArr,
                 tagName
               );
@@ -211,7 +286,7 @@ function observeHtmlBody() {
             });
 
             $.each(inputTags, function (_i, tagName) {
-              var filteredEls = utils.getFilteredElements(
+              const filteredEls = utils.getFilteredElements(
                 addedNodesArr,
                 tagName
               );
@@ -239,7 +314,7 @@ function observeHtmlBody() {
     characterDataMutations.forEach((element) => capitaliseText(element));
   });
 
-  var config = {
+  const config = {
     subtree: true,
     childList: true,
     characterData: true,
@@ -249,7 +324,7 @@ function observeHtmlBody() {
 }
 
 function unique(list) {
-  var result = [];
+  const result = [];
   $.each(list, function (i, e) {
     if ($.inArray(e, result) == -1) result.push(e);
   });
@@ -257,11 +332,58 @@ function unique(list) {
 }
 
 function capitaliseText(element) {
-  utils.capitaliseText(
-    element,
-    utils.shouldCapitalise,
-    utils.shouldCapitaliseForI,
-    utils.getText,
-    utils.setText
-  );
+  // Only apply debounce when sentence case feature is enabled; otherwise capitalize immediately
+  if (utils.isSentenceCaseModeActive()) {
+    utils.applyImmediateSentenceStartCapitalisation(element);
+    const debouncedFn = utils.getDebouncedCapitaliseText(
+      element,
+      configuredDebounceDelay
+    );
+    debouncedFn(element);
+  } else {
+    try {
+      utils.capitaliseTextProxy(element);
+    } catch {
+      // swallow errors to avoid disrupting typing
+    }
+  }
+}
+
+// Immediately invoke capitalization (bypassing debounce) for the currently focused editable element
+function reprocessActiveElement() {
+  const active = document.activeElement;
+  if (!active) return;
+  const tag = active.tagName?.toUpperCase();
+  const isEditable =
+    active.isContentEditable || tag === 'INPUT' || tag === 'TEXTAREA';
+  if (!isEditable) return;
+  // Directly call underlying capitalise logic synchronously using current mode flags
+  try {
+    utils.capitaliseTextProxy(active);
+  } catch {
+    // swallow to avoid disrupting user typing
+  }
+}
+
+function fullReprocessAllVisible(forceSentenceCase) {
+  const selector =
+    "input[type='text'], textarea, [contenteditable=''], [contenteditable='true'], [contenteditable='plaintext-only']";
+  document.querySelectorAll(selector).forEach((el) => {
+    try {
+      if (forceSentenceCase && utils.isSentenceCaseEnabled()) {
+        const tag = el.tagName;
+        const text = utils.getText(el, tag);
+        if (text && typeof text === 'string') {
+          const updated = utils.getConvertedToSentenceCase(text);
+          if (updated !== text) {
+            utils.setText(el, tag, updated, false);
+          }
+        }
+      } else {
+        utils.fullReprocessElement(el);
+      }
+    } catch {
+      // ignore element-level failures
+    }
+  });
 }
