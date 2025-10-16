@@ -112,6 +112,7 @@ export function querySelectorAll(selector, context = document) {
 /**
  * Add event listener to element(s)
  * Replaces: $(element).on(event, handler)
+ * Note: Strips jQuery-style namespaces (e.g., "input.namespace" becomes "input")
  */
 export function on(elements, eventName, handler, options) {
   const elementList =
@@ -119,9 +120,12 @@ export function on(elements, eventName, handler, options) {
       ? Array.from(elements)
       : [elements];
 
+  // Strip jQuery-style namespace from event name (e.g., "input.namespace" -> "input")
+  const cleanEventName = eventName.split('.')[0];
+
   elementList.forEach((element) => {
     if (element && element.addEventListener) {
-      element.addEventListener(eventName, handler, options);
+      element.addEventListener(cleanEventName, handler, options);
     }
   });
 }
@@ -129,6 +133,7 @@ export function on(elements, eventName, handler, options) {
 /**
  * Remove event listener from element(s)
  * Replaces: $(element).off(event, handler)
+ * Note: Strips jQuery-style namespaces (e.g., "input.namespace" becomes "input")
  */
 export function off(elements, eventName, handler, options) {
   const elementList =
@@ -136,9 +141,12 @@ export function off(elements, eventName, handler, options) {
       ? Array.from(elements)
       : [elements];
 
+  // Strip jQuery-style namespace from event name (e.g., "input.namespace" -> "input")
+  const cleanEventName = eventName.split('.')[0];
+
   elementList.forEach((element) => {
     if (element && element.removeEventListener) {
-      element.removeEventListener(eventName, handler, options);
+      element.removeEventListener(cleanEventName, handler, options);
     }
   });
 }
