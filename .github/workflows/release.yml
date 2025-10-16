@@ -15,7 +15,7 @@ jobs:
       version: ${{ steps.daily-version.outputs.version }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 20
       - name: Use Node.js 22.x
@@ -47,7 +47,7 @@ jobs:
           - firefox
           - chrome
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - run: yarn install --frozen-lockfile
 
       - name: Use Node.js ${{ matrix.node-version }}
@@ -79,7 +79,7 @@ jobs:
           - chrome
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Use Node.js 22.x
         uses: actions/setup-node@v6
         with:
