@@ -496,33 +496,53 @@ function refreshModeUI() {
     'checked'
   );
   if (sentenceActive) {
-    querySelector('#sentenceModeSection').classList.add('active');
-    querySelector('#sentenceModeSection').classList.remove('inactive');
-    querySelector('#wordModeSection').classList.add('inactive');
-    querySelector('#wordModeSection').classList.remove('active');
+    const sentenceSection = querySelector('#sentenceModeSection');
+    const wordSection = querySelector('#wordModeSection');
+    const perfCard = querySelector('#sentencePerformanceCard');
+
+    if (sentenceSection) {
+      sentenceSection.classList.add('active');
+      sentenceSection.classList.remove('inactive');
+    }
+    if (wordSection) {
+      wordSection.classList.add('inactive');
+      wordSection.classList.remove('active');
+    }
     reorderModeSections('sentence');
     const btn = querySelector('#modeToggleButton');
-    btn.setAttribute('data-mode', 'sentence');
-    btn.textContent = 'Switch to Word Capitalisation Mode';
-    btn.classList.remove('btn-outline-primary');
-    btn.classList.add('btn-primary', 'text-white');
+    if (btn) {
+      btn.setAttribute('data-mode', 'sentence');
+      btn.textContent = 'Switch to Word Capitalisation Mode';
+      btn.classList.remove('btn-outline-primary');
+      btn.classList.add('btn-primary', 'text-white');
+    }
     // Enable debounce controls
     prop(querySelector('#debounce_delay_ms'), 'disabled', false);
-    querySelector('#sentencePerformanceCard').classList.remove('opacity-50');
+    if (perfCard) perfCard.classList.remove('opacity-50');
   } else {
-    querySelector('#wordModeSection').classList.add('active');
-    querySelector('#wordModeSection').classList.remove('inactive');
-    querySelector('#sentenceModeSection').classList.add('inactive');
-    querySelector('#sentenceModeSection').classList.remove('active');
+    const sentenceSection = querySelector('#sentenceModeSection');
+    const wordSection = querySelector('#wordModeSection');
+    const perfCard = querySelector('#sentencePerformanceCard');
+
+    if (wordSection) {
+      wordSection.classList.add('active');
+      wordSection.classList.remove('inactive');
+    }
+    if (sentenceSection) {
+      sentenceSection.classList.add('inactive');
+      sentenceSection.classList.remove('active');
+    }
     reorderModeSections('word');
     const btn = querySelector('#modeToggleButton');
-    btn.setAttribute('data-mode', 'word');
-    btn.textContent = 'Switch to Sentence Case Mode';
-    btn.classList.remove('btn-primary', 'text-white');
-    btn.classList.add('btn-outline-primary');
+    if (btn) {
+      btn.setAttribute('data-mode', 'word');
+      btn.textContent = 'Switch to Sentence Case Mode';
+      btn.classList.remove('btn-primary', 'text-white');
+      btn.classList.add('btn-outline-primary');
+    }
     // Disable debounce controls (only relevant in sentence mode)
     prop(querySelector('#debounce_delay_ms'), 'disabled', true);
-    querySelector('#sentencePerformanceCard').classList.add('opacity-50');
+    if (perfCard) perfCard.classList.add('opacity-50');
   }
 }
 

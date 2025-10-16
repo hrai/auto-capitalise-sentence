@@ -186,7 +186,10 @@ function observeIframeInputTags() {
     const iframeDocument =
       iframe.contentDocument || iframe.contentWindow?.document;
     if (iframeDocument) {
-      const inputs = querySelectorAll(':text,textarea', iframeDocument);
+      const inputs = querySelectorAll(
+        'input[type="text"],textarea',
+        iframeDocument
+      );
       inputs.forEach((item) => {
         on(item, `input.${pluginNamespace}`, function (event) {
           capitaliseText(event.target);
@@ -197,7 +200,7 @@ function observeIframeInputTags() {
 }
 
 function observeInputTags() {
-  const inputs = querySelectorAll(':text,textarea');
+  const inputs = querySelectorAll('input[type="text"],textarea');
   on(inputs, `input.${pluginNamespace}`, function (event) {
     capitaliseText(event.target);
   });
