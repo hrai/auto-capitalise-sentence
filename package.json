@@ -5,7 +5,7 @@
   "description": "Browser add-on to automatically capitalise the first letter of a sentence while typing.",
   "scripts": {
     "start": "run-script-os",
-    "start:win32": "yarn build-dev && cd distribution && copy manifest_v2.json manifest.json && web-ext run --firefox=\"C:/Users/Hangjit.Rai/scoop/apps/firefox-developer/current/firefox.exe\" --keep-profile-changes --start-url localhost:3000",
+    "start:win32": "yarn build-dev && cd distribution && copy manifest_v3.json manifest.json && web-ext run -t chromium --chromium-binary \"C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe\" --keep-profile-changes --start-url localhost:3000",
     "start:darwin:linux": "yarn build-dev && FIREFOX_BIN=firefox-developer; if ! command -v $FIREFOX_BIN >/dev/null 2>&1; then if command -v firefox >/dev/null 2>&1; then FIREFOX_BIN=firefox; elif [ -x '/Applications/Firefox Developer Edition.app/Contents/MacOS/firefox' ]; then FIREFOX_BIN='/Applications/Firefox Developer Edition.app/Contents/MacOS/firefox'; else echo 'Neither firefox-developer nor firefox found in PATH' >&2; exit 1; fi; fi; web-ext run --firefox=\"$FIREFOX_BIN\" --start-url localhost:3000",
     "start:chrome": "run-script-os",
     "start:chrome:win32": "yarn build-dev && cd distribution && copy manifest_v3.json manifest.json && web-ext run -t chromium --start-url localhost:3000",
