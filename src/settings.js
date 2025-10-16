@@ -1,4 +1,5 @@
 import browser from 'webextension-polyfill';
+import { querySelector, val, prop, delegate, on } from './lib/dom-utils.js';
 import {
   pluginNamespace,
   sitesToIgnore,
@@ -21,17 +22,17 @@ browser.storage.sync
 function updateIgnoreLists(item) {
   const sitesToExclude = item.sitesToIgnore;
   if (sitesToExclude) {
-    $('#sites').val(sitesToExclude.join('\n'));
+    val(querySelector('#sites'), sitesToExclude.join('\n'));
   }
 
   const wordsToExclude = item.wordsToExclude;
   if (wordsToExclude) {
-    $('#excluded_words_textbox').val(wordsToExclude.join('\n'));
+    val(querySelector('#excluded_words_textbox'), wordsToExclude.join('\n'));
   }
 
   const wordsToInclude = item.wordsToInclude;
   if (wordsToInclude) {
-    $('#included_words_textbox').val(wordsToInclude.join('\n'));
+    val(querySelector('#included_words_textbox'), wordsToInclude.join('\n'));
   }
 
   // Debounce delay (ms) default 5000
@@ -42,7 +43,7 @@ function updateIgnoreLists(item) {
       delay = parsed;
     }
   }
-  $('#debounce_delay_ms').val(delay);
+  val(querySelector('#debounce_delay_ms'), delay);
 }
 
 function onError(error) {
@@ -55,7 +56,7 @@ function getUrlDomain(data) {
   return a.hostname;
 }
 
-$(document).on(`click.${pluginNamespace}`, '#ignoreSiteButton', function () {
+delegate(document, 'click', '#ignoreSiteButton', function () {
   browser.tabs.query({ currentWindow: true, active: true }).then((tabs) => {
     const hostname = getUrlDomain(tabs[0].url);
     const sites = getExcludedSites();
@@ -65,52 +66,44 @@ $(document).on(`click.${pluginNamespace}`, '#ignoreSiteButton', function () {
       sitesToIgnore: sites,
     });
 
-    $('#sites').val(sites.join('\n'));
-    $(this).prop('disabled', true);
-    $(this).val('Site added to ignore list');
+    val(querySelector('#sites'), sites.join('\n'));
+    prop(this, 'disabled', true);
+    val(this, 'Site added to ignore list');
   });
 });
 
-$(document).on(`click.${pluginNamespace}`, '#submitButton', function () {
+delegate(document, 'click', '#submitButton', function () {
   const sites = getExcludedSites();
 
   browser.storage.sync.set({
     sitesToIgnore: sites,
   });
 
-  $(this).prop('disabled', true);
-  $(this).val('Saved');
+  prop(this, 'disabled', true);
+  val(this, 'Saved');
 });
 
-$(document).on(
-  `click.${pluginNamespace}`,
-  '#submitButtonExcludedWords',
-  function () {
-    const excludedWords = getExcludedWords();
+delegate(document, 'click', '#submitButtonExcludedWords', function () {
+  const excludedWords = getExcludedWords();
 
-    browser.storage.sync.set({
-      wordsToExclude: excludedWords,
-    });
+  browser.storage.sync.set({
+    wordsToExclude: excludedWords,
+  });
 
-    $(this).prop('disabled', true);
-    $(this).val('Saved');
-  }
-);
+  prop(this, 'disabled', true);
+  val(this, 'Saved');
+});
 
-$(document).on(
-  `click.${pluginNamespace}`,
-  '#submitButtonIncludedWords',
-  function () {
-    const includedWords = getIncludedWords();
+delegate(document, 'click', '#submitButtonIncludedWords', function () {
+  const includedWords = getIncludedWords();
 
-    browser.storage.sync.set({
-      wordsToInclude: includedWords,
-    });
+  browser.storage.sync.set({
+    wordsToInclude: includedWords,
+  });
 
-    $(this).prop('disabled', true);
-    $(this).val('Saved');
-  }
-);
+  prop(this, 'disabled', true);
+  val(this, 'Saved');
+});
 
 loadFlagValuesFromBrowserStorage(shouldCapitaliseI);
 loadFlagValuesFromBrowserStorage(shouldCapitaliseNames);
@@ -165,13 +158,18 @@ browser.storage.sync.get(LAST_ACTIVE_TAB_KEY).then((res) => {
 });
 
 // Track tab changes and persist
-$(document).on('shown.bs.tab', 'button[data-bs-toggle="tab"]', function (e) {
-  const targetSelector = $(e.target).attr('data-bs-target');
-  if (targetSelector && targetSelector.startsWith('#')) {
-    const paneId = targetSelector.substring(1);
-    browser.storage.sync.set({ [LAST_ACTIVE_TAB_KEY]: paneId });
+delegate(
+  document,
+  'shown.bs.tab',
+  'button[data-bs-toggle="tab"]',
+  function (e) {
+    const targetSelector = e.target.getAttribute('data-bs-target');
+    if (targetSelector && targetSelector.startsWith('#')) {
+      const paneId = targetSelector.substring(1);
+      browser.storage.sync.set({ [LAST_ACTIVE_TAB_KEY]: paneId });
+    }
   }
-});
+);
 
 // Persist <details> open/closed state for mode info panels
 function persistDetailsState() {
@@ -231,9 +229,17 @@ function loadMasterWordFlagFromBrowserStorage() {
       const storedMaster = items[shouldEnableAllWordCapitalisation];
       const masterValue = storedMaster != null ? storedMaster : allOn; // prefer stored value else infer
       if (masterValue) {
-        $('#' + shouldEnableAllWordCapitalisation).prop('checked', true);
+        prop(
+          querySelector('#' + shouldEnableAllWordCapitalisation),
+          'checked',
+          true
+        );
       } else {
-        $('#' + shouldEnableAllWordCapitalisation).prop('checked', false);
+        prop(
+          querySelector('#' + shouldEnableAllWordCapitalisation),
+          'checked',
+          false
+        );
       }
     });
 }
@@ -244,10 +250,10 @@ function loadFlagValuesFromBrowserStorage(flagName) {
 
     if (flagValue === true || flagValue === undefined) {
       //value not set yet/ext just installed
-      $(`#${flagName}`).prop('checked', true);
+      prop(querySelector(`#${flagName}`), 'checked', true);
       setShouldCapitaliseVariable(flagName, true);
     } else {
-      $(`#${flagName}`).prop('checked', false);
+      prop(querySelector(`#${flagName}`), 'checked', false);
       setShouldCapitaliseVariable(flagName, false);
     }
   });
@@ -259,7 +265,7 @@ function loadSentenceCaseFlagFromBrowserStorage(flagName) {
 
     // Sentence case defaults to false (disabled by default)
     const enabled = flagValue === true;
-    $(`#${flagName}`).prop('checked', enabled);
+    prop(querySelector(`#${flagName}`), 'checked', enabled);
     setShouldCapitaliseVariable(flagName, enabled);
     toggleSentenceCaseHint(enabled);
   });
@@ -272,35 +278,40 @@ setupCheckboxChangeEventHandlers(shouldCapitaliseLocations);
 setupCheckboxChangeEventHandlers(shouldConvertToSentenceCase);
 
 // Master checkbox change handler
-$(document).on('change', `#${shouldEnableAllWordCapitalisation}`, function () {
-  const enabled = $(this).prop('checked');
-  // Persist master state for convenience (not required for runtime logic)
-  browser.storage.sync.set({ [shouldEnableAllWordCapitalisation]: enabled });
-  // If turning on master, ensure sentence case is off (mutual exclusion)
-  if (enabled) {
-    const $sentence = $(`#${shouldConvertToSentenceCase}`);
-    if ($sentence.prop('checked')) {
-      $sentence.prop('checked', false);
-      setShouldCapitaliseVariable(shouldConvertToSentenceCase, false);
+delegate(
+  document,
+  'change',
+  `#${shouldEnableAllWordCapitalisation}`,
+  function () {
+    const enabled = prop(this, 'checked');
+    // Persist master state for convenience (not required for runtime logic)
+    browser.storage.sync.set({ [shouldEnableAllWordCapitalisation]: enabled });
+    // If turning on master, ensure sentence case is off (mutual exclusion)
+    if (enabled) {
+      const sentenceEl = querySelector(`#${shouldConvertToSentenceCase}`);
+      if (prop(sentenceEl, 'checked')) {
+        prop(sentenceEl, 'checked', false);
+        setShouldCapitaliseVariable(shouldConvertToSentenceCase, false);
+      }
     }
+    // Apply to each individual flag
+    [
+      shouldCapitaliseI,
+      shouldCapitaliseNames,
+      shouldCapitaliseAcronyms,
+      shouldCapitaliseLocations,
+    ].forEach((flag) => {
+      const el = querySelector(`#${flag}`);
+      if (prop(el, 'checked') !== enabled) {
+        prop(el, 'checked', enabled);
+        setShouldCapitaliseVariable(flag, enabled);
+      } else {
+        // still set storage to ensure explicit value
+        setShouldCapitaliseVariable(flag, enabled);
+      }
+    });
   }
-  // Apply to each individual flag
-  [
-    shouldCapitaliseI,
-    shouldCapitaliseNames,
-    shouldCapitaliseAcronyms,
-    shouldCapitaliseLocations,
-  ].forEach((flag) => {
-    const $el = $(`#${flag}`);
-    if ($el.prop('checked') !== enabled) {
-      $el.prop('checked', enabled);
-      setShouldCapitaliseVariable(flag, enabled);
-    } else {
-      // still set storage to ensure explicit value
-      setShouldCapitaliseVariable(flag, enabled);
-    }
-  });
-});
+);
 
 // Mutual exclusion: enabling sentence case disables other capitalisation checkboxes,
 // and enabling any other disables sentence case.
@@ -319,43 +330,49 @@ const otherFlags = [
 
 // Helper: update master checkbox (shouldEnableAllWordCapitalisation) to reflect current child states
 function updateMasterFromChildren() {
-  const $sentence = $(`#${sentenceCaseFlag}`);
-  if ($sentence.prop('checked')) return; // while sentence case active, master remains unchecked/disabled
-  const allOn = otherFlags.every((f) => $(`#${f}`).prop('checked'));
-  const $master = $(`#${shouldEnableAllWordCapitalisation}`);
-  if ($master.prop('checked') !== allOn) {
-    $master.prop('checked', allOn);
+  const sentence = querySelector(`#${sentenceCaseFlag}`);
+  if (prop(sentence, 'checked')) return; // while sentence case active, master remains unchecked/disabled
+  const allOn = otherFlags.every((f) =>
+    prop(querySelector(`#${f}`), 'checked')
+  );
+  const master = querySelector(`#${shouldEnableAllWordCapitalisation}`);
+  if (prop(master, 'checked') !== allOn) {
+    prop(master, 'checked', allOn);
     browser.storage.sync.set({ [shouldEnableAllWordCapitalisation]: allOn });
   }
 }
 
 // When sentence case toggles on, turn others off.
-$(document).on('change', `#${sentenceCaseFlag}`, function () {
-  const enabled = $(this).prop('checked');
+delegate(document, 'change', `#${sentenceCaseFlag}`, function () {
+  const enabled = prop(this, 'checked');
   if (enabled) {
     otherFlags.forEach((f) => {
-      const $el = $(`#${f}`);
-      if ($el.prop('checked')) {
-        $el.prop('checked', false);
+      const el = querySelector(`#${f}`);
+      if (prop(el, 'checked')) {
+        prop(el, 'checked', false);
         setShouldCapitaliseVariable(f, false);
       }
     });
     // Also uncheck and disable master checkbox
-    const $master = $(`#${shouldEnableAllWordCapitalisation}`);
-    if ($master.prop('checked')) {
-      $master.prop('checked', false);
+    const masterEl = querySelector(`#${shouldEnableAllWordCapitalisation}`);
+    if (prop(masterEl, 'checked')) {
+      prop(masterEl, 'checked', false);
       browser.storage.sync.set({ [shouldEnableAllWordCapitalisation]: false });
     }
-    $master.prop('disabled', true);
+    prop(masterEl, 'disabled', true);
     // Disable child boxes (UI) while sentence case active
     otherFlags.forEach((f) => {
-      $(`#${f}`).prop('disabled', true);
+      prop(querySelector(`#${f}`), 'disabled', true);
     });
   } else {
     // Re-enable master and child checkboxes when sentence case turns off
-    $(`#${shouldEnableAllWordCapitalisation}`).prop('disabled', false);
+    prop(
+      querySelector(`#${shouldEnableAllWordCapitalisation}`),
+      'disabled',
+      false
+    );
     otherFlags.forEach((f) => {
-      $(`#${f}`).prop('disabled', false);
+      prop(querySelector(`#${f}`), 'disabled', false);
     });
     // Recalculate master based on existing child states
     updateMasterFromChildren();
@@ -365,11 +382,11 @@ $(document).on('change', `#${sentenceCaseFlag}`, function () {
 
 // When any other flag turns on, ensure sentence case is off.
 otherFlags.forEach((f) => {
-  $(document).on('change', `#${f}`, function () {
-    if ($(this).prop('checked')) {
-      const $sentence = $(`#${sentenceCaseFlag}`);
-      if ($sentence.prop('checked')) {
-        $sentence.prop('checked', false);
+  delegate(document, 'change', `#${f}`, function () {
+    if (prop(this, 'checked')) {
+      const sentenceEl = querySelector(`#${sentenceCaseFlag}`);
+      if (prop(sentenceEl, 'checked')) {
+        prop(sentenceEl, 'checked', false);
         setShouldCapitaliseVariable(sentenceCaseFlag, false);
         toggleSentenceCaseHint(false);
       }
@@ -379,30 +396,30 @@ otherFlags.forEach((f) => {
 });
 
 function toggleSentenceCaseHint(enabled) {
-  const $hint = $('#sentence_case_hint');
-  if (!$hint.length) return; // safety if HTML not present
+  const hintEl = querySelector('#sentence_case_hint');
+  if (!hintEl) return; // safety if HTML not present
   if (enabled) {
-    $hint.removeClass('d-none');
+    hintEl.classList.remove('d-none');
   } else {
-    $hint.addClass('d-none');
+    hintEl.classList.add('d-none');
   }
 }
 
 // Debounce delay change handler
-$(document).on('input', '#debounce_delay_ms', function () {
-  const raw = $(this).val();
+delegate(document, 'input', '#debounce_delay_ms', function () {
+  const raw = val(this);
   const parsed = parseInt(raw, 10);
   if (!isNaN(parsed) && parsed >= 0 && parsed <= 60000) {
     browser.storage.sync.set({ [debounceDelayMs]: parsed });
-    $('#debounce_delay_status').text('Saved');
+    querySelector('#debounce_delay_status').textContent = 'Saved';
   } else {
-    $('#debounce_delay_status').text('Enter 0 - 60000');
+    querySelector('#debounce_delay_status').textContent = 'Enter 0 - 60000';
   }
 });
 
 function setupCheckboxChangeEventHandlers(flagName) {
-  $(document).on('change', `#${flagName}`, function (event) {
-    if ($(event.target).prop('checked')) {
+  delegate(document, 'change', `#${flagName}`, function (event) {
+    if (prop(event.target, 'checked')) {
       setShouldCapitaliseVariable(flagName, true);
     } else {
       setShouldCapitaliseVariable(flagName, false);
@@ -417,7 +434,7 @@ function setShouldCapitaliseVariable(variableName, value) {
 }
 
 function getExcludedSites() {
-  const sitesBoxVal = $('#sites').val();
+  const sitesBoxVal = val(querySelector('#sites'));
 
   if (sitesBoxVal) {
     const sites = sitesBoxVal.split('\n');
@@ -428,7 +445,7 @@ function getExcludedSites() {
 }
 
 function getIncludedWords() {
-  const wordsBoxVal = $('#included_words_textbox').val();
+  const wordsBoxVal = val(querySelector('#included_words_textbox'));
 
   if (wordsBoxVal) {
     const words = wordsBoxVal.split('\n');
@@ -439,7 +456,7 @@ function getIncludedWords() {
 }
 
 function getExcludedWords() {
-  const wordsBoxVal = $('#excluded_words_textbox').val();
+  const wordsBoxVal = val(querySelector('#excluded_words_textbox'));
 
   if (wordsBoxVal) {
     const words = wordsBoxVal.split('\n');
@@ -449,67 +466,91 @@ function getExcludedWords() {
   return [];
 }
 
-$('#sites').on(`input.${pluginNamespace}`, function () {
-  $('#submitButton').prop('disabled', false);
+on(querySelector('#sites'), `input.${pluginNamespace}`, function () {
+  prop(querySelector('#submitButton'), 'disabled', false);
 });
 
-$('#included_words_textbox').on(`input.${pluginNamespace}`, function () {
-  $('#submitButtonIncludedWords').prop('disabled', false);
-});
+on(
+  querySelector('#included_words_textbox'),
+  `input.${pluginNamespace}`,
+  function () {
+    prop(querySelector('#submitButtonIncludedWords'), 'disabled', false);
+  }
+);
 
-$('#excluded_words_textbox').on(`input.${pluginNamespace}`, function () {
-  $('#submitButtonExcludedWords').prop('disabled', false);
-});
+on(
+  querySelector('#excluded_words_textbox'),
+  `input.${pluginNamespace}`,
+  function () {
+    prop(querySelector('#submitButtonExcludedWords'), 'disabled', false);
+  }
+);
 
 // MODE TOGGLE BUTTONS (Sentence vs Word mode visual grouping)
 let cachedWordFlags = null;
 const CACHED_WORD_FLAGS_KEY = 'cachedWordFlagsSnapshot';
 // Helper to refresh visual state (active/inactive sections + button) based on current checkbox values.
 function refreshModeUI() {
-  const sentenceActive = $('#' + shouldConvertToSentenceCase).prop('checked');
+  const sentenceActive = prop(
+    querySelector('#' + shouldConvertToSentenceCase),
+    'checked'
+  );
   if (sentenceActive) {
-    $('#sentenceModeSection').addClass('active').removeClass('inactive');
-    $('#wordModeSection').addClass('inactive').removeClass('active');
+    querySelector('#sentenceModeSection').classList.add('active');
+    querySelector('#sentenceModeSection').classList.remove('inactive');
+    querySelector('#wordModeSection').classList.add('inactive');
+    querySelector('#wordModeSection').classList.remove('active');
     reorderModeSections('sentence');
-    const $btn = $('#modeToggleButton');
-    $btn
-      .attr('data-mode', 'sentence')
-      .text('Switch to Word Capitalisation Mode')
-      .removeClass('btn-outline-primary')
-      .addClass('btn-primary text-white');
+    const btn = querySelector('#modeToggleButton');
+    btn.setAttribute('data-mode', 'sentence');
+    btn.textContent = 'Switch to Word Capitalisation Mode';
+    btn.classList.remove('btn-outline-primary');
+    btn.classList.add('btn-primary', 'text-white');
     // Enable debounce controls
-    $('#debounce_delay_ms').prop('disabled', false);
-    $('#sentencePerformanceCard').removeClass('opacity-50');
+    prop(querySelector('#debounce_delay_ms'), 'disabled', false);
+    querySelector('#sentencePerformanceCard').classList.remove('opacity-50');
   } else {
-    $('#wordModeSection').addClass('active').removeClass('inactive');
-    $('#sentenceModeSection').addClass('inactive').removeClass('active');
+    querySelector('#wordModeSection').classList.add('active');
+    querySelector('#wordModeSection').classList.remove('inactive');
+    querySelector('#sentenceModeSection').classList.add('inactive');
+    querySelector('#sentenceModeSection').classList.remove('active');
     reorderModeSections('word');
-    const $btn = $('#modeToggleButton');
-    $btn
-      .attr('data-mode', 'word')
-      .text('Switch to Sentence Case Mode')
-      .removeClass('btn-primary text-white')
-      .addClass('btn-outline-primary');
+    const btn = querySelector('#modeToggleButton');
+    btn.setAttribute('data-mode', 'word');
+    btn.textContent = 'Switch to Sentence Case Mode';
+    btn.classList.remove('btn-primary', 'text-white');
+    btn.classList.add('btn-outline-primary');
     // Disable debounce controls (only relevant in sentence mode)
-    $('#debounce_delay_ms').prop('disabled', true);
-    $('#sentencePerformanceCard').addClass('opacity-50');
+    prop(querySelector('#debounce_delay_ms'), 'disabled', true);
+    querySelector('#sentencePerformanceCard').classList.add('opacity-50');
   }
 }
 
 function updateCachedWordFlagsSnapshot() {
   // Only update snapshot if currently in word mode (sentence case not active)
-  const sentenceActive = $('#' + shouldConvertToSentenceCase).prop('checked');
+  const sentenceActive = prop(
+    querySelector('#' + shouldConvertToSentenceCase),
+    'checked'
+  );
   if (sentenceActive) return; // do not overwrite snapshot with disabled flags
   cachedWordFlags = {
-    [shouldCapitaliseI]: $('#shouldCapitaliseI').prop('checked'),
-    [shouldCapitaliseNames]: $('#shouldCapitaliseNames').prop('checked'),
-    [shouldCapitaliseAcronyms]: $('#shouldCapitaliseAcronyms').prop('checked'),
-    [shouldCapitaliseLocations]: $('#shouldCapitaliseLocations').prop(
+    [shouldCapitaliseI]: prop(querySelector('#shouldCapitaliseI'), 'checked'),
+    [shouldCapitaliseNames]: prop(
+      querySelector('#shouldCapitaliseNames'),
       'checked'
     ),
-    [shouldEnableAllWordCapitalisation]: $(
-      '#shouldEnableAllWordCapitalisation'
-    ).prop('checked'),
+    [shouldCapitaliseAcronyms]: prop(
+      querySelector('#shouldCapitaliseAcronyms'),
+      'checked'
+    ),
+    [shouldCapitaliseLocations]: prop(
+      querySelector('#shouldCapitaliseLocations'),
+      'checked'
+    ),
+    [shouldEnableAllWordCapitalisation]: prop(
+      querySelector('#shouldEnableAllWordCapitalisation'),
+      'checked'
+    ),
   };
   browser.storage.sync.set({ [CACHED_WORD_FLAGS_KEY]: cachedWordFlags });
 }
@@ -528,14 +569,19 @@ function applySentenceCaseMode() {
     [shouldCapitaliseLocations]: false,
     [shouldEnableAllWordCapitalisation]: false,
   });
-  $('#shouldConvertToSentenceCase').prop('checked', true);
+  prop(querySelector('#shouldConvertToSentenceCase'), 'checked', true);
   [
     '#shouldCapitaliseI',
     '#shouldCapitaliseNames',
     '#shouldCapitaliseAcronyms',
     '#shouldCapitaliseLocations',
     '#shouldEnableAllWordCapitalisation',
-  ].forEach((sel) => $(sel).prop('checked', false).prop('disabled', true));
+  ].forEach(
+    (sel) => (
+      prop(querySelector(sel), 'checked', false),
+      prop(querySelector(sel), 'disabled', true)
+    )
+  );
   toggleSentenceCaseHint(true);
   refreshModeUI();
 }
@@ -548,17 +594,17 @@ function applyWordMode() {
     updates[k] = restore[k];
   });
   browser.storage.sync.set(updates);
-  $('#shouldConvertToSentenceCase').prop('checked', false);
+  prop(querySelector('#shouldConvertToSentenceCase'), 'checked', false);
   [
     '#shouldCapitaliseI',
     '#shouldCapitaliseNames',
     '#shouldCapitaliseAcronyms',
     '#shouldCapitaliseLocations',
     '#shouldEnableAllWordCapitalisation',
-  ].forEach((sel) => $(sel).prop('disabled', false));
+  ].forEach((sel) => prop(querySelector(sel), 'disabled', false));
   Object.entries(restore).forEach(([k, v]) => {
     if (v !== undefined) {
-      $('#' + k).prop('checked', v);
+      prop(querySelector('#' + k), 'checked', v);
     }
   });
   // Ensure snapshot persisted (in case it was only in-memory before navigation or restore)
@@ -574,10 +620,10 @@ function applyWordMode() {
 
 // Ensure the active section is visually first in the wrapper for clarity.
 function reorderModeSections(activeMode) {
-  const wrapper = $('#modeSectionsWrapper');
+  const wrapper = querySelector('#modeSectionsWrapper');
   if (!wrapper.length) return;
-  const sentence = $('#sentenceModeSection');
-  const word = $('#wordModeSection');
+  const sentence = querySelector('#sentenceModeSection');
+  const word = querySelector('#wordModeSection');
   if (activeMode === 'sentence') {
     sentence.detach();
     wrapper.prepend(sentence);
@@ -587,8 +633,8 @@ function reorderModeSections(activeMode) {
   }
 }
 
-$(document).on('click', '#modeToggleButton', function () {
-  const mode = $(this).attr('data-mode');
+delegate(document, 'click', '#modeToggleButton', function () {
+  const mode = this.getAttribute('data-mode');
   if (mode === 'word') {
     applySentenceCaseMode();
   } else {
@@ -621,7 +667,7 @@ setTimeout(() => {
       } else {
         const applyFlag = (id, val) => {
           const effective = val === undefined ? true : !!val;
-          $(id).prop('checked', effective);
+          prop(querySelector(id), 'checked', effective);
         };
         applyFlag('#shouldCapitaliseI', res[shouldCapitaliseI]);
         applyFlag('#shouldCapitaliseNames', res[shouldCapitaliseNames]);
@@ -639,7 +685,7 @@ setTimeout(() => {
           cachedWordFlags = res[CACHED_WORD_FLAGS_KEY];
           Object.entries(cachedWordFlags).forEach(([k, v]) => {
             if (v !== undefined) {
-              $('#' + k).prop('checked', v);
+              prop(querySelector('#' + k), 'checked', v);
             }
           });
         } else {
@@ -653,8 +699,11 @@ setTimeout(() => {
 
 // Keep snapshot current when user changes word flags while in word mode
 otherFlags.forEach((f) => {
-  $(document).on('change', `#${f}`, function () {
-    const sentenceActive = $('#' + shouldConvertToSentenceCase).prop('checked');
+  delegate(document, 'change', `#${f}`, function () {
+    const sentenceActive = prop(
+      querySelector('#' + shouldConvertToSentenceCase),
+      'checked'
+    );
     if (!sentenceActive) {
       updateCachedWordFlagsSnapshot();
     }
@@ -663,13 +712,21 @@ otherFlags.forEach((f) => {
   });
 });
 
-$(document).on('change', `#${shouldEnableAllWordCapitalisation}`, function () {
-  const sentenceActive = $('#' + shouldConvertToSentenceCase).prop('checked');
-  if (!sentenceActive) {
-    updateCachedWordFlagsSnapshot();
+delegate(
+  document,
+  'change',
+  `#${shouldEnableAllWordCapitalisation}`,
+  function () {
+    const sentenceActive = prop(
+      querySelector('#' + shouldConvertToSentenceCase),
+      'checked'
+    );
+    if (!sentenceActive) {
+      updateCachedWordFlagsSnapshot();
+    }
+    refreshModeUI();
   }
-  refreshModeUI();
-});
+);
 
 // When sentence case checkbox itself changes directly (user clicks inside sentence section), ensure UI refresh.
 // Hidden checkbox retained; mode changes now driven exclusively by toggle button so we do not bind a direct change handler.

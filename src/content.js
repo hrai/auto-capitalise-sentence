@@ -1,5 +1,6 @@
 import * as utils from './utils';
 import browser from 'webextension-polyfill';
+import { each, inArray, querySelectorAll, on } from './lib/dom-utils.js';
 import {
   pluginNamespace,
   sitesToIgnore,
@@ -93,7 +94,7 @@ function processResponse(storageDict) {
     try {
       let shouldEnableCapitalisingOnCurrentSite = true;
 
-      $.each(sitesToExclude, function (_i, siteToExclude) {
+      each(sitesToExclude, function (_i, siteToExclude) {
         if (currentUrlDomain.includes(siteToExclude)) {
           shouldEnableCapitalisingOnCurrentSite = false;
         }
@@ -179,21 +180,25 @@ function hookupEventHandlers() {
 }
 
 function observeIframeInputTags() {
-  $('iframe').on('load', (event) => {
+  const iframes = querySelectorAll('iframe');
+  on(iframes, 'load', (event) => {
     const iframe = event.target;
-    $(iframe)
-      .contents()
-      .find(':text,textarea')
-      .each((_, item) => {
-        $(item).on(`input.${pluginNamespace}`, function (event) {
+    const iframeDocument =
+      iframe.contentDocument || iframe.contentWindow?.document;
+    if (iframeDocument) {
+      const inputs = querySelectorAll(':text,textarea', iframeDocument);
+      inputs.forEach((item) => {
+        on(item, `input.${pluginNamespace}`, function (event) {
           capitaliseText(event.target);
         });
       });
+    }
   });
 }
 
 function observeInputTags() {
-  $(':text,textarea').on(`input.${pluginNamespace}`, function (event) {
+  const inputs = querySelectorAll(':text,textarea');
+  on(inputs, `input.${pluginNamespace}`, function (event) {
     capitaliseText(event.target);
   });
 }
@@ -241,7 +246,7 @@ function observeHtmlBody() {
   const observer = new MutationObserver(function (mutations) {
     let characterDataMutations = [];
 
-    $.each(mutations, function (_i, mutation) {
+    each(mutations, function (_i, mutation) {
       try {
         // console.log(mutation);
 
@@ -270,7 +275,7 @@ function observeHtmlBody() {
               }
             });
 
-            $.each(contentEditableTags, function (_i, tagName) {
+            each(contentEditableTags, function (_i, tagName) {
               const filteredEls = utils.getFilteredElements(
                 addedNodesArr,
                 tagName
@@ -285,15 +290,15 @@ function observeHtmlBody() {
               }
             });
 
-            $.each(inputTags, function (_i, tagName) {
+            each(inputTags, function (_i, tagName) {
               const filteredEls = utils.getFilteredElements(
                 addedNodesArr,
                 tagName
               );
 
               if (filteredEls?.length) {
-                filteredEls.each(function (_index, element) {
-                  $(element).on(`input.${pluginNamespace}`, function (event) {
+                filteredEls.forEach(function (element) {
+                  on(element, `input.${pluginNamespace}`, function (event) {
                     capitaliseText(event.target);
                   });
                 });
@@ -325,8 +330,8 @@ function observeHtmlBody() {
 
 function unique(list) {
   const result = [];
-  $.each(list, function (i, e) {
-    if ($.inArray(e, result) == -1) result.push(e);
+  each(list, function (i, e) {
+    if (inArray(e, result) == -1) result.push(e);
   });
   return result;
 }
