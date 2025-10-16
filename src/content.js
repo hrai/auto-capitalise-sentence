@@ -1,6 +1,6 @@
 import * as utils from './utils';
 import browser from 'webextension-polyfill';
-import { each, inArray, querySelectorAll, on } from './lib/dom-utils.js';
+import { inArray, querySelectorAll, on } from './lib/dom-utils.js';
 import {
   pluginNamespace,
   sitesToIgnore,
@@ -94,7 +94,7 @@ function processResponse(storageDict) {
     try {
       let shouldEnableCapitalisingOnCurrentSite = true;
 
-      each(sitesToExclude, function (_i, siteToExclude) {
+      sitesToExclude.forEach(function (siteToExclude) {
         if (currentUrlDomain.includes(siteToExclude)) {
           shouldEnableCapitalisingOnCurrentSite = false;
         }
@@ -249,7 +249,7 @@ function observeHtmlBody() {
   const observer = new MutationObserver(function (mutations) {
     let characterDataMutations = [];
 
-    each(mutations, function (_i, mutation) {
+    mutations.forEach(function (mutation) {
       try {
         // console.log(mutation);
 
@@ -278,7 +278,7 @@ function observeHtmlBody() {
               }
             });
 
-            each(contentEditableTags, function (_i, tagName) {
+            contentEditableTags.forEach(function (tagName) {
               const filteredEls = utils.getFilteredElements(
                 addedNodesArr,
                 tagName
@@ -293,7 +293,7 @@ function observeHtmlBody() {
               }
             });
 
-            each(inputTags, function (_i, tagName) {
+            inputTags.forEach(function (tagName) {
               const filteredEls = utils.getFilteredElements(
                 addedNodesArr,
                 tagName
@@ -333,7 +333,7 @@ function observeHtmlBody() {
 
 function unique(list) {
   const result = [];
-  each(list, function (i, e) {
+  list.forEach(function (e) {
     if (inArray(e, result) == -1) result.push(e);
   });
   return result;
