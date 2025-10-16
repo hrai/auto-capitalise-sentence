@@ -285,7 +285,7 @@ function observeHtmlBody() {
               );
 
               if (filteredEls?.length) {
-                filteredEls.each(function (_index, element) {
+                filteredEls.forEach(function (element) {
                   if (utils.shouldCapitaliseContent(element)) {
                     capitaliseText(element);
                   }

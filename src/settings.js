@@ -641,15 +641,15 @@ function applyWordMode() {
 // Ensure the active section is visually first in the wrapper for clarity.
 function reorderModeSections(activeMode) {
   const wrapper = querySelector('#modeSectionsWrapper');
-  if (!wrapper.length) return;
+  if (!wrapper) return;
   const sentence = querySelector('#sentenceModeSection');
   const word = querySelector('#wordModeSection');
+  if (!sentence || !word) return;
+
   if (activeMode === 'sentence') {
-    sentence.detach();
-    wrapper.prepend(sentence);
+    wrapper.insertBefore(sentence, wrapper.firstChild);
   } else if (activeMode === 'word') {
-    word.detach();
-    wrapper.prepend(word);
+    wrapper.insertBefore(word, wrapper.firstChild);
   }
 }
 
