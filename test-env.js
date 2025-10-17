@@ -1,2 +1,1 @@
-import $ from 'jquery'
-global.$ = global.jQuery = $
+// Test environment setup - jQuery has been removed from the extension

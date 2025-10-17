@@ -429,7 +429,7 @@ describe('setEndOfContenteditable', () => {
       configurable: true,
     });
 
-    const element = $('#text_block')[0];
+    const element = document.querySelector('#text_block');
     utils.setEndOfContenteditable(element);
     const expectedArg = '<br>';
     var args = range.setStart.getCall(0).args;
@@ -462,7 +462,7 @@ describe('setEndOfContenteditable', () => {
       configurable: true,
     });
 
-    const element = $('#text_block_without_br')[0];
+    const element = document.querySelector('#text_block_without_br');
     utils.setEndOfContenteditable(element);
     const expectedArg = 'Item is not Kryptonite.';
     var args = range.setStart.getCall(0).args;

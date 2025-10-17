@@ -11,6 +11,13 @@ import {
   locationsKeyVal,
   wordsToIncludeKeyVal,
 } from './plugin-constants';
+import {
+  parseHTML,
+  removeFromHTML,
+  setHTML,
+  getHTML,
+  findAndAddBack,
+} from './lib/dom-utils.js';
 // Re-export commonly used option and key names so tests can reliably import them from a single module.
 export {
   shouldCapitaliseI,
@@ -434,19 +441,16 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
   //fix for confluence and jira user tags
   if (window.location.host.includes('atlassian.net')) {
     const innerHtml = getCleanHtmlForAtlassian(updatedStr);
-    $(htmlControl).html(innerHtml);
+    setHTML(htmlControl, innerHtml);
   } else {
-    $(htmlControl).html(updatedStr);
+    setHTML(htmlControl, updatedStr);
   }
 
   setEndOfContenteditable(htmlControl);
 }
 export function getCleanHtmlForAtlassian(updatedStr) {
-  const html = $.parseHTML(updatedStr);
-  // console.log(innerHtml);
-
-  const assistiveSpan = $(html).find('span.assistive');
-  assistiveSpan.remove();
+  const html = parseHTML(updatedStr);
+  removeFromHTML(html, 'span.assistive');
   return html;
 }
 
@@ -597,7 +601,7 @@ export function isContentEditable(element) {
 }
 
 export function getFilteredElements(addedNodes, tagName) {
-  return $(addedNodes).find(tagName).addBack(tagName); // finds either added alone or as tree
+  return findAndAddBack(addedNodes, tagName); // finds either added alone or as tree
 }
 
 export function shouldCapitaliseContent(element) {
@@ -613,7 +617,7 @@ export function isEditableElement(element, tagName) {
 }
 
 export function containsHtmlContent(element) {
-  const content = $(element).html();
+  const content = getHTML(element);
 
   const brRegex = /\s*<br>/;
   //for gmail
