@@ -12,7 +12,7 @@
     "start:chrome:linux": "if grep -qiE 'microsoft|wsl' /proc/version; then yarn start:chrome:linux-wsl; else yarn start:chrome:linux-native; fi",
     "start:chrome:linux-wsl": "yarn build-dev && cd distribution && cp manifest_v3.json manifest.json -f && EDGE_BIN='/mnt/c/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'; if [ ! -x \"$EDGE_BIN\" ]; then EDGE_BIN='/mnt/c/Program Files/Microsoft/Edge/Application/msedge.exe'; fi; if [ ! -x \"$EDGE_BIN\" ]; then echo 'Windows Edge not found, falling back to /usr/bin/microsoft-edge' >&2; EDGE_BIN='/usr/bin/microsoft-edge'; fi; web-ext run -t chromium --chromium-binary \"$EDGE_BIN\" --start-url localhost:3000",
     "start:chrome:linux-native": "yarn build-dev && cd distribution && cp manifest_v3.json manifest.json -f && EDGE_BIN=${EDGE_BIN:-/usr/bin/microsoft-edge}; if [ ! -x \"$EDGE_BIN\" ]; then if command -v microsoft-edge >/dev/null 2>&1; then EDGE_BIN=\"$(command -v microsoft-edge)\"; elif command -v chromium-browser >/dev/null 2>&1; then EDGE_BIN=chromium-browser; elif command -v chromium >/dev/null 2>&1; then EDGE_BIN=chromium; elif command -v google-chrome-stable >/dev/null 2>&1; then EDGE_BIN=google-chrome-stable; else echo 'No suitable Chromium/Edge browser found' >&2; exit 1; fi; fi; web-ext run -t chromium --chromium-binary \"$EDGE_BIN\" --start-url localhost:3000",
-    "build": "yarn webpack",
+    "build": "yarn webpack --mode=production",
     "build-dev": "yarn webpack --mode=development",
     "watch": "yarn build --watch",
     "watch-dev": "yarn build-dev --watch",

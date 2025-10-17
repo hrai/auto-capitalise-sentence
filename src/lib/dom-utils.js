@@ -7,6 +7,7 @@
  */
 export function parseHTML(htmlString) {
   const template = document.createElement('template');
+  // eslint-disable-next-line no-unsanitized/property
   template.innerHTML = htmlString.trim();
   return Array.from(template.content.childNodes);
 }
@@ -41,6 +42,7 @@ export function setHTML(element, htmlContent) {
     // The extension reads text from elements the user is typing into, capitalizes it, and writes it back.
     // Any HTML in the content was already typed by the user and rendered by their browser.
     // This is a browser extension that only modifies the user's own local content, not content shared with others.
+    // eslint-disable-next-line no-unsanitized/property
     element.innerHTML = htmlContent;
   }
 }
