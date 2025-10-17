@@ -10,25 +10,25 @@
     "default_popup": "popup/settings.html"
   },
   "background": {
-    "scripts": ["dependencies/jquery.min.js", "lib/background.bundle.js"]
+    "scripts": ["lib/background.bundle.js"]
   },
   "content_scripts": [
     {
       "run_at": "document_end",
       "matches": ["<all_urls>"],
       "js": [
-        "dependencies/jquery.min.js",
         "lib/main.bundle.js",
         "lib/settings.bundle.js"
       ]
     }
   ],
   "icons": {
-    "16": "icons/auto-capitalise-sentence.png",
-    "48": "icons/auto-capitalise-sentence.png",
-    "128": "icons/auto-capitalise-sentence.png"
+    "16": "icons/auto-capitalise-sentence-16.png",
+    "48": "icons/auto-capitalise-sentence-48.png",
+    "128": "icons/auto-capitalise-sentence-128.png"
   },
   "permissions": ["storage", "tabs"],
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "browser_specific_settings": {
     "gecko": {
       "id": "{680e06ed-65ed-4e11-a9c0-0e6f80b9a347}"
