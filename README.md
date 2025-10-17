@@ -1,6 +1,6 @@
 # What is this extension?
 
-Firefox/Microsoft Edge Chromium add-on to automatically capitalise words while typing.
+Firefox/Microsoft Edge Chromium add-on to automatically capitalise words while typing. Works with traditional input fields, textareas, and modern contenteditable elements used by chat applications like WhatsApp Web, Messenger, Discord, and Slack.
 
 ## Features
 
@@ -14,6 +14,8 @@ Firefox/Microsoft Edge Chromium add-on to automatically capitalise words while t
 - Capitalise custom words
 - Optional Sentence Case mode (preserve internal word casing while capitalising sentence starts and standalone "I")
 - Per-field debounced processing to reduce performance impact (configurable delay)
+- Works with modern chat applications (WhatsApp Web, Messenger, Discord, Slack, Teams, Telegram Web, Google Chat)
+- Supports contenteditable elements (`<div>`, `<span>`, `<p>` tags with contenteditable attribute)
 
 ## Configuration/Settings
 
@@ -64,14 +66,14 @@ To change it, open the extension popup settings and update the Debounce Delay (m
 - [Firefox](https://addons.mozilla.org/en-US/firefox/addon/auto-capitalise-sentence/)
 - [Microsoft Edge](https://microsoftedge.microsoft.com/addons/detail/auto-capitalise-sentence/ifebcbphlfoifeajpbecncpgjflpbann)
 
-## Exceptions
+## Known Limitations
 
-Certain sites reset the text change so this extension will not work on them.
+Some sites may have specific behaviors that affect the extension:
 
-- Reddit
-- WhatsApp Web
-- Facebook Messenger
-- Discord
+- **Reddit** - Site may reset text changes in certain scenarios
+- **AWS Console** (aws.amazon.com) - Excluded by default due to code editor conflicts
+
+**Note**: The extension now works with WhatsApp Web, Facebook Messenger, Discord, and most modern chat applications that use contenteditable elements. See [CONTENTEDITABLE_SUPPORT.md](CONTENTEDITABLE_SUPPORT.md) for technical details.
 
 
 ## How to contribute?
