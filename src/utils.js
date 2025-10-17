@@ -76,6 +76,12 @@ export function capitaliseText(
 ) {
   if (!element) return;
 
+  // Guard: Skip if element is currently being processed (prevent infinite loops)
+  // Only check if dataset exists (some test elements may not have it)
+  if (element.dataset && element.dataset.capitalising === 'true') {
+    return;
+  }
+
   // debugger
 
   const tagName = element.tagName;
@@ -418,24 +424,83 @@ export function getNbspCount(text) {
   return (text.match(new RegExp(nbsp, 'g')) || []).length;
 }
 
+/**
+ * Set a native value on an input element and dispatch proper events
+ * This ensures compatibility with React, Vue, and other frameworks
+ * that track input state internally.
+ */
+function setNativeValue(element, value) {
+  const lastValue = element.value;
+  element.value = value;
+
+  // Only dispatch events for real DOM elements (not test mocks)
+  if (typeof element.dispatchEvent === 'function') {
+    // Dispatch input event that React/Vue can detect
+    const event = new Event('input', { bubbles: true });
+
+    // Handle React's internal value tracking
+    const tracker = element._valueTracker;
+    if (tracker) {
+      tracker.setValue(lastValue);
+    }
+
+    element.dispatchEvent(event);
+  }
+}
+
 export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
   //console.log("setting text: "+ updatedStr);
   //debugger
 
-  if (
-    tagName.toUpperCase() === 'INPUT' ||
-    tagName.toUpperCase() === 'TEXTAREA'
-  ) {
-    htmlControl.value = updatedStr;
+  // Guard: Skip if we're already processing this element (prevent infinite loops)
+  // Only check if dataset exists (some test elements may not have it)
+  if (htmlControl.dataset && htmlControl.dataset.capitalising === 'true') {
     return;
   }
 
-  if (contentEditableTags.includes(tagName.toUpperCase())) {
+  const tagNameUpper = tagName.toUpperCase();
+
+  if (tagNameUpper === 'INPUT' || tagNameUpper === 'TEXTAREA') {
+    // Guard: Only update if value actually changed (prevent re-triggering on our own updates)
+    if (htmlControl.value === updatedStr) {
+      return;
+    }
+
+    // Mark element as being processed (if dataset is available)
+    if (htmlControl.dataset) {
+      htmlControl.dataset.capitalising = 'true';
+    }
+
+    // Use setNativeValue for better compatibility with React/Vue/Angular
+    setNativeValue(htmlControl, updatedStr);
+
+    // Clear flag after a brief delay to allow event propagation
+    if (htmlControl.dataset) {
+      setTimeout(() => {
+        delete htmlControl.dataset.capitalising;
+      }, 0);
+    }
+
+    return;
+  }
+
+  if (contentEditableTags.includes(tagNameUpper)) {
     updatedStr = replaceLastOccurrenceInString(updatedStr, ' ', nbsp);
   }
 
   if (shouldAppendBr) {
     updatedStr += '<br>';
+  }
+
+  // Guard: Check if content actually changed before updating
+  const currentContent = htmlControl.innerHTML || '';
+  if (currentContent === updatedStr) {
+    return;
+  }
+
+  // Mark element as being processed (if dataset is available)
+  if (htmlControl.dataset) {
+    htmlControl.dataset.capitalising = 'true';
   }
 
   //fix for confluence and jira user tags
@@ -450,6 +515,13 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
     // whatever HTML the browser already rendered when the user typed it.
     // The extension modifies only the text content for capitalization.
     setHTML(htmlControl, updatedStr);
+  }
+
+  // Clear flag after a brief delay to allow event propagation
+  if (htmlControl.dataset) {
+    setTimeout(() => {
+      delete htmlControl.dataset.capitalising;
+    }, 0);
   }
 
   setEndOfContenteditable(htmlControl);

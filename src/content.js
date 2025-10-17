@@ -254,6 +254,14 @@ function observeHtmlBody() {
         // console.log(mutation);
 
         if (mutation.type === 'childList') {
+          // Guard: Skip mutations triggered by our own updates
+          if (
+            mutation.target.dataset &&
+            mutation.target.dataset.capitalising === 'true'
+          ) {
+            return;
+          }
+
           // add support for div block in gmail and outlook
           if (['P'].includes(mutation.target.nodeName)) {
             capitaliseText(mutation.target);
