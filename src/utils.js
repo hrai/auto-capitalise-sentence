@@ -116,7 +116,7 @@ export function capitaliseText(
     if (updatedStr !== text) {
       setText(element, tagName, updatedStr, shouldAppendBr);
     }
-    return; // Skip all other capitalization paths while in sentence case mode
+    return; // Skip all other capitalisation paths while in sentence case mode
   }
 
   // Per-character last-letter capitalisation (word mode only)
@@ -428,23 +428,65 @@ export function getNbspCount(text) {
  * Set a native value on an input element and dispatch proper events
  * This ensures compatibility with React, Vue, and other frameworks
  * that track input state internally.
+ *
+ * This function tries multiple approaches to ensure the value sticks:
+ * 1. Direct value assignment
+ * 2. React internal tracker update
+ * 3. Native setter via descriptor
+ * 4. Event dispatch to notify frameworks
  */
 function setNativeValue(element, value) {
   const lastValue = element.value;
-  element.value = value;
+
+  // Method 1: Try to use the native setter if available (only for real DOM elements)
+  if (typeof window !== 'undefined' && window.HTMLInputElement) {
+    // Check if element is actually an HTMLInputElement or HTMLTextAreaElement instance
+    const isRealInput = element instanceof window.HTMLInputElement;
+    const isRealTextarea =
+      window.HTMLTextAreaElement &&
+      element instanceof window.HTMLTextAreaElement;
+
+    if (isRealInput || isRealTextarea) {
+      // Get the appropriate native setter based on element type
+      const nativeSetter = isRealTextarea
+        ? Object.getOwnPropertyDescriptor(
+            window.HTMLTextAreaElement.prototype,
+            'value'
+          )?.set
+        : Object.getOwnPropertyDescriptor(
+            window.HTMLInputElement.prototype,
+            'value'
+          )?.set;
+
+      if (nativeSetter) {
+        nativeSetter.call(element, value);
+      } else {
+        element.value = value;
+      }
+    } else {
+      // Test mock or plain object
+      element.value = value;
+    }
+  } else {
+    element.value = value;
+  }
 
   // Only dispatch events for real DOM elements (not test mocks)
   if (typeof element.dispatchEvent === 'function') {
-    // Dispatch input event that React/Vue can detect
-    const event = new Event('input', { bubbles: true });
-
-    // Handle React's internal value tracking
+    // Method 2: Handle React's internal value tracking
     const tracker = element._valueTracker;
     if (tracker) {
       tracker.setValue(lastValue);
     }
 
-    element.dispatchEvent(event);
+    // Method 3: Dispatch multiple events to ensure frameworks catch it
+    // React listens for 'input', Vue listens for 'input', Angular listens for 'input' and 'change'
+    const inputEvent = new Event('input', { bubbles: true });
+    element.dispatchEvent(inputEvent);
+
+    // Dispatch change event immediately (setTimeout removed to fix test timing issues)
+    const changeEvent = new Event('change', { bubbles: true });
+    element.dispatchEvent(changeEvent);
   }
 }
 
@@ -508,12 +550,12 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
     const innerHtml = getCleanHtmlForAtlassian(updatedStr);
     // Security: updatedStr comes from getText which reads innerHTML, so it preserves
     // whatever HTML the browser already rendered when the user typed it.
-    // The extension modifies only the text content for capitalization.
+    // The extension modifies only the text content for capitalisation.
     setHTML(htmlControl, innerHtml);
   } else {
     // Security: updatedStr comes from getText which reads innerHTML, so it preserves
     // whatever HTML the browser already rendered when the user typed it.
-    // The extension modifies only the text content for capitalization.
+    // The extension modifies only the text content for capitalisation.
     setHTML(htmlControl, updatedStr);
   }
 
@@ -816,23 +858,23 @@ export function applyImmediateSentenceStartCapitalisation(element) {
 
 // Store debounced functions & their timeout IDs per element to maintain individual timers and allow cancellation/flush.
 // Value shape: { fn: Function, timeoutId: number|null }
-let debouncedCapitalizationMap = new WeakMap();
+let debouncedCapitalisationMap = new WeakMap();
 
 // TEST-ONLY helper (safe in prod; no reference leakage) to clear debounced map
 export function __resetDebouncedMapForTests() {
-  debouncedCapitalizationMap = new WeakMap();
+  debouncedCapitalisationMap = new WeakMap();
 }
 
 // Public helper to clear per-element debounced functions (used when switching modes)
 export function clearDebouncedCapitalisationCache() {
   // Cancel any outstanding timers without flushing
-  debouncedCapitalizationMap = new WeakMap();
+  debouncedCapitalisationMap = new WeakMap();
 }
 
 // Force flush (run immediately) all pending debounced capitalisations then clear cache.
 export function flushAndClearDebouncedCapitalisations() {
   try {
-    debouncedCapitalizationMap.forEach?.(() => {}); // no-op safeguard for older environments
+    debouncedCapitalisationMap.forEach?.(() => {}); // no-op safeguard for older environments
   } catch {
     /* ignore */
   }
@@ -843,7 +885,7 @@ export function flushAndClearDebouncedCapitalisations() {
 // Explicit cancel for a specific element (used when switching modes for active element)
 export function cancelDebouncedForElement(element) {
   if (!element) return;
-  const entry = debouncedCapitalizationMap.get(element);
+  const entry = debouncedCapitalisationMap.get(element);
   if (entry && entry.timeoutId) {
     clearTimeout(entry.timeoutId);
     entry.timeoutId = null;
@@ -855,7 +897,7 @@ export function getDebouncedCapitaliseText(
   delay = DEFAULT_DEBOUNCE_DELAY,
   capitaliserFn = capitaliseTextProxy
 ) {
-  const existing = debouncedCapitalizationMap.get(element);
+  const existing = debouncedCapitalisationMap.get(element);
   if (existing && typeof existing.fn === 'function') return existing.fn;
 
   let timeoutId = null;
@@ -887,10 +929,10 @@ export function getDebouncedCapitaliseText(
         /* ignore */
       }
     }, delay);
-    debouncedCapitalizationMap.set(element, { fn: wrapped, timeoutId });
+    debouncedCapitalisationMap.set(element, { fn: wrapped, timeoutId });
   };
 
-  debouncedCapitalizationMap.set(element, { fn: wrapped, timeoutId });
+  debouncedCapitalisationMap.set(element, { fn: wrapped, timeoutId });
   return wrapped;
 }
 

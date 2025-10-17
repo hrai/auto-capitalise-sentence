@@ -144,7 +144,7 @@ browser.storage.onChanged.addListener(
           utils.setWordsToExclude(newValue);
         }
       }
-      // Re-run capitalization immediately on active element after mode changes so UI reflects new mode without waiting
+      // Re-run capitalisation immediately on active element after mode changes so UI reflects new mode without waiting
       if (
         changes.shouldConvertToSentenceCase ||
         changes.shouldCapitaliseI ||
@@ -190,10 +190,22 @@ function observeIframeInputTags() {
         'input[type="text"],textarea',
         iframeDocument
       );
-      inputs.forEach((item) => {
-        on(item, `input.${pluginNamespace}`, function (event) {
+      inputs.forEach((input) => {
+        let lastCapitalisedValue = input.value;
+
+        const handleInput = function (event) {
           capitaliseText(event.target);
-        });
+          lastCapitalisedValue = event.target.value;
+
+          // Re-check after microtask
+          Promise.resolve().then(() => {
+            if (event.target.value !== lastCapitalisedValue) {
+              capitaliseText(event.target);
+            }
+          });
+        };
+
+        input.addEventListener('input', handleInput, false);
       });
     }
   });
@@ -201,8 +213,47 @@ function observeIframeInputTags() {
 
 function observeInputTags() {
   const inputs = querySelectorAll('input[type="text"],textarea');
-  on(inputs, `input.${pluginNamespace}`, function (event) {
-    capitaliseText(event.target);
+
+  inputs.forEach((input) => {
+    // Store the expected capitalised value
+    let lastCapitalisedValue = input.value;
+
+    // Main input handler
+    const handleInput = function (event) {
+      capitaliseText(event.target);
+      lastCapitalisedValue = event.target.value;
+
+      // Re-check after a microtask to ensure frameworks haven't reverted
+      Promise.resolve().then(() => {
+        if (event.target.value !== lastCapitalisedValue) {
+          // Framework reverted our change, reapply with native event
+          const text = utils.getText(event.target, event.target.tagName);
+          if (text !== lastCapitalisedValue) {
+            capitaliseText(event.target);
+          }
+        }
+      });
+    };
+
+    input.addEventListener('input', handleInput, false);
+
+    // Also observe with MutationObserver for value changes not triggered by input events
+    const observer = new MutationObserver(() => {
+      if (input.value && input.value !== lastCapitalisedValue) {
+        const oldValue = input.value;
+        capitaliseText(input);
+        if (input.value !== oldValue) {
+          lastCapitalisedValue = input.value;
+        }
+      }
+    });
+
+    observer.observe(input, {
+      attributes: true,
+      attributeFilter: ['value'],
+      characterData: false,
+      childList: false,
+    });
   });
 }
 
@@ -348,7 +399,7 @@ function unique(list) {
 }
 
 function capitaliseText(element) {
-  // Only apply debounce when sentence case feature is enabled; otherwise capitalize immediately
+  // Only apply debounce when sentence case feature is enabled; otherwise capitalise immediately
   if (utils.isSentenceCaseModeActive()) {
     utils.applyImmediateSentenceStartCapitalisation(element);
     const debouncedFn = utils.getDebouncedCapitaliseText(
@@ -365,7 +416,7 @@ function capitaliseText(element) {
   }
 }
 
-// Immediately invoke capitalization (bypassing debounce) for the currently focused editable element
+// Immediately invoke capitalisation (bypassing debounce) for the currently focused editable element
 function reprocessActiveElement() {
   const active = document.activeElement;
   if (!active) return;

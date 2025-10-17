@@ -23,29 +23,27 @@ export function getHTML(element) {
  * Set HTML content of an element
  * Replaces: $(element).html(content)
  *
- * Security: This function is used to set capitalized text back into editable elements.
+ * Security: This function is used to set capitalised text back into editable elements.
  * The content comes from getText() which reads what the user already typed into the element.
- * The extension only modifies the text for capitalization - it doesn't introduce new HTML.
+ * The extension only modifies the text for capitalisation - it doesn't introduce new HTML.
  * Any HTML in the content was already rendered by the browser when the user typed it.
  *
  * The extension adds minimal controlled HTML (e.g., <br> tags for line breaks in contentEditable).
  * This is safe because:
  * 1. The user is editing their own content in their own browser
- * 2. Any malicious HTML they type would execute when they type it, not when we capitalize it
+ * 2. Any malicious HTML they type would execute when they type it, not when we capitalise it
  * 3. The extension runs in the user's browser context, not server-side
  * 4. We're not transmitting this content to other users or storing it
  */
 export function setHTML(element, htmlContent) {
   if (element) {
     // codeql[js/xss] - False positive: Content comes from user's own input in their own editable elements.
-    // The extension reads text from elements the user is typing into, capitalizes it, and writes it back.
+    // The extension reads text from elements the user is typing into, capitalises it, and writes it back.
     // Any HTML in the content was already typed by the user and rendered by their browser.
     // This is a browser extension that only modifies the user's own local content, not content shared with others.
     element.innerHTML = htmlContent;
   }
-}
-
-/**
+} /**
  * Find descendant elements matching a selector
  * Replaces: $(element).find(selector)
  */
