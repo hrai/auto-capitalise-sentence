@@ -441,8 +441,14 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
   //fix for confluence and jira user tags
   if (window.location.host.includes('atlassian.net')) {
     const innerHtml = getCleanHtmlForAtlassian(updatedStr);
+    // Security: updatedStr comes from getText which reads innerHTML, so it preserves
+    // whatever HTML the browser already rendered when the user typed it.
+    // The extension modifies only the text content for capitalization.
     setHTML(htmlControl, innerHtml);
   } else {
+    // Security: updatedStr comes from getText which reads innerHTML, so it preserves
+    // whatever HTML the browser already rendered when the user typed it.
+    // The extension modifies only the text content for capitalization.
     setHTML(htmlControl, updatedStr);
   }
 
