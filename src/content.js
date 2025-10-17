@@ -23,10 +23,9 @@ import {
 const errorMsg = 'breaking loop';
 let sitesToExclude = [
   'aws.amazon.com',
-  'web.whatsapp.com',
-  'messenger.com',
-  'discord.com',
-  'facebook.com',
+  // Removed WhatsApp, Messenger, Discord, Facebook from default exclusions
+  // The extension now properly supports contenteditable span/div elements
+  // used by modern chat applications
 ];
 
 let configuredDebounceDelay = 5000;
@@ -186,6 +185,7 @@ function observeIframeInputTags() {
     const iframeDocument =
       iframe.contentDocument || iframe.contentWindow?.document;
     if (iframeDocument) {
+      // Traditional inputs
       const inputs = querySelectorAll(
         'input[type="text"],textarea',
         iframeDocument
@@ -207,11 +207,21 @@ function observeIframeInputTags() {
 
         input.addEventListener('input', handleInput, false);
       });
+
+      // Contenteditable elements in iframes
+      const contentEditables = querySelectorAll(
+        '[contenteditable="true"],[contenteditable=""],[contenteditable="plaintext-only"],span[contenteditable],div[contenteditable],p[contenteditable]',
+        iframeDocument
+      );
+      contentEditables.forEach((element) => {
+        attachContentEditableHandlers(element);
+      });
     }
   });
 }
 
 function observeInputTags() {
+  // Traditional form inputs
   const inputs = querySelectorAll('input[type="text"],textarea');
 
   inputs.forEach((input) => {
@@ -255,6 +265,90 @@ function observeInputTags() {
       childList: false,
     });
   });
+
+  // Modern contenteditable elements (WhatsApp, Messenger, Discord, etc.)
+  observeContentEditableElements();
+}
+
+/**
+ * Observe contenteditable elements used by modern chat apps
+ * (WhatsApp, Messenger, Discord, Slack, etc.)
+ */
+function observeContentEditableElements() {
+  // Find all existing contenteditable elements
+  const contentEditables = querySelectorAll(
+    '[contenteditable="true"],[contenteditable=""],[contenteditable="plaintext-only"],span[contenteditable],div[contenteditable],p[contenteditable]'
+  );
+
+  contentEditables.forEach((element) => {
+    attachContentEditableHandlers(element);
+  });
+}
+
+/**
+ * Attach event handlers to a contenteditable element
+ */
+function attachContentEditableHandlers(element) {
+  // Skip if already attached
+  if (element.dataset && element.dataset.capitalisationAttached === 'true') {
+    return;
+  }
+
+  // Mark as attached to avoid duplicate handlers
+  if (element.dataset) {
+    element.dataset.capitalisationAttached = 'true';
+  }
+
+  let lastCapitalisedText = utils.getText(element, element.tagName);
+
+  // Handle input events (typed characters)
+  const handleInput = function (event) {
+    capitaliseText(event.target);
+    lastCapitalisedText = utils.getText(event.target, event.target.tagName);
+  };
+
+  // Handle paste events
+  const handlePaste = function (event) {
+    // Small delay to allow paste to complete
+    setTimeout(() => {
+      capitaliseText(event.target);
+      lastCapitalisedText = utils.getText(event.target, event.target.tagName);
+    }, 10);
+  };
+
+  // Handle keyup for special keys (Enter, space, etc.)
+  const handleKeyUp = function (event) {
+    // Capitalise on space, enter, or punctuation
+    if (
+      event.key === ' ' ||
+      event.key === 'Enter' ||
+      event.key === '.' ||
+      event.key === '!' ||
+      event.key === '?'
+    ) {
+      capitaliseText(event.target);
+      lastCapitalisedText = utils.getText(event.target, event.target.tagName);
+    }
+  };
+
+  element.addEventListener('input', handleInput, false);
+  element.addEventListener('paste', handlePaste, false);
+  element.addEventListener('keyup', handleKeyUp, false);
+
+  // MutationObserver for DOM changes within the contenteditable
+  const observer = new MutationObserver(() => {
+    const currentText = utils.getText(element, element.tagName);
+    if (currentText && currentText !== lastCapitalisedText) {
+      capitaliseText(element);
+      lastCapitalisedText = currentText;
+    }
+  });
+
+  observer.observe(element, {
+    characterData: true,
+    childList: true,
+    subtree: true,
+  });
 }
 
 function setOptions(item) {
@@ -293,7 +387,7 @@ function setKeyValues(item) {
 function observeHtmlBody() {
   const target = document.querySelector('body');
 
-  const contentEditableTags = ['p', 'span'];
+  const contentEditableTags = ['p', 'span', 'div'];
   const inputTags = ["input[type='text']", 'textarea'];
 
   const lastUpdatedText = '';
@@ -334,6 +428,28 @@ function observeHtmlBody() {
                 addedNodesArr = addedNodesArr.filter((addedNode) => {
                   addedNode != node;
                 });
+              }
+            });
+
+            // Check for newly added contenteditable elements and attach handlers
+            addedNodesArr.forEach((node) => {
+              if (node.nodeType === Node.ELEMENT_NODE) {
+                // Check the node itself
+                if (
+                  node.isContentEditable ||
+                  node.hasAttribute('contenteditable')
+                ) {
+                  attachContentEditableHandlers(node);
+                }
+                // Check descendants
+                if (node.querySelectorAll) {
+                  const editables = node.querySelectorAll(
+                    '[contenteditable="true"],[contenteditable=""],[contenteditable="plaintext-only"],span[contenteditable],div[contenteditable],p[contenteditable]'
+                  );
+                  editables.forEach((el) => {
+                    attachContentEditableHandlers(el);
+                  });
+                }
               }
             });
 
