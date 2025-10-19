@@ -40,6 +40,15 @@ export const optionsDictionary = {
   [shouldCapitaliseLocations]: false,
   [shouldConvertToSentenceCase]: false,
 };
+
+// Store previous word mode settings before switching to sentence case
+let savedWordModeSettings = {
+  [shouldCapitaliseI]: false,
+  [shouldCapitaliseNames]: false,
+  [shouldCapitaliseAcronyms]: false,
+  [shouldCapitaliseLocations]: false,
+};
+
 const keyValueDictionary = {
   [constantsKeyVal]: {},
   [namesKeyVal]: {},
@@ -58,6 +67,11 @@ export function __resetAllOptionsAndDictionariesForTests() {
   optionsDictionary[shouldCapitaliseAcronyms] = false;
   optionsDictionary[shouldCapitaliseLocations] = false;
   optionsDictionary[shouldConvertToSentenceCase] = false;
+  // Reset saved state
+  savedWordModeSettings[shouldCapitaliseI] = false;
+  savedWordModeSettings[shouldCapitaliseNames] = false;
+  savedWordModeSettings[shouldCapitaliseAcronyms] = false;
+  savedWordModeSettings[shouldCapitaliseLocations] = false;
   keyValueDictionary[constantsKeyVal] = {};
   keyValueDictionary[namesKeyVal] = {};
   keyValueDictionary[acronymsKeyVal] = {};
@@ -225,12 +239,68 @@ export function setShouldCapitaliseOption(optionName, value) {
   if (value != null) {
     // Enforce strict mutual exclusion here as a single source of truth.
     if (optionName === shouldConvertToSentenceCase && value === true) {
+      // Save current word mode settings before switching to sentence case
+      savedWordModeSettings[shouldCapitaliseI] =
+        optionsDictionary[shouldCapitaliseI];
+      savedWordModeSettings[shouldCapitaliseNames] =
+        optionsDictionary[shouldCapitaliseNames];
+      savedWordModeSettings[shouldCapitaliseAcronyms] =
+        optionsDictionary[shouldCapitaliseAcronyms];
+      savedWordModeSettings[shouldCapitaliseLocations] =
+        optionsDictionary[shouldCapitaliseLocations];
+
       optionsDictionary[shouldConvertToSentenceCase] = true;
       // Turn off all word-level flags explicitly
       optionsDictionary[shouldCapitaliseI] = false;
       optionsDictionary[shouldCapitaliseNames] = false;
       optionsDictionary[shouldCapitaliseAcronyms] = false;
       optionsDictionary[shouldCapitaliseLocations] = false;
+
+      // Sync disabled word flags to browser storage so UI stays in sync
+      if (
+        typeof browser !== 'undefined' &&
+        browser.storage &&
+        browser.storage.sync
+      ) {
+        browser.storage.sync.set({
+          [shouldCapitaliseI]: false,
+          [shouldCapitaliseNames]: false,
+          [shouldCapitaliseAcronyms]: false,
+          [shouldCapitaliseLocations]: false,
+        });
+      }
+    } else if (
+      optionName === shouldConvertToSentenceCase &&
+      value === false &&
+      optionsDictionary[shouldConvertToSentenceCase] === true
+    ) {
+      // Only restore saved word mode settings if we're actually switching FROM sentence case
+      // (i.e., sentence case was previously true and is now being set to false)
+      optionsDictionary[shouldConvertToSentenceCase] = false;
+      optionsDictionary[shouldCapitaliseI] =
+        savedWordModeSettings[shouldCapitaliseI];
+      optionsDictionary[shouldCapitaliseNames] =
+        savedWordModeSettings[shouldCapitaliseNames];
+      optionsDictionary[shouldCapitaliseAcronyms] =
+        savedWordModeSettings[shouldCapitaliseAcronyms];
+      optionsDictionary[shouldCapitaliseLocations] =
+        savedWordModeSettings[shouldCapitaliseLocations];
+
+      // Sync restored word flags to browser storage so UI stays in sync
+      if (
+        typeof browser !== 'undefined' &&
+        browser.storage &&
+        browser.storage.sync
+      ) {
+        browser.storage.sync.set({
+          [shouldCapitaliseI]: savedWordModeSettings[shouldCapitaliseI],
+          [shouldCapitaliseNames]: savedWordModeSettings[shouldCapitaliseNames],
+          [shouldCapitaliseAcronyms]:
+            savedWordModeSettings[shouldCapitaliseAcronyms],
+          [shouldCapitaliseLocations]:
+            savedWordModeSettings[shouldCapitaliseLocations],
+        });
+      }
     } else if (
       value === true &&
       (optionName === shouldCapitaliseI ||
