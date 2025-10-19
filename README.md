@@ -1,6 +1,8 @@
 # What is this extension?
 
-Firefox/Microsoft Edge Chromium add-on to automatically capitalise words while typing. Works with traditional input fields, textareas, and modern contenteditable elements used by chat applications like WhatsApp Web, Messenger, Discord, and Slack.
+Firefox/Microsoft Edge Chromium add-on to automatically capitalise words while typing. Works with traditional input fields, textareas, and modern contenteditable elements used by chat applications like Discord, Slack, Teams, and Telegram Web.
+
+**Note**: WhatsApp Web and Facebook Messenger are not supported due to technical limitations with their Lexical editor framework. See [compatibility section](#compatibility--known-limitations) below.
 
 ## Features
 
@@ -14,8 +16,9 @@ Firefox/Microsoft Edge Chromium add-on to automatically capitalise words while t
 - Capitalise custom words
 - Optional Sentence Case mode (preserve internal word casing while capitalising sentence starts and standalone "I")
 - Per-field debounced processing to reduce performance impact (configurable delay)
-- Works with modern chat applications (WhatsApp Web, Messenger, Discord, Slack, Teams, Telegram Web, Google Chat)
+- Works with modern chat applications (Discord, Slack, Teams, Telegram Web, Google Chat)
 - Supports contenteditable elements (`<div>`, `<span>`, `<p>` tags with contenteditable attribute)
+- **Not compatible with WhatsApp Web and Facebook Messenger** (see [Known Limitations](#compatibility--known-limitations))
 
 ## Configuration/Settings
 
@@ -66,14 +69,63 @@ To change it, open the extension popup settings and update the Debounce Delay (m
 - [Firefox](https://addons.mozilla.org/en-US/firefox/addon/auto-capitalise-sentence/)
 - [Microsoft Edge](https://microsoftedge.microsoft.com/addons/detail/auto-capitalise-sentence/ifebcbphlfoifeajpbecncpgjflpbann)
 
-## Known Limitations
+## Compatibility & Known Limitations
 
-Some sites may have specific behaviors that affect the extension:
+### Supported Platforms
+
+The extension works on most websites with:
+- ✅ Traditional input fields and textareas
+
+### Sponsor
+- ✅ **Slack** - Full support
+- ✅ **Microsoft Teams** - Full support
+- ✅ **Telegram Web** - Full support
+- ✅ **Google Chat** - Full support
+- ✅ Most web-based text editors
+
+- PRs are welcome! :)
+
+The following sites are **not compatible** with this extension and are automatically excluded:
+
+#### ❌ WhatsApp Web (`web.whatsapp.com`)
+- **Reason**: Uses Meta's Lexical editor framework
+- **Issue**: Lexical maintains strict internal state that breaks when external scripts modify the DOM
+- **Impact**: Would cause complete input blocking (cannot type after certain characters)
+- **Workaround**: Use WhatsApp Desktop app or mobile app for auto-capitalization
+
+#### ❌ Facebook Messenger (`messenger.com`)
+- **Reason**: Uses Meta's Lexical editor framework (same as WhatsApp)
+- **Issue**: Same technical limitations as WhatsApp
+- **Impact**: Would cause input freezing and dropped characters
+- **Workaround**: Use Messenger Desktop app or mobile app
+
+#### ❌ AWS Console (`aws.amazon.com`)
+- **Reason**: Code editors conflict with auto-capitalization
+- **Impact**: Would capitalize code/configuration inappropriately
+
+### Technical Details
+
+WhatsApp and Messenger use **Lexical**, Facebook's modern rich-text editor framework. Lexical maintains its own internal representation of the editor state, separate from the DOM. Any external modification to the DOM—even changing text content without touching the HTML structure—desynchronizes Lexical's internal state from the DOM, causing:
+
+- Input blocking (cannot type after certain words)
+- Cursor position issues
+- Dropped characters
+- Event handling conflicts
+
+### Other Known Limitations
 
 - **Reddit** - Site may reset text changes in certain scenarios
-- **AWS Console** (aws.amazon.com) - Excluded by default due to code editor conflicts
+- **Instagram DMs** - Likely uses Lexical (untested, may have same issues as WhatsApp)
 
-**Note**: The extension now works with WhatsApp Web, Facebook Messenger, Discord, and most modern chat applications that use contenteditable elements. See [CONTENTEDITABLE_SUPPORT.md](CONTENTEDITABLE_SUPPORT.md) for technical details.
+### Adding Custom Exclusions
+
+You can exclude additional websites using the extension settings:
+1. Click the extension icon
+2. Go to "Excluded websites" section
+3. Add website domains (e.g., `example.com`)
+4. Save settings
+
+**Note**: Sites using Lexical or similar state-managed editors may experience input issues. If you notice typing problems on any site, add it to the exclusions list.
 
 
 ## How to contribute?

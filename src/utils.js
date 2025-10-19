@@ -781,11 +781,51 @@ export function shouldCapitaliseContent(element) {
 }
 
 export function isEditableElement(element, tagName) {
-  return (
-    element.isContentEditable ||
-    tagName.toUpperCase() === 'INPUT' ||
-    tagName.toUpperCase() === 'TEXTAREA'
-  );
+  // Check multiple ways an element can be editable:
+  // 1. isContentEditable property (standard way)
+  // 2. contentEditable attribute set to 'true', '', or 'plaintext-only'
+  // 3. Standard input/textarea elements
+
+  if (!element) {
+    return false;
+  }
+
+  // Check for standard input/textarea first (requires tagName)
+  if (tagName) {
+    const tagUpper = tagName.toUpperCase();
+    if (tagUpper === 'INPUT' || tagUpper === 'TEXTAREA') {
+      return true;
+    }
+  }
+
+  // Check isContentEditable property (may be undefined in some environments)
+  if (element.isContentEditable === true) {
+    return true;
+  }
+
+  // Check contentEditable attribute as fallback
+  // getAttribute returns null if not present, or the attribute value as a string
+  const contentEditableAttr = element.getAttribute?.('contenteditable');
+  if (contentEditableAttr !== null && contentEditableAttr !== undefined) {
+    // contenteditable can be 'true', '', or 'plaintext-only' to make element editable
+    // It's 'false' or 'inherit' when not editable
+    return (
+      contentEditableAttr === 'true' ||
+      contentEditableAttr === '' ||
+      contentEditableAttr === 'plaintext-only'
+    );
+  }
+
+  // Also check the property (might be set as element.contentEditable = 'true')
+  if (element.contentEditable) {
+    return (
+      element.contentEditable === 'true' ||
+      element.contentEditable === '' ||
+      element.contentEditable === 'plaintext-only'
+    );
+  }
+
+  return false;
 }
 
 export function containsHtmlContent(element) {

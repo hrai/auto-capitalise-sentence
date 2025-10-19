@@ -23,9 +23,9 @@ import {
 const errorMsg = 'breaking loop';
 let sitesToExclude = [
   'aws.amazon.com',
-  // Removed WhatsApp, Messenger, Discord, Facebook from default exclusions
-  // The extension now properly supports contenteditable span/div elements
-  // used by modern chat applications
+  'web.whatsapp.com',
+  'messenger.com',
+  'www.messenger.com',
 ];
 
 let configuredDebounceDelay = 5000;
