@@ -219,9 +219,35 @@ function updateConstant(text, element, tagName, keyValuePairs, caseSensitive) {
 }
 
 export function shouldCapitaliseForI(text) {
-  // Match whitespace + i followed by either: whitespace, apostrophe, end-of-string, or punctuation commonly ending a thought.
-  const regex = /\s+i(?=\s+|'|$|[.,!?])/;
-  return regex.test(text);
+  // Only capitalize 'i' when it's a complete standalone word
+  // This means: preceded by whitespace/punctuation/start AND followed by whitespace/punctuation/end
+  // This prevents capitalizing 'i' in words like "identify", "interface", "iTunes" etc.
+
+  // Match patterns like: " i ", " i.", " i,", " i!", " i?", " i:", " i;", " i'", or " i" at end
+  // Also match at start: "i ", "i.", etc.
+  // Use lowercase 'i' specifically in the pattern, not case-insensitive
+  const regex = /(?:^|[\s.,!?:;])(i)(?=[\s.,!?:;'"]|$)/g;
+  let match;
+  let lastMatch = null;
+
+  // Find all matches and get the last one
+  while ((match = regex.exec(text)) !== null) {
+    lastMatch = match;
+  }
+
+  // Only return true if we found a match and the last character confirms it's complete
+  // (i.e., the character after 'i' is not a letter)
+  if (lastMatch) {
+    const matchIndex = lastMatch.index + (lastMatch[0].startsWith('i') ? 0 : 1);
+    const charAfterI = text[matchIndex + 1];
+
+    // Capitalize only if:
+    // 1. We're at the end of the text (user just typed 'i'), OR
+    // 2. The character after 'i' is NOT a letter (confirming it's standalone)
+    return !charAfterI || !/[a-zA-Z]/.test(charAfterI);
+  }
+
+  return false;
 }
 
 export function setShouldCapitaliseOption(optionName, value) {
@@ -655,10 +681,36 @@ export function getUpdatedString(text, matchedWord, correctedWord) {
 }
 
 export function getCapitalisedContentForI(text) {
-  const lastTwoChars = text.slice(-2);
-  const updatedStr =
-    text.substr(0, text.length - 2) + lastTwoChars.toUpperCase();
-  return updatedStr;
+  // Find the standalone 'i' and capitalize it
+  // Use the same pattern as shouldCapitaliseForI to find the 'i'
+  // Target lowercase 'i' specifically, not case-insensitive
+  const regex = /(?:^|[\s.,!?:;])(i)(?=[\s.,!?:;'"]|$)/g;
+
+  // Find the last match (most recent 'i' typed)
+  let lastMatch = null;
+  let match;
+  while ((match = regex.exec(text)) !== null) {
+    lastMatch = match;
+  }
+
+  // If we found a standalone 'i', capitalize it
+  if (lastMatch) {
+    const matchIndex = lastMatch.index;
+    const matchText = lastMatch[0];
+
+    // Build the updated string
+    const before = text.substring(0, matchIndex);
+    const after = text.substring(matchIndex + matchText.length);
+
+    // If the match starts with a separator, keep it and capitalize the 'i'
+    if (matchText.length > 1) {
+      return before + matchText[0] + 'I' + after;
+    }
+    // If the match is just 'i' at the start, capitalize it
+    return before + 'I' + after;
+  }
+
+  return text;
 }
 
 export function getCapitalisedContent(text) {
