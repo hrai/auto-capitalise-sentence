@@ -54,10 +54,16 @@ describe('Mode switching behaviour', () => {
     wordFlags.forEach((f) => setShouldCapitaliseOption(f, true));
   });
 
-  test('Word mode capitalises isolated i at end of input', () => {
-    const el = makeEl('I went to the store i');
-    const result = run(el, 'I went to the store i');
-    expect(result.endsWith(' I')).toBeTruthy();
+  test('Word mode capitalises isolated i only after space/punctuation is added', () => {
+    // 'i' at end of string should NOT be capitalized (could be part of a word being typed)
+    const el1 = makeEl('I went to the store i');
+    const result1 = run(el1, 'I went to the store i');
+    expect(result1.endsWith(' i')).toBeTruthy(); // Should remain lowercase until confirmed standalone
+
+    // 'i' followed by space SHOULD be capitalized
+    const el2 = makeEl('I went to the store i ');
+    const result2 = run(el2, 'I went to the store i ');
+    expect(result2).toContain(' I ');
   });
 
   test('Sentence case mode applies even without trigger punctuation', () => {

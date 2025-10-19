@@ -213,8 +213,11 @@ function updateConstant(text, element, tagName, keyValuePairs, caseSensitive) {
 }
 
 export function shouldCapitaliseForI(text) {
-  // Match whitespace + i followed by either: whitespace, apostrophe, end-of-string, or punctuation commonly ending a thought.
-  const regex = /\s+i(?=\s+|'|$|[.,!?])/;
+  // Only capitalize 'i' when followed by a non-alphabetic character (space, punctuation, etc.)
+  // This prevents premature capitalization while typing words like "item", "in", "if", etc.
+  // Remove end-of-string ($) anchor to avoid capitalizing before space is added
+  // Match 'i' at start of string OR after whitespace, when followed by space/punctuation
+  const regex = /(^|\s)i(?=\s|[.,!?;:'")\]}])/;
   return regex.test(text);
 }
 
@@ -541,10 +544,9 @@ export function getUpdatedString(text, matchedWord, correctedWord) {
 }
 
 export function getCapitalisedContentForI(text) {
-  const lastTwoChars = text.slice(-2);
-  const updatedStr =
-    text.substr(0, text.length - 2) + lastTwoChars.toUpperCase();
-  return updatedStr;
+  // Find and capitalize standalone 'i' preceded by whitespace or at start
+  // Use replace to only capitalize the 'i', not the surrounding characters
+  return text.replace(/(^|\s)i(\s|[.,!?;:'")\]}])/g, '$1I$2');
 }
 
 export function getCapitalisedContent(text) {
