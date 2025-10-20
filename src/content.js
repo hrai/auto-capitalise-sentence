@@ -22,11 +22,13 @@ import {
 
 const errorMsg = 'breaking loop';
 let sitesToExclude = [
+  'localhost',
   'aws.amazon.com',
-  'web.whatsapp.com',
-  'messenger.com',
-  'discord.com',
-  'facebook.com',
+  'discord.com', // Uses Slate.js framework - controlled editor that breaks with DOM manipulation
+  'teams.microsoft.com', // Causes UI freezing - likely uses controlled editor framework
+  'web.whatsapp.com', // Uses Lexical framework
+  'messenger.com', // Uses Lexical framework
+  'facebook.com', // Uses Lexical framework
 ];
 
 let configuredDebounceDelay = 5000;
@@ -175,7 +177,8 @@ browser.storage.onChanged.addListener(
 function hookupEventHandlers() {
   observeInputTags();
   observeHtmlBody();
-
+  // observeContentEditableElements() - DISABLED: Causes over-processing
+  // The main MutationObserver in observeHtmlBody() handles contenteditable elements better
   observeIframeInputTags();
 }
 
@@ -186,6 +189,7 @@ function observeIframeInputTags() {
     const iframeDocument =
       iframe.contentDocument || iframe.contentWindow?.document;
     if (iframeDocument) {
+      // Handle traditional input elements
       const inputs = querySelectorAll(
         'input[type="text"],textarea',
         iframeDocument
@@ -195,6 +199,9 @@ function observeIframeInputTags() {
           capitaliseText(event.target);
         });
       });
+
+      // REMOVED: Contenteditable handler attachment in iframes
+      // This was causing over-processing. Iframes are handled by their own MutationObservers
     }
   });
 }
@@ -242,7 +249,7 @@ function setKeyValues(item) {
 function observeHtmlBody() {
   const target = document.querySelector('body');
 
-  const contentEditableTags = ['p', 'span'];
+  const contentEditableTags = ['p', 'span', 'div']; // Added 'div' for modern chat apps
   const inputTags = ["input[type='text']", 'textarea'];
 
   const lastUpdatedText = '';
@@ -263,6 +270,11 @@ function observeHtmlBody() {
           const addedNodes = mutation.addedNodes;
           if (addedNodes && addedNodes.length > 0) {
             let addedNodesArr = Array.from(addedNodes);
+
+            // REMOVED: Automatic contenteditable handler attachment
+            // This was causing over-processing and capitalizing 'i' within words
+            // The characterData mutations below handle contenteditable elements correctly
+
             addedNodesArr.forEach((node) => {
               if (utils.isFirstTextOfEditableTextNode(node, lastUpdatedText)) {
                 capitaliseText(node.parentNode);

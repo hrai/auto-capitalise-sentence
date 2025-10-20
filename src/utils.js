@@ -563,29 +563,21 @@ export function setEndOfContenteditable(contentEditableElement) {
   if (document.createRange) {
     //Firefox, Chrome, Opera, Safari, IE 9+
     range = document.createRange(); //Create a range (a range is a like the selection but invisible)
-    const childNodes = contentEditableElement.childNodes;
 
-    if (childNodes == null) return;
-
-    const childNode =
-      childNodes.length == 1
-        ? childNodes[0]
-        : childNodes[childNodes.length - 2];
-    // childNodes.forEach(x=>console.log(x.outerHTML));
-
-    if (childNode == null) {
-      return;
+    // Find the deepest last text node to position cursor correctly
+    let lastNode = contentEditableElement;
+    while (lastNode.lastChild) {
+      lastNode = lastNode.lastChild;
     }
 
-    if (childNode.nodeName === '#text') {
-      range.setStart(childNode, childNode.data.length);
-      range.collapse(false);
-    } else if (childNode.outerHTML === '<br>') {
-      range.setStart(childNode, 0);
+    // If we found a text node, position at the end of it
+    if (lastNode.nodeType === Node.TEXT_NODE) {
+      range.setStart(lastNode, lastNode.length);
       range.collapse(true);
     } else {
-      range.selectNodeContents(contentEditableElement); //Select the entire contents of the element with the range
-      range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
+      // Fallback: position at the end of the contenteditable element
+      range.selectNodeContents(contentEditableElement);
+      range.collapse(false);
     }
 
     selection = window.getSelection(); //get the selection object (allows you to change selection)

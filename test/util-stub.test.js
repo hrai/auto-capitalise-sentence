@@ -431,11 +431,14 @@ describe('setEndOfContenteditable', () => {
 
     const element = document.querySelector('#text_block');
     utils.setEndOfContenteditable(element);
-    const expectedArg = '<br>';
+
+    // Updated: The new implementation finds the deepest last text node
+    // instead of positioning at <br>, which is better for Slack/Quill.js
+    const expectedArg = ' ';
     var args = range.setStart.getCall(0).args;
 
-    expect(args[0].outerHTML).toBe(expectedArg);
-    expect(args[1]).toBe(0);
+    expect(args[0].data).toBe(expectedArg);
+    expect(args[1]).toBe(expectedArg.length);
   });
 
   test('setEndOfContenteditable_WithoutBr', () => {
