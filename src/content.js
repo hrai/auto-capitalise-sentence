@@ -25,7 +25,7 @@ let sitesToExclude = [
   'localhost',
   'aws.amazon.com',
   'discord.com', // Uses Slate.js framework - controlled editor that breaks with DOM manipulation
-  'teams.microsoft.com', // Causes UI freezing - likely uses controlled editor framework
+  'teams.microsoft.com', // Uses CKEditor 5 - causes severe UI freezing and cursor issues despite optimization attempts
   'web.whatsapp.com', // Uses Lexical framework
   'messenger.com', // Uses Lexical framework
   'facebook.com', // Uses Lexical framework
@@ -253,7 +253,8 @@ function observeHtmlBody() {
   const inputTags = ["input[type='text']", 'textarea'];
 
   const lastUpdatedText = '';
-  const observer = new MutationObserver(function (mutations) {
+
+  const processMutations = function (mutations) {
     let characterDataMutations = [];
 
     mutations.forEach(function (mutation) {
@@ -332,6 +333,10 @@ function observeHtmlBody() {
 
     characterDataMutations = unique(characterDataMutations);
     characterDataMutations.forEach((element) => capitaliseText(element));
+  };
+
+  const observer = new MutationObserver(function (mutations) {
+    processMutations(mutations);
   });
 
   const config = {
