@@ -55,7 +55,7 @@
     "prettier": "^3.6.2",
     "run-script-os": "^1.1.3",
     "sinon": "^21.0.0",
-    "web-ext": "^8.5.0",
+    "web-ext": "^9.0.0",
     "webextension-polyfill": "^0.12.0",
     "webpack": "^5.102.1",
     "webpack-cli": "^6.0.1"
