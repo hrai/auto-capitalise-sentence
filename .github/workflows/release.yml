@@ -63,7 +63,7 @@ jobs:
           VER: ${{ needs.Version.outputs.version }}
         run: |
           yarn update-version:${{ matrix.command }}
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: auto-capitalise-artifacts-${{ matrix.command }} # {{ strategy.job-index }}
           path: distribution
