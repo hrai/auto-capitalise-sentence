@@ -37,7 +37,7 @@
     "@babel/eslint-parser": "^7.28.4",
     "@babel/preset-env": "^7.26.9",
     "@eslint/eslintrc": "^3.3.1",
-    "@eslint/js": "^9.37.0",
+    "@eslint/js": "^9.38.0",
     "bootstrap": "^5.3.8",
     "copy-webpack-plugin": "^13.0.1",
     "daily-version": "^2.0.0",
