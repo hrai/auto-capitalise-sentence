@@ -777,6 +777,7 @@ export function isSentenceCaseEnabled() {
 }
 
 // Lightweight immediate feedback: capitalise the first alphabetical character if it starts lowercase
+// Also capitalises any character immediately after sentence-ending punctuation (. ! ?)
 export function applyImmediateSentenceStartCapitalisation(element) {
   if (!element) return;
   const tag = element.tagName?.toUpperCase();
@@ -788,21 +789,36 @@ export function applyImmediateSentenceStartCapitalisation(element) {
       tag === 'INPUT' || tag === 'TEXTAREA'
         ? element.value
         : element.innerText || '';
-    if (
-      typeof current === 'string' &&
-      current.length &&
-      /^(\s*[a-z])/.test(current)
-    ) {
-      const updated = current.replace(
+    if (typeof current !== 'string' || !current.length) return;
+
+    let updated = current;
+    let hasChanges = false;
+
+    // Capitalise first character if it's lowercase
+    if (/^(\s*[a-z])/.test(updated)) {
+      updated = updated.replace(
         /^(\s*)([a-z])/,
         (m, ws, ch) => ws + ch.toUpperCase()
       );
-      if (updated !== current) {
-        if (tag === 'INPUT' || tag === 'TEXTAREA') {
-          element.value = updated;
-        } else if (element.isContentEditable) {
-          element.innerText = updated;
-        }
+      hasChanges = true;
+    }
+
+    // Capitalise any character after sentence-ending punctuation (. ! ?)
+    // This handles typing like "hello. world" -> "hello. World"
+    const afterPunctuationRegex = /([.!?]\s+)([a-z])/g;
+    if (afterPunctuationRegex.test(updated)) {
+      updated = updated.replace(
+        /([.!?]\s+)([a-z])/g,
+        (m, prefix, ch) => prefix + ch.toUpperCase()
+      );
+      hasChanges = true;
+    }
+
+    if (hasChanges && updated !== current) {
+      if (tag === 'INPUT' || tag === 'TEXTAREA') {
+        element.value = updated;
+      } else if (element.isContentEditable) {
+        element.innerText = updated;
       }
     }
   } catch {
