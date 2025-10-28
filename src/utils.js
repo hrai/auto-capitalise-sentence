@@ -525,7 +525,11 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
     setHTML(htmlControl, updatedStr);
   }
 
-  setEndOfContenteditable(htmlControl);
+  // Use requestAnimationFrame to ensure DOM has updated before setting cursor position
+  // This fixes cursor positioning issues in editors like Slack/Quill that may update asynchronously
+  requestAnimationFrame(() => {
+    setEndOfContenteditable(htmlControl);
+  });
 }
 export function getCleanHtmlForAtlassian(updatedStr) {
   const html = parseHTML(updatedStr);
