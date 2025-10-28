@@ -785,10 +785,13 @@ export function applyImmediateSentenceStartCapitalisation(element) {
     element.isContentEditable || tag === 'INPUT' || tag === 'TEXTAREA';
   if (!isEditable) return;
   try {
-    let current =
+    // For INPUT/TEXTAREA, use value directly
+    // For contentEditable, use innerText for plain text matching
+    const current =
       tag === 'INPUT' || tag === 'TEXTAREA'
-        ? element.value
+        ? element.value || ''
         : element.innerText || '';
+
     if (typeof current !== 'string' || !current.length) return;
 
     let updated = current;
@@ -818,7 +821,14 @@ export function applyImmediateSentenceStartCapitalisation(element) {
       if (tag === 'INPUT' || tag === 'TEXTAREA') {
         element.value = updated;
       } else if (element.isContentEditable) {
-        element.innerText = updated;
+        // Use setHTML which sets innerHTML, then set cursor position
+        // Security: updatedStr comes from element.innerText which is plain text only
+        setHTML(element, updated);
+        // Use requestAnimationFrame to ensure DOM has updated before setting cursor position
+        // This fixes cursor positioning issues in editors like Slack/Quill that may update asynchronously
+        requestAnimationFrame(() => {
+          setEndOfContenteditable(element);
+        });
       }
     }
   } catch {

@@ -382,15 +382,18 @@ function capitaliseText(element) {
   // Guard against extension context invalidation
   if (!checkExtensionContext()) return;
 
-  // Only apply debounce when sentence case feature is enabled; otherwise capitalize immediately
+  // For sentence case: apply immediate after-punctuation capitalization, then debounce full processing
   if (utils.isSentenceCaseModeActive()) {
+    // Immediate capitalization for characters after . ! ? for instant feedback
     utils.applyImmediateSentenceStartCapitalisation(element);
+    // Debounced full sentence case processing for other corrections
     const debouncedFn = utils.getDebouncedCapitaliseText(
       element,
       configuredDebounceDelay
     );
     debouncedFn(element);
   } else {
+    // Word mode: immediate capitalization
     try {
       utils.capitaliseTextProxy(element);
     } catch {

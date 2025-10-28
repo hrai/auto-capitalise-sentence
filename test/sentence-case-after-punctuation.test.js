@@ -9,11 +9,23 @@ const {
 
 // Mock element for testing
 function makeContentEditableElement(text) {
-  return {
+  const element = {
     tagName: 'DIV',
     isContentEditable: true,
     innerText: text,
+    innerHTML: text,
   };
+  // Sync innerHTML and innerText when innerHTML is set (mimics real DOM behavior)
+  Object.defineProperty(element, 'innerHTML', {
+    get() {
+      return this.innerText;
+    },
+    set(value) {
+      this.innerText = value;
+    },
+    configurable: true,
+  });
+  return element;
 }
 
 function makeInputElement(text) {
