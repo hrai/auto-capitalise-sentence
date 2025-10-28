@@ -20,6 +20,28 @@ import {
   shouldEnableAllWordCapitalisation,
 } from './plugin-constants';
 
+// Global error handler for extension context invalidation
+// This catches errors when the extension is reloaded while content scripts are still running
+let extensionContextValid = true;
+
+// Detect if extension context has been invalidated (extension reload)
+function checkExtensionContext() {
+  if (!extensionContextValid) return false;
+
+  try {
+    // Try to access browser runtime - will throw if context is invalidated
+    if (browser?.runtime?.id) {
+      return true;
+    }
+  } catch {
+    extensionContextValid = false;
+    console.debug(
+      'Extension context invalidated - extension may have been reloaded'
+    );
+  }
+  return false;
+}
+
 const errorMsg = 'breaking loop';
 let sitesToExclude = [
   'localhost',
@@ -357,6 +379,9 @@ function unique(list) {
 }
 
 function capitaliseText(element) {
+  // Guard against extension context invalidation
+  if (!checkExtensionContext()) return;
+
   // Only apply debounce when sentence case feature is enabled; otherwise capitalize immediately
   if (utils.isSentenceCaseModeActive()) {
     utils.applyImmediateSentenceStartCapitalisation(element);

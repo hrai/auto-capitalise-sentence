@@ -838,11 +838,19 @@ export function flushAndClearDebouncedCapitalisations() {
 
 // Explicit cancel for a specific element (used when switching modes for active element)
 export function cancelDebouncedForElement(element) {
-  if (!element) return;
-  const entry = debouncedCapitalizationMap.get(element);
-  if (entry && entry.timeoutId) {
-    clearTimeout(entry.timeoutId);
-    entry.timeoutId = null;
+  if (!element || typeof element !== 'object') return;
+  try {
+    const entry = debouncedCapitalizationMap.get(element);
+    if (entry && entry.timeoutId) {
+      clearTimeout(entry.timeoutId);
+      entry.timeoutId = null;
+    }
+  } catch (e) {
+    // Silently handle WeakMap errors during extension reload
+    console.debug(
+      'WeakMap access error (extension may be reloading):',
+      e.message
+    );
   }
 }
 
@@ -851,11 +859,16 @@ export function getDebouncedCapitaliseText(
   delay = DEFAULT_DEBOUNCE_DELAY,
   capitaliserFn = capitaliseTextProxy
 ) {
+  // Defensive check: element must be a valid object for WeakMap
+  if (!element || typeof element !== 'object') return () => {};
+
   const existing = debouncedCapitalizationMap.get(element);
   if (existing && typeof existing.fn === 'function') return existing.fn;
 
   let timeoutId = null;
   const wrapped = function (targetElement) {
+    // Defensive check for extension context invalidation
+    if (!targetElement || typeof targetElement !== 'object') return;
     if (timeoutId) clearTimeout(timeoutId);
     // Immediate execute if delay == 0
     if (!Number.isFinite(delay) || delay < 0) delay = DEFAULT_DEBOUNCE_DELAY;
@@ -883,10 +896,23 @@ export function getDebouncedCapitaliseText(
         /* ignore */
       }
     }, delay);
-    debouncedCapitalizationMap.set(element, { fn: wrapped, timeoutId });
+    try {
+      debouncedCapitalizationMap.set(element, { fn: wrapped, timeoutId });
+    } catch (e) {
+      // Silently handle WeakMap errors during extension reload
+      console.debug(
+        'WeakMap set error (extension may be reloading):',
+        e.message
+      );
+    }
   };
 
-  debouncedCapitalizationMap.set(element, { fn: wrapped, timeoutId });
+  try {
+    debouncedCapitalizationMap.set(element, { fn: wrapped, timeoutId });
+  } catch (e) {
+    // Silently handle WeakMap errors during extension reload
+    console.debug('WeakMap set error (extension may be reloading):', e.message);
+  }
   return wrapped;
 }
 
