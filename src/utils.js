@@ -227,12 +227,18 @@ function updateConstant(text, element, tagName, keyValuePairs, caseSensitive) {
 }
 
 export function shouldCapitaliseForI(text) {
+  // Gmail-specific: temporarily replace &nbsp; with regular space for matching
+  let processedText = text;
+  if (isGmail() && text.includes(nbsp)) {
+    processedText = text.replace(new RegExp(nbsp, 'g'), ' ');
+  }
+
   // Only capitalize 'i' when followed by a non-alphabetic character (space, punctuation, etc.)
   // This prevents premature capitalization while typing words like "item", "in", "if", etc.
   // Remove end-of-string ($) anchor to avoid capitalizing before space is added
   // Match 'i' at start of string OR after whitespace, when followed by space/punctuation
   const regex = /(^|\s)i(?=\s|[.,!?;:'")\]}])/;
-  return regex.test(text);
+  return regex.test(processedText);
 }
 
 export function setShouldCapitaliseOption(optionName, value) {
@@ -414,9 +420,15 @@ export function getMatchingAndCorrectedWords(
   wordsToExclude,
   caseInsensitive
 ) {
+  // Gmail-specific: temporarily replace &nbsp; with regular space for word matching
+  let processedText = text;
+  if (isGmail() && text.includes(nbsp)) {
+    processedText = text.replace(new RegExp(nbsp, 'g'), ' ');
+  }
+
   const lastWordRegex = /((-|\.)?\w+)([^\w-])$/;
 
-  const match = lastWordRegex.exec(text);
+  const match = lastWordRegex.exec(processedText);
   const noMatch = ['', ''];
 
   if (match) {
@@ -489,6 +501,15 @@ export function replaceLastOccurrenceInString(
 
 export function getNbspCount(text) {
   return (text.match(new RegExp(nbsp, 'g')) || []).length;
+}
+
+// Returns true if we're on Gmail
+export function isGmail() {
+  return (
+    typeof window !== 'undefined' &&
+    window.location &&
+    window.location.host === 'mail.google.com'
+  );
 }
 
 // Returns true if host is exactly 'atlassian.net' or is a direct subdomain like 'foo.atlassian.net'
