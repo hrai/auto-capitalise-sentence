@@ -505,6 +505,12 @@ export function getNbspCount(text) {
   return (text.match(new RegExp(nbsp, 'g')) || []).length;
 }
 
+// Returns true if host is exactly 'atlassian.net' or is a direct subdomain like 'foo.atlassian.net'
+function isAtlassianCloudHost(host) {
+  // Only accept hosts that are exactly 'atlassian.net' or end with '.atlassian.net', but are not like 'foo.bar.atlassian.net.evil.com'
+  return host === 'atlassian.net' || (/^[a-zA-Z0-9-]+\.atlassian\.net$/i).test(host);
+}
+
 export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
   //console.log("setting text: "+ updatedStr);
   //debugger
@@ -526,7 +532,7 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
   }
 
   //fix for confluence and jira user tags
-  if (window.location.host.includes('atlassian.net')) {
+  if (isAtlassianCloudHost(window.location.host)) {
     const innerHtml = getCleanHtmlForAtlassian(updatedStr);
     // Security: updatedStr comes from getText which reads innerHTML, so it preserves
     // whatever HTML the browser already rendered when the user typed it.
