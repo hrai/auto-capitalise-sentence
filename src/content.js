@@ -382,11 +382,9 @@ function capitaliseText(element) {
   // Guard against extension context invalidation
   if (!checkExtensionContext()) return;
 
-  // For sentence case: apply immediate after-punctuation capitalization, then debounce full processing
+  // For sentence case: only run debounced processing (no immediate capitalization)
   if (utils.isSentenceCaseModeActive()) {
-    // Immediate capitalization for characters after . ! ? for instant feedback
-    utils.applyImmediateSentenceStartCapitalisation(element);
-    // Debounced full sentence case processing for other corrections
+    // Only debounced sentence case processing - no immediate capitalization
     const debouncedFn = utils.getDebouncedCapitaliseText(
       element,
       configuredDebounceDelay
