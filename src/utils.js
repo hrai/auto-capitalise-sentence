@@ -785,8 +785,13 @@ export function applyImmediateSentenceStartCapitalisation(element) {
     element.isContentEditable || tag === 'INPUT' || tag === 'TEXTAREA';
   if (!isEditable) return;
   try {
-    // Use getText which properly handles Gmail's &nbsp; conversion to spaces
-    const current = getText(element, tag);
+    // For immediate feedback, use innerText for speed (avoids complex HTML processing)
+    // This gives instant visual feedback for common typing scenarios
+    const current =
+      tag === 'INPUT' || tag === 'TEXTAREA'
+        ? element.value || ''
+        : element.innerText || '';
+
     if (typeof current !== 'string' || !current.length) return;
 
     let updated = current;
@@ -813,9 +818,17 @@ export function applyImmediateSentenceStartCapitalisation(element) {
     }
 
     if (hasChanges && updated !== current) {
-      // Use setText which properly handles Gmail's &nbsp; and cursor positioning
-      // This converts spaces back to &nbsp; for contentEditable elements and uses requestAnimationFrame
-      setText(element, tag, updated, false);
+      if (tag === 'INPUT' || tag === 'TEXTAREA') {
+        element.value = updated;
+      } else if (element.isContentEditable) {
+        // For immediate feedback, set innerText directly for speed
+        // The debounced full processing will handle complex HTML structures properly
+        element.innerText = updated;
+        // Still need cursor positioning for Slack/Quill editors
+        requestAnimationFrame(() => {
+          setEndOfContenteditable(element);
+        });
+      }
     }
   } catch {
     /* ignore */
