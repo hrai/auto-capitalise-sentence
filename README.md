@@ -15,6 +15,19 @@ Firefox/Microsoft Edge Chromium add-on to automatically capitalise words while t
 - Optional Sentence Case mode (preserve internal word casing while capitalising sentence starts and standalone "I")
 - Per-field debounced processing to reduce performance impact (configurable delay)
 
+### Processing Modes
+
+**Word Case Mode (Default):**
+- Immediate capitalization as you type
+- Real-time feedback for most features
+- Optimized for responsive typing experience
+
+**Sentence Case Mode:**
+- All capitalization waits for the debounce delay (default: 5 seconds)  
+- No immediate processing - preserves exact typing flow
+- Comprehensive sentence structure analysis after timeout
+- Ideal for complex editing scenarios or when you prefer uninterrupted typing
+
 ## Configuration/Settings
 
 There are 4 sections to configure the extension.
@@ -35,26 +48,35 @@ There are 4 sections to configure the extension.
 
   ![features](imgs/features.png)
 
-### Debounce Delay (New)
+### Debounce Delay Configuration
 
-You can now configure how long the extension waits after your last keystroke before performing capitalisation. This helps avoid unnecessary work while you're still typing rapidly.
+Configure how long the extension waits after your last keystroke before performing capitalization processing.
 
-Defaults:
-
+**Defaults:**
 - Default delay: 5000 ms (5 seconds)
 - Range: 0 – 60000 ms
 
-Behaviour:
+**Behavior by Mode:**
 
-- Sliding window: each new keystroke resets the timer.
-- Setting delay to 0 applies capitalisation immediately (no debouncing) – may reduce performance on very large editors.
-- Each editable field gets its own independent timer.
+**Word Case Mode:**
+- Most features apply immediately (no delay)
+- Debounce only affects complex sentence processing
+- Setting delay to 0 disables debouncing entirely
 
-Recommendations:
+**Sentence Case Mode:**  
+- ALL capitalization waits for the full debounce delay
+- No immediate processing regardless of delay setting
+- Comprehensive analysis runs only after timeout expires
 
-- 3000–5000 ms: Good balance for most users.
-- 0–500 ms: Only if you prefer near-instant capitalisation and your pages are lightweight.
-- >10000 ms: Use if you type in long uninterrupted bursts and want minimal interruptions.
+**General Behavior:**
+- Sliding window: each new keystroke resets the timer
+- Each editable field gets its own independent timer
+- Lower delays increase responsiveness but may impact performance
+
+**Recommendations:**
+- **Word Case**: 1000–3000 ms for balanced performance
+- **Sentence Case**: 3000–5000 ms for optimal typing flow  
+- **Complex editors**: 5000+ ms to avoid interruptions during long typing sessions
 
 To change it, open the extension popup settings and update the Debounce Delay (ms) field. The change applies immediately to all newly observed inputs.
 

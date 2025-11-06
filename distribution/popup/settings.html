@@ -96,7 +96,7 @@
                                                                                         <ul class="list-unstyled mode-facts small mb-1 mt-1">
                                                                                             <li><span class="icon-bullet sentence"></span>Capitalises the first letter after ., ! or ? (with closing quotes/brackets handled).</li>
                                                                                             <li><span class="icon-bullet sentence"></span>Ignores word-level rules (names, I, acronyms, locations) while active.</li>
-                                                                                            <li><span class="icon-bullet sentence"></span>Set delay to 0 for immediate updates; higher values reduce processing on rapid typing.</li>
+                                                                                            <li><span class="icon-bullet sentence"></span>ALL processing waits for the full delay - no immediate capitalization while typing.</li>
                                                                                         </ul>
                                                                                     </details>
                                                                                 </div>
@@ -105,7 +105,7 @@
                                                                                     <div class="card-body pt-2 pb-2">
                                                                                         <label for="debounce_delay_ms" class="form-label mb-1">Processing Delay (ms)</label>
                                                                                         <input type="number" id="debounce_delay_ms" class="form-control form-control-sm" min="0" max="60000" step="100" placeholder="5000" />
-                                                                                        <div class="form-text">Wait after typing stops before sentence case runs. 0 = immediate.</div>
+                                                                                        <div class="form-text">Wait after typing stops before sentence case runs. All capitalization waits for this delay.</div>
                                                                                         <div id="debounce_delay_status" class="small text-muted mt-1"></div>
                                                                                     </div>
                                                                                 </div>
