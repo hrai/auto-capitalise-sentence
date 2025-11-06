@@ -785,13 +785,8 @@ export function applyImmediateSentenceStartCapitalisation(element) {
     element.isContentEditable || tag === 'INPUT' || tag === 'TEXTAREA';
   if (!isEditable) return;
   try {
-    // For INPUT/TEXTAREA, use value directly
-    // For contentEditable, use innerText for plain text matching
-    const current =
-      tag === 'INPUT' || tag === 'TEXTAREA'
-        ? element.value || ''
-        : element.innerText || '';
-
+    // Use getText which properly handles Gmail's &nbsp; conversion to spaces
+    const current = getText(element, tag);
     if (typeof current !== 'string' || !current.length) return;
 
     let updated = current;
@@ -818,25 +813,14 @@ export function applyImmediateSentenceStartCapitalisation(element) {
     }
 
     if (hasChanges && updated !== current) {
-      if (tag === 'INPUT' || tag === 'TEXTAREA') {
-        element.value = updated;
-      } else if (element.isContentEditable) {
-        // Use setHTML which sets innerHTML, then set cursor position
-        // Security: updatedStr comes from element.innerText which is plain text only
-        setHTML(element, updated);
-        // Use requestAnimationFrame to ensure DOM has updated before setting cursor position
-        // This fixes cursor positioning issues in editors like Slack/Quill that may update asynchronously
-        requestAnimationFrame(() => {
-          setEndOfContenteditable(element);
-        });
-      }
+      // Use setText which properly handles Gmail's &nbsp; and cursor positioning
+      // This converts spaces back to &nbsp; for contentEditable elements and uses requestAnimationFrame
+      setText(element, tag, updated, false);
     }
   } catch {
     /* ignore */
   }
-}
-
-// Store debounced functions & their timeout IDs per element to maintain individual timers and allow cancellation/flush.
+} // Store debounced functions & their timeout IDs per element to maintain individual timers and allow cancellation/flush.
 // Value shape: { fn: Function, timeoutId: number|null }
 let debouncedCapitalizationMap = new WeakMap();
 
