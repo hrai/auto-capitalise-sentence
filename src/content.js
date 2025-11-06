@@ -233,6 +233,29 @@ function observeInputTags() {
   on(inputs, `input.${pluginNamespace}`, function (event) {
     capitaliseText(event.target);
   });
+
+  // Special handling for dynamically loaded elements like GitHub's query-builder-test
+  // Retry a few times to catch elements that load after initial page render
+  let retryCount = 0;
+  const maxRetries = 5;
+  const retryInterval = setInterval(() => {
+    retryCount++;
+    const newInputs = querySelectorAll('input[type="text"],textarea');
+
+    newInputs.forEach((input) => {
+      // Check if this input already has our event listener by checking for a data attribute
+      if (!input.dataset.autoCapListener) {
+        input.dataset.autoCapListener = 'true';
+        on([input], `input.${pluginNamespace}`, function (event) {
+          capitaliseText(event.target);
+        });
+      }
+    });
+
+    if (retryCount >= maxRetries) {
+      clearInterval(retryInterval);
+    }
+  }, 1000); // Check every second
 }
 
 function setOptions(item) {
