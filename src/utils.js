@@ -127,6 +127,20 @@ export function capitaliseText(
     return; // Skip all other capitalization paths while in sentence case mode
   }
 
+  // Word mode: basic sentence start capitalization (first letter of text)
+  // This helps with cases like Gmail where "i am ai" should start with "I am ai"
+  if (text && /^(\s*<[^>]*>)*\s*[a-z]/.test(text)) {
+    // Simple regex to capitalize first letter, handling possible HTML tags
+    text = text.replace(
+      /^(\s*(?:<[^>]*>)*\s*)([a-z])/,
+      (match, prefix, letter) => {
+        return prefix + letter.toUpperCase();
+      }
+    );
+    // Update the element but continue processing for other word rules
+    setText(element, tagName, text, shouldAppendBr);
+  }
+
   // Per-character last-letter capitalisation (word mode only)
   if (shouldCapitalise(text)) {
     const updatedStr = getCapitalisedContent(text);
