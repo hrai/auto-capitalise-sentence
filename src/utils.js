@@ -776,8 +776,8 @@ export function isSentenceCaseEnabled() {
   return !!optionsDictionary[shouldConvertToSentenceCase];
 }
 
-// Lightweight immediate feedback: capitalise the first alphabetical character if it starts lowercase
-// Also capitalises any character immediately after sentence-ending punctuation (. ! ?)
+// Lightweight immediate feedback: capitalise only the first alphabetical character if it starts lowercase
+// After-punctuation capitalization is handled by the debounced sentence case processing
 export function applyImmediateSentenceStartCapitalisation(element) {
   if (!element) return;
   const tag = element.tagName?.toUpperCase();
@@ -806,16 +806,7 @@ export function applyImmediateSentenceStartCapitalisation(element) {
       hasChanges = true;
     }
 
-    // Capitalise any character after sentence-ending punctuation (. ! ?)
-    // This handles typing like "hello. world" -> "hello. World"
-    const afterPunctuationRegex = /([.!?]\s+)([a-z])/g;
-    if (afterPunctuationRegex.test(updated)) {
-      updated = updated.replace(
-        /([.!?]\s+)([a-z])/g,
-        (m, prefix, ch) => prefix + ch.toUpperCase()
-      );
-      hasChanges = true;
-    }
+    // Removed after-punctuation capitalization - this is now handled only by debounced processing
 
     if (hasChanges && updated !== current) {
       if (tag === 'INPUT' || tag === 'TEXTAREA') {
