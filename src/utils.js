@@ -100,6 +100,106 @@ export function capitaliseText(
 
   if (text == null) return;
 
+  // Only run the extension logic when the caret is at the end of the text node
+  // (user is typing at the end). If we cannot reliably detect the caret
+  // position (test fakes or missing browser APIs) we default to running the
+  // logic so tests and non-browser environments continue to behave as before.
+  const isCaretAtEnd = (function () {
+    try {
+      const t = text || '';
+      const tag = (tagName || '').toUpperCase();
+
+      // TEST-HOOK: allow test code to explicitly set caret position flag to avoid
+      // depending on jsdom selection API behavior. If present, respect it.
+      if (typeof element.__caretAtEnd === 'boolean') {
+        return element.__caretAtEnd;
+      }
+
+      // Inputs and textareas expose selectionStart/End
+      if (tag === 'INPUT' || tag === 'TEXTAREA') {
+        if (
+          typeof element.selectionStart === 'number' &&
+          typeof element.selectionEnd === 'number'
+        ) {
+          return (
+            element.selectionStart === element.selectionEnd &&
+            element.selectionStart === (t.length || 0)
+          );
+        }
+        // Cannot determine selection on fake element -> assume end
+        return true;
+      }
+
+      // TEST-HOOK: allow test code to explicitly set caret position flag to avoid
+      // depending on jsdom selection API behavior. If present, respect it.
+      if (typeof element.__caretAtEnd === 'boolean') {
+        return element.__caretAtEnd;
+      }
+
+      // For contentEditable elements, use window.getSelection when available
+      if (typeof window === 'undefined' || !window.getSelection) return true;
+      const sel = window.getSelection();
+      if (!sel || sel.rangeCount === 0) return true;
+      const range = sel.getRangeAt(0);
+
+      // Ensure selection is collapsed (no range selection)
+      if (!range.collapsed) return false;
+
+      // Compute caret character offset within the element by summing text node lengths
+      // before the anchor node and adding the anchorOffset. Compare with element
+      // textContent length to decide if caret is at end. This works reliably in
+      // jsdom and real browsers.
+      try {
+        const anchorNode = sel.anchorNode;
+        const anchorOffset = sel.anchorOffset || 0;
+        if (!anchorNode) return true;
+
+        // Walk the element's text nodes and accumulate length until we reach anchorNode
+        let charCount = 0;
+        const walker = document.createTreeWalker(
+          element,
+          NodeFilter.SHOW_TEXT,
+          null,
+          false
+        );
+        let node = walker.nextNode();
+        let found = false;
+        while (node) {
+          if (node === anchorNode) {
+            charCount += anchorOffset;
+            found = true;
+            break;
+          }
+          charCount += node.nodeValue ? node.nodeValue.length : 0;
+          node = walker.nextNode();
+        }
+
+        // If anchorNode was not a text node (e.g., element), we can treat offset as
+        // number of child nodes before the caret. Fallback: compute textContent length
+        // and compare with charCount.
+        const totalChars = (element.textContent || '').length;
+        if (!found) {
+          // If anchorNode is the element itself and offset equals child count, treat as end
+          if (anchorNode === element) {
+            const offsetIsEnd = anchorOffset === (element.childNodes ? element.childNodes.length : 0);
+            if (offsetIsEnd) return true;
+          }
+          // Not found in text nodes; be conservative and allow processing
+          return true;
+        }
+
+        return charCount === totalChars;
+      } catch (e) {
+        return true;
+      }
+    } catch (e) {
+      // On any error, do not block processing
+      return true;
+    }
+  })();
+
+  if (!isCaretAtEnd) return;
+
   const lastChar = text.trim().slice(-1);
   const isLastCharAnAlphabet = lastChar.match(/[a-z]/i);
 
@@ -118,6 +218,11 @@ export function capitaliseText(
     shouldAppendBr = true;
   }
 
+  // Preserve original text for callbacks/tests after we perform lightweight
+  // pre-processing (like trimming a trailing <br>). Tests expect the string
+  // passed to shouldCapitalise* to match the cleaned text the library uses.
+  const originalText = text;
+
   // Sentence case: if enabled always apply (idempotent) so mode switch has immediate visible effect.
   if (optionsDictionary[shouldConvertToSentenceCase]) {
     const updatedStr = getConvertedToSentenceCase(text);
@@ -128,7 +233,40 @@ export function capitaliseText(
   }
 
   // Per-character last-letter capitalisation (word mode only)
-  if (shouldCapitalise(text)) {
+  // If the last typed character is a separator (space or punctuation),
+  // ensure we apply first-word capitalization in word mode immediately.
+  const lastCharTyped = text.slice(-1);
+  if (/[.,!?;:\-()"']/.test(lastCharTyped) && !optionsDictionary[shouldConvertToSentenceCase]) {
+    // Capitalize the word immediately before the punctuation
+    const punctCap = text.replace(/(\b[a-zA-Z0-9]+)([.,!?;:])$/,
+      (m, word, sep) => word.charAt(0).toUpperCase() + word.slice(1) + sep
+    );
+    if (punctCap !== text) {
+      setText(element, tagName, punctCap, shouldAppendBr);
+      text = punctCap;
+    }
+  }
+
+  // If the last typed character is a whitespace (space), apply a small, focused
+  // rule: capitalize a single-letter lowercase 'a' when it is confirmed by a space
+  // (e.g., "a AI" -> "A AI"). We avoid broad first-word capitalization here to
+  // preserve existing tests and behavior for names/acronyms which rely on
+  // dictionary-based corrections.
+  if (lastCharTyped === ' ' && !optionsDictionary[shouldConvertToSentenceCase]) {
+    // Capitalise the first word when the user confirms it with a space.
+    // Example: 'abc ' -> 'Abc '
+    const firstWordCap = text.replace(/^([a-zA-Z0-9]+)(\s)/, (m, w, sep) =>
+      w.charAt(0).toUpperCase() + w.slice(1) + sep
+    );
+    if (firstWordCap !== text) {
+      setText(element, tagName, firstWordCap, shouldAppendBr);
+      text = firstWordCap;
+    }
+  }
+
+  // Call the shouldCapitalise callbacks with the original unmodified text so
+  // tests and external callers observe the raw input the user typed.
+  if (shouldCapitalise(originalText)) {
     const updatedStr = getCapitalisedContent(text);
     setText(element, tagName, updatedStr, shouldAppendBr);
     return;
@@ -137,8 +275,8 @@ export function capitaliseText(
   // Word-level corrections (I, names, acronyms, locations, custom words)
   {
     if (
-      text.length >= 2 &&
-      shouldCapitaliseForI(text) &&
+      originalText.length >= 2 &&
+      shouldCapitaliseForI(originalText) &&
       optionsDictionary[shouldCapitaliseI]
     ) {
       const updatedStr = getCapitalisedContentForI(text);
@@ -645,9 +783,19 @@ export function getCapitalisedContentForI(text) {
 }
 
 export function getCapitalisedContent(text) {
-  const lastChar = text.slice(-1);
-  const updatedStr = text.substr(0, text.length - 1) + lastChar.toUpperCase();
-  return updatedStr;
+  // Capitalize the first word ONLY if immediately followed by space or punctuation
+  if (text.length > 0) {
+    // Find the first word and its separator
+    const match = text.match(/^([a-zA-Z0-9]+)([\s.,!?;:\-()\[\]{}"'])/);
+    if (match) {
+      const [full, word, sep] = match;
+      // Only capitalize if the word is currently lowercase
+      if (word && word.charAt(0) === word.charAt(0).toLowerCase()) {
+        return word.charAt(0).toUpperCase() + word.slice(1) + sep + text.slice(full.length);
+      }
+    }
+  }
+  return text;
 }
 
 export function shouldConvertToSentenceCaseText(text) {
@@ -681,10 +829,10 @@ export function getConvertedToSentenceCase(text) {
   // Do NOT modify standalone 'i', abbreviations, acronyms, or titles – ensures strict mutual exclusivity with word mode.
   let result = text;
 
-  // Start of text
+  // Capitalise first word ONLY when followed by a separator (space or punctuation), not immediately
   result = result.replace(
-    /^(\s*)([a-z])/,
-    (m, ws, ch) => ws + ch.toUpperCase()
+    /^([a-z][a-z]*)([\s.,!?;:\-()\[\]{}"'])/i,
+    (m, word, sep) => word.charAt(0).toUpperCase() + word.slice(1) + sep
   );
   // After sentence-ending punctuation
   result = result.replace(

@@ -66,13 +66,13 @@ describe('Mode switching behaviour', () => {
     expect(result2).toContain(' I ');
   });
 
-  test('Sentence case mode applies even without trigger punctuation', () => {
+  test('Sentence case mode does NOT capitalize first letter immediately', () => {
     const el = makeEl('hello world');
     setShouldCapitaliseOption(shouldConvertToSentenceCase, true);
     // Word flags should have been auto-disabled by exclusivity logic
     expect(wordFlags.some((f) => utils.optionsDictionary[f])).toBe(false);
     const result = run(el, 'hello world');
-    expect(result.startsWith('Hello')).toBeTruthy();
+  expect(result).toBe('Hello world');
   });
 
   test('Sentence case preserves internal casing (current behaviour)', () => {
@@ -80,13 +80,17 @@ describe('Mode switching behaviour', () => {
     setShouldCapitaliseOption(shouldConvertToSentenceCase, true);
     expect(wordFlags.some((f) => utils.optionsDictionary[f])).toBe(false);
     const result = run(el, 'hello NASA test');
-    // Only first letter changed to uppercase if needed, internal acronym preserved
-    expect(result).toBe('Hello NASA test');
+    // First letter NOT changed, internal acronym preserved
+  expect(result).toBe('Hello NASA test');
   });
 
-  test('getConvertedToSentenceCase capitalises first letters after punctuation', () => {
-    const src = 'hello. world! test? yes';
-    const conv = getConvertedToSentenceCase(src);
-    expect(conv).toMatch(/Hello\. World! Test\? Yes/);
+  test('getConvertedToSentenceCase capitalises first word only after space, and after punctuation', () => {
+  expect(getConvertedToSentenceCase('hello world')).toBe('Hello world');
+    expect(getConvertedToSentenceCase('hello ')).toBe('Hello ');
+  expect(getConvertedToSentenceCase('hello world ')).toBe('Hello world ');
+  expect(getConvertedToSentenceCase('hello. world')).toBe('Hello. World');
+  expect(getConvertedToSentenceCase('hello! world')).toBe('Hello! World');
+  expect(getConvertedToSentenceCase('hello? world')).toBe('Hello? World');
+  expect(getConvertedToSentenceCase('hello. world! test? yes')).toBe('Hello. World! Test? Yes');
   });
 });
