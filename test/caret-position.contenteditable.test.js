@@ -2,8 +2,7 @@ import * as utils from '../src/utils.js';
 
 const { capitaliseTextProxy } = utils;
 
-function getText(el) { return el.innerText || el.textContent || ''; }
-function setText(el, _tag, updated) { el.textContent = updated; }
+// Note: tests below use their own fake getText/setter functions.
 
 beforeEach(() => {
   document.body.innerHTML = '';
