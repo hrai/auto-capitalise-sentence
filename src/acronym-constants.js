@@ -178,6 +178,7 @@ const commonTechAcronyms = [
   'EHS',
   'EHW',
   'EMP',
+  'ERD',
   'ES',
   'FIFO',
   'FaaS',
