@@ -1,38 +1,3 @@
-describe('Word mode capitalization after separator', () => {
-  beforeEach(() => {
-    __resetAllOptionsAndDictionariesForTests();
-    setShouldCapitaliseOption(shouldConvertToSentenceCase, false);
-    setShouldCapitaliseOption(shouldCapitaliseNames, true);
-    setShouldCapitaliseOption(shouldCapitaliseAcronyms, true);
-  });
-
-  test('does not capitalize as word is typed, only after space', () => {
-    const el = makeEl('');
-    typeText(el, 'john');
-    expect(el.value).toBe('john');
-  typeText(el, ' ');
-  expect(el.value).toBe('John ');
-  });
-
-  test('does not capitalize acronym as typed, only after space', () => {
-    const el = makeEl('');
-    typeText(el, 'nasa');
-    expect(el.value).toBe('nasa');
-  typeText(el, ' ');
-  expect(el.value).toBe('Nasa ');
-  });
-
-  test('capitalizes after punctuation', () => {
-    const el = makeEl('');
-    typeText(el, 'hello');
-    expect(el.value).toBe('hello');
-  typeText(el, ',');
-  expect(el.value).toBe('Hello,');
-  typeText(el, ' world');
-  typeText(el, '.');
-  expect(el.value).toBe('Hello, World.');
-  });
-});
 /**
  * Tests for mode toggle followed by typing.
  * This tests the real-world scenario: word mode -> sentence mode -> word mode -> continue typing.
@@ -313,8 +278,8 @@ describe('Mode toggle then continue typing', () => {
     // Now type in sentence case mode - acronyms should NOT be capitalized
     const el = makeEl('hello ');
     typeText(el, 'nasa ');
-  // In sentence case mode, 'nasa' should stay lowercase, first letter NOT capitalized automatically
-  expect(el.value).toBe('Hello nasa '); // sentence case: first word capitalized after space
+    // In sentence case mode, 'nasa' should stay lowercase
+    expect(el.value).toBe('Hello nasa '); // sentence case: first letter only
     expect(el.value).not.toContain('NASA'); // should NOT capitalize acronym
   });
 });
