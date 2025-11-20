@@ -189,10 +189,10 @@ export function capitaliseText(
         }
 
         return charCount === totalChars;
-      } catch {
+      } catch (e) {
         return true;
       }
-    } catch {
+    } catch (e) {
       // On any error, do not block processing
       return true;
     }
