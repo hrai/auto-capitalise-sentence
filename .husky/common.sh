@@ -1,8 +1,9 @@
+#!/bin/sh
+
+# Simple helper to check if a command exists
 command_exists () {
-  command -v "$1" > /dev/null 2>&1 &
+  command -v "$1" >/dev/null 2>&1
 }
 
-# Windows 10, Git Bash and Yarn workaround
-if command_exists winpty && test -t 1; then
-  exec < /dev/tty
-fi
+# Ensure Node/Yarn/NPM binaries from local project are available
+export PATH="$PATH:./node_modules/.bin"
