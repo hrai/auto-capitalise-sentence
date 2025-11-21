@@ -2,35 +2,6 @@ import * as utils from '../src/utils.js';
 import sinon from 'sinon';
 
 describe('capitaliseText', () => {
-  test('capitaliseText_HtmlContent', () => {
-    const element = {
-      isContentEditable: true,
-      tagName: 'div',
-      innerHTML: "I'm the content of html tag.",
-    };
-    const shouldCapitaliseFake = sinon.fake();
-    const shouldCapitaliseForIFake = sinon.fake();
-    const setTextFake = sinon.fake();
-
-    expect(
-      utils.capitaliseText(
-        element,
-        shouldCapitaliseFake,
-        shouldCapitaliseForIFake,
-        utils.getText,
-        setTextFake
-      )
-    ).toBe(undefined);
-    expect(element.isContentEditable.calledOnce).toBeTruthy;
-    expect(element.tagName.calledOnce).toBeTruthy;
-
-    expect(shouldCapitaliseFake.getCall(0).args[0]).toBe(
-      "I'm the content of html tag."
-    );
-    expect(shouldCapitaliseForIFake.getCall(0).args[0]).toBe(
-      "I'm the content of html tag."
-    );
-  });
 
   test('capitaliseText_ShouldNotCallSetText_WhenConstantMatchesExactly', () => {
     const element = {

@@ -18,6 +18,19 @@ import {
   getHTML,
   findAndAddBack,
 } from './lib/dom-utils.js';
+import {
+  setWordModeOption,
+  enforceExclusiveModeInvariant as enforceExclusiveModeInvariantCore,
+  getMatchingAndCorrectedWordsCore,
+  getCaseInsensitiveMatchingAndCorrectedWordsCore,
+  getCaseSensitiveMatchingAndCorrectedWordsCore,
+  getUpdatedStringCore,
+  getCapitalisedContentForICore,
+  getCapitalisedContentCore,
+  stringToKeyValuePairsCore,
+  arrayToMapCore,
+} from './word-mode';
+import { enableSentenceMode, disableSentenceMode } from './sentence-mode';
 // Re-export commonly used option and key names so tests can reliably import them from a single module.
 export {
   shouldCapitaliseI,
@@ -242,107 +255,30 @@ export function shouldCapitaliseForI(text) {
 }
 
 export function setShouldCapitaliseOption(optionName, value) {
-  if (value != null) {
-    // Enforce strict mutual exclusion here as a single source of truth.
-    if (optionName === shouldConvertToSentenceCase && value === true) {
-      // Save current word mode settings before switching to sentence case
-      savedWordModeSettings[shouldCapitaliseI] =
-        optionsDictionary[shouldCapitaliseI];
-      savedWordModeSettings[shouldCapitaliseNames] =
-        optionsDictionary[shouldCapitaliseNames];
-      savedWordModeSettings[shouldCapitaliseAcronyms] =
-        optionsDictionary[shouldCapitaliseAcronyms];
-      savedWordModeSettings[shouldCapitaliseLocations] =
-        optionsDictionary[shouldCapitaliseLocations];
+  if (value == null) return;
 
-      optionsDictionary[shouldConvertToSentenceCase] = true;
-      // Turn off all word-level flags explicitly
-      optionsDictionary[shouldCapitaliseI] = false;
-      optionsDictionary[shouldCapitaliseNames] = false;
-      optionsDictionary[shouldCapitaliseAcronyms] = false;
-      optionsDictionary[shouldCapitaliseLocations] = false;
-
-      // Sync disabled word flags to browser storage so UI stays in sync
-      if (
-        typeof browser !== 'undefined' &&
-        browser.storage &&
-        browser.storage.sync
-      ) {
-        browser.storage.sync.set({
-          [shouldCapitaliseI]: false,
-          [shouldCapitaliseNames]: false,
-          [shouldCapitaliseAcronyms]: false,
-          [shouldCapitaliseLocations]: false,
-        });
-      }
-    } else if (
-      optionName === shouldConvertToSentenceCase &&
-      value === false &&
-      optionsDictionary[shouldConvertToSentenceCase] === true
-    ) {
-      // Only restore saved word mode settings if we're actually switching FROM sentence case
-      // (i.e., sentence case was previously true and is now being set to false)
-      optionsDictionary[shouldConvertToSentenceCase] = false;
-      optionsDictionary[shouldCapitaliseI] =
-        savedWordModeSettings[shouldCapitaliseI];
-      optionsDictionary[shouldCapitaliseNames] =
-        savedWordModeSettings[shouldCapitaliseNames];
-      optionsDictionary[shouldCapitaliseAcronyms] =
-        savedWordModeSettings[shouldCapitaliseAcronyms];
-      optionsDictionary[shouldCapitaliseLocations] =
-        savedWordModeSettings[shouldCapitaliseLocations];
-
-      // Sync restored word flags to browser storage so UI stays in sync
-      if (
-        typeof browser !== 'undefined' &&
-        browser.storage &&
-        browser.storage.sync
-      ) {
-        browser.storage.sync.set({
-          [shouldCapitaliseI]: savedWordModeSettings[shouldCapitaliseI],
-          [shouldCapitaliseNames]: savedWordModeSettings[shouldCapitaliseNames],
-          [shouldCapitaliseAcronyms]:
-            savedWordModeSettings[shouldCapitaliseAcronyms],
-          [shouldCapitaliseLocations]:
-            savedWordModeSettings[shouldCapitaliseLocations],
-        });
-      }
-    } else if (
-      value === true &&
-      (optionName === shouldCapitaliseI ||
-        optionName === shouldCapitaliseNames ||
-        optionName === shouldCapitaliseAcronyms ||
-        optionName === shouldCapitaliseLocations)
-    ) {
-      // Turning on any word-level flag disables sentence case.
-      optionsDictionary[shouldConvertToSentenceCase] = false;
-      optionsDictionary[optionName] = true;
-    } else {
-      optionsDictionary[optionName] = value;
-    }
-    // Final safeguard: ensure exclusivity invariant ALWAYS holds even if future flags added.
-    enforceExclusiveModeInvariant();
+  // Branch: sentence-mode enable/disable handled by sentence-mode module
+  if (optionName === shouldConvertToSentenceCase && value === true) {
+    enableSentenceMode(optionsDictionary, savedWordModeSettings);
+  } else if (
+    optionName === shouldConvertToSentenceCase &&
+    value === false &&
+    optionsDictionary[shouldConvertToSentenceCase] === true
+  ) {
+    disableSentenceMode(optionsDictionary, savedWordModeSettings);
+  } else {
+    // Word-mode handling (this will also clear sentence-case when a word flag is enabled)
+    setWordModeOption(optionsDictionary, optionName, value);
   }
+
+  // Final safeguard: ensure exclusivity invariant ALWAYS holds even if multiple flags are toggled in rapid succession or new flag logic added later.
+  enforceExclusiveModeInvariantCore(optionsDictionary);
 }
 
 // Internal safeguard to guarantee exclusivity even if multiple flags are toggled in rapid succession or new flag logic added later.
 export function enforceExclusiveModeInvariant() {
-  if (optionsDictionary[shouldConvertToSentenceCase]) {
-    // Sentence case trumps word flags: clear any stray word flags that might have been set directly.
-    if (
-      optionsDictionary[shouldCapitaliseI] ||
-      optionsDictionary[shouldCapitaliseNames] ||
-      optionsDictionary[shouldCapitaliseAcronyms] ||
-      optionsDictionary[shouldCapitaliseLocations]
-    ) {
-      optionsDictionary[shouldCapitaliseI] = false;
-      optionsDictionary[shouldCapitaliseNames] = false;
-      optionsDictionary[shouldCapitaliseAcronyms] = false;
-      optionsDictionary[shouldCapitaliseLocations] = false;
-    }
-  } else {
-    // If sentence case off but NO word flags on, remain as-is (neutral mode). If sentence case off and any word flag on, valid word mode.
-  }
+  // Delegate to word-mode module implementation which accepts the options dictionary
+  enforceExclusiveModeInvariantCore(optionsDictionary);
 }
 
 // Explicit mode helpers for clarity in calling code & tests
@@ -397,20 +333,18 @@ export function getCaseInsensitiveMatchingAndCorrectedWords(
   text,
   keyValuePairs
 ) {
-  return getMatchingAndCorrectedWords(
+  return getCaseInsensitiveMatchingAndCorrectedWordsCore(
     text,
     keyValuePairs,
-    wordsToExclude,
-    true
+    wordsToExclude
   );
 }
 
 export function getCaseSensitiveMatchingAndCorrectedWords(text, keyValuePairs) {
-  return getMatchingAndCorrectedWords(
+  return getCaseSensitiveMatchingAndCorrectedWordsCore(
     text,
     keyValuePairs,
-    wordsToExclude,
-    false
+    wordsToExclude
   );
 }
 
@@ -420,45 +354,14 @@ export function getMatchingAndCorrectedWords(
   wordsToExclude,
   caseInsensitive
 ) {
-  // Gmail-specific: temporarily replace &nbsp; with regular space for word matching
-  let processedText = text;
-  if (isGmail() && text.includes(nbsp)) {
-    processedText = text.replace(new RegExp(nbsp, 'g'), ' ');
-  }
-
-  const lastWordRegex = /((-|\.)?\w+)([^\w-])$/;
-
-  const match = lastWordRegex.exec(processedText);
-  const noMatch = ['', ''];
-
-  if (match) {
-    const matchedWord = match[1];
-
-    if (matchedWord != null) {
-      if (wordsToExclude.includes(matchedWord.toLowerCase())) {
-        return noMatch;
-      }
-
-      const correctedWord = getCorrectedWord(
-        caseInsensitive,
-        matchedWord,
-        keyValuePairs
-      );
-
-      if (correctedWord != null) {
-        return [matchedWord, correctedWord];
-      }
-    }
-  }
-
-  return noMatch;
+  return getMatchingAndCorrectedWordsCore(
+    text,
+    keyValuePairs,
+    wordsToExclude,
+    caseInsensitive
+  );
 }
 
-function getCorrectedWord(caseInsensitive, matchedWord, keyValuePairs) {
-  return caseInsensitive === true
-    ? keyValuePairs[matchedWord.toLowerCase()]
-    : keyValuePairs[matchedWord];
-}
 
 export function onError(error) {
   console.log(error);
@@ -626,28 +529,15 @@ export function setEndOfContenteditable(contentEditableElement) {
 }
 
 export function getUpdatedString(text, matchedWord, correctedWord) {
-  if (text && matchedWord && correctedWord) {
-    const splitAt = (index) => (x) => [x.slice(0, index), x.slice(index)];
-    const arr = splitAt(-1)(text);
-
-    const updatedStr =
-      arr[0].replace(new RegExp(matchedWord + '$'), correctedWord) + arr[1];
-    return updatedStr;
-  }
-
-  return text;
+  return getUpdatedStringCore(text, matchedWord, correctedWord);
 }
 
 export function getCapitalisedContentForI(text) {
-  // Find and capitalize standalone 'i' preceded by whitespace or at start
-  // Use replace to only capitalize the 'i', not the surrounding characters
-  return text.replace(/(^|\s)i(\s|[.,!?;:'")\]}])/g, '$1I$2');
+  return getCapitalisedContentForICore(text);
 }
 
 export function getCapitalisedContent(text) {
-  const lastChar = text.slice(-1);
-  const updatedStr = text.substr(0, text.length - 1) + lastChar.toUpperCase();
-  return updatedStr;
+  return getCapitalisedContentCore(text);
 }
 
 export function shouldConvertToSentenceCaseText(text) {
@@ -755,8 +645,7 @@ export function toggleOptionsValue(changes, variableName) {
 }
 
 export const stringToKeyValuePairs = (obj, val) => {
-  obj[val.toLowerCase()] = val;
-  return obj;
+  return stringToKeyValuePairsCore(obj, val);
 };
 
 export function arrayToMap(obj) {
@@ -770,7 +659,7 @@ export function arrayToMap(obj) {
       return {};
     }
 
-    return obj.reduce(stringToKeyValuePairs, {});
+    return arrayToMapCore(obj);
   }
 
   return {};
