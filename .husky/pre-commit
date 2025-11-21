@@ -1,3 +1,5 @@
 . "$(dirname "$0")/common.sh"
 
-yarn lint-staged
+# Prefer npx to avoid requiring a global yarn install in developer environments.
+# npx will execute the locally installed lint-staged binary from node_modules.
+npx lint-staged
