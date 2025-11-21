@@ -44,6 +44,27 @@ describe('word-mode core helpers', () => {
     expect(res).toEqual(['WORLD', 'WORLD']);
   });
 
+  test('getCorrectedWord respects case-insensitive flag and capitalised-key fallback', () => {
+    // Case-insensitive lookup should use lowercased key
+    const dictCI = { world: 'World' };
+    const ci = require('../src/word-mode').getCorrectedWord(true, 'World', dictCI);
+    expect(ci).toBe('World');
+
+    // Case-sensitive: direct key wins
+    const dictCS = { Two: 'Two', two: 'two-lower' };
+    const direct = require('../src/word-mode').getCorrectedWord(false, 'Two', dictCS);
+    expect(direct).toBe('Two');
+
+    // Case-sensitive: when direct missing, fallback to capitalised key
+    const dictFallback = { Two: 'Two' };
+    const fallback = require('../src/word-mode').getCorrectedWord(false, 'two', dictFallback);
+    expect(fallback).toBe('Two');
+
+    // No match returns undefined
+    const none = require('../src/word-mode').getCorrectedWord(false, 'missing', {});
+    expect(none).toBeUndefined();
+  });
+
   test('getMatchingAndCorrectedWordsCore uses caseInsensitive flag', () => {
     const text = 'one two ';
     const dict = { two: 'Two' };
