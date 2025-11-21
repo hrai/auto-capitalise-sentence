@@ -113,6 +113,14 @@ export function capitaliseText(
 
   if (text == null) return;
 
+  // Lightweight pre-check: quickly determine whether deeper capitalization
+  // processing is worth running. This avoids expensive dictionary lookups and
+  // DOM updates when the user's recent input makes a capitalization unlikely.
+  // The heuristic is conservative (it errs on the side of running the full
+  // processing when in doubt) to preserve existing behavior while reducing
+  // needless work in common non-capitalisation cases.
+  if (!quickCapitalisationCheck(text)) return;
+
   const lastChar = text.trim().slice(-1);
   const isLastCharAnAlphabet = lastChar.match(/[a-z]/i);
 
@@ -205,6 +213,57 @@ export function capitaliseText(
       );
     }
   }
+}
+
+// Cheap heuristic to decide whether deeper capitalization logic should run.
+// Returns true when it's plausible that a capitalization or word-correction
+// might be needed given the current text tail and enabled options.
+export function quickCapitalisationCheck(text) {
+  // Treat null/undefined as no-work; allow empty string through so sentence-mode
+  // enablement can still force processing (useful when toggling modes).
+  if (text == null || typeof text !== 'string') return false;
+
+  // If sentence-case mode is enabled, always allow processing so the UI can
+  // reflect the mode immediately (even for empty strings).
+  if (optionsDictionary[shouldConvertToSentenceCase]) return true;
+
+  // Work only on a short tail to keep this fast. Normalize common HTML
+  // trailing markers like '<br>' so tests and real inputs that use innerHTML
+  // behave like plain text for this heuristic.
+  let normalized = text;
+  if (normalized.length >= 4 && normalized.slice(-4) === '<br>') {
+    normalized = normalized.slice(0, -4);
+  }
+  if (normalized.length >= 5 && normalized.slice(-5) === '<br/>') {
+    normalized = normalized.slice(0, -5);
+  }
+
+  const tail = normalized.slice(-40);
+
+  // If last character is alphabetical, whitespace (user just typed a space),
+  // or punctuation commonly used to terminate sentences, further processing
+  // may be useful. Including whitespace ensures we handle cases where the
+  // user has just finished typing a word and the logic should inspect the
+  // preceding token (many tests rely on this behaviour).
+  const lastChar = tail.slice(-1);
+  if (/[a-zA-Z\s.!?]/.test(lastChar)) return true;
+
+  // Cheap check for standalone 'i' at the end (common small-case correction).
+  if (optionsDictionary[shouldCapitaliseI] && /\b[iI]$/.test(tail)) return true;
+
+  // If enabled, names/acronyms/locations corrections are plausible when the
+  // tail contains any lower-case letter (likely a typed word).
+  if (
+    (optionsDictionary[shouldCapitaliseNames] ||
+      optionsDictionary[shouldCapitaliseAcronyms] ||
+      optionsDictionary[shouldCapitaliseLocations]) &&
+    /[a-z]/.test(tail)
+  )
+    return true;
+
+  // Conservative fallback: if none of the above matched, assume no need to
+  // capitalise. This keeps behaviour unchanged for most non-text inputs.
+  return false;
 }
 
 // Proxy wrapper to allow stable spying in tests without interfering with internal references
