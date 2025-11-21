@@ -40,4 +40,15 @@ describe('quickCapitalisationCheck', () => {
     expect(utils.quickCapitalisationCheck(' i')).toBe(true);
     expect(utils.quickCapitalisationCheck('i')).toBe(true);
   });
+
+  test('single letters other than i still allow quick check', () => {
+    // Other single letters should pass the cheap alpha-tail check
+    expect(utils.quickCapitalisationCheck(' a')).toBe(true);
+    expect(utils.quickCapitalisationCheck('a')).toBe(true);
+    expect(utils.quickCapitalisationCheck(' z')).toBe(true);
+    expect(utils.quickCapitalisationCheck('Z')).toBe(true);
+
+    // Uppercase single letters are also treated as text tail and should pass
+    expect(utils.quickCapitalisationCheck(' A ')).toBe(true);
+  });
 });
