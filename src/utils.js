@@ -443,6 +443,54 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
     updatedStr += '<br>';
   }
 
+  // Optimization for contentEditable: when the change is a simple last-character
+  // replacement (common in word-mode capitalization), update the deepest text node
+  // directly and adjust the selection synchronously. This avoids resetting innerHTML
+  // and a requestAnimationFrame-based cursor reset which can race with fast typing
+  // and cause characters to appear out-of-order.
+  try {
+    if (
+      contentEditableTags.includes(tagName.toUpperCase()) &&
+      htmlControl &&
+      htmlControl.isContentEditable &&
+      typeof updatedStr === 'string'
+    ) {
+      const currentText = getText(htmlControl, tagName);
+      if (
+        typeof currentText === 'string' &&
+        updatedStr.length === currentText.length &&
+        updatedStr.slice(0, -1) === currentText.slice(0, -1)
+      ) {
+        // Simple last-character change: apply to deepest text node
+        let lastNode = htmlControl;
+        while (lastNode && lastNode.lastChild) {
+          lastNode = lastNode.lastChild;
+        }
+
+        if (lastNode && lastNode.nodeType === Node.TEXT_NODE) {
+          // Replace node data with updated text (use plain text to avoid injecting HTML)
+          lastNode.data = updatedStr.replace(new RegExp(nbsp, 'g'), ' ');
+
+          // Position caret at end of last node synchronously
+          try {
+            const range = document.createRange();
+            range.setStart(lastNode, lastNode.length);
+            range.collapse(true);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+          } catch {
+            // Fall back to the existing rAF-based approach if selection APIs fail
+          }
+
+          return;
+        }
+      }
+    }
+  } catch {
+    // If any error occurs in the fast-path, fall back to the original safe behaviour below
+  }
+
   //fix for confluence and jira user tags
   if (isAtlassianCloudHost(window.location.host)) {
     const innerHtml = getCleanHtmlForAtlassian(updatedStr);
@@ -694,55 +742,6 @@ export function isSentenceCaseEnabled() {
   return !!optionsDictionary[shouldConvertToSentenceCase];
 }
 
-// Lightweight immediate feedback: capitalise only the first alphabetical character if it starts lowercase
-// After-punctuation capitalization is handled by the debounced sentence case processing
-export function applyImmediateSentenceStartCapitalisation(element) {
-  if (!element) return;
-  const tag = element.tagName?.toUpperCase();
-  const isEditable =
-    element.isContentEditable || tag === 'INPUT' || tag === 'TEXTAREA';
-  if (!isEditable) return;
-  try {
-    // For immediate feedback, use innerText for speed (avoids complex HTML processing)
-    // This gives instant visual feedback for common typing scenarios
-    const current =
-      tag === 'INPUT' || tag === 'TEXTAREA'
-        ? element.value || ''
-        : element.innerText || '';
-
-    if (typeof current !== 'string' || !current.length) return;
-
-    let updated = current;
-    let hasChanges = false;
-
-    // Capitalise first character if it's lowercase
-    if (/^(\s*[a-z])/.test(updated)) {
-      updated = updated.replace(
-        /^(\s*)([a-z])/,
-        (m, ws, ch) => ws + ch.toUpperCase()
-      );
-      hasChanges = true;
-    }
-
-    // Removed after-punctuation capitalization - this is now handled only by debounced processing
-
-    if (hasChanges && updated !== current) {
-      if (tag === 'INPUT' || tag === 'TEXTAREA') {
-        element.value = updated;
-      } else if (element.isContentEditable) {
-        // For immediate feedback, set innerText directly for speed
-        // The debounced full processing will handle complex HTML structures properly
-        element.innerText = updated;
-        // Still need cursor positioning for Slack/Quill editors
-        requestAnimationFrame(() => {
-          setEndOfContenteditable(element);
-        });
-      }
-    }
-  } catch {
-    /* ignore */
-  }
-} // Store debounced functions & their timeout IDs per element to maintain individual timers and allow cancellation/flush.
 // Value shape: { fn: Function, timeoutId: number|null }
 let debouncedCapitalizationMap = new WeakMap();
 
