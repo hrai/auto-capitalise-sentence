@@ -158,14 +158,36 @@ export function processResponse(storageDict) {
       enableAll[shouldEnableAllWordCapitalisation] = true;
       // persist defaults and also persist a cached snapshot so restores work after toggles/reloads
       try {
-        browser.storage.sync.set(enableAll);
+        // Persist user-facing flags to sync (so user settings roam if supported)
+        if (
+          browser.storage.sync &&
+          typeof browser.storage.sync.set === 'function'
+        ) {
+          browser.storage.sync.set(enableAll);
+        }
+
         const snapshot = {
           [shouldCapitaliseI]: true,
           [shouldCapitaliseNames]: true,
           [shouldCapitaliseAcronyms]: true,
           [shouldCapitaliseLocations]: true,
         };
-        browser.storage.sync.set({ [cachedWordFlagsSnapshot]: snapshot });
+
+        // Persist a cached snapshot to sync if available
+        if (
+          browser.storage.sync &&
+          typeof browser.storage.sync.set === 'function'
+        ) {
+          browser.storage.sync.set({ [cachedWordFlagsSnapshot]: snapshot });
+        }
+
+        // Also persist the cached snapshot to local storage so content scripts can read it
+        if (
+          browser.storage.local &&
+          typeof browser.storage.local.set === 'function'
+        ) {
+          browser.storage.local.set({ [cachedWordFlagsSnapshot]: snapshot });
+        }
       } catch {
         // ignore storage errors (e.g. unavailable storage in some environments)
       }
@@ -202,59 +224,69 @@ export function processResponse(storageDict) {
 /* Updating the value of this sync storage variable in settings.js happens AFTER content.js.
  * The browser doesn't register the change and doesn't capitalise I by default after installing the extension.
  * This block will capture the event and update the value of 'shouldCapitaliseI'.
+ *
+ * Guard registration so importing this module in test environments without webextension
+ * APIs doesn't throw when attempting to access browser.storage.onChanged.
  */
-browser.storage.onChanged.addListener(
-  function (
-    changes, // object
-    areaName // string
-  ) {
-    if (areaName === 'sync') {
-      utils.toggleOptionsValue(changes, shouldCapitaliseI);
-      utils.toggleOptionsValue(changes, shouldCapitaliseNames);
-      utils.toggleOptionsValue(changes, shouldCapitaliseAcronyms);
-      utils.toggleOptionsValue(changes, shouldCapitaliseLocations);
-      utils.toggleOptionsValue(changes, shouldConvertToSentenceCase);
-      if (changes.debounceDelayMs) {
-        const v = parseInt(changes.debounceDelayMs.newValue, 10);
-        if (!isNaN(v) && v >= 0 && v <= 60000) {
-          configuredDebounceDelay = v;
+if (
+  typeof browser !== 'undefined' &&
+  browser.storage &&
+  browser.storage.onChanged &&
+  typeof browser.storage.onChanged.addListener === 'function'
+) {
+  browser.storage.onChanged.addListener(
+    function (
+      changes, // object
+      areaName // string
+    ) {
+      if (areaName === 'sync') {
+        utils.toggleOptionsValue(changes, shouldCapitaliseI);
+        utils.toggleOptionsValue(changes, shouldCapitaliseNames);
+        utils.toggleOptionsValue(changes, shouldCapitaliseAcronyms);
+        utils.toggleOptionsValue(changes, shouldCapitaliseLocations);
+        utils.toggleOptionsValue(changes, shouldConvertToSentenceCase);
+        if (changes.debounceDelayMs) {
+          const v = parseInt(changes.debounceDelayMs.newValue, 10);
+          if (!isNaN(v) && v >= 0 && v <= 60000) {
+            configuredDebounceDelay = v;
+          }
         }
-      }
 
-      if (changes.wordsToExclude != null) {
-        const newValue = changes.wordsToExclude.newValue;
+        if (changes.wordsToExclude != null) {
+          const newValue = changes.wordsToExclude.newValue;
 
-        if (newValue != null) {
-          utils.setWordsToExclude(newValue);
+          if (newValue != null) {
+            utils.setWordsToExclude(newValue);
+          }
         }
-      }
-      // Re-run capitalization immediately on active element after mode changes so UI reflects new mode without waiting
-      if (
-        changes.shouldConvertToSentenceCase ||
-        changes.shouldCapitaliseI ||
-        changes.shouldCapitaliseNames ||
-        changes.shouldCapitaliseAcronyms ||
-        changes.shouldCapitaliseLocations
-      ) {
-        if (changes.shouldConvertToSentenceCase) {
-          // Clear existing debounced functions so no delayed word-mode updates fire after switching
-          utils.clearDebouncedCapitalisationCache();
-        }
+        // Re-run capitalization immediately on active element after mode changes so UI reflects new mode without waiting
         if (
-          changes.shouldConvertToSentenceCase &&
-          changes.shouldConvertToSentenceCase.newValue === true
+          changes.shouldConvertToSentenceCase ||
+          changes.shouldCapitaliseI ||
+          changes.shouldCapitaliseNames ||
+          changes.shouldCapitaliseAcronyms ||
+          changes.shouldCapitaliseLocations
         ) {
-          // Force full sentence case pass across all elements
-          fullReprocessAllVisible(true);
-        } else {
-          reprocessActiveElement();
-          fullReprocessAllVisible(false);
+          if (changes.shouldConvertToSentenceCase) {
+            // Clear existing debounced functions so no delayed word-mode updates fire after switching
+            utils.clearDebouncedCapitalisationCache();
+          }
+          if (
+            changes.shouldConvertToSentenceCase &&
+            changes.shouldConvertToSentenceCase.newValue === true
+          ) {
+            // Force full sentence case pass across all elements
+            fullReprocessAllVisible(true);
+          } else {
+            reprocessActiveElement();
+            fullReprocessAllVisible(false);
+          }
         }
+        //browser.runtime.reload() - reload browser
       }
-      //browser.runtime.reload() - reload browser
     }
-  }
-);
+  );
+}
 
 function hookupEventHandlers() {
   observeInputTags();
