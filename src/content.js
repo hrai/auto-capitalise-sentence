@@ -17,6 +17,7 @@ import {
   wordsToExclude,
   wordsToInclude,
   wordsToIncludeKeyVal,
+  cachedWordFlagsSnapshot,
   shouldEnableAllWordCapitalisation,
 } from './plugin-constants';
 
@@ -55,28 +56,67 @@ let sitesToExclude = [
 
 let configuredDebounceDelay = 5000;
 
-browser.storage.local
-  .get([constantsKeyVal, namesKeyVal, acronymsKeyVal, locationsKeyVal])
-  .then((localDict) => {
-    browser.storage.sync
-      .get([
-        sitesToIgnore,
-        shouldCapitaliseI,
-        shouldCapitaliseNames,
-        shouldCapitaliseAcronyms,
-        shouldCapitaliseLocations,
-        shouldConvertToSentenceCase,
-        debounceDelayMs,
-        wordsToExclude,
-        wordsToInclude,
-        shouldEnableAllWordCapitalisation,
-      ])
-      .then((remoteDict) => {
-        processResponse({ ...localDict, ...remoteDict });
-      }, utils.onError);
-  }, utils.onError);
+// Initialize from storage if the browser storage API is available. Guard so importing
+// this module in test environments (where webextension APIs are mocked / absent)
+// doesn't immediately throw.
+if (
+  typeof browser !== 'undefined' &&
+  browser.storage &&
+  browser.storage.local &&
+  typeof browser.storage.local.get === 'function'
+) {
+  try {
+    const localResult = browser.storage.local.get([
+      constantsKeyVal,
+      namesKeyVal,
+      acronymsKeyVal,
+      locationsKeyVal,
+      cachedWordFlagsSnapshot,
+    ]);
 
-function processResponse(storageDict) {
+    const handleLocal = (localDict) => {
+      // Use sync.get if available; otherwise fall back to empty remote dictionary
+      if (
+        browser.storage.sync &&
+        typeof browser.storage.sync.get === 'function'
+      ) {
+        const remoteResult = browser.storage.sync.get([
+          sitesToIgnore,
+          shouldCapitaliseI,
+          shouldCapitaliseNames,
+          shouldCapitaliseAcronyms,
+          shouldCapitaliseLocations,
+          shouldConvertToSentenceCase,
+          debounceDelayMs,
+          wordsToExclude,
+          wordsToInclude,
+          shouldEnableAllWordCapitalisation,
+        ]);
+
+        if (remoteResult && typeof remoteResult.then === 'function') {
+          remoteResult.then((remoteDict) => {
+            processResponse({ ...localDict, ...remoteDict });
+          }, utils.onError);
+        } else {
+          processResponse({ ...localDict, ...(remoteResult || {}) });
+        }
+      } else {
+        processResponse(localDict || {});
+      }
+    };
+
+    if (localResult && typeof localResult.then === 'function') {
+      localResult.then(handleLocal, utils.onError);
+    } else {
+      handleLocal(localResult || {});
+    }
+  } catch {
+    // Silently ignore storage initialization errors in environments without webextension APIs
+    // Tests will call processResponse directly.
+  }
+}
+
+export function processResponse(storageDict) {
   if (storageDict.sitesToIgnore) {
     sitesToExclude = sitesToExclude.concat(storageDict.sitesToIgnore);
   }
@@ -90,6 +130,15 @@ function processResponse(storageDict) {
 
   setOptions(storageDict);
   setKeyValues(storageDict);
+
+  // If a persisted cached snapshot exists from prior toggles, load it into memory
+  if (storageDict && storageDict[cachedWordFlagsSnapshot]) {
+    try {
+      utils.setCachedWordFlagsSnapshot(storageDict[cachedWordFlagsSnapshot]);
+    } catch {
+      // ignore
+    }
+  }
 
   // Default: enable word group if sentence case disabled AND none of the individual flags are true
   if (!storageDict[shouldConvertToSentenceCase]) {
@@ -107,12 +156,23 @@ function processResponse(storageDict) {
         utils.setShouldCapitaliseOption(f, true);
       });
       enableAll[shouldEnableAllWordCapitalisation] = true;
-      browser.storage.sync.set(enableAll); // persist defaults
+      // persist defaults and also persist a cached snapshot so restores work after toggles/reloads
+      try {
+        browser.storage.sync.set(enableAll);
+        const snapshot = {
+          [shouldCapitaliseI]: true,
+          [shouldCapitaliseNames]: true,
+          [shouldCapitaliseAcronyms]: true,
+          [shouldCapitaliseLocations]: true,
+        };
+        browser.storage.sync.set({ [cachedWordFlagsSnapshot]: snapshot });
+      } catch {
+        // ignore storage errors (e.g. unavailable storage in some environments)
+      }
     }
   }
 
   if (storageDict && sitesToExclude) {
-    //https://stackoverflow.com/questions/406192/get-current-url-with-jquery
     const currentUrlDomain = window.location.origin;
 
     try {

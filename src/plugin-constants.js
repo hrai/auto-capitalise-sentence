@@ -15,3 +15,4 @@ export const sitesToIgnore = 'sitesToIgnore',
   acronymsKeyVal = 'acronymsKeyVal',
   locationsKeyVal = 'locationsKeyVal',
   wordsToIncludeKeyVal = 'wordsToIncludeKeyVal';
+export const cachedWordFlagsSnapshot = 'cachedWordFlagsSnapshot';

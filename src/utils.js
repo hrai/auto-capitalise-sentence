@@ -62,6 +62,27 @@ let savedWordModeSettings = {
   [shouldCapitaliseLocations]: false,
 };
 
+// Persist/restore helpers for cached snapshot used when toggling sentence/word modes
+export function setCachedWordFlagsSnapshot(snapshot) {
+  if (!snapshot || typeof snapshot !== 'object') return;
+  // copy known keys to in-memory snapshot
+  if (snapshot[shouldCapitaliseI] != null)
+    savedWordModeSettings[shouldCapitaliseI] = snapshot[shouldCapitaliseI];
+  if (snapshot[shouldCapitaliseNames] != null)
+    savedWordModeSettings[shouldCapitaliseNames] =
+      snapshot[shouldCapitaliseNames];
+  if (snapshot[shouldCapitaliseAcronyms] != null)
+    savedWordModeSettings[shouldCapitaliseAcronyms] =
+      snapshot[shouldCapitaliseAcronyms];
+  if (snapshot[shouldCapitaliseLocations] != null)
+    savedWordModeSettings[shouldCapitaliseLocations] =
+      snapshot[shouldCapitaliseLocations];
+}
+
+export function getCachedWordFlagsSnapshot() {
+  return Object.assign({}, savedWordModeSettings);
+}
+
 const keyValueDictionary = {
   [constantsKeyVal]: {},
   [namesKeyVal]: {},
@@ -420,7 +441,6 @@ export function getMatchingAndCorrectedWords(
     caseInsensitive
   );
 }
-
 
 export function onError(error) {
   console.log(error);
