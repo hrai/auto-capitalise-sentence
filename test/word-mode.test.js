@@ -17,7 +17,6 @@ import {
   shouldCapitaliseLocations,
   shouldConvertToSentenceCase,
 } from '../src/plugin-constants';
-
 import * as utils from '../src/utils.js';
 import sinon from 'sinon';
 
@@ -25,52 +24,68 @@ describe('word-mode core helpers', () => {
   test('case-insensitive matching finds and returns corrected word', () => {
     const text = 'hello world ';
     const dict = { world: 'World' };
-    const res = getCaseInsensitiveMatchingAndCorrectedWordsCore(
-      text,
-      dict,
-      []
-    );
+    const res = getCaseInsensitiveMatchingAndCorrectedWordsCore(text, dict, []);
     expect(res).toEqual(['world', 'World']);
   });
 
   test('case-sensitive matching respects exact case', () => {
     const text = 'hello WORLD ';
     const dict = { WORLD: 'WORLD' };
-    const res = getCaseSensitiveMatchingAndCorrectedWordsCore(
-      text,
-      dict,
-      []
-    );
+    const res = getCaseSensitiveMatchingAndCorrectedWordsCore(text, dict, []);
+    expect(res).toEqual(['WORLD', 'WORLD']);
+  });
+
+  test('case-sensitive matching respects exact case', () => {
+    const text = 'hello WORLD ';
+    const dict = { WORLD: 'WORLD' };
+    const res = getCaseSensitiveMatchingAndCorrectedWordsCore(text, dict, []);
     expect(res).toEqual(['WORLD', 'WORLD']);
   });
 
   test('getCorrectedWord respects case-insensitive flag and capitalised-key fallback', () => {
     // Case-insensitive lookup should use lowercased key
     const dictCI = { world: 'World' };
-    const ci = require('../src/word-mode').getCorrectedWord(true, 'World', dictCI);
+    const ci = require('../src/word-mode').getCorrectedWord(
+      true,
+      'World',
+      dictCI
+    );
     expect(ci).toBe('World');
 
     // Case-sensitive: direct key wins
     const dictCS = { Two: 'Two', two: 'two-lower' };
-    const direct = require('../src/word-mode').getCorrectedWord(false, 'Two', dictCS);
+    const direct = require('../src/word-mode').getCorrectedWord(
+      false,
+      'Two',
+      dictCS
+    );
     expect(direct).toBe('Two');
 
     // Case-sensitive: when direct missing, fallback to capitalised key
     const dictFallback = { Two: 'Two' };
-    const fallback = require('../src/word-mode').getCorrectedWord(false, 'two', dictFallback);
+    const fallback = require('../src/word-mode').getCorrectedWord(
+      false,
+      'two',
+      dictFallback
+    );
     expect(fallback).toBe('Two');
 
     // No match returns undefined
-    const none = require('../src/word-mode').getCorrectedWord(false, 'missing', {});
+    const none = require('../src/word-mode').getCorrectedWord(
+      false,
+      'missing',
+      {}
+    );
     expect(none).toBeUndefined();
   });
 
   test('getMatchingAndCorrectedWordsCore uses caseInsensitive flag', () => {
     const text = 'one two ';
     const dict = { two: 'Two' };
-    expect(
-      getMatchingAndCorrectedWordsCore(text, dict, [], true)
-    ).toEqual(['two', 'Two']);
+    expect(getMatchingAndCorrectedWordsCore(text, dict, [], true)).toEqual([
+      'two',
+      'Two',
+    ]);
     expect(
       getMatchingAndCorrectedWordsCore(text, { Two: 'Two' }, [], false)
     ).toEqual(['two', 'Two']);
@@ -142,6 +157,8 @@ describe('integration: utils -> word-mode', () => {
       setTextFake
     );
 
-    expect(shouldCapitaliseFake.getCall(0).args[0]).toBe("I'm the content of html tag.");
+    expect(shouldCapitaliseFake.getCall(0).args[0]).toBe(
+      "I'm the content of html tag."
+    );
   });
 });
