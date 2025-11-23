@@ -30,7 +30,16 @@ import {
   stringToKeyValuePairsCore,
   arrayToMapCore,
 } from './word-mode';
+import { createGetDebouncedCapitaliseText } from './word-mode';
 import { enableSentenceMode, disableSentenceMode } from './sentence-mode';
+import {
+  DEFAULT_DEBOUNCE_DELAY as _DEFAULT_DEBOUNCE_DELAY,
+  debounce as _debounce,
+  __resetDebouncedMapForTests as _resetDebouncedMapForTests,
+  clearDebouncedCapitalisationCache as _clearDebouncedCapitalisationCache,
+  flushAndClearDebouncedCapitalisations as _flushAndClearDebouncedCapitalisations,
+  cancelDebouncedForElement as _cancelDebouncedForElement,
+} from './debounce';
 // Re-export commonly used option and key names so tests can reliably import them from a single module.
 export {
   shouldCapitaliseI,
@@ -792,139 +801,32 @@ export function arrayToMap(obj) {
   return {};
 }
 
-// Debounce function for sliding window delay
-export const DEFAULT_DEBOUNCE_DELAY = 5000;
-
-export function debounce(func, delay) {
-  // Normalise delay: fall back to DEFAULT_DEBOUNCE_DELAY for invalid values (NaN, negative, null, undefined)
-  const normalisedDelay =
-    Number.isFinite(delay) && delay >= 0 ? delay : DEFAULT_DEBOUNCE_DELAY;
-
-  // Special case: a zero delay should execute immediately (synchronously) as per test expectations
-  if (normalisedDelay === 0) {
-    return function (...args) {
-      return func.apply(this, args);
-    };
-  }
-
-  let timeoutId;
-  return function (...args) {
-    if (timeoutId) {
-      clearTimeout(timeoutId); // sliding window behaviour
-    }
-    timeoutId = setTimeout(() => func.apply(this, args), normalisedDelay);
-  };
-}
+// Re-export debounce helpers from dedicated module
+export const DEFAULT_DEBOUNCE_DELAY = _DEFAULT_DEBOUNCE_DELAY;
+export const debounce = _debounce;
 
 // Helper to expose current sentence case mode without leaking internal dictionary object
 export function isSentenceCaseEnabled() {
   return !!optionsDictionary[shouldConvertToSentenceCase];
 }
 
-// Value shape: { fn: Function, timeoutId: number|null }
-let debouncedCapitalizationMap = new WeakMap();
-
 // TEST-ONLY helper (safe in prod; no reference leakage) to clear debounced map
-export function __resetDebouncedMapForTests() {
-  debouncedCapitalizationMap = new WeakMap();
-}
+export const __resetDebouncedMapForTests = _resetDebouncedMapForTests;
+export const clearDebouncedCapitalisationCache =
+  _clearDebouncedCapitalisationCache;
+export const flushAndClearDebouncedCapitalisations =
+  _flushAndClearDebouncedCapitalisations;
+export const cancelDebouncedForElement = _cancelDebouncedForElement;
 
-// Public helper to clear per-element debounced functions (used when switching modes)
-export function clearDebouncedCapitalisationCache() {
-  // Cancel any outstanding timers without flushing
-  debouncedCapitalizationMap = new WeakMap();
-}
-
-// Force flush (run immediately) all pending debounced capitalisations then clear cache.
-export function flushAndClearDebouncedCapitalisations() {
-  try {
-    debouncedCapitalizationMap.forEach?.(() => {}); // no-op safeguard for older environments
-  } catch {
-    /* ignore */
-  }
-  // Iterate via WeakMap is not directly possible; instead we store wrapped functions that self-record timeout IDs.
-  // So this helper is best-effort: callers should hold element references if precise flushing is required.
-}
-
-// Explicit cancel for a specific element (used when switching modes for active element)
-export function cancelDebouncedForElement(element) {
-  if (!element || typeof element !== 'object') return;
-  try {
-    const entry = debouncedCapitalizationMap.get(element);
-    if (entry && entry.timeoutId) {
-      clearTimeout(entry.timeoutId);
-      entry.timeoutId = null;
-    }
-  } catch (e) {
-    // Silently handle WeakMap errors during extension reload
-    console.debug(
-      'WeakMap access error (extension may be reloading):',
-      e.message
-    );
-  }
-}
-
-export function getDebouncedCapitaliseText(
-  element,
-  delay = DEFAULT_DEBOUNCE_DELAY,
-  capitaliserFn = capitaliseTextProxy
-) {
-  // Defensive check: element must be a valid object for WeakMap
-  if (!element || typeof element !== 'object') return () => {};
-
-  const existing = debouncedCapitalizationMap.get(element);
-  if (existing && typeof existing.fn === 'function') return existing.fn;
-
-  let timeoutId = null;
-  const wrapped = function (targetElement) {
-    // Defensive check for extension context invalidation
-    if (!targetElement || typeof targetElement !== 'object') return;
-    if (timeoutId) clearTimeout(timeoutId);
-    // Immediate execute if delay == 0
-    if (!Number.isFinite(delay) || delay < 0) delay = DEFAULT_DEBOUNCE_DELAY;
-    if (delay === 0) {
-      capitaliserFn(
-        targetElement,
-        shouldCapitalise,
-        shouldCapitaliseForI,
-        getText,
-        setText
-      );
-      return;
-    }
-    timeoutId = setTimeout(() => {
-      timeoutId = null;
-      try {
-        capitaliserFn(
-          targetElement,
-          shouldCapitalise,
-          shouldCapitaliseForI,
-          getText,
-          setText
-        );
-      } catch {
-        /* ignore */
-      }
-    }, delay);
-    try {
-      debouncedCapitalizationMap.set(element, { fn: wrapped, timeoutId });
-    } catch (e) {
-      // Silently handle WeakMap errors during extension reload
-      console.debug(
-        'WeakMap set error (extension may be reloading):',
-        e.message
-      );
-    }
-  };
-
-  try {
-    debouncedCapitalizationMap.set(element, { fn: wrapped, timeoutId });
-  } catch (e) {
-    // Silently handle WeakMap errors during extension reload
-    console.debug('WeakMap set error (extension may be reloading):', e.message);
-  }
-  return wrapped;
-}
+// Compatibility wrapper: adapt existing capitaliser signature to the debounce core's expectation
+// Create the compat wrapper via factory to avoid circular imports
+export const getDebouncedCapitaliseText = createGetDebouncedCapitaliseText({
+  getTextFn: getText,
+  setTextFn: setText,
+  shouldCapitaliseFn: shouldCapitalise,
+  shouldCapitaliseForIFn: shouldCapitaliseForI,
+  capitaliseTextProxyFn: capitaliseTextProxy,
+});
 
 // Retroactively apply enabled rules across the entire text of a single element (used when toggling features on)
 export function fullReprocessElement(element) {

@@ -56,20 +56,20 @@ function isGmailLocal() {
 
 export function getCorrectedWord(caseInsensitive, matchedWord, keyValuePairs) {
   if (caseInsensitive === true) {
-    return keyValuePairs[matchedWord.toLowerCase()]
+    return keyValuePairs[matchedWord.toLowerCase()];
   }
 
   // Case-sensitive lookup first
-  const direct = keyValuePairs[matchedWord]
-  if (direct != null) return direct
+  const direct = keyValuePairs[matchedWord];
+  if (direct != null) return direct;
 
   // Fallback: try capitalised key (e.g. dict has 'Two' but matchedWord is 'two')
   if (matchedWord && matchedWord.length > 0) {
-    const cap = matchedWord[0].toUpperCase() + matchedWord.slice(1)
-    return keyValuePairs[cap]
+    const cap = matchedWord[0].toUpperCase() + matchedWord.slice(1);
+    return keyValuePairs[cap];
   }
 
-  return undefined
+  return undefined;
 }
 
 // Core matching function: accepts wordsToExclude so callers can pass shared state
@@ -182,3 +182,34 @@ export function arrayToMapCore(obj) {
   return {};
 }
 
+// Compatibility wrapper for per-element debounced capitalisation.
+// Adapts the debounce core to the higher-level capitaliser used by the rest of the app.
+// Factory to create a compatibility wrapper for debounced capitalisation.
+// Accepts the portal functions from utils to avoid circular imports.
+import { DEFAULT_DEBOUNCE_DELAY } from './debounce';
+import { getDebouncedCapitaliseText as _getDebouncedCapitaliseTextCore } from './debounce';
+
+export function createGetDebouncedCapitaliseText({
+  getTextFn,
+  setTextFn,
+  shouldCapitaliseFn,
+  shouldCapitaliseForIFn,
+  capitaliseTextProxyFn,
+}) {
+  return function getDebouncedCapitaliseText(
+    element,
+    delay = DEFAULT_DEBOUNCE_DELAY,
+    capitaliserFn = capitaliseTextProxyFn
+  ) {
+    const wrappedCapitaliser = (el) => {
+      capitaliserFn(
+        el,
+        shouldCapitaliseFn,
+        shouldCapitaliseForIFn,
+        getTextFn,
+        setTextFn
+      );
+    };
+    return _getDebouncedCapitaliseTextCore(element, delay, wrappedCapitaliser);
+  };
+}
