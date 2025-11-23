@@ -113,16 +113,16 @@ Certain sites reset the text change so this extension will not work on them.
 - Recent tests required a small content-script guard and a cached snapshot persistence fix. If you import `src/content.js` into a non-extension environment (such as unit tests), ensure `webextension-polyfill` is mocked or available; the code now safely guards `browser.storage` access.
 - Branches: the repo historically used `master` as the primary branch; a `main` branch now exists and mirrors `master` for users who expect `main`.
 
-If you plan to run tests locally, make sure dev dependencies are installed:
+If you plan to run tests locally, make sure dependencies are installed with Yarn:
 
 ```bash
-npm install
+yarn install
 ```
 
-Then run:
+Then run the test suite:
 
 ```bash
-npm test
+yarn test
 ```
 
 If you see failures related to webextension APIs, the tests expect `webextension-polyfill` to be mocked (see `test/*` for examples).
