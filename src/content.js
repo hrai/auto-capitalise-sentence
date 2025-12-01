@@ -148,8 +148,8 @@ export function processResponse(storageDict) {
       shouldCapitaliseAcronyms,
       shouldCapitaliseLocations,
     ];
-    const anyTrue = wordFlags.some((f) => storageDict[f] === true);
-    if (!anyTrue) {
+    const anyDefined = wordFlags.some((f) => storageDict[f] != null);
+    if (!anyDefined) {
       const enableAll = {};
       wordFlags.forEach((f) => {
         enableAll[f] = true;
