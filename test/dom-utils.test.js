@@ -346,5 +346,16 @@ describe('dom-utils', () => {
       expect(div1.querySelector('.remove')).toBeNull();
       expect(div2.querySelector('.remove')).toBeNull();
     });
+
+    it('should drop nodes matching selector at the root level', () => {
+      const nodes = parseHTML(
+        '<span class="remove">remove</span><span class="keep">keep</span>'
+      );
+
+      const cleaned = removeFromHTML(nodes, '.remove');
+
+      expect(cleaned).toHaveLength(1);
+      expect(cleaned[0].outerHTML).toBe('<span class="keep">keep</span>');
+    });
   });
 });

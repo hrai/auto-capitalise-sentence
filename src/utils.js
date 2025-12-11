@@ -399,8 +399,12 @@ export function setKeyValue(keyValueName, value) {
 }
 
 export function shouldCapitalise(text) {
+  if (typeof text !== 'string') return false;
+
+  const normalizedText = normalizeWhitespaceEntities(text);
+
   const multilineRegex = /\s*\n+\s*[a-z]$/;
-  let matches = multilineRegex.test(text);
+  let matches = multilineRegex.test(normalizedText);
 
   //console.log("matches:" + matches);
 
@@ -409,13 +413,27 @@ export function shouldCapitalise(text) {
   }
 
   const sentenceRegex = /\w+\s*\W?([.?!])+\s+[a-z]$/;
-  matches = sentenceRegex.test(text);
+  matches = sentenceRegex.test(normalizedText);
 
   if (!matches) {
-    return text.length == 1;
+    return normalizedText.length == 1;
   }
 
   return matches;
+}
+
+function normalizeWhitespaceEntities(text) {
+  if (typeof text !== 'string' || text.length === 0) return text || '';
+
+  let normalized = text;
+  if (normalized.includes(nbsp)) {
+    normalized = normalized.replace(new RegExp(nbsp, 'g'), ' ');
+  }
+  if (normalized.includes('&#160;')) {
+    normalized = normalized.replace(/&#160;/g, ' ');
+  }
+
+  return normalized;
 }
 
 export function getCaseInsensitiveMatchingAndCorrectedWords(
@@ -581,7 +599,8 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
   }
 
   //fix for confluence and jira user tags
-  if (isAtlassianCloudHost(window.location.host)) {
+  const hostForAtlassianCheck = getHostForAtlassianHostCheck();
+  if (isAtlassianCloudHost(hostForAtlassianCheck)) {
     const innerHtml = getCleanHtmlForAtlassian(updatedStr);
     // Security: updatedStr comes from getText which reads innerHTML, so it preserves
     // whatever HTML the browser already rendered when the user typed it.
@@ -600,10 +619,43 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
     setEndOfContenteditable(htmlControl);
   });
 }
+
+function getHostForAtlassianHostCheck() {
+  if (typeof window === 'undefined') return '';
+
+  const override = window.__autoCapitaliseAtlassianHostOverride;
+  if (typeof override === 'string' && override.trim().length > 0) {
+    return override;
+  }
+
+  return window.location?.host ?? '';
+}
 export function getCleanHtmlForAtlassian(updatedStr) {
-  const html = parseHTML(updatedStr);
-  removeFromHTML(html, 'span.assistive');
-  return html;
+  const nodes = parseHTML(updatedStr);
+  const cleanedNodes = removeFromHTML(nodes, 'span.assistive');
+  return serializeNodesToHtml(cleanedNodes);
+}
+
+function serializeNodesToHtml(nodes) {
+  if (!Array.isArray(nodes) || nodes.length === 0) {
+    return '';
+  }
+
+  return nodes
+    .map((node) => {
+      if (!node) return '';
+      if (node.nodeType === Node.TEXT_NODE) {
+        return node.textContent || '';
+      }
+      if (node.nodeType === Node.COMMENT_NODE) {
+        return `<!--${node.textContent || ''}-->`;
+      }
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        return node.outerHTML || '';
+      }
+      return '';
+    })
+    .join('');
 }
 
 export function isFirstTextOfEditableTextNode(node, lastUpdatedText) {

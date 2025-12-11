@@ -102,13 +102,20 @@ export function inArray(item, array) {
  * Replaces: $(html).find('selector').remove()
  */
 export function removeFromHTML(htmlNodes, selector) {
-  htmlNodes.forEach((node) => {
-    if (node.querySelectorAll) {
+  const nodes = Array.isArray(htmlNodes) ? htmlNodes : [htmlNodes];
+
+  return nodes.filter((node) => {
+    if (node?.nodeType === Node.ELEMENT_NODE && node.matches(selector)) {
+      return false;
+    }
+
+    if (node?.querySelectorAll) {
       const elementsToRemove = node.querySelectorAll(selector);
       elementsToRemove.forEach((el) => el.remove());
     }
+
+    return true;
   });
-  return htmlNodes;
 }
 
 /**
