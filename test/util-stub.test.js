@@ -2,6 +2,11 @@ import * as utils from '../src/utils.js';
 import sinon from 'sinon';
 
 describe('capitaliseText', () => {
+  beforeEach(() => {
+    if (typeof utils.__resetAllOptionsAndDictionariesForTests === 'function') {
+      utils.__resetAllOptionsAndDictionariesForTests();
+    }
+  });
 
   test('capitaliseText_ShouldNotCallSetText_WhenConstantMatchesExactly', () => {
     const element = {
@@ -360,6 +365,109 @@ describe('capitaliseText', () => {
     expect(shouldCapitaliseFake.getCall(0).args[0]).toBe(
       "I'm the content of html tag."
     );
+  });
+
+  test('capitaliseText skips textarea updates when caret is mid-text', () => {
+    const element = {
+      tagName: 'TEXTAREA',
+      value: 'hello world',
+      selectionStart: 2,
+      selectionEnd: 2,
+      isContentEditable: false,
+    };
+    const shouldCapitaliseFake = sinon.fake();
+    const shouldCapitaliseForIFake = sinon.fake();
+    const setTextFake = sinon.fake();
+
+    utils.capitaliseText(
+      element,
+      shouldCapitaliseFake,
+      shouldCapitaliseForIFake,
+      utils.getText,
+      setTextFake
+    );
+
+    expect(shouldCapitaliseFake.called).toBe(false);
+    expect(shouldCapitaliseForIFake.called).toBe(false);
+    expect(setTextFake.called).toBe(false);
+  });
+
+  test('capitaliseText skips contentEditable updates when selection is not at the end', () => {
+    const element = {
+      isContentEditable: true,
+      tagName: 'div',
+      innerHTML: 'hello world',
+      contains(node) {
+        return node === this;
+      },
+    };
+    const shouldCapitaliseFake = sinon.fake();
+    const shouldCapitaliseForIFake = sinon.fake();
+    const setTextFake = sinon.fake();
+
+    const fakeRange = { startContainer: element, collapsed: false };
+    const selection = {
+      rangeCount: 1,
+      getRangeAt: sinon.fake.returns(fakeRange),
+    };
+
+    const originalGetSelection = window.getSelection;
+    window.getSelection = sinon.fake.returns(selection);
+
+    try {
+      utils.capitaliseText(
+        element,
+        shouldCapitaliseFake,
+        shouldCapitaliseForIFake,
+        utils.getText,
+        setTextFake
+      );
+
+      expect(shouldCapitaliseFake.called).toBe(false);
+      expect(shouldCapitaliseForIFake.called).toBe(false);
+      expect(setTextFake.called).toBe(false);
+    } finally {
+      if (originalGetSelection) {
+        window.getSelection = originalGetSelection;
+      } else {
+        delete window.getSelection;
+      }
+    }
+  });
+
+  test('sentence case bypasses caret guard so toggling applies formatting', () => {
+    const element = {
+      tagName: 'TEXTAREA',
+      value: 'hello world',
+      selectionStart: 0,
+      selectionEnd: 0,
+      isContentEditable: false,
+    };
+    const shouldCapitaliseFake = sinon.fake();
+    const shouldCapitaliseForIFake = sinon.fake();
+    const setTextFake = sinon.fake();
+
+    utils.setShouldCapitaliseOption(utils.shouldConvertToSentenceCase, true);
+
+    try {
+      utils.capitaliseText(
+        element,
+        shouldCapitaliseFake,
+        shouldCapitaliseForIFake,
+        utils.getText,
+        setTextFake
+      );
+
+      expect(setTextFake.calledOnce).toBe(true);
+      const [elArg, tagNameArg, updatedText, shouldAppendBr] =
+        setTextFake.getCall(0).args;
+      expect(elArg).toBe(element);
+      expect(tagNameArg).toBe('TEXTAREA');
+      expect(updatedText).toBe('Hello world');
+      expect(shouldAppendBr).toBe(false);
+    } finally {
+      utils.setShouldCapitaliseOption(utils.shouldConvertToSentenceCase, false);
+    }
   });
 });
 

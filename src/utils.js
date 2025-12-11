@@ -143,6 +143,8 @@ export function capitaliseText(
 
   if (text == null) return;
 
+  const sentenceCaseActive = !!optionsDictionary[shouldConvertToSentenceCase];
+
   // Lightweight pre-check: quickly determine whether deeper capitalization
   // processing is worth running. This avoids expensive dictionary lookups and
   // DOM updates when the user's recent input makes a capitalization unlikely.
@@ -150,6 +152,13 @@ export function capitaliseText(
   // processing when in doubt) to preserve existing behavior while reducing
   // needless work in common non-capitalisation cases.
   if (!quickCapitalisationCheck(text)) return;
+
+  // Respect the user's caret position: only auto-capitalise when the caret
+  // (or selection) is at the end of the current value. Sentence-case mode is
+  // exempt so toggling the option still updates previously typed text.
+  if (!sentenceCaseActive && !isCaretAtEnd(element, tagName)) {
+    return;
+  }
 
   const lastChar = text.trim().slice(-1);
   const isLastCharAnAlphabet = lastChar.match(/[a-z]/i);
@@ -170,7 +179,7 @@ export function capitaliseText(
   }
 
   // Sentence case: if enabled always apply (idempotent) so mode switch has immediate visible effect.
-  if (optionsDictionary[shouldConvertToSentenceCase]) {
+  if (sentenceCaseActive) {
     const updatedStr = getConvertedToSentenceCase(text);
     if (updatedStr !== text) {
       setText(element, tagName, updatedStr, shouldAppendBr);
@@ -629,6 +638,83 @@ function getHostForAtlassianHostCheck() {
   }
 
   return window.location?.host ?? '';
+}
+
+function isCaretAtEnd(htmlControl, tagName) {
+  if (!htmlControl || !tagName) return true;
+
+  const upperTag = tagName.toUpperCase();
+  if (upperTag === 'INPUT' || upperTag === 'TEXTAREA') {
+    return isInputCaretAtEnd(htmlControl);
+  }
+
+  if (!isContentEditable(htmlControl)) {
+    return true;
+  }
+
+  return isContentEditableCaretAtEnd(htmlControl);
+}
+
+function isInputCaretAtEnd(input) {
+  const valueLength = typeof input.value === 'string' ? input.value.length : 0;
+  if (
+    typeof input.selectionStart === 'number' &&
+    typeof input.selectionEnd === 'number'
+  ) {
+    return (
+      input.selectionStart === valueLength && input.selectionEnd === valueLength
+    );
+  }
+  return true;
+}
+
+function isContentEditableCaretAtEnd(element) {
+  if (typeof window === 'undefined' || !window.getSelection) {
+    return true;
+  }
+
+  const selection = window.getSelection();
+  if (!selection || selection.rangeCount === 0) {
+    return true;
+  }
+
+  const range = selection.getRangeAt(0);
+  if (!range) return true;
+
+  if (!element.contains(range.startContainer)) {
+    return true;
+  }
+
+  if (!range.collapsed) {
+    return false;
+  }
+
+  return isRangeCollapsedAtEnd(range, element);
+}
+
+function isRangeCollapsedAtEnd(range, element) {
+  if (typeof document === 'undefined' || !document.createRange) return true;
+
+  try {
+    const endRange = document.createRange();
+    endRange.selectNodeContents(element);
+    endRange.collapse(false);
+
+    const RangeCtor =
+      (typeof window !== 'undefined' && window.Range) ||
+      (typeof global !== 'undefined' && global.Range);
+    const END_TO_END = RangeCtor?.END_TO_END ?? 2;
+    return range.compareBoundaryPoints(END_TO_END, endRange) === 0;
+  } catch {
+    try {
+      const tailRange = document.createRange();
+      tailRange.selectNodeContents(element);
+      tailRange.setStart(range.startContainer, range.startOffset);
+      return tailRange.toString().length === 0;
+    } catch {
+      return true;
+    }
+  }
 }
 export function getCleanHtmlForAtlassian(updatedStr) {
   const nodes = parseHTML(updatedStr);
