@@ -541,7 +541,8 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
       contentEditableTags.includes(tagName.toUpperCase()) &&
       htmlControl &&
       htmlControl.isContentEditable &&
-      typeof updatedStr === 'string'
+      typeof updatedStr === 'string' &&
+      !containsHtmlContent(htmlControl)
     ) {
       const currentText = getText(htmlControl, tagName);
       if (
