@@ -469,6 +469,95 @@ describe('capitaliseText', () => {
       utils.setShouldCapitaliseOption(utils.shouldConvertToSentenceCase, false);
     }
   });
+
+  test('capitaliseText proceeds with capitalization when getSelection throws error for contentEditable', () => {
+    const element = {
+      isContentEditable: true,
+      tagName: 'div',
+      innerHTML: 'i',
+      contains() {
+        return true;
+      },
+    };
+    const shouldCapitaliseFake = sinon.fake();
+    const shouldCapitaliseForIFake = sinon.fake();
+    const setTextFake = sinon.fake();
+
+    const originalGetSelection = window.getSelection;
+    window.getSelection = sinon.fake.throws(new Error('getSelection failed'));
+
+    // Enable capitalizing 'i'
+    utils.setShouldCapitaliseOption(utils.shouldCapitaliseI, true);
+
+    try {
+      utils.capitaliseText(
+        element,
+        shouldCapitaliseFake,
+        shouldCapitaliseForIFake,
+        utils.getText,
+        setTextFake
+      );
+
+      // Should proceed with capitalization despite error (falls back to permissive default)
+      expect(setTextFake.called).toBe(true);
+      const [, , updatedText] = setTextFake.getCall(0).args;
+      expect(updatedText).toBe('I');
+    } finally {
+      if (originalGetSelection) {
+        window.getSelection = originalGetSelection;
+      } else {
+        delete window.getSelection;
+      }
+      utils.setShouldCapitaliseOption(utils.shouldCapitaliseI, false);
+    }
+  });
+
+  test('capitaliseText proceeds with capitalization when getRangeAt throws error for contentEditable', () => {
+    const element = {
+      isContentEditable: true,
+      tagName: 'div',
+      innerHTML: 'i',
+      contains() {
+        return true;
+      },
+    };
+    const shouldCapitaliseFake = sinon.fake();
+    const shouldCapitaliseForIFake = sinon.fake();
+    const setTextFake = sinon.fake();
+
+    const selection = {
+      rangeCount: 1,
+      getRangeAt: sinon.fake.throws(new Error('getRangeAt failed')),
+    };
+
+    const originalGetSelection = window.getSelection;
+    window.getSelection = sinon.fake.returns(selection);
+
+    // Enable capitalizing 'i'
+    utils.setShouldCapitaliseOption(utils.shouldCapitaliseI, true);
+
+    try {
+      utils.capitaliseText(
+        element,
+        shouldCapitaliseFake,
+        shouldCapitaliseForIFake,
+        utils.getText,
+        setTextFake
+      );
+
+      // Should proceed with capitalization despite error (falls back to permissive default)
+      expect(setTextFake.called).toBe(true);
+      const [, , updatedText] = setTextFake.getCall(0).args;
+      expect(updatedText).toBe('I');
+    } finally {
+      if (originalGetSelection) {
+        window.getSelection = originalGetSelection;
+      } else {
+        delete window.getSelection;
+      }
+      utils.setShouldCapitaliseOption(utils.shouldCapitaliseI, false);
+    }
+  });
 });
 
 function setInnerHtmlForContentEditableElement() {

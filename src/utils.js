@@ -673,23 +673,28 @@ function isContentEditableCaretAtEnd(element) {
     return true;
   }
 
-  const selection = window.getSelection();
-  if (!selection || selection.rangeCount === 0) {
+  try {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) {
+      return true;
+    }
+
+    const range = selection.getRangeAt(0);
+    if (!range) return true;
+
+    if (!element.contains(range.startContainer)) {
+      return true;
+    }
+
+    if (!range.collapsed) {
+      return false;
+    }
+
+    return isRangeCollapsedAtEnd(range, element);
+  } catch {
+    // If we can't determine caret position, assume it's at the end (permissive default)
     return true;
   }
-
-  const range = selection.getRangeAt(0);
-  if (!range) return true;
-
-  if (!element.contains(range.startContainer)) {
-    return true;
-  }
-
-  if (!range.collapsed) {
-    return false;
-  }
-
-  return isRangeCollapsedAtEnd(range, element);
 }
 
 function isRangeCollapsedAtEnd(range, element) {
