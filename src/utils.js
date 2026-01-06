@@ -701,21 +701,27 @@ function isRangeCollapsedAtEnd(range, element) {
   if (typeof document === 'undefined' || !document.createRange) return true;
 
   try {
-    const endRange = document.createRange();
-    endRange.selectNodeContents(element);
-    endRange.collapse(false);
+    // Check if there's any visible text content after the caret
+    // This is more reliable for contenteditable elements (like Slack) that may have
+    // trailing empty nodes, whitespace, or structural elements after the typing position
+    const tailRange = document.createRange();
+    tailRange.selectNodeContents(element);
+    tailRange.setStart(range.startContainer, range.startOffset);
+    const textAfter = tailRange.toString().trim();
 
-    const RangeCtor =
-      (typeof window !== 'undefined' && window.Range) ||
-      (typeof global !== 'undefined' && global.Range);
-    const END_TO_END = RangeCtor?.END_TO_END ?? 2;
-    return range.compareBoundaryPoints(END_TO_END, endRange) === 0;
+    // If there's no visible text after the caret, consider it at the end
+    return textAfter.length === 0;
   } catch {
+    // Fallback: try exact boundary comparison
     try {
-      const tailRange = document.createRange();
-      tailRange.selectNodeContents(element);
-      tailRange.setStart(range.startContainer, range.startOffset);
-      return tailRange.toString().length === 0;
+      const endRange = document.createRange();
+      endRange.selectNodeContents(element);
+      endRange.collapse(false);
+      const comparison = range.compareBoundaryPoints(
+        Range.END_TO_END,
+        endRange
+      );
+      return comparison === 0;
     } catch {
       return true;
     }

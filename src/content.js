@@ -239,6 +239,9 @@ if (
       changes, // object
       areaName // string
     ) {
+      // Guard against extension context invalidation
+      if (!checkExtensionContext()) return;
+
       if (areaName === 'sync') {
         utils.toggleOptionsValue(changes, shouldCapitaliseI);
         utils.toggleOptionsValue(changes, shouldCapitaliseNames);
@@ -300,22 +303,42 @@ function observeIframeInputTags() {
   const iframes = querySelectorAll('iframe');
   on(iframes, 'load', (event) => {
     const iframe = event.target;
-    const iframeDocument =
-      iframe.contentDocument || iframe.contentWindow?.document;
-    if (iframeDocument) {
-      // Handle traditional input elements
-      const inputs = querySelectorAll(
-        'input[type="text"],textarea',
-        iframeDocument
-      );
-      inputs.forEach((item) => {
-        on(item, `input.${pluginNamespace}`, function (event) {
-          capitaliseText(event.target);
+    try {
+      // Try to access iframe document - will throw SecurityError for cross-origin iframes
+      const iframeDocument =
+        iframe.contentDocument || iframe.contentWindow?.document;
+      if (iframeDocument) {
+        // Handle traditional input elements
+        const inputs = querySelectorAll(
+          'input[type="text"],textarea',
+          iframeDocument
+        );
+        inputs.forEach((item) => {
+          on(item, `input.${pluginNamespace}`, function (event) {
+            capitaliseText(event.target);
+          });
         });
-      });
 
-      // REMOVED: Contenteditable handler attachment in iframes
-      // This was causing over-processing. Iframes are handled by their own MutationObservers
+        // Handle contenteditable elements in iframes
+        const contentEditables = querySelectorAll(
+          '[contenteditable="true"]',
+          iframeDocument
+        );
+        contentEditables.forEach((item) => {
+          on(item, `input.${pluginNamespace}`, function (event) {
+            capitaliseText(event.target);
+          });
+        });
+      }
+    } catch (e) {
+      // Silently ignore cross-origin iframe access errors - browser security prevents access
+      // Also ignore extension context invalidation errors
+      if (
+        e.name !== 'SecurityError' &&
+        !e.message?.includes('Extension context')
+      ) {
+        console.debug('Error accessing iframe:', e);
+      }
     }
   });
 }
@@ -323,6 +346,12 @@ function observeIframeInputTags() {
 function observeInputTags() {
   const inputs = querySelectorAll('input[type="text"],textarea');
   on(inputs, `input.${pluginNamespace}`, function (event) {
+    capitaliseText(event.target);
+  });
+
+  // Add event listeners for contenteditable elements (including Slack's editor)
+  const contentEditables = querySelectorAll('[contenteditable="true"]');
+  on(contentEditables, `input.${pluginNamespace}`, function (event) {
     capitaliseText(event.target);
   });
 
@@ -339,6 +368,17 @@ function observeInputTags() {
       if (!input.dataset.autoCapListener) {
         input.dataset.autoCapListener = 'true';
         on([input], `input.${pluginNamespace}`, function (event) {
+          capitaliseText(event.target);
+        });
+      }
+    });
+
+    // Also check for dynamically added contenteditable elements
+    const newContentEditables = querySelectorAll('[contenteditable="true"]');
+    newContentEditables.forEach((el) => {
+      if (!el.dataset.autoCapListener) {
+        el.dataset.autoCapListener = 'true';
+        on([el], `input.${pluginNamespace}`, function (event) {
           capitaliseText(event.target);
         });
       }
@@ -534,7 +574,14 @@ function reprocessActiveElement() {
 function fullReprocessAllVisible(forceSentenceCase) {
   const selector =
     "input[type='text'], textarea, [contenteditable=''], [contenteditable='true'], [contenteditable='plaintext-only']";
-  document.querySelectorAll(selector).forEach((el) => {
+  const allElements = Array.from(document.querySelectorAll(selector));
+  // Also include any contenteditable elements that might use other attribute values (like Slack)
+  const contentEditableElements = Array.from(
+    document.querySelectorAll('[contenteditable]')
+  ).filter((el) => el.isContentEditable && !allElements.includes(el));
+  const elementsToProcess = [...allElements, ...contentEditableElements];
+
+  elementsToProcess.forEach((el) => {
     try {
       if (forceSentenceCase && utils.isSentenceCaseEnabled()) {
         const tag = el.tagName;
