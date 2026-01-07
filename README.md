@@ -23,7 +23,7 @@ Firefox/Microsoft Edge Chromium add-on to automatically capitalise words while t
 - Optimized for responsive typing experience
 
 **Sentence Case Mode:**
-- All capitalization waits for the debounce delay (default: 5 seconds)  
+- All capitalization waits for the debounce delay (default: 5 seconds)
 - No immediate processing - preserves exact typing flow
 - Comprehensive sentence structure analysis after timeout
 - Ideal for complex editing scenarios or when you prefer uninterrupted typing
@@ -63,7 +63,7 @@ Configure how long the extension waits after your last keystroke before performi
 - Debounce only affects complex sentence processing
 - Setting delay to 0 disables debouncing entirely
 
-**Sentence Case Mode:**  
+**Sentence Case Mode:**
 - ALL capitalization waits for the full debounce delay
 - No immediate processing regardless of delay setting
 - Comprehensive analysis runs only after timeout expires
@@ -75,7 +75,7 @@ Configure how long the extension waits after your last keystroke before performi
 
 **Recommendations:**
 - **Word Case**: 1000–3000 ms for balanced performance
-- **Sentence Case**: 3000–5000 ms for optimal typing flow  
+- **Sentence Case**: 3000–5000 ms for optimal typing flow
 - **Complex editors**: 5000+ ms to avoid interruptions during long typing sessions
 
 To change it, open the extension popup settings and update the Debounce Delay (ms) field. The change applies immediately to all newly observed inputs.
@@ -93,7 +93,11 @@ Certain sites reset the text change so this extension will not work on them.
 - Reddit
 - WhatsApp Web
 - Facebook Messenger
+- Facebook
 - Discord
+- Microsoft Teams
+- Amazon AWS
+- localhost
 
 
 ## How to contribute?
