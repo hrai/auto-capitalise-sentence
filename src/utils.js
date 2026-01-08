@@ -909,6 +909,28 @@ export function containsHtmlContent(element) {
     return false; // content that ends with br but has other text should be treated as plain text
   }
 
+  // Gmail compose frequently uses structural wrapper tags (e.g. nested <div>/<span>/<p>)
+  // even when the content is effectively plain text. Treat those wrappers as non-HTML
+  // so the extension can still operate.
+  if (content && isGmail()) {
+    const tagRegex = /<\/?\s*([a-z0-9-]+)(\s[^>]*)?>/gi;
+    const allowed = new Set(['br', 'div', 'span', 'p']);
+    let match;
+    let sawAnyTag = false;
+    while ((match = tagRegex.exec(content)) !== null) {
+      sawAnyTag = true;
+      const tagName = (match[1] || '').toLowerCase();
+      if (!allowed.has(tagName)) {
+        return true;
+      }
+    }
+
+    // Only allowed structural tags found => treat as plain text
+    if (sawAnyTag) {
+      return false;
+    }
+  }
+
   const regex = /<\/?[a-z][\s\S]*>/i;
   const hasHtmlTag = regex.test(content);
   return hasHtmlTag;
