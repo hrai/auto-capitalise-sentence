@@ -530,6 +530,14 @@ export function isGmail() {
   );
 }
 
+function isSlack() {
+  return (
+    typeof window !== 'undefined' &&
+    window.location &&
+    window.location.host === 'app.slack.com'
+  );
+}
+
 // Returns true if host is exactly 'atlassian.net' or is a direct subdomain like 'foo.atlassian.net'
 function isAtlassianCloudHost(host) {
   // Only accept hosts that are exactly 'atlassian.net' or end with '.atlassian.net', but are not like 'foo.bar.atlassian.net.evil.com'
@@ -926,6 +934,35 @@ export function containsHtmlContent(element) {
     }
 
     // Only allowed structural tags found => treat as plain text
+    if (sawAnyTag) {
+      return false;
+    }
+  }
+
+  // Slack uses a controlled editor that often emits nested wrapper tags. When the markup
+  // is purely structural we treat it as plain text so the fast-path text-node update can
+  // operate without resetting innerHTML (which tends to break Slack). However, if the
+  // markup includes Slack-specific token/mention metadata we treat it as HTML and bail.
+  if (content && isSlack()) {
+    // Common markers for mentions, channels, emojis, and other special entities
+    const slackTokenRegex =
+      /(data-stringify|data-mention-id|data-channel-id|data-emoji|data-slate|data-lexical)/i;
+    if (slackTokenRegex.test(content)) {
+      return true;
+    }
+
+    const tagRegex = /<\/?\s*([a-z0-9-]+)(\s[^>]*)?>/gi;
+    const allowed = new Set(['br', 'div', 'span', 'p']);
+    let match;
+    let sawAnyTag = false;
+    while ((match = tagRegex.exec(content)) !== null) {
+      sawAnyTag = true;
+      const tagName = (match[1] || '').toLowerCase();
+      if (!allowed.has(tagName)) {
+        return true;
+      }
+    }
+
     if (sawAnyTag) {
       return false;
     }
