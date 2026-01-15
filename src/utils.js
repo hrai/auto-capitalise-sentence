@@ -914,7 +914,7 @@ export function containsHtmlContent(element) {
     if (stripped === '<br>' || stripped === '<br/>') {
       return true; // single br considered html content
     }
-    return false; // content that ends with br but has other text should be treated as plain text
+    // For other cases with <br> and text, continue to Gmail-specific logic or return false
   }
 
   // Gmail compose frequently uses structural wrapper tags (e.g. nested <div>/<span>/<p>)
@@ -937,6 +937,11 @@ export function containsHtmlContent(element) {
     if (sawAnyTag) {
       return false;
     }
+  }
+
+  // For non-Gmail or when no structural tags found on Gmail, check for <br> with content
+  if (content && brRegex.test(content)) {
+    return false; // content that ends with br but has other text should be treated as plain text
   }
 
   // Slack uses a controlled editor that often emits nested wrapper tags. When the markup
