@@ -38,7 +38,7 @@
   "devDependencies": {
     "@babel/core": "^7.28.5",
     "@babel/eslint-parser": "^7.28.5",
-    "@babel/preset-env": "^7.28.5",
+    "@babel/preset-env": "^7.28.6",
     "@eslint/eslintrc": "^3.3.3",
     "@eslint/js": "^9.39.1",
     "bootstrap": "^5.3.8",
