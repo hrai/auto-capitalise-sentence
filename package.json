@@ -58,7 +58,7 @@
     "pidtree": "^0.6.0",
     "prettier": "^3.8.1",
     "run-script-os": "^1.1.3",
-    "sinon": "^21.0.3",
+    "sinon": "^21.1.2",
     "web-ext": "^10.1.0",
     "webextension-polyfill": "^0.12.0",
     "webpack": "^5.105.4",
