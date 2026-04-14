@@ -494,6 +494,12 @@ export function getText(htmlControl, tagName) {
     htmlControl.innerHTML &&
     contentEditableTags.includes(tagName.toUpperCase())
   ) {
+    // For Gmail, use textContent to strip out grammar checker spans and other HTML tags
+    // that shouldn't be included in the capitalization logic. This prevents corruption
+    // from Grammarly, LanguageTool, and other grammar checker extensions.
+    if (isGmail() && htmlControl.textContent !== undefined) {
+      return htmlControl.textContent;
+    }
     return getTextForSpanTag(htmlControl.innerHTML);
   }
 
