@@ -52,7 +52,7 @@
     "globals": "^17.6.0",
     "husky": "^9.1.7",
     "jest": "^30.3.0",
-    "jest-environment-jsdom": "^30.3.0",
+    "jest-environment-jsdom": "^30.4.1",
     "lint-staged": "^17.0.5",
     "nodemon": "^3.1.14",
     "pidtree": "^0.6.0",
