@@ -24,7 +24,7 @@ jobs:
           node-version: 22.x
       - run: yarn install
       - run: yarn test
-      - uses: fregante/daily-version-action@v2
+      - uses: fregante/daily-version-action@v3
         name: Create tag if necessary
         id: daily-version
       # - name: Created?
