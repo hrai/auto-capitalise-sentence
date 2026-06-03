@@ -62,7 +62,7 @@
     "web-ext": "^10.2.0",
     "webextension-polyfill": "^0.12.0",
     "webpack": "^5.107.1",
-    "webpack-cli": "^7.0.2"
+    "webpack-cli": "^7.0.3"
   },
   "repository": {
     "type": "git",
