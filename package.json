@@ -93,6 +93,6 @@
     }
   },
   "dependencies": {
-    "chrome-webstore-upload-cli": "^4.0.0"
+    "chrome-webstore-upload-cli": "^4.0.1"
   }
 }
