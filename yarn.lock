@@ -3215,11 +3215,12 @@ expect@30.4.1:
     jest-mock "30.4.1"
     jest-util "30.4.1"
 
-express-rate-limit@^8.5.2:
-  version "8.5.2"
-  resolved "https://registry.yarnpkg.com/express-rate-limit/-/express-rate-limit-8.5.2.tgz#5922dbf76df2124611cea955d93432b37514b2f3"
-  integrity sha512-5Kb34ipNX694DH48vN9irak1Qx30nb0PLYHXfJgw4YEjiC3ZEmZJhwOp+VfiCYwFzvFTdB9QkArYS5kXa2cx2A==
+express-rate-limit@^8.6.1:
+  version "8.6.1"
+  resolved "https://registry.yarnpkg.com/express-rate-limit/-/express-rate-limit-8.6.1.tgz#e0977ec8075346e207d788383362ada7c08324ae"
+  integrity sha512-0D493aP61w0TJ2A0wy27riRsO7FMQ7FK+KUHOKCSfPvYo0R55aiC6emCVgFUeShH0fq0ICPVzNcgoS+BsbXQCA==
   dependencies:
+    debug "^4.4.3"
     ip-address "^10.2.0"
 
 express@^5.2.0:
