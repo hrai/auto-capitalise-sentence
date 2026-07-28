@@ -14,6 +14,7 @@ on:
   check_suite:
     types: [completed]
   # 'status' event omitted (deprecated for most use cases); check_suite completion suffices.
+  workflow_dispatch: # manual sweep of all open Dependabot PRs
 
 permissions:
   contents: write
@@ -43,8 +44,13 @@ jobs:
           if [ -n "$RAW_NUMBER" ]; then
             PR_NUMBERS="$RAW_NUMBER"
             echo "Pull request context present: $PR_NUMBERS"
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Manual dispatch; sweeping all open PRs (author filtered in loop)."
+            PR_NUMBERS=$(gh pr list --state open --json number -q '.[].number') || true
           else
-            SHA='${{ github.sha }}'
+            # For check_suite events github.sha is the default-branch head, NOT the PR
+            # head — use the check suite's own head_sha so PR resolution actually works.
+            SHA='${{ github.event.check_suite.head_sha || github.sha }}'
             echo "No direct pull_request context; resolving PR(s) by commit SHA $SHA"
             PR_NUMBERS=$(gh pr list --state open --json number,headRefOid -q \
               ".[] | select(.headRefOid==\"$SHA\") | .number") || true
@@ -86,5 +92,11 @@ jobs:
               gh pr review "$PR_NUMBER" --approve --body "Auto-approval for Dependabot update" || true
             fi
             echo "Enabling auto-merge (squash) for PR #$PR_NUMBER"
-            gh pr merge "$PR_NUMBER" --auto --squash --delete-branch || true
+            # Enabling auto-merge fails when the PR is already mergeable and no required
+            # checks are pending; fall back to merging directly in that case.
+            if ! gh pr merge "$PR_NUMBER" --auto --squash --delete-branch; then
+              echo "Auto-merge could not be enabled; attempting direct merge."
+              gh pr merge "$PR_NUMBER" --squash --delete-branch \
+                || echo "::warning::Merge failed for PR #$PR_NUMBER"
+            fi
           done
