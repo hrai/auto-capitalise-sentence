@@ -279,12 +279,16 @@ export function quickCapitalisationCheck(text) {
 
   const tail = normalized.slice(-40);
 
+  // Early exit for apostrophes and other punctuation that don't trigger capitalization
+  // This prevents unnecessary processing and cursor jumping when typing contractions (e.g., "I'm", "don't")
+  const lastChar = tail.slice(-1);
+  if (/['",;:-]/.test(lastChar)) return false;
+
   // If last character is alphabetical, whitespace (user just typed a space),
   // or punctuation commonly used to terminate sentences, further processing
   // may be useful. Including whitespace ensures we handle cases where the
   // user has just finished typing a word and the logic should inspect the
   // preceding token (many tests rely on this behaviour).
-  const lastChar = tail.slice(-1);
   if (/[a-zA-Z\s.!?]/.test(lastChar)) return true;
 
   // Cheap check for standalone 'i' at the end (common small-case correction).
