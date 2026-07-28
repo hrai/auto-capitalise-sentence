@@ -59,7 +59,9 @@ jobs:
           for PR_NUMBER in $PR_NUMBERS; do
             echo "\n--- Evaluating PR #$PR_NUMBER ---"
             AUTHOR=$(gh pr view "$PR_NUMBER" --json author -q .author.login || echo unknown)
-            if [ "$AUTHOR" != "dependabot[bot]" ] && [ "$AUTHOR" != "dependabot" ]; then
+            # gh may report the author as 'dependabot[bot]', 'dependabot', or 'app/dependabot'
+            # depending on CLI version.
+            if [ "$AUTHOR" != "dependabot[bot]" ] && [ "$AUTHOR" != "dependabot" ] && [ "$AUTHOR" != "app/dependabot" ]; then
               echo "PR #$PR_NUMBER author is '$AUTHOR' (not Dependabot); skipping."
               continue
             fi
