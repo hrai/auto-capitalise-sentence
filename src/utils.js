@@ -614,6 +614,8 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
           const newLastChar = updatedStr
             .replace(new RegExp(nbsp, 'g'), ' ')
             .slice(-1);
+          // codeql[js/xss-through-dom] - False positive: assigning to a Text node's
+          // `data` sets plain character data; it is never parsed as HTML.
           lastNode.data = lastNode.data.slice(0, -1) + newLastChar;
 
           // Position caret at end of last node synchronously
