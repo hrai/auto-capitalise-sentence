@@ -601,9 +601,20 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
           lastNode = lastNode.lastChild;
         }
 
-        if (lastNode && lastNode.nodeType === Node.TEXT_NODE) {
-          // Replace node data with updated text (use plain text to avoid injecting HTML)
-          lastNode.data = updatedStr.replace(new RegExp(nbsp, 'g'), ' ');
+        if (
+          lastNode &&
+          lastNode.nodeType === Node.TEXT_NODE &&
+          lastNode.data.length > 0
+        ) {
+          // The element's text may span many nodes (e.g. Gmail's nested line
+          // divs and spell-checker spans), while updatedStr holds the full
+          // text. Only the final character changed, so apply just that change
+          // to the last text node — writing the whole string here duplicates
+          // everything that precedes this node.
+          const newLastChar = updatedStr
+            .replace(new RegExp(nbsp, 'g'), ' ')
+            .slice(-1);
+          lastNode.data = lastNode.data.slice(0, -1) + newLastChar;
 
           // Position caret at end of last node synchronously
           try {
