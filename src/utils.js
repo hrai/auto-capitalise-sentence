@@ -590,46 +590,54 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
       !containsHtmlContent(htmlControl)
     ) {
       const currentText = getText(htmlControl, tagName);
-      if (
-        typeof currentText === 'string' &&
-        updatedStr.length === currentText.length &&
-        updatedStr.slice(0, -1) === currentText.slice(0, -1)
-      ) {
-        // Simple last-character change: apply to deepest text node
-        let lastNode = htmlControl;
-        while (lastNode && lastNode.lastChild) {
-          lastNode = lastNode.lastChild;
+      if (typeof currentText === 'string') {
+        // Find the last non-empty text node in document order. The previous
+        // deepest-lastChild descent landed on Gmail's trailing empty line
+        // (<div><br></div>) after the user pressed Enter, bailed out, and sent
+        // multi-line emails into the destructive setHTML fallback below.
+        const lastNode = findLastNonEmptyTextNode(htmlControl);
+
+        if (lastNode && currentText.endsWith(lastNode.data)) {
+          const prefix = currentText.slice(
+            0,
+            currentText.length - lastNode.data.length
+          );
+
+          // Change confined to the tail (last-character capitalisation or a
+          // last-word dictionary correction): rewrite only that text node so
+          // the element's structure (line divs, spell-checker spans) survives.
+          if (
+            updatedStr.startsWith(prefix) &&
+            updatedStr.length > prefix.length
+          ) {
+            // codeql[js/xss-through-dom] - False positive: assigning to a Text node's
+            // `data` sets plain character data; it is never parsed as HTML.
+            lastNode.data = updatedStr
+              .slice(prefix.length)
+              .replace(new RegExp(nbsp, 'g'), ' ');
+
+            // Position caret at end of last node synchronously
+            try {
+              const range = document.createRange();
+              range.setStart(lastNode, lastNode.length);
+              range.collapse(true);
+              const selection = window.getSelection();
+              selection.removeAllRanges();
+              selection.addRange(range);
+            } catch {
+              // Fall back to the existing rAF-based approach if selection APIs fail
+            }
+
+            return;
+          }
         }
 
-        if (
-          lastNode &&
-          lastNode.nodeType === Node.TEXT_NODE &&
-          lastNode.data.length > 0
-        ) {
-          // The element's text may span many nodes (e.g. Gmail's nested line
-          // divs and spell-checker spans), while updatedStr holds the full
-          // text. Only the final character changed, so apply just that change
-          // to the last text node — writing the whole string here duplicates
-          // everything that precedes this node.
-          const newLastChar = updatedStr
-            .replace(new RegExp(nbsp, 'g'), ' ')
-            .slice(-1);
-          // codeql[js/xss-through-dom] - False positive: assigning to a Text node's
-          // `data` sets plain character data; it is never parsed as HTML.
-          lastNode.data = lastNode.data.slice(0, -1) + newLastChar;
-
-          // Position caret at end of last node synchronously
-          try {
-            const range = document.createRange();
-            range.setStart(lastNode, lastNode.length);
-            range.collapse(true);
-            const selection = window.getSelection();
-            selection.removeAllRanges();
-            selection.addRange(range);
-          } catch {
-            // Fall back to the existing rAF-based approach if selection APIs fail
-          }
-
+        // On Gmail, getText returns flattened textContent, so the setHTML
+        // fallback below would collapse a multi-line email into a single line.
+        // A change that isn't confined to the last text node cannot be applied
+        // safely here — skip it (the per-line MutationObserver path handles
+        // line-local corrections).
+        if (isGmail() && htmlControl.querySelector?.('div,p')) {
           return;
         }
       }
@@ -658,6 +666,29 @@ export function setText(htmlControl, tagName, updatedStr, shouldAppendBr) {
   requestAnimationFrame(() => {
     setEndOfContenteditable(htmlControl);
   });
+}
+
+// Last non-empty text node of an element in document order. Unlike a
+// deepest-lastChild descent, this skips trailing empty lines (<div><br></div>)
+// and empty text nodes, which Gmail leaves at the end of the compose body.
+function findLastNonEmptyTextNode(root) {
+  if (
+    typeof document === 'undefined' ||
+    typeof document.createTreeWalker !== 'function'
+  ) {
+    return null;
+  }
+
+  const showText =
+    typeof NodeFilter === 'undefined' ? 0x4 : NodeFilter.SHOW_TEXT;
+  const walker = document.createTreeWalker(root, showText);
+  let last = null;
+  while (walker.nextNode()) {
+    if (walker.currentNode.data.length > 0) {
+      last = walker.currentNode;
+    }
+  }
+  return last;
 }
 
 function getHostForAtlassianHostCheck() {
